@@ -10,4 +10,4 @@ CMPUT 301 Project Repo
 
 **R**andi Derbyshire (rderbysh)
 
-**D**avid Choi (minsoung)
+**D**aniel Choi (minsoung)
