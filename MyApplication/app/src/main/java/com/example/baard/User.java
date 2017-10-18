@@ -17,6 +17,8 @@ public class User {
     private String username;
     private ArrayList<Habit> habits = new ArrayList<>();
     private ArrayList<User> friends = new ArrayList<>();
+    private ArrayList<User> receivedRequests = new ArrayList<>();
+    // WOW factor TODO --> profile pictures
 
     public User(String name, String email, String password, String username) {
         this.name = name;
@@ -81,11 +83,27 @@ public class User {
         this.friends = friends;
     }
 
-    public void addFriend(Habit habit) {
+    public void addFriend(User user) {
         // TODO
     }
 
-    public void removeFriend(Habit habit) {
+    public void removeFriend(User user) {
+        // TODO
+    }
+
+    public ArrayList<User> getReceivedRequests() {
+        return receivedRequests;
+    }
+
+    public void setReceivedRequests(ArrayList<User> receivedRequests) {
+        this.receivedRequests = receivedRequests;
+    }
+
+    public void addReceivedRequest(User user) {
+        // TODO
+    }
+
+    public void removeReceivedRequest(User user) {
         // TODO
     }
 }
