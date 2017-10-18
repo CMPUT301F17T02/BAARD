@@ -14,8 +14,8 @@ public class HabitEvent {
     private Habit habit;
     private String comment;
     private Date eventDate;
-    // location variable
-    // picture variable
+    // TODO location variable
+    // TODO picture variable
 
     public HabitEvent(Habit habit, String comment, Date eventDate) {
         this.habit = habit;

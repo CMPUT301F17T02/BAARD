@@ -4,6 +4,8 @@
 
 package com.example.baard;
 
+import java.util.ArrayList;
+
 /**
  * Created by biancaangotti on 2017-10-18.
  */
@@ -13,6 +15,8 @@ public class User {
     private String email;
     private String password;
     private String username;
+    private ArrayList<Habit> habits = new ArrayList<>();
+    private ArrayList<User> friends = new ArrayList<>();
 
     public User(String name, String email, String password, String username) {
         this.name = name;
@@ -51,5 +55,37 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public ArrayList<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(ArrayList<Habit> habits) {
+        this.habits = habits;
+    }
+
+    public void addHabit(Habit habit) {
+        // TODO
+    }
+
+    public void removeHabit(Habit habit) {
+        // TODO
+    }
+
+    public ArrayList<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<User> friends) {
+        this.friends = friends;
+    }
+
+    public void addFriend(Habit habit) {
+        // TODO
+    }
+
+    public void removeFriend(Habit habit) {
+        // TODO
     }
 }

@@ -16,7 +16,7 @@ public class Habit {
     private String title, reason;
     private Date startDate;
     private Map<String, Boolean> frequency;
-    private ArrayList<HabitEvent> events;
+    private ArrayList<HabitEvent> events = new ArrayList<>();
 
     public void Habit(String title, String reason, Date startDate, Map<String, Boolean> frequency) {
         this.title = title;
