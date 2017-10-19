@@ -14,26 +14,43 @@ import java.util.Date;
  */
 
 public class HabitTest extends ActivityInstrumentationTestCase2 {
+
+    ArrayList<Habit> habits = new ArrayList<Habit>();
+    Date startDate = new Date();
+    ArrayList<Integer> array = new ArrayList<Integer>();
+
     public HabitTest(){
         super(Habit.class);
     }
 
     public void testGetTitle() {
-        ArrayList<Habit> habits = new ArrayList<Habit>();
-        Date startDate = new Date();
-        Habit habit = new Habit("Test Title", "Reason", startDate);
+        String title = "Test Title";
+        Habit habit = new Habit(title, "Reason", startDate, array);
+        String test_title = habit.getTitle();
+        assertEquals(title, test_title);
     }
 
     public void testGetReason() {
-
+        String reason = "Reason";
+        Habit habit = new Habit("Test Title", reason, startDate, array);
+        String test_reason = habit.getReason();
+        assertEquals(reason, test_reason);
     }
 
     public void testGetStartDate() {
-
+        Habit habit = new Habit("Test Title", "Reason", startDate, array);
+        Date test_startDate = habit.getStartDate();
+        assertEquals(startDate, test_startDate);
     }
 
     public void testGetFrequency() {
-
+        array.add(1);
+        array.add(3);
+        array.add(5);
+        Habit habit = new Habit("Test Title", "Reason", startDate, array);
+        ArrayList<Integer> test_array = new ArrayList<Integer>();
+        test_array = habit.getFrequency();
+        assertEquals(array, test_array);
     }
 
     public void testGetEvent() {
