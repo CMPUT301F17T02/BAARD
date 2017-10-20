@@ -15,10 +15,10 @@ import java.util.Map;
 public class Habit {
     private String title, reason;
     private Date startDate;
-    private Map<String, Boolean> frequency;
+    private ArrayList<Integer> frequency;
     private ArrayList<HabitEvent> events = new ArrayList<>();
 
-    public Habit(String title, String reason, Date startDate, Map<String, Boolean> frequency) {
+    public Habit(String title, String reason, Date startDate, ArrayList<Integer> frequency) {
         this.title = title;
         this.reason = reason;
         this.startDate = startDate;
@@ -49,11 +49,11 @@ public class Habit {
         this.startDate = startDate;
     }
 
-    public Map<String, Boolean> getFrequency() {
+    public ArrayList<Integer> getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(Map<String, Boolean> frequency) {
+    public void setFrequency(ArrayList<Integer> frequency) {
         this.frequency = frequency;
     }
 
