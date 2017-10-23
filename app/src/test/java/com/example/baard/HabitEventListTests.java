@@ -29,6 +29,7 @@ public class HabitEventListTests {
     HabitEvent habitEvent;
     HabitEventList habitEventList;
 
+    //run Before every test
     @Before
     public void setUpTest(){
         freq = new ArrayList<Day>();
@@ -44,12 +45,22 @@ public class HabitEventListTests {
         assertTrue(habitEventList.hasHabitEvent(habitEvent));
     }
 
-    public void testContains(){
+    public void testDelete(){
+        habitEventList.add(habitEvent);
+        habitEventList.delete(habitEvent);
+        assertFalse(habitEventList.hasHabitEvent(habitEvent));
+    }
+
+    public void testHasHabitEvent(){
         habitEventList.add(habitEvent);
         Date date2 = new Date();
         HabitEvent habitEvent2 = new HabitEvent(habit, "second",date2);
         assertTrue(habitEventList.hasHabitEvent(habitEvent));
         assertFalse(habitEventList.hasHabitEvent(habitEvent2));
     }
-    
+
+    public void testGetHabitEvent(){
+        habitEventList.add(habitEvent);
+        assertEquals(habitEventList.getHabitEvent(0), habitEvent);
+    }
 }
