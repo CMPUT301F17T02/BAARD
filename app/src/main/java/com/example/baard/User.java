@@ -12,18 +12,14 @@ import java.util.ArrayList;
 
 public class User {
     private String name;
-    private String email;
-    private String password;
     private String username;
     private HabitList habits = new HabitList();
     private UserList friends = new UserList();
     private UserList receivedRequests = new UserList();
     // WOW factor TODO --> profile pictures
 
-    public User(String name, String email, String password, String username) {
+    public User(String name, String username) {
         this.name = name;
-        this.email = email;
-        this.password = password;
         this.username = username;
     }
 
@@ -33,22 +29,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUsername() {
