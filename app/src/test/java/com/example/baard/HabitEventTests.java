@@ -25,7 +25,7 @@ public class HabitEventTests {
         //super();
     //}
 
-    ArrayList<Integer> freq;
+    ArrayList<Day> freq;
     Date date1;
     Habit habit;
     HabitEvent habitEvent;
@@ -33,7 +33,7 @@ public class HabitEventTests {
     //this function is run at the start of every test
     @Before
     public void setUpTest(){
-        freq = new ArrayList<Integer>();
+        freq = new ArrayList<Day>();
         date1 = new Date();
         habit = new Habit("test","reason",date1,freq);
         // constructor 1
@@ -110,7 +110,7 @@ public class HabitEventTests {
 
     public void testSetHabit(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
-        ArrayList<Integer> freq2 = new ArrayList<Integer>();
+        ArrayList<Day> freq2 = new ArrayList<Day>();
         //Date date1 = new Date();
         Date date2 = new Date();
         //Habit habit = new Habit("test","reason",date1,freq);
