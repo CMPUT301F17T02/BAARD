@@ -15,9 +15,9 @@ public class User {
     private String email;
     private String password;
     private String username;
-    private ArrayList<Habit> habits = new ArrayList<>();
-    private ArrayList<User> friends = new ArrayList<>();
-    private ArrayList<User> receivedRequests = new ArrayList<>();
+    private HabitList habits = new HabitList();
+    private UserList friends = new UserList();
+    private UserList receivedRequests = new UserList();
     // WOW factor TODO --> profile pictures
 
     public User(String name, String email, String password, String username) {
@@ -59,51 +59,28 @@ public class User {
         this.username = username;
     }
 
-    public ArrayList<Habit> getHabits() {
+    public HabitList getHabits() {
         return habits;
     }
 
-    public void setHabits(ArrayList<Habit> habits) {
+    public void setHabits(HabitList habits) {
         this.habits = habits;
     }
 
-    public void addHabit(Habit habit) {
-        // TODO
-    }
-
-    public void removeHabit(Habit habit) {
-        // TODO
-    }
-
-    public ArrayList<User> getFriends() {
+    public UserList getFriends() {
         return friends;
     }
 
-    public void setFriends(ArrayList<User> friends) {
+    public void setFriends(UserList friends) {
         this.friends = friends;
     }
 
-    public void addFriend(User user) {
-        // TODO
-    }
-
-    public void removeFriend(User user) {
-        // TODO
-    }
-
-    public ArrayList<User> getReceivedRequests() {
+    public UserList getReceivedRequests() {
         return receivedRequests;
     }
 
-    public void setReceivedRequests(ArrayList<User> receivedRequests) {
+    public void setReceivedRequests(UserList receivedRequests) {
         this.receivedRequests = receivedRequests;
     }
 
-    public void addReceivedRequest(User user) {
-        // TODO
-    }
-
-    public void removeReceivedRequest(User user) {
-        // TODO
-    }
 }
