@@ -106,4 +106,5 @@ public class UserTest extends TestCase {
         user.setReceivedRequests(userList);
         assertEquals(userList, user.getReceivedRequests());
     }
+
 }

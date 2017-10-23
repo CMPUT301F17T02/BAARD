@@ -67,8 +67,6 @@ public class User {
         this.habits = habits;
     }
 
-    public void addHabits(Habit habit) {};
-
     public UserList getFriends() {
         return friends;
     }
@@ -76,8 +74,6 @@ public class User {
     public void setFriends(UserList friends) {
         this.friends = friends;
     }
-
-    public void removeFrieds(User user) {};
 
     public UserList getReceivedRequests() {
         return receivedRequests;
@@ -87,7 +83,4 @@ public class User {
         this.receivedRequests = receivedRequests;
     }
 
-    public void acceptFriendRequest(User user) {}
-
-    public void declineFriendRequest(User user) {}
 }
