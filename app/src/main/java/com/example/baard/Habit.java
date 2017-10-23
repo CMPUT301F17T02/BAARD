@@ -6,7 +6,6 @@ package com.example.baard;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created by biancaangotti on 2017-10-18.
@@ -15,10 +14,10 @@ import java.util.Map;
 public class Habit {
     private String title, reason;
     private Date startDate;
-    private ArrayList<Integer> frequency;
+    private ArrayList<Day> frequency;
     private HabitEventList events = new HabitEventList();
 
-    public Habit(String title, String reason, Date startDate, ArrayList<Integer> frequency) {
+    public Habit(String title, String reason, Date startDate, ArrayList<Day> frequency) {
         this.title = title;
         this.reason = reason;
         this.startDate = startDate;
@@ -49,11 +48,11 @@ public class Habit {
         this.startDate = startDate;
     }
 
-    public ArrayList<Integer> getFrequency() {
+    public ArrayList<Day> getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(ArrayList<Integer> frequency) {
+    public void setFrequency(ArrayList<Day> frequency) {
         this.frequency = frequency;
     }
 
