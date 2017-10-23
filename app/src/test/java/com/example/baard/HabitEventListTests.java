@@ -39,18 +39,18 @@ public class HabitEventListTests {
         habitEvent = new HabitEvent(habit, "testevent", date1);
         habitEventList = new HabitEventList();
     }
-
+    @Test
     public void testAdd(){
         habitEventList.add(habitEvent);
         assertTrue(habitEventList.hasHabitEvent(habitEvent));
     }
-
+    @Test
     public void testDelete(){
         habitEventList.add(habitEvent);
         habitEventList.delete(habitEvent);
         assertFalse(habitEventList.hasHabitEvent(habitEvent));
     }
-
+    @Test
     public void testHasHabitEvent(){
         habitEventList.add(habitEvent);
         Date date2 = new Date();
@@ -58,7 +58,7 @@ public class HabitEventListTests {
         assertTrue(habitEventList.hasHabitEvent(habitEvent));
         assertFalse(habitEventList.hasHabitEvent(habitEvent2));
     }
-
+    @Test
     public void testGetHabitEvent(){
         habitEventList.add(habitEvent);
         assertEquals(habitEventList.getHabitEvent(0), habitEvent);

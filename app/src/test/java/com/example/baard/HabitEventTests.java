@@ -39,7 +39,7 @@ public class HabitEventTests {
         // constructor 1
         habitEvent = new HabitEvent(habit, "testevent", date1);
     }
-
+    @Test
     public void testConstructor(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
         //Date date1 = new Date();
@@ -58,7 +58,7 @@ public class HabitEventTests {
         assertEquals(habitEvent.getEventDate(), date2);
         assertEquals(habitEvent.getHabit(), habit);
     }
-
+    @Test
     public void testGetComment(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
         //Date date1 = new Date();
@@ -67,7 +67,7 @@ public class HabitEventTests {
         HabitEvent habitEvent = new HabitEvent(habit, "testevent", date1);
         assertEquals(habitEvent.getComment(), "testevent");
     }
-
+    @Test
     public void testSetComment(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
         //Date date1 = new Date();
@@ -77,7 +77,7 @@ public class HabitEventTests {
         habitEvent.setComment("set test");
         assertEquals(habitEvent.getComment(), "set test");
     }
-
+    @Test
     public void testGetDate(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
         //Date date1 = new Date();
@@ -86,7 +86,7 @@ public class HabitEventTests {
         //HabitEvent habitEvent = new HabitEvent(habit, "testevent", date1);
         assertEquals(habitEvent.getEventDate(), date1);
     }
-
+    @Test
     public void testSetDate(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
         //Date date1 = new Date();
@@ -98,7 +98,7 @@ public class HabitEventTests {
         assertNotEquals(habitEvent.getEventDate(), date1);
         assertEquals(habitEvent.getEventDate(), date2);
     }
-
+    @Test
     public void testGetHabit(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
         //Date date1 = new Date();
@@ -107,7 +107,7 @@ public class HabitEventTests {
         //HabitEvent habitEvent = new HabitEvent(habit, "testevent", date1);
         assertEquals(habitEvent.getHabit(), habit);
     }
-
+    @Test
     public void testSetHabit(){
         //ArrayList<Integer> freq = new ArrayList<Integer>();
         ArrayList<Day> freq2 = new ArrayList<Day>();
