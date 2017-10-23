@@ -10,5 +10,5 @@ import junit.framework.TestCase;
  * Created by mchoi on 2017-10-22.
  */
 
-public class UserListTest extends TestCase{
+public class UserListTest {
 }

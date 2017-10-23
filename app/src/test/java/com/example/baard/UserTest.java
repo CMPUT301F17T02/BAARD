@@ -4,7 +4,12 @@
 
 package com.example.baard;
 
+
 import junit.framework.TestCase;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 
 /**
  * Created by mchoi on 2017-10-22.
@@ -14,54 +19,91 @@ public class UserTest extends TestCase {
 
     private User user;
 
-    @Override
     public void setUp() {
         user = new User("Daniel", "daniel.choi@gmail.com", "asdf1234", "daniel.choi123");
     }
 
     public void testGetName() {
-        assertEquals(user.getName(), "Daniel");
+        assertEquals("Daniel", user.getName());
     }
+
     public void testSetName() {
         user.setName("Andrew");
-        assertEquals(user.getName(), "Andrew");
+        assertEquals("Andrew", user.getName());
     }
+
     public void testGetEmail() {
-        assertEquals(user.getEmail(), "daniel.choi@gmail.com");
+        assertEquals("daniel.choi@gmail.com", user.getEmail());
     }
+
     public void testSetEmail() {
         user.setEmail("john.smith@gmail.com");
-        assertEquals(user.getEmail(), "john.smith@gmail.com");
+        assertEquals("john.smith@gmail.com", user.getEmail());
     }
+
     public void testGetPassword() {
-        assertEquals(user.getPassword(), "asdf1234");
+        assertEquals("asdf1234", user.getPassword());
     }
+
     public void testSetPassword() {
         user.setPassword("1234asdf");
-        assertEquals(user.getPassword(), "1234asdf");
+        assertEquals("1234asdf", user.getPassword());
     }
+
     public void testGetUsername() {
-        assertEquals(user.getUsername(), "daniel.choi123");
+        assertEquals("daniel.choi123", user.getUsername());
     }
+
     public void testSetUsername() {
         user.setUsername("qwerty93");
-        assertEquals(user.getUsername(), "qwerty93");
+        assertEquals("qwerty93", user.getUsername());
     }
+
     public void testGetHabits() {
+        HabitList habitList = new HabitList();
+        ArrayList<Day> frequency = new ArrayList<Day>();
+        frequency.add(Day.MONDAY);
+        Habit habit = new Habit("Jog", "To be healthy", new Date(), frequency);
+        habitList.add(habit);
+        user.setHabits(habitList);
+        assertEquals(habitList, user.getHabits());
     }
+
     public void testSetHabits() {
-
+        HabitList habitList = new HabitList();
+        ArrayList<Day> frequency = new ArrayList<Day>();
+        frequency.add(Day.MONDAY);
+        Habit habit = new Habit("Jog", "To be healthy", new Date(), frequency);
+        habitList.add(habit);
+        user.setHabits(habitList);
+        assertEquals(habitList, user.getHabits());
     }
+
     public void testGetFriends() {
-
+        UserList userList = new UserList();
+        userList.add(new User("John", "johnsmith123@gmail.com", "zxcv123", "johnSmith232"));
+        user.setFriends(userList);
+        assertEquals(userList, user.getFriends());
     }
+
     public void testSetFriends() {
-
+        UserList userList = new UserList();
+        userList.add(new User("John", "johnsmith123@gmail.com", "zxcv123", "johnSmith232"));
+        user.setFriends(userList);
+        assertEquals(userList, user.getFriends());
     }
+
     public void testGetReceivedRequests() {
-
+        UserList userList = new UserList();
+        userList.add(new User("John", "johnsmith123@gmail.com", "zxcv123", "johnSmith232"));
+        user.setFriends(userList);
+        assertEquals(userList, user.getFriends());
     }
-    public void testSetReceivedRequests() {
 
+    public void testSetReceivedRequests() {
+        UserList userList = new UserList();
+        userList.add(new User("John", "johnsmith123@gmail.com", "zxcv123", "johnSmith232"));
+        user.setFriends(userList);
+        assertEquals(userList, user.getFriends());
     }
 }
