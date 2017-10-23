@@ -54,18 +54,29 @@ public class HabitTest extends ActivityInstrumentationTestCase2 {
         assertEquals(array, test_array);
     }
 
-    public void testGetEvent() {
-        HabitEventList habitEventList = new HabitEventList();
+    public void testGetEvents() {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
-        habit.getEvents();
+        HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
+        HabitEventList habitEventList = new HabitEventList();
+
+        habitEventList.add(habitEvent);
+
+        HabitEventList returnedEventList = habit.getEvents();
+
+        assertEquals(returnedEventList.getHabitEvent(0), habitEvent);
+
     }
 
-    public void testSetEvent() {
+    public void testSetEvents() {
         HabitEventList habitEventList = new HabitEventList();
         Habit habit = new Habit("Test Title", "reason", startDate, array);
-        HabitEvent habitEvent = new HabitEvent(habit, "comment", eventDate)
+        HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
+
         habitEventList.add(habitEvent);
         habit.setEvents(habitEventList);
+
+        assertEquals(habit.getEvents(), habitEventList);
+
     }
 
 }
