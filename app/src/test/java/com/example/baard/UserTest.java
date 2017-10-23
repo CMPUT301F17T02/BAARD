@@ -32,24 +32,6 @@ public class UserTest extends TestCase {
         assertEquals("Andrew", user.getName());
     }
 
-    public void testGetEmail() {
-        assertEquals("daniel_choi@gmail.com", user.getEmail());
-    }
-
-    public void testSetEmail() {
-        user.setEmail("john_smith@gmail.com");
-        assertEquals("john_smith@gmail.com", user.getEmail());
-    }
-
-    public void testGetPassword() {
-        assertEquals("asdf1234", user.getPassword());
-    }
-
-    public void testSetPassword() {
-        user.setPassword("1234asdf");
-        assertEquals("1234asdf", user.getPassword());
-    }
-
     public void testGetUsername() {
         assertEquals("daniel.choi123", user.getUsername());
     }
