@@ -20,7 +20,7 @@ public class UserTest extends TestCase {
     private User user;
 
     public void setUp() {
-        user = new User("Daniel", "daniel.choi@gmail.com", "asdf1234", "daniel.choi123");
+        user = new User("Daniel", "daniel_choi@gmail.com", "asdf1234", "daniel.choi123");
     }
 
     public void testGetName() {
@@ -33,12 +33,12 @@ public class UserTest extends TestCase {
     }
 
     public void testGetEmail() {
-        assertEquals("daniel.choi@gmail.com", user.getEmail());
+        assertEquals("daniel_choi@gmail.com", user.getEmail());
     }
 
     public void testSetEmail() {
-        user.setEmail("john.smith@gmail.com");
-        assertEquals("john.smith@gmail.com", user.getEmail());
+        user.setEmail("john_smith@gmail.com");
+        assertEquals("john_smith@gmail.com", user.getEmail());
     }
 
     public void testGetPassword() {
@@ -96,14 +96,14 @@ public class UserTest extends TestCase {
     public void testGetReceivedRequests() {
         UserList userList = new UserList();
         userList.add(new User("John", "johnsmith123@gmail.com", "zxcv123", "johnSmith232"));
-        user.setFriends(userList);
-        assertEquals(userList, user.getFriends());
+        user.setReceivedRequests(userList);
+        assertEquals(userList, user.getReceivedRequests());
     }
 
     public void testSetReceivedRequests() {
         UserList userList = new UserList();
         userList.add(new User("John", "johnsmith123@gmail.com", "zxcv123", "johnSmith232"));
-        user.setFriends(userList);
-        assertEquals(userList, user.getFriends());
+        user.setReceivedRequests(userList);
+        assertEquals(userList, user.getReceivedRequests());
     }
 }

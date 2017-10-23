@@ -4,11 +4,39 @@
 
 package com.example.baard;
 
+
 import junit.framework.TestCase;
 
 /**
  * Created by mchoi on 2017-10-22.
  */
 
-public class UserListTest {
+public class UserListTest extends TestCase {
+
+    UserList userList = new UserList();
+
+    public void testGetUser() {
+        User user = new User("Daniel", "daniel_choi@gmail.com", "asdf1234", "daniel.choi123");
+        userList.add(user);
+        assertEquals(user, userList.getUser(0));
+    }
+
+    public void testHasUser() {
+        User user = new User("Daniel", "daniel_choi@gmail.com", "asdf1234", "daniel.choi123");
+        userList.add(user);
+        assertTrue(userList.hasUser(user));
+    }
+
+    public void testAdd() {
+        User user = new User("Daniel", "daniel_choi@gmail.com", "asdf1234", "daniel.choi123");
+        userList.add(user);
+        assertEquals(user, userList.getUser(0));
+    }
+
+    public void testDelete() {
+        User user = new User("Daniel", "daniel_choi@gmail.com", "asdf1234", "daniel.choi123");
+        userList.add(user);
+        userList.delete(user);
+        assertFalse(userList.hasUser(user));
+    }
 }
