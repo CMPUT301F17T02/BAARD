@@ -15,9 +15,10 @@ import java.util.Date;
 
 public class HabitTest extends ActivityInstrumentationTestCase2 {
 
-    ArrayList<Habit> habits = new ArrayList<Habit>();
+    HabitList habits = new HabitList();
     Date startDate = new Date();
-    ArrayList<Integer> array = new ArrayList<Integer>();
+    Date eventDate;
+    ArrayList<Day> array = new ArrayList<Day>();
 
     public HabitTest(){
         super(Habit.class);
@@ -44,24 +45,27 @@ public class HabitTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testGetFrequency() {
-        array.add(1);
-        array.add(3);
-        array.add(5);
+        array.add(Day.MONDAY);
+        array.add(Day.WEDNESDAY);
+        array.add(Day.FRIDAY);
         Habit habit = new Habit("Test Title", "Reason", startDate, array);
-        ArrayList<Integer> test_array = new ArrayList<Integer>();
+        ArrayList<Day> test_array = new ArrayList<Day>();
         test_array = habit.getFrequency();
         assertEquals(array, test_array);
     }
 
     public void testGetEvent() {
-
+        HabitEventList habitEventList = new HabitEventList();
+        Habit habit = new Habit("Test Title", "reason", startDate, array);
+        habit.getEvents();
     }
 
-    public void testAddEvent() {
-
+    public void testSetEvent() {
+        HabitEventList habitEventList = new HabitEventList();
+        Habit habit = new Habit("Test Title", "reason", startDate, array);
+        HabitEvent habitEvent = new HabitEvent(habit, "comment", eventDate)
+        habitEventList.add(habitEvent);
+        habit.setEvents(habitEventList);
     }
 
-    public void testRemoveEvent() {
-
-    }
 }
