@@ -9,11 +9,15 @@ import android.test.ActivityInstrumentationTestCase2;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  * Created by randi on 23/10/17.
  */
 
-public class HabitListTest extends ActivityInstrumentationTestCase2{
+public class HabitListTest {
 
     HabitList habits = new HabitList();
     Date startDate = new Date();
@@ -21,9 +25,10 @@ public class HabitListTest extends ActivityInstrumentationTestCase2{
     ArrayList<Day> array = new ArrayList<Day>();
 
     public HabitListTest(){
-        super(Habit.class);
+        super();
     }
 
+    @Test
     public void testGetHabit() {
         Habit habit = new Habit("title", "Reason", startDate, array);
         habits.add(habit);
@@ -34,6 +39,7 @@ public class HabitListTest extends ActivityInstrumentationTestCase2{
         assertEquals(returnedHabit.getFrequency(), habit.getFrequency());
     }
 
+    @Test
     public void testHasHabit() {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
 
@@ -42,6 +48,7 @@ public class HabitListTest extends ActivityInstrumentationTestCase2{
         assertTrue(habits.hasHabit(habit));
     }
 
+    @Test
     public void testAdd() {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
 
@@ -49,6 +56,7 @@ public class HabitListTest extends ActivityInstrumentationTestCase2{
         assertTrue(habits.hasHabit(habit));
     }
 
+    @Test
     public void testDelete() {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
         habits.add(habit);
