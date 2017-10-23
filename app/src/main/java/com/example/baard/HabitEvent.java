@@ -12,21 +12,68 @@ import java.util.Date;
 
 public class HabitEvent {
     private Habit habit;
-    private String comment;
+    private String comment = "";
     private Date eventDate;
     // TODO location variable
     // TODO picture variable
 
-    public HabitEvent(Habit habit, String comment, Date eventDate) {
-        this.habit = habit;
-        this.comment = comment;
-        this.eventDate = eventDate;
-    }
 
     public HabitEvent(Habit habit, Date eventDate) {
         this.habit = habit;
         this.eventDate = eventDate;
     }
+
+    public HabitEvent(Habit habit, Date eventDate, String comment) {
+        this.habit = habit;
+        this.comment = comment;
+        this.eventDate = eventDate;
+    }
+
+    /*
+    public HabitEvent(Habit habit, Date eventDate, Picture picture) {
+        this.habit = habit;
+        this.eventDate = eventDate;
+        this.picture = picture;
+    }
+
+    public HabitEvent(Habit habit, Date eventDate, Location location) {
+        this.habit = habit;
+        this.eventDate = eventDate;
+        this.picture = picture;
+    }
+
+    public HabitEvent(Habit habit, Date eventDate, String comment, Location location) {
+        this.habit = habit;
+        this.eventDate = eventDate;
+        this.comment = comment;
+        this.picture = picture;
+        this.location = location;
+    }
+
+    public HabitEvent(Habit habit, Date eventDate, String comment, Picture picture) {
+        this.habit = habit;
+        this.eventDate = eventDate;
+        this.comment = comment;
+        this.picture = picture;
+        this.location = location;
+    }
+
+    public HabitEvent(Habit habit, Date eventDate, Picture picture, Location location) {
+        this.habit = habit;
+        this.eventDate = eventDate;
+        this.comment = comment;
+        this.picture = picture;
+        this.location = location;
+    }
+
+    public HabitEvent(Habit habit, Date eventDate, String comment, Picture picture, Location location) {
+        this.habit = habit;
+        this.eventDate = eventDate;
+        this.comment = comment;
+        this.picture = picture;
+        this.location = location;
+    }
+    */
 
     public Habit getHabit() {
         return habit;
@@ -51,4 +98,22 @@ public class HabitEvent {
     public void setEventDate(Date eventDate) {
         this.eventDate = eventDate;
     }
+
+    /*
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+    */
 }
