@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         Button mRegisterButton = (Button) findViewById(R.id.register_button);
-        mSignInButton.setOnClickListener(new OnClickListener() {
+        mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptRegister();
@@ -175,10 +175,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
-        } else if (!usernameExists(username)) {
-            mUsernameView.setError(getString(R.string.error_incorrect_username));
-            focusView = mUsernameView;
-            cancel = true;
         }
 
         if (cancel) {
@@ -227,10 +223,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
-        } else if (usernameExists(username)) {
-            mUsernameView.setError(getString(R.string.error_username_exists));
-            focusView = mUsernameView;
-            cancel = true;
         }
 
         if (cancel) {
@@ -244,11 +236,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = new UserLoginTask(username,name);
             mAuthTask.execute((Void) null);
         }
-    }
-
-    private boolean usernameExists(String username) {
-        //TODO: Replace this with your own logic and check for username exists in database
-        return !username.contains(" ");
     }
 
     /**
@@ -360,15 +347,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mName = null;
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service. i.e. perfom the login or register
-
-            if (mName == null) {
-                // TODO: Login
-            } else {
-                // TODO: Register
-            }
+        private boolean usernameExists(String username) {
+            //TODO: Replace this with your own logic and check for username exists in database
 
             try {
                 // Simulate network access.
@@ -385,20 +365,49 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
-            // TODO: register the new account here. Probably
+            return !username.contains(" ");
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service. i.e. perform the login or register
+
+            if (mName == null) {
+                // TODO: Login
+                if (!usernameExists(mUsername)) {
+                    return false;
+                }
+            } else {
+                if (usernameExists(mUsername)) {
+                    return false;
+                }
+                // TODO: Register new account
+            }
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
+            if (mName == null) {
+                mAuthTask = null;
+                showProgress(false);
 
-            if (success) {
-                finish();
+                if (success) {
+                    finish();
+                } else {
+                    mUsernameView.setError(getString(R.string.error_incorrect_username));
+                    mUsernameView.requestFocus();
+                }
             } else {
-                mUsernameView.setError(getString(R.string.error_incorrect_username));
-                mUsernameView.requestFocus();
+                mAuthTask = null;
+                showProgress(false);
+
+                if (success) {
+                    finish();
+                } else {
+                    mUsernameView.setError(getString(R.string.error_username_exists));
+                    mUsernameView.requestFocus();
+                }
             }
         }
 
