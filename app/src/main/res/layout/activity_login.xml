@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,6 +58,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_name"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_register"
+                    android:imeOptions="actionUnspecified"
                     android:inputType="textPersonName"
                     android:maxLines="1" />
 
@@ -80,6 +83,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
 </LinearLayout>
