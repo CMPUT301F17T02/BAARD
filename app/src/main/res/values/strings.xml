@@ -11,6 +11,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_username">This username contains invalid characters</string>
     <string name="error_incorrect_username">This username does not exist</string>
     <string name="error_username_exists">This username already exists</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
