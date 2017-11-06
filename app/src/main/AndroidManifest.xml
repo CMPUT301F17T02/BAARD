@@ -53,7 +53,6 @@
         <activity
             android:name=".ViewMapActivity"
             android:label="@string/title_activity_view_map" />
-        <activity android:name=".FriendsActivity"></activity>
     </application>
 
 </manifest>

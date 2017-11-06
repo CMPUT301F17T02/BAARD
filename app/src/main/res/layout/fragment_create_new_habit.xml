@@ -13,34 +13,157 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="63dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:ems="10"
         android:hint="Title"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/reason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/title"
-        android:layout_alignStart="@+id/title"
-        android:layout_below="@+id/title"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="Reason"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:layout_below="@+id/title"
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignStart="@+id/title" />
 
     <EditText
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/reason"
-        android:layout_alignStart="@+id/reason"
-        android:layout_below="@+id/reason"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="19dp"
         android:ems="10"
-        android:inputType="date" />
+        android:hint="Start Date"
+        android:inputType="date"
+        android:layout_below="@+id/reason"
+        android:layout_alignLeft="@+id/reason"
+        android:layout_alignStart="@+id/reason" />
+
+    <Button
+        android:id="@+id/create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:layout_marginBottom="29dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:text="Create New Habit"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ToggleButton
+        android:id="@+id/tues"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/mon"
+        android:layout_toEndOf="@+id/mon"
+        android:layout_toRightOf="@+id/mon"
+        android:text="Tues"
+        android:textOff="Tues"
+        android:textOn="Tues"
+        android:textSize="12sp" />
+
+    <ToggleButton
+        android:id="@+id/mon"
+        android:layout_width="52dp"
+        android:layout_height="wrap_content"
+        android:text="Mon"
+        android:textOff="Mon"
+        android:textOn="Mon"
+        android:textSize="12sp"
+        android:layout_alignBaseline="@+id/sun"
+        android:layout_alignBottom="@+id/sun"
+        android:layout_toRightOf="@+id/sun"
+        android:layout_toEndOf="@+id/sun" />
+
+    <ToggleButton
+        android:id="@+id/thurs"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/wed"
+        android:layout_toRightOf="@+id/wed"
+        android:text="Thurs"
+        android:textOff="Thurs"
+        android:textOn="Thurs"
+        android:textSize="12sp"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
+
+    <ToggleButton
+        android:id="@+id/wed"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="Wed"
+        android:textOff="Wed"
+        android:textOn="Wed"
+        android:textSize="12sp"
+        android:layout_alignBaseline="@+id/tues"
+        android:layout_alignBottom="@+id/tues"
+        android:layout_toRightOf="@+id/tues"
+        android:layout_toEndOf="@+id/tues" />
+
+    <ToggleButton
+        android:id="@+id/fri"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/sun"
+        android:layout_toEndOf="@+id/thurs"
+        android:layout_toRightOf="@+id/thurs"
+        android:text="Fri"
+        android:textOff="Fri"
+        android:textOn="Fri"
+        android:textSize="12sp" />
+
+    <ToggleButton
+        android:id="@+id/sat"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/fri"
+        android:checked="false"
+        android:text="Sat"
+        android:textOff="Sat"
+        android:textOn="Sat"
+        android:textSize="12sp" />
+
+    <ToggleButton
+        android:id="@+id/sun"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:text="Sun"
+        android:textOff="Sun"
+        android:textOn="Sun"
+        android:textSize="12sp"
+        android:layout_above="@+id/create"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="31dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Days of the Week"
+        android:textSize="18sp"
+        android:layout_above="@+id/thurs"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" />
 
 </RelativeLayout>
