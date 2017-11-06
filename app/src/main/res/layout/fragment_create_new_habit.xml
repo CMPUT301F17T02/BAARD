@@ -44,15 +44,6 @@
         android:layout_alignLeft="@+id/reason"
         android:layout_alignStart="@+id/reason" />
 
-    <Button
-        android:id="@+id/create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create"
-        android:layout_marginBottom="29dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -64,6 +55,29 @@
         android:textAllCaps="false"
         android:textSize="24sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/thurs"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Days of the Week"
+        android:textSize="18sp" />
+
+    <ToggleButton
+        android:id="@+id/mon"
+        android:layout_width="52dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sun"
+        android:layout_alignBottom="@+id/sun"
+        android:layout_toEndOf="@+id/sun"
+        android:layout_toRightOf="@+id/sun"
+        android:text="Mon"
+        android:textOff="Mon"
+        android:textOn="Mon"
+        android:textSize="12sp" />
 
     <ToggleButton
         android:id="@+id/tues"
@@ -78,17 +92,17 @@
         android:textSize="12sp" />
 
     <ToggleButton
-        android:id="@+id/mon"
-        android:layout_width="52dp"
+        android:id="@+id/wed"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:text="Mon"
-        android:textOff="Mon"
-        android:textOn="Mon"
-        android:textSize="12sp"
-        android:layout_alignBaseline="@+id/sun"
-        android:layout_alignBottom="@+id/sun"
-        android:layout_toRightOf="@+id/sun"
-        android:layout_toEndOf="@+id/sun" />
+        android:layout_alignBaseline="@+id/tues"
+        android:layout_alignBottom="@+id/tues"
+        android:layout_toEndOf="@+id/tues"
+        android:layout_toRightOf="@+id/tues"
+        android:text="Wed"
+        android:textOff="Wed"
+        android:textOn="Wed"
+        android:textSize="12sp" />
 
     <ToggleButton
         android:id="@+id/thurs"
@@ -102,19 +116,6 @@
         android:textSize="12sp"
         android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView" />
-
-    <ToggleButton
-        android:id="@+id/wed"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:text="Wed"
-        android:textOff="Wed"
-        android:textOn="Wed"
-        android:textSize="12sp"
-        android:layout_alignBaseline="@+id/tues"
-        android:layout_alignBottom="@+id/tues"
-        android:layout_toRightOf="@+id/tues"
-        android:layout_toEndOf="@+id/tues" />
 
     <ToggleButton
         android:id="@+id/fri"
@@ -156,14 +157,13 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="31dp" />
 
-    <TextView
-        android:id="@+id/textView3"
+    <Button
+        android:id="@+id/create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Days of the Week"
-        android:textSize="18sp"
-        android:layout_above="@+id/thurs"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="29dp"
+        android:text="Create" />
 
 </RelativeLayout>
