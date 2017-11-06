@@ -90,7 +90,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_allHabits) {
+        if (id == R.id.nav_dailyHabits) {
+
+        }
+        else if (id == R.id.nav_allHabits) {
             Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();
             AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance(0);
             FragmentManager manager = getSupportFragmentManager();
@@ -108,13 +111,17 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitFragment,
                     createNewHabitFragment.getTag()
             ).commit();
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_allHabitEvents) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_newHabitEvent) {
+
+        } else if (id == R.id.nav_viewMap) {
+
+        } else if (id == R.id.nav_viewFriends) {
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
 
         }
 

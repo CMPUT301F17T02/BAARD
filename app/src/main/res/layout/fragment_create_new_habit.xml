@@ -10,37 +10,37 @@
 
     <!-- TODO: Update blank fragment layout -->
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="63dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Reason"
-        android:layout_below="@+id/editText"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:hint="Title"
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/reason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignStart="@+id/title"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="34dp"
+        android:ems="10"
+        android:hint="Reason"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/reason"
+        android:layout_alignStart="@+id/reason"
+        android:layout_below="@+id/reason"
         android:layout_marginTop="30dp"
         android:ems="10"
-        android:inputType="date"
-        android:layout_below="@+id/editText2"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_alignStart="@+id/editText2" />
+        android:inputType="date" />
 
 </RelativeLayout>

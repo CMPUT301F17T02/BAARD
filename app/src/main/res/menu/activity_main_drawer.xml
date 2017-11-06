@@ -7,6 +7,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_dailyHabits"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Daily Habits" />
+        <item
             android:id="@+id/nav_allHabits"
             android:icon="@drawable/ic_menu_camera"
             android:title="All Habits" />
@@ -15,25 +19,33 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Create New Habit" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_allHabitEvents"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="All Habit Events" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_newHabitEvent"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Create New Habit Event" />
+        <item
+            android:id="@+id/nav_viewMap"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="View Map" />
+        <item
+            android:id="@+id/nav_viewFriends"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Explore Friends" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Personal">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Settings" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Logout" />
         </menu>
     </item>
 
