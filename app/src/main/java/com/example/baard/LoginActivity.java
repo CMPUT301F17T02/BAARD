@@ -7,6 +7,7 @@ package com.example.baard;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 
@@ -229,6 +230,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
+     * Calls the intent to move on to the main activity
+     */
+    private void login() {
+        // TODO: Pass intent to main activity with user instance
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
@@ -252,7 +262,7 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -285,28 +295,21 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            // TODO: Pass intent to main activity with user instance
-
-            if (mName == null) {
+            if (!success) {
                 mAuthTask = null;
                 showProgress(false);
 
-                if (success) {
-                    finish();
-                } else {
+                if (mName == null) {
                     mUsernameView.setError(getString(R.string.error_incorrect_username));
+                    mUsernameView.requestFocus();
+                } else {
+                    mUsernameView.setError(getString(R.string.error_username_exists));
                     mUsernameView.requestFocus();
                 }
             } else {
                 mAuthTask = null;
                 showProgress(false);
-
-                if (success) {
-                    finish();
-                } else {
-                    mUsernameView.setError(getString(R.string.error_username_exists));
-                    mUsernameView.requestFocus();
-                }
+                login();
             }
         }
 
