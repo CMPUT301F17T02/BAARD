@@ -34,7 +34,6 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".DailyHabitsActivity" />
         <activity
             android:name=".ViewHabitActivity"
             android:label="@string/title_activity_view_habit"
