@@ -1,0 +1,40 @@
+{
+    "mappings": {
+        "HabitEvent": {
+            "properties": {
+                "comment": {"type": "text"},
+                "eventDate": {"type": "date"},
+                "location": {}, 
+                "picture": {}
+            }
+        },
+        "HabitEventList": {
+            "properties": {
+                "events": []
+            }
+        },
+        "Habit": {
+            "properties": {
+                "title": {"type": "text"},
+                "reason": {"type": "text"},
+                "startDate": {"type": "date"},
+                "frequency": [],
+                "events": []
+            }
+        },
+        "HabitList": {
+            "properties": {
+                "habits": []
+            }
+        },
+        "User": {
+            "properties": {
+                "name": {"type": "text"},
+                "username": {"type": "text"},
+                "habits": [],
+                "friends": [],
+                "receivedRequests": []
+            }
+        }
+    }
+}
