@@ -24,7 +24,8 @@ import com.example.baard.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
-        AllHabitsFragment.OnListFragmentInteractionListener {
+        AllHabitsFragment.OnListFragmentInteractionListener, AllHabitEventsFragment.OnListFragmentInteractionListener,
+        CreateNewHabitEventFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +113,23 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitFragment.getTag()
             ).commit();
         } else if (id == R.id.nav_allHabitEvents) {
-
+            Toast.makeText(this, "All Habit Events", Toast.LENGTH_SHORT).show();
+            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance(0);
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    allHabitEventsFragment,
+                    allHabitEventsFragment.getTag()
+            ).commit();
         } else if (id == R.id.nav_newHabitEvent) {
-
+            Toast.makeText(this, "Create New Habit Event", Toast.LENGTH_SHORT).show();
+            CreateNewHabitEventFragment createNewHabitEventFragment = CreateNewHabitEventFragment.newInstance("test", "test2");
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    createNewHabitEventFragment,
+                    createNewHabitEventFragment.getTag()
+            ).commit();
         } else if (id == R.id.nav_viewMap) {
 
         } else if (id == R.id.nav_viewFriends) {
