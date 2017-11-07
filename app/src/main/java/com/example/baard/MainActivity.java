@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_dailyHabits) {
-
+            Toast.makeText(this, "TBD", Toast.LENGTH_SHORT).show();
         }
         else if (id == R.id.nav_allHabits) {
             Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();
@@ -131,13 +131,13 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitEventFragment.getTag()
             ).commit();
         } else if (id == R.id.nav_viewMap) {
-
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
-
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_share) {
-
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
-
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
