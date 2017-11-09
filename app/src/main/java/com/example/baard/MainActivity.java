@@ -137,7 +137,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
