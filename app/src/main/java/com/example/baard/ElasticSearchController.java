@@ -41,7 +41,6 @@ public class ElasticSearchController {
                     // where is the client?
                     DocumentResult execute = client.execute(index);
                     if(execute.isSucceeded()) {
-                        habit.setId(execute.getId());
                     }
                 }
                 catch (Exception e) {
