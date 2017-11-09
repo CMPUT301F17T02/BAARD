@@ -96,7 +96,7 @@ public class ElasticSearchController {
     public static void verifySettings() {
         if (client == null) {
             // classes that build other classes for you
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080/CMPUT301F17T02");
+            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080/cmput301f17t02");
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();
