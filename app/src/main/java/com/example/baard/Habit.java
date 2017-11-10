@@ -56,6 +56,18 @@ public class Habit {
         this.frequency = frequency;
     }
 
+    public String getFrequencyString() {
+        String days = "";
+        for (int i = 0; i < frequency.size(); i++) {
+//            StringBuilder day = new StringBuilder(frequency.get(i).toString());
+//            days += day.replace(1, day.length(), day.substring(1).toLowerCase());
+            days += frequency.get(i).toString().substring(0,1) + frequency.get(i).toString().substring(1).toLowerCase();
+            if (i + 1 < frequency.size())
+                days += ", ";
+        }
+        return days;
+    }
+
     public HabitEventList getEvents() {
         return events;
     }

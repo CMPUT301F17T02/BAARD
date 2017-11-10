@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/reason" />
 
     <TextView
-        android:id="@+id/repeatDays"
+        android:id="@+id/frequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="39dp"
