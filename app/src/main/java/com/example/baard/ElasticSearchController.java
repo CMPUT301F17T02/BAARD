@@ -28,20 +28,23 @@ public class ElasticSearchController {
     private static JestDroidClient client;
 
     // TODO we need a function which adds habits to elastic search
-    public static class AddHabitsTask extends AsyncTask<Habit, Void, Void> {
+    public static class AddUserTask extends AsyncTask<User, Void, Void> {
 
         @Override
-        protected Void doInBackground(Habit... habits) {
-            //verifySettings();
+        protected Void doInBackground(User... users) {
+            verifySettings();
 
-            for (Habit habit : habits) {
-                Index index = new Index.Builder(habit).index("CMPUT301F17T02").type("habit").build();
+            for (User user : users) {
+                String source = "{\"name\":" + user.getName() + "," +
+                                "\"username\":" + user.getUsername() + "," +
+                                "\"habits\": []," +
+                                "\"friends\": []," +
+                                "\"receivedRequests\": []}";
+                Index index = new Index.Builder(source).index("cmput301f17t02").type("habit").build();
 
                 try {
-                    // where is the client?
                     DocumentResult execute = client.execute(index);
-                    if(execute.isSucceeded()) {
-                    }
+                    if (execute.isSucceeded()) {}
                 }
                 catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the habits");
@@ -53,7 +56,7 @@ public class ElasticSearchController {
     }
 
     // TODO we need a function which gets habits from elastic search
-    public static class GetHabitsTask extends AsyncTask<String, Void, ArrayList<Habit>> {
+    public static class GetUserTask extends AsyncTask<String, Void, ArrayList<Habit>> {
         @Override
         protected ArrayList<Habit> doInBackground(String... search_parameters) {
             verifySettings();
