@@ -64,5 +64,10 @@ public class Habit {
         this.events = events;
     }
 
+    @Override
+    public String toString() {
+        return title;
+    }
+
 }
 

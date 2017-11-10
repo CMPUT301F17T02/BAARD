@@ -4,9 +4,11 @@
 
 package com.example.baard;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,9 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.example.baard.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
+        AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
+        CreateNewHabitEventFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -84,22 +91,63 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        if (id == R.id.nav_dailyHabits) {
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.nav_allHabits) {
+            Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();
+            AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance("test", "test2");
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    allHabitsFragment,
+                    allHabitsFragment.getTag()
+            ).commit();
+        } else if (id == R.id.nav_newHabit) {
+            Toast.makeText(this, "Create New Habit", Toast.LENGTH_SHORT).show();
+            CreateNewHabitFragment createNewHabitFragment = CreateNewHabitFragment.newInstance("test", "test2");
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    createNewHabitFragment,
+                    createNewHabitFragment.getTag()
+            ).commit();
+        } else if (id == R.id.nav_allHabitEvents) {
+            Toast.makeText(this, "All Habit Events", Toast.LENGTH_SHORT).show();
+            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance("test", "test2");
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    allHabitEventsFragment,
+                    allHabitEventsFragment.getTag()
+            ).commit();
+        } else if (id == R.id.nav_newHabitEvent) {
+            Toast.makeText(this, "Create New Habit Event", Toast.LENGTH_SHORT).show();
+            CreateNewHabitEventFragment createNewHabitEventFragment = CreateNewHabitEventFragment.newInstance("test", "test2");
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    createNewHabitEventFragment,
+                    createNewHabitEventFragment.getTag()
+            ).commit();
+        } else if (id == R.id.nav_viewMap) {
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_viewFriends) {
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_logout) {
+            Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
