@@ -7,6 +7,7 @@ package com.example.baard;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -62,19 +63,15 @@ public class ElasticSearchController {
             verifySettings();
             ArrayList<User> users = new ArrayList<User>();
 
-            // TODO Build the query
-            //String query = "{" +
-            //               "    \"query\" : {" +
-            //               "       \"term\" : { \"username\" : \"" + search_parameters[0] + "\" }" +
-            //               "    }" +
-            //               "}";
             String query = "{\n" +
-                           "    \"query\": {\"match_all\":{} }\n" +
+                           "    \"query\" : {\n" +
+                           "       \"term\" : {\"username\": \"" + search_parameters[0] + "\"}\n" +
+                           "    }\n" +
                            "}";
 
-            Log.d("elasticSearch", "query = " + query);
+            Log.d("elasticSearch", query);
             Search search = new Search.Builder(query)
-                    .addIndex("cmput301ft17t02")
+                    .addIndex("cmput301f17t02")
                     .addType("User")
                     .build();
 
@@ -82,7 +79,7 @@ public class ElasticSearchController {
                 // TODO get the results of the query
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    Log.d("elasticSearch", "result: " + result.getJsonString());
+                    Object object = result.getValue("_source");
                     Log.d("elasticSearch", "source: " + result.getSourceAsString());
                     List<User> foundUsers = result.getSourceAsObjectList(User.class);
                     users.addAll(foundUsers);
@@ -105,7 +102,7 @@ public class ElasticSearchController {
     public static void verifySettings() {
         if (client == null) {
             // classes that build other classes for you
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080/cmput301f17t02");
+            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();
