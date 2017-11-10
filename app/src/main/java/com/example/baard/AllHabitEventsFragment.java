@@ -80,7 +80,7 @@ public class AllHabitEventsFragment extends Fragment {
 
         habitEventList.add(new HabitEvent(new Habit("test", "just because", new Date(), new ArrayList<Day>()), new Date()));
 
-        ListView habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
+        habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
         adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
 

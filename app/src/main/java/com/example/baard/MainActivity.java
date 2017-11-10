@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_dailyHabits) {
-            Toast.makeText(this, "TBD", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         }
         else if (id == R.id.nav_allHabits) {
             Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();

@@ -5,12 +5,14 @@
 package com.example.baard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -80,11 +82,21 @@ public class AllHabitsFragment extends Fragment {
 
         habitList.add(new Habit("test", "just because", new Date(), new ArrayList<Day>()));
 
-        ListView habitListView = (ListView) view.findViewById(R.id.habitListView);
+        habitListView = (ListView) view.findViewById(R.id.habitListView);
 
         adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList);
 
         habitListView.setAdapter(adapter);
+
+        // set the listener so that if you click a habit in the list, you can view it
+        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                intent.putExtra("position",i);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
