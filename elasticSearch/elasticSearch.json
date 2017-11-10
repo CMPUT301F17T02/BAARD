@@ -12,14 +12,14 @@
                 "habits": {
                     "type": "nested",
                     "properties": {
-                        "id": {"type": "integer"},
+                        "id": {"type": "string"},
                         "title": {"type": "string"}
                     }
                 },
                 "friends": {
                     "type": "nested",
                     "properties": {
-                        "id": {"type": "integer"},
+                        "id": {"type": "string"},
                         "name": {"type": "string"},
                         "username": {"type": "string"}
                     }
@@ -27,7 +27,7 @@
                 "receivedRequests": {
                     "type": "nested",
                     "properties": {
-                        "id": {"type": "integer"},
+                        "id": {"type": "string"},
                         "name": {"type": "string"},
                         "username": {"type": "string"}
                     }
@@ -52,7 +52,7 @@
                 "events": {
                     "type": "nested",
                     "properties": {
-                        "id": {"type": "integer"}
+                        "id": {"type": "string"}
                     }
                 }
             }
@@ -83,14 +83,14 @@
         "habits": {
             "type": "nested",
             "properties": {
-                "id": {"type": "integer"},
+                "id": {"type": "string"},
                 "title": {"type": "string"}
             }
         },
         "friends": {
             "type": "nested",
             "properties": {
-                "id": {"type": "integer"},
+                "id": {"type": "string"},
                 "name": {"type": "string"},
                 "username": {"type": "string"}
             }
@@ -98,7 +98,7 @@
         "receivedRequests": {
             "type": "nested",
             "properties": {
-                "id": {"type": "integer"},
+                "id": {"type": "string"},
                 "name": {"type": "string"},
                 "username": {"type": "string"}
             }
@@ -125,7 +125,7 @@
         "events": {
             "type": "nested",
             "properties": {
-                "id": {"type": "integer"}
+                "id": {"type": "string"}
             }
         }
     }

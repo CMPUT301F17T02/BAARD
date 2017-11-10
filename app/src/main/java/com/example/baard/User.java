@@ -6,6 +6,8 @@ package com.example.baard;
 
 import java.util.ArrayList;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by biancaangotti on 2017-10-18.
  */
@@ -16,11 +18,17 @@ public class User {
     private HabitList habits = new HabitList();
     private UserList friends = new UserList();
     private UserList receivedRequests = new UserList();
+    @JestId
+    private String id;
     // WOW factor TODO --> profile pictures
 
     public User(String name, String username) {
         this.name = name;
         this.username = username;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

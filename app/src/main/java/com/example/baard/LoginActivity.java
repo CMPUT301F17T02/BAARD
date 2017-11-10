@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -136,6 +137,13 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+            ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
+            getUserTask.execute("daniel123");
+            try {
+                User user = getUserTask.get();
+            } catch (Exception e) {
+
+            }
             mAuthTask = new UserLoginTask(username);
             mAuthTask.execute((Void) null);
         }
@@ -259,11 +267,10 @@ public class LoginActivity extends AppCompatActivity {
 
         private boolean usernameExists(String username) {
             //TODO: Replace this with your own logic and check for username exists in database
-
             try {
                 // Simulate network access.
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 return false;
             }
 

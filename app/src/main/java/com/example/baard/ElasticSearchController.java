@@ -35,12 +35,12 @@ public class ElasticSearchController {
             verifySettings();
 
             for (User user : users) {
-                String source = "{\"name\":" + user.getName() + "," +
-                                "\"username\":" + user.getUsername() + "," +
+                String source = "{\"name\": \"" + user.getName() + "\"," +
+                                "\"username\": \"" + user.getUsername() + "\"," +
                                 "\"habits\": []," +
                                 "\"friends\": []," +
                                 "\"receivedRequests\": []}";
-                Index index = new Index.Builder(source).index("cmput301f17t02").type("habit").build();
+                Index index = new Index.Builder(source).index("cmput301f17t02").type("User").build();
 
                 try {
                     DocumentResult execute = client.execute(index);
@@ -56,41 +56,48 @@ public class ElasticSearchController {
     }
 
     // TODO we need a function which gets habits from elastic search
-    public static class GetUserTask extends AsyncTask<String, Void, ArrayList<Habit>> {
+    public static class GetUserTask extends AsyncTask<String, Void, User> {
         @Override
-        protected ArrayList<Habit> doInBackground(String... search_parameters) {
+        protected User doInBackground(String... search_parameters) {
             verifySettings();
-
-            ArrayList<Habit> habits = new ArrayList<Habit>();
+            ArrayList<User> users = new ArrayList<User>();
 
             // TODO Build the query
+            //String query = "{" +
+            //               "    \"query\" : {" +
+            //               "       \"term\" : { \"username\" : \"" + search_parameters[0] + "\" }" +
+            //               "    }" +
+            //               "}";
             String query = "{\n" +
-                    "    \"query\" : {\n" +
-                    "        \"term\" : { \"message\" : \"" + search_parameters[0] + "\" }\n" +
-                    "    }\n" +
-                    "}";
+                           "    \"query\": {\"match_all\":{} }\n" +
+                           "}";
 
+            Log.d("elasticSearch", "query = " + query);
             Search search = new Search.Builder(query)
-                    .addIndex("testing")
-                    .addType("habit")
+                    .addIndex("cmput301ft17t02")
+                    .addType("User")
                     .build();
 
             try {
                 // TODO get the results of the query
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    List<Habit> foundHabits = result.getSourceAsObjectList(Habit.class);
-                    habits.addAll(foundHabits);
+                    Log.d("elasticSearch", "result: " + result.getJsonString());
+                    Log.d("elasticSearch", "source: " + result.getSourceAsString());
+                    List<User> foundUsers = result.getSourceAsObjectList(User.class);
+                    users.addAll(foundUsers);
                 }
                 else {
+                    Log.d("elasticSearch", "Unable to find any habits.");
                     Log.e("Error","The search query failed to find any habits that matched.");
                 }
             }
             catch (Exception e) {
+                Log.d("elasticSearch", "Error with elasticsearch Server");
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
-            return habits;
+            return new User("hi", "hello");
         }
     }
 

@@ -3,20 +3,20 @@
     "username": "daniel123",
     "habits": [
         {
-            "id": 1,
+            "id": "1",
             "title": "eating"
         }
     ],
     "friends": [
         {
-            "id": 2,
+            "id": "2",
             "name": "Adam",
             "username": "adam123"
         }
     ],
     "receivedRequests": [
         {
-            "id": 3,
+            "id": "3",
             "name": "John",
             "username": "john123"
         }
