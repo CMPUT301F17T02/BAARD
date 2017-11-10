@@ -11,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 
 /**
@@ -68,7 +70,15 @@ public class CreateNewHabitEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_new_habit_event, container, false);
+        View v = inflater.inflate(R.layout.fragment_create_new_habit_event, container, false);
+
+        // TODO: GET ACTUAL LIST OF HABITS FROM FILE/SERVER
+        String [] habits = {"Swimming","Eating","Studying"};
+        Spinner spinner = (Spinner) v.findViewById(R.id.habitSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, habits);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(adapter);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -93,6 +103,13 @@ public class CreateNewHabitEventFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        //get eerything ready
+        // go super saiyan 3
     }
 
     /**
