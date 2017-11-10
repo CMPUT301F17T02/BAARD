@@ -90,5 +90,4 @@ public class HabitTest {
         assertEquals(habit.getEvents(), habitEventList);
 
     }
-
 }

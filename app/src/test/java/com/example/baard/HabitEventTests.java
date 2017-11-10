@@ -22,7 +22,7 @@ public class HabitEventTests {
 
     //do we need this?? was in the lab test cases
     //public HabitEventTests{
-        //super();
+    //super();
     //}
 
     ArrayList<Day> freq;
