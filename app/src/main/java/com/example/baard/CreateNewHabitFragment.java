@@ -6,6 +6,7 @@ package com.example.baard;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link CreateNewHabitFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CreateNewHabitFragment extends Fragment {
+public class CreateNewHabitFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -71,28 +72,11 @@ public class CreateNewHabitFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.fragment_create_new_habit);
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        //Button createButton = (Button) findViewById(R.id.create);
-        //bodyText = (EditText) findViewById(R.id.body);
-
-        //createButton.setOnClickListener(new View.OnClickListener() {
-
-        //    public void onClick(View v) {
-
-//                setResult(RESULT_OK);
-//                String text = bodyText.getText().toString();
-
-//                habits.add(new NormalTweet(text));
-//                adapter.notifyDataSetInvalidated();
-                //saveInFile();
- //           }
-//        });
     }
 
     @Override
@@ -103,8 +87,17 @@ public class CreateNewHabitFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View myView = inflater.inflate(R.layout.fragment_create_new_habit, container, false);
+         Button createButton = (Button) myView.findViewById(R.id.create);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                startActivity(intent);
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_new_habit, container, false);
+        return myView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -123,6 +116,17 @@ public class CreateNewHabitFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        //setResult(RESULT_OK);
+        String text = bodyText.getText().toString();
+        // Add new habit
+        //habits.add(new Habit());
+        adapter.notifyDataSetInvalidated();
+
     }
 
     @Override
