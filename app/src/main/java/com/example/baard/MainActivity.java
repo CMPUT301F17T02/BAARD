@@ -24,7 +24,7 @@ import com.example.baard.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
-        AllHabitsFragment.OnListFragmentInteractionListener, AllHabitEventsFragment.OnListFragmentInteractionListener,
+        AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnListFragmentInteractionListener,
         CreateNewHabitEventFragment.OnFragmentInteractionListener {
 
     @Override
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_allHabits) {
             Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();
-            AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance(0);
+            AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance("test", "test2");
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
                     R.id.relativelayout_for_fragment,
