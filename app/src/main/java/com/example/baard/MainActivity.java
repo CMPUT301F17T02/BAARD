@@ -24,7 +24,7 @@ import com.example.baard.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
-        AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnListFragmentInteractionListener,
+        AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
         CreateNewHabitEventFragment.OnFragmentInteractionListener {
 
     @Override
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             ).commit();
         } else if (id == R.id.nav_allHabitEvents) {
             Toast.makeText(this, "All Habit Events", Toast.LENGTH_SHORT).show();
-            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance(0);
+            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance("test", "test2");
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
                     R.id.relativelayout_for_fragment,
@@ -148,11 +148,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
     }
 }
