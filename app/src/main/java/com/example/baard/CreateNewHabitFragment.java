@@ -4,6 +4,7 @@
 
 package com.example.baard;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -30,6 +39,10 @@ public class CreateNewHabitFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ArrayList<Habit> habits = new ArrayList<Habit>();
+    private ArrayAdapter<Habit> adapter;
+    private EditText bodyText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,10 +71,33 @@ public class CreateNewHabitFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setContentView(R.layout.fragment_create_new_habit);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //Button createButton = (Button) findViewById(R.id.create);
+        //bodyText = (EditText) findViewById(R.id.body);
+
+        //createButton.setOnClickListener(new View.OnClickListener() {
+
+        //    public void onClick(View v) {
+
+//                setResult(RESULT_OK);
+//                String text = bodyText.getText().toString();
+
+//                habits.add(new NormalTweet(text));
+//                adapter.notifyDataSetInvalidated();
+                //saveInFile();
+ //           }
+//        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -94,6 +130,8 @@ public class CreateNewHabitFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
