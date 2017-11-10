@@ -5,16 +5,19 @@
 package com.example.baard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -71,37 +74,38 @@ public class AllHabitsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        getActivity().setContentView(R.layout.fragment_all_habits);
-        habitListView = (ListView) getView().findViewById(R.id.habitListView);
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_all_habits, container, false);
-//        ListView habitListView = (ListView) view.findViewById(R.id.habitListView);
-//        habitListView.setAdapter(new ArrayAdapter<Habit>(this, R.layout.list_item,R.id.labeld, habitList));
-//        return view;
-//    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_all_habits, container, false);
+
+        habitList.add(new Habit("test", "just because", new Date(), new ArrayList<Day>()));
+
+        habitListView = (ListView) view.findViewById(R.id.habitListView);
+
+        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList);
+
+        habitListView.setAdapter(adapter);
+
+        // set the listener so that if you click a habit in the list, you can view it
+        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                intent.putExtra("position",i);
+                startActivity(intent);
+            }
+        });
+
+        return view;
+    }
 
     @Override
     public void onStart() {
         super.onStart();
         // TODO GRAB THE LIST TO DISPLAY
-
-
-
-        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList);
-        habitListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_habits, container, false);
+//        adapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

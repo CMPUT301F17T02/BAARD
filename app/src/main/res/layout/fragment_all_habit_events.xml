@@ -3,14 +3,14 @@
   -->
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.baard.AllHabitsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.baard.AllHabitEventsFragment">
 
     <ListView
-        android:id="@+id/habitListView"
+        android:id="@+id/habitEventListView"
         android:layout_width="352dp"
         android:layout_height="411dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="All Habits"
+        android:text="All Habit Events"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"

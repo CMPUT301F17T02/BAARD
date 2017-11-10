@@ -22,7 +22,7 @@ public class HabitEventTests {
 
     //do we need this?? was in the lab test cases
     //public HabitEventTests{
-        //super();
+    //super();
     //}
 
     ArrayList<Day> freq;
@@ -37,7 +37,7 @@ public class HabitEventTests {
         date1 = new Date();
         habit = new Habit("test","reason",date1,freq);
         // constructor 1
-        habitEvent = new HabitEvent(habit, "testevent", date1);
+        habitEvent = new HabitEvent(habit, date1, "testevent");
     }
     @Test
     public void testConstructor(){
@@ -45,7 +45,7 @@ public class HabitEventTests {
         //Date date1 = new Date();
         //Habit habit = new Habit("test","reason",date1,freq);
         // constructor 1
-        habitEvent = new HabitEvent(habit, "testevent", date1);
+        habitEvent = new HabitEvent(habit, date1, "testevent");
         // test that the values have been set
         assertEquals(habitEvent.getComment(), "testevent");
         assertEquals(habitEvent.getEventDate(), date1);
@@ -64,7 +64,7 @@ public class HabitEventTests {
         //Date date1 = new Date();
         //Habit habit = new Habit("test","reason",date1,freq);
         // constructor 1
-        HabitEvent habitEvent = new HabitEvent(habit, "testevent", date1);
+        HabitEvent habitEvent = new HabitEvent(habit, date1, "testevent");
         assertEquals(habitEvent.getComment(), "testevent");
     }
     @Test
