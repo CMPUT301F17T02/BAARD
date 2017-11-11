@@ -9,10 +9,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.example.baard.Day.MONDAY;
 import static com.example.baard.Day.TUESDAY;
@@ -22,6 +27,7 @@ public class EditHabitActivity extends AppCompatActivity {
     private Habit habit;
     private EditText editTextTitle, editTextReason, editTextStartDate;
     private ArrayList<Day> frequency;
+    DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class EditHabitActivity extends AppCompatActivity {
         editTextStartDate = (EditText) findViewById(R.id.startDate);
         editTextTitle.setText(habit.getTitle());
         editTextReason.setText(habit.getReason());
-        editTextStartDate.setText(habit.getStartDate().toString());
+        editTextStartDate.setText(formatter.format(habit.getStartDate()));
         frequency = habit.getFrequency();
         setToggleButtons();
     }
@@ -61,21 +67,29 @@ public class EditHabitActivity extends AppCompatActivity {
             toggles.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        // TODO The toggle is enabled
                         if (!frequency.contains(possibleValues[finalI])) {
                             frequency.add(possibleValues[finalI]);
                         }
                     } else {
-                        // TODO The toggle is disabled
                         frequency.remove(possibleValues[finalI]);
                     }
                 }
             });
-            //TODO set it on or off depending on arraylist state!!
+
             if (frequency.contains(possibleValues[finalI])) {
                 toggles.get(i).setChecked(true);
             }
         }
+    }
+
+    public Date convertDate(String stringDate) {
+        Date date = null;
+        try {
+            date = formatter.parse(stringDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     /* Function that saves the new list into file & online */
@@ -97,21 +111,23 @@ public class EditHabitActivity extends AppCompatActivity {
             editTextReason.setError("Reason for habit is required!");
             properEntry = false;
         }
-        if (editTextStartDate.getText().toString().equals("")){
+        Date convertedStartDate = convertDate(editTextStartDate.getText().toString());
+        if (editTextStartDate.getText().toString().equals("") || convertedStartDate == null){
             editTextStartDate.setError("Start date is required!");
             properEntry = false;
         }
-
         System.out.println(frequency);
-
+        if (frequency.size() < 1) {
+            Toast.makeText(this, "No frequency selected", Toast.LENGTH_SHORT).show();
+            properEntry = false;
+        }
         if (properEntry) {
             habit.setTitle(editTextTitle.getText().toString());
             habit.setReason(editTextReason.getText().toString());
             habit.setStartDate(new Date(editTextStartDate.getText().toString()));
-            //TODO call for toggles into frequency
+            habit.setFrequency(frequency);
             commitEdits();
             finish();
         }
-
     }
 }
