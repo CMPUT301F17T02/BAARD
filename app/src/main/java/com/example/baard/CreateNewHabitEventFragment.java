@@ -18,8 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -95,6 +101,13 @@ public class CreateNewHabitEventFragment extends Fragment {
                 onSelectImageButtonPress(view);
             }
         });
+        Button createButton = (Button) v.findViewById(R.id.saveButton);
+        createButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                createHabitEvent();
+            }
+        });
         return v;
     }
 
@@ -102,6 +115,29 @@ public class CreateNewHabitEventFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    public void createHabitEvent(){
+        //validate data fields and save the record BOI
+        //make sure date string is a valid format
+        Date date = null;
+        boolean isValidHabitEvent = true;
+        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        EditText dateEditText = (EditText) getActivity().findViewById(R.id.HabitEventDateEditText);
+        try {
+            date = sourceFormat.parse(dateEditText.getText().toString());
+        }catch(Exception e){
+            //invalid date format
+            isValidHabitEvent = false;
+        }
+        //TODO: make sure there are no HabitEvents on the given date
+
+        if (isValidHabitEvent) {
+            //Habit habit = new Habit();
+            EditText comment = (EditText) getActivity().findViewById(R.id.commentEditText);
+            //HabitEvent habitEvent = new HabitEvent(habit, date, comment);
+            //TODO: SAVE HABIT EVENT IN HABIT 
         }
     }
 
@@ -136,7 +172,9 @@ public class CreateNewHabitEventFragment extends Fragment {
             cursor.close();
             TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
             textView.setText(filePath);
-            //Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
+            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
+            ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+            imageView.setImageBitmap(yourSelectedImage);
         }
     }
 
