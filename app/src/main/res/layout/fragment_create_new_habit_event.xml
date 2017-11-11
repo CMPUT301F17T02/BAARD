@@ -60,7 +60,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="Enter Habit Event Date"
+        android:hint="Enter Date (dd/mm/yyyy)"
         android:inputType="date"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitSpinner" />

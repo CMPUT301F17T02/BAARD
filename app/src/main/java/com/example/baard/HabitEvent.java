@@ -6,8 +6,10 @@ package com.example.baard;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.ContactsContract;
 
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 /**
  * Created by biancaangotti on 2017-10-18.
@@ -27,9 +29,9 @@ public class HabitEvent {
         this.eventDate = eventDate;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, String comment) {
+    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException {
         this.habit = habit;
-        this.comment = comment;
+        this.setComment(comment);
         this.eventDate = eventDate;
     }
 
@@ -91,7 +93,10 @@ public class HabitEvent {
         return comment;
     }
 
-    public void setComment(String comment) {
+    public void setComment(String comment) throws DataFormatException {
+        if (comment.length() > 20){
+            throw new DataFormatException();
+        }
         this.comment = comment;
     }
 

@@ -29,7 +29,7 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         TextView comment = (TextView) findViewById(R.id.commentView);
         comment.setText(habitEvent.getComment());
         ImageView image = (ImageView) findViewById(R.id.imageView);
-        image.setImageBitmap(habitEvent.getImage());
+        image.setImageURI(habitEvent.getImage());
         //set onClick listeners for the edit/delete buttons
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitEventButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {

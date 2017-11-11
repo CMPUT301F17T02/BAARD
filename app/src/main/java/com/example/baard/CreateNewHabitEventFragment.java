@@ -129,6 +129,7 @@ public class CreateNewHabitEventFragment extends Fragment {
             date = sourceFormat.parse(dateEditText.getText().toString());
         }catch(Exception e){
             //invalid date format
+            dateEditText.setError("Invalid date entry:");
             isValidHabitEvent = false;
         }
         //TODO: make sure there are no HabitEvents on the given date
@@ -158,7 +159,7 @@ public class CreateNewHabitEventFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            //TODO: action
+
 
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
