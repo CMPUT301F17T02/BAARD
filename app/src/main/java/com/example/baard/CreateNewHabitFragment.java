@@ -52,14 +52,13 @@ public class CreateNewHabitFragment extends Fragment {
 
     private HabitList habits = new HabitList();
     ArrayList<ToggleButton> toggles = new ArrayList<>();
-    ArrayList<Day> trueToggles = new ArrayList<Day>();
+    //ArrayList<Day> trueToggles = new ArrayList<Day>();
 
     private ArrayAdapter<Habit> adapter;
     private EditText titleText;
     private EditText reasonText;
     private EditText startDateText;
-
-    ToggleButton monToggle, tuesToggle, wedToggle, thurToggle, friToggle, satToggle, sunToggle;
+    private ArrayList<Day> frequency;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,14 +66,6 @@ public class CreateNewHabitFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateNewHabitFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static CreateNewHabitFragment newInstance(String param1, String param2) {
         CreateNewHabitFragment fragment = new CreateNewHabitFragment();
@@ -114,52 +105,12 @@ public class CreateNewHabitFragment extends Fragment {
         reasonText = (EditText) myView.findViewById(R.id.reason);
         startDateText = (EditText) myView.findViewById(R.id.startDate);
 
-        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
-        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
-        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
-        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
-        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
-
-        for (final ToggleButton tog : toggles) {
-            tog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        // TODO The toggle is enabled
-
-                        StringBuffer result = new StringBuffer();
-                        result.append(tog.getText());
-
-                        switch(result.toString()) {
-                            case "Mon": trueToggles.add(Day.MONDAY);
-                                        break;
-                            case "Tue": trueToggles.add(Day.TUESDAY);
-                                        break;
-                            case "Wed": trueToggles.add(Day.WEDNESDAY);
-                                        break;
-                            case "Thu": trueToggles.add(Day.THURSDAY);
-                                        break;
-                            case "Fri": trueToggles.add(Day.FRIDAY);
-                                        break;
-                            case "Sat": trueToggles.add(Day.SATURDAY);
-                                        break;
-                            case "Sun": trueToggles.add(Day.SUNDAY);
-                                        break;
-                        }
-
-                    } else {
-                        // TODO The toggle is disabled
-                        // Do nothing
-                    }
-                }
-            });
-        }
-
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean properEntry = true;
+
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                 String title_text = titleText.getText().toString();
                 String reason = reasonText.getText().toString();
@@ -167,20 +118,28 @@ public class CreateNewHabitFragment extends Fragment {
                 String startDate = startDateText.getText().toString();
                 Date convertedStartDate = convertDate(startDate);
 
-                habits.add(new Habit(title_text, reason, convertedStartDate, trueToggles));
+                setToggleButtons();
 
-//                System.out.println("title: " + title_text);
-//                System.out.println("reason: " + reason);
-//                System.out.println("start Date: " + startDate);
-//                System.out.println("Data start date: " + convertedStartDate);
+                if (titleText.getText().toString().equals("")) {
+                    titleText.setError("Title of habit is required!");
+                    properEntry = false;
+                }
+                if (reasonText.getText().toString().equals("")) {
+                    reasonText.setError("Reason for habit is required!");
+                    properEntry = false;
+                }
+                if (startDateText.getText().toString().equals("")) {
+                    startDateText.setError("Start date is required!");
+                    properEntry = false;
+                }
 
-                // Add habit to habit list
+                if (properEntry) {
 
-
-//                System.out.println("freq" + habits.getHabit(0).getFrequency());
-
-
-                startActivity(intent);
+                    habits.add(new Habit(title_text, reason, convertedStartDate, frequency));
+                    //System.out.println("Start Date: " + convertedStartDate);
+                    // System.out.println("freq" + habits.getHabit(0).getFrequency());
+                    startActivity(intent);
+                }
             }
         });
         // Inflate the layout for this fragment
@@ -191,6 +150,39 @@ public class CreateNewHabitFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    public void setToggleButtons() {
+        //ArrayList<ToggleButton> toggles = new ArrayList<>();
+        toggles.add((ToggleButton) getView().findViewById(R.id.sun));
+        toggles.add((ToggleButton) getView().findViewById(R.id.mon));
+        toggles.add((ToggleButton) getView().findViewById(R.id.tue));
+        toggles.add((ToggleButton) getView().findViewById(R.id.wed));
+        toggles.add((ToggleButton) getView().findViewById(R.id.thu));
+        toggles.add((ToggleButton) getView().findViewById(R.id.fri));
+        toggles.add((ToggleButton) getView().findViewById(R.id.sat));
+        final Day[] possibleValues  = Day.values();
+
+        for (int i = 0; i < toggles.size(); i++) {
+            final int finalI = i;
+            toggles.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        // TODO The toggle is enabled
+                        if (!frequency.contains(possibleValues[finalI])) {
+                            frequency.add(possibleValues[finalI]);
+                        }
+                    } else {
+                        // TODO The toggle is disabled
+                        frequency.remove(possibleValues[finalI]);
+                    }
+                }
+            });
+//            //TODO set it on or off depending on arraylist state!!
+//            if (frequency.contains(possibleValues[finalI])) {
+//                toggles.get(i).setChecked(true);
+//            }
         }
     }
 
@@ -205,17 +197,6 @@ public class CreateNewHabitFragment extends Fragment {
         }
     }
 
-
-//    @Override
-//    public void onClick(View v) {
-//        //setResult(RESULT_OK);
-//        String text = bodyText.getText().toString();
-//        // Add new habit
-//        //habits.add(new Habit());
-//        adapter.notifyDataSetInvalidated();
-//
-//    }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -223,12 +204,13 @@ public class CreateNewHabitFragment extends Fragment {
     }
 
     public Date convertDate(String stringDate) {
-        DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
         try {
             date = format.parse(stringDate);
         } catch (ParseException e) {
             e.printStackTrace();
+            System.out.println(" Please enter date ");
         }
         return date;
     }
