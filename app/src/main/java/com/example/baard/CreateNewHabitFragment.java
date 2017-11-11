@@ -108,6 +108,7 @@ public class CreateNewHabitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_create_new_habit, container, false);
+
         Button createButton = (Button) myView.findViewById(R.id.create);
         titleText = (EditText) myView.findViewById(R.id.title);
         reasonText = (EditText) myView.findViewById(R.id.reason);
@@ -125,42 +126,31 @@ public class CreateNewHabitFragment extends Fragment {
             tog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        String newDay;
                         // TODO The toggle is enabled
-                        // convert to day then add to trueToggles
 
                         StringBuffer result = new StringBuffer();
                         result.append(tog.getText());
-                        //String day = tog.getText().toString();
-                        System.out.println("tog: " + tog);
-                        //System.out.println("day: " + newDay);
 
                         switch(result.toString()) {
                             case "Mon": trueToggles.add(Day.MONDAY);
-                                        System.out.println("got into monday");
                                         break;
                             case "Tue": trueToggles.add(Day.TUESDAY);
-                                        System.out.println("got into tuesday");
                                         break;
                             case "Wed": trueToggles.add(Day.WEDNESDAY);
-                                        System.out.println("got into wednesday");
                                         break;
                             case "Thu": trueToggles.add(Day.THURSDAY);
-                                        System.out.println("got into thursday");
                                         break;
                             case "Fri": trueToggles.add(Day.FRIDAY);
-                                        System.out.println("got into friday");
                                         break;
                             case "Sat": trueToggles.add(Day.SATURDAY);
-                                        System.out.println("got into saturday");
                                         break;
                             case "Sun": trueToggles.add(Day.SUNDAY);
-                                        System.out.println("got into sunday");
                                         break;
                         }
 
                     } else {
                         // TODO The toggle is disabled
+                        // Do nothing
                     }
                 }
             });
@@ -177,20 +167,18 @@ public class CreateNewHabitFragment extends Fragment {
                 String startDate = startDateText.getText().toString();
                 Date convertedStartDate = convertDate(startDate);
 
-                //setToggleButtons(habit.getFrequency());
-
-
-                System.out.println("title: " + title_text);
-                System.out.println("reason: " + reason);
-                System.out.println("start Date: " + startDate);
-                System.out.println("Data start date: " + convertedStartDate);
-
-                // Add habit to habit list
                 habits.add(new Habit(title_text, reason, convertedStartDate, trueToggles));
 
-                //for ( HabitList i: habits) {
-                System.out.println("freq" + habits.getHabit(0).getFrequency());
-                //}
+//                System.out.println("title: " + title_text);
+//                System.out.println("reason: " + reason);
+//                System.out.println("start Date: " + startDate);
+//                System.out.println("Data start date: " + convertedStartDate);
+
+                // Add habit to habit list
+
+
+//                System.out.println("freq" + habits.getHabit(0).getFrequency());
+
 
                 startActivity(intent);
             }
