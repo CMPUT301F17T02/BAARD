@@ -22,18 +22,25 @@ import java.lang.reflect.Type;
  * Created by Adam on 11/11/2017.
  */
 
-public class FileController {
+class FileController {
 
-    public static final String FILENAME = "BAARD.sav";
+    private static final String FILENAME = "BAARD.sav";
 
+    /**
+     * Constructor for FileController
+     */
     public FileController() {
     }
 
+    // TODO: Check for device online and push to server.
+
     /**
-     * Loads the necessary files from the device
+     * Loads the user stored locally on the device
      * Taken from lonelytwitter lab exercises
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @return User stored in the file
      */
-    public User loadFromFile(Context context) {
+    public User loadUserFromFile(Context context) {
         User user = null;
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
@@ -43,16 +50,18 @@ public class FileController {
             Type UserType = new TypeToken<User>() {}.getType();
             user = gson.fromJson(in,UserType);
             //https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
         }
         return user;
     }
 
     /**
-     * Saves the necessary files to the device
+     * Saves the specified user to file locally
      * Taken from lonelytwitter lab exercises
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @param user User to be stored in the file
      */
-    public void saveInFile(Context context, User user) {
+    public void saveUserToFile(Context context, User user) {
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME,
                     Context.MODE_PRIVATE);
@@ -61,8 +70,6 @@ public class FileController {
             gson.toJson(user,writer);
             writer.flush();
             fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException();
         } catch (IOException e) {
             throw new RuntimeException();
         }
