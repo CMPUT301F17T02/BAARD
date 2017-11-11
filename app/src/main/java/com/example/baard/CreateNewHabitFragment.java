@@ -18,7 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -31,7 +36,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link CreateNewHabitFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CreateNewHabitFragment extends Fragment implements View.OnClickListener {
+public class CreateNewHabitFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,7 +48,9 @@ public class CreateNewHabitFragment extends Fragment implements View.OnClickList
 
     private ArrayList<Habit> habits = new ArrayList<Habit>();
     private ArrayAdapter<Habit> adapter;
-    private EditText bodyText;
+    private EditText titleText;
+    private EditText reasonText;
+    private EditText startDateText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -88,11 +95,28 @@ public class CreateNewHabitFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_create_new_habit, container, false);
-         Button createButton = (Button) myView.findViewById(R.id.create);
+        Button createButton = (Button) myView.findViewById(R.id.create);
+        titleText = (EditText) myView.findViewById(R.id.title);
+        reasonText = (EditText) myView.findViewById(R.id.reason);
+        startDateText = (EditText) myView.findViewById(R.id.startDate);
+
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                String title_text = titleText.getText().toString();
+                String reason = reasonText.getText().toString();
+
+                String startDate = startDateText.getText().toString();
+                Date convertedStartDate = convertDate(startDate);
+
+                System.out.println("title: " + title_text);
+                System.out.println("reason: " + reason);
+                System.out.println("start Date: " + startDate);
+                System.out.println("Data start date: " + convertedStartDate);
+
+                // Add habit to habit list
+                //habits.add(new Habit(title_text, reason, convertedStartDate, ));
                 startActivity(intent);
             }
         });
@@ -119,20 +143,31 @@ public class CreateNewHabitFragment extends Fragment implements View.OnClickList
     }
 
 
-    @Override
-    public void onClick(View v) {
-        //setResult(RESULT_OK);
-        String text = bodyText.getText().toString();
-        // Add new habit
-        //habits.add(new Habit());
-        adapter.notifyDataSetInvalidated();
-
-    }
+//    @Override
+//    public void onClick(View v) {
+//        //setResult(RESULT_OK);
+//        String text = bodyText.getText().toString();
+//        // Add new habit
+//        //habits.add(new Habit());
+//        adapter.notifyDataSetInvalidated();
+//
+//    }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public Date convertDate(String stringDate) {
+        DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        Date date = null;
+        try {
+            date = format.parse(stringDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
 
