@@ -68,6 +68,9 @@
                 }
             }
         }
+    },
+    "settings": {
+        "index.mapper.dynamic": false
     }
 }
 
@@ -84,7 +87,20 @@
             "type": "nested",
             "properties": {
                 "id": {"type": "string"},
-                "title": {"type": "string"}
+                "userId": {"type": "string"},
+                "title": {"type": "string"},
+                "reason": {"type": "string"},
+                "startDate": {"type": "date", "format": "date_time_no_millis"},
+                "frequency": {"type": "integer"},
+                "events": {"type": "nested",
+                           "properties": {
+                               "id": {"type": "string"},
+                               "userId": {"type": "string"},
+                               "habitId": {"type": "string"},
+                               "comment": {"type": "string"},
+                               "eventDate": {"type": "date", "format", "date_time_no_millis"}
+                           }
+                }
             }
         },
         "friends": {

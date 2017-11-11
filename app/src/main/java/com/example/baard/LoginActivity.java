@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
             ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
-            getUserTask.execute("daniel123");
+            getUserTask.execute("nathan123");
             try {
                 User user = getUserTask.get();
             } catch (Exception e) {
@@ -196,6 +196,14 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+            ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
+            User user1 = new User("Nathan", "nathan123");
+            User user2 = new User("John", "john123");
+            user2.setId("1");
+            UserList friendsList = new UserList();
+            friendsList.add(user2);
+            user1.setFriends(friendsList);
+            addUserTask.execute(user1);
             mAuthTask = new UserLoginTask(username,name);
             mAuthTask.execute((Void) null);
         }

@@ -6,17 +6,46 @@ package com.example.baard;
 
 import java.util.Date;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by biancaangotti on 2017-10-18.
  */
 
 public class HabitEvent {
-    private Habit habit;
+    private transient Habit habit;
     private String comment = "";
     private Date eventDate;
+    @JestId
+    private String id;
+    private String userId;
+    private String habitId;
     // TODO location variable
     // TODO picture variable
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getHabitId() {
+        return habitId;
+    }
+
+    public void setHabitId(String habitId) {
+        this.habitId = habitId;
+    }
 
     public HabitEvent(Habit habit, Date eventDate) {
         this.habit = habit;

@@ -15,9 +15,9 @@ import io.searchbox.annotations.JestId;
 public class User {
     private String name;
     private String username;
-    private HabitList habits = new HabitList();
-    private UserList friends = new UserList();
-    private UserList receivedRequests = new UserList();
+    private transient HabitList habits = new HabitList();
+    private transient UserList friends = new UserList();
+    private transient UserList receivedRequests = new UserList();
     @JestId
     private String id;
     // WOW factor TODO --> profile pictures
@@ -25,6 +25,10 @@ public class User {
     public User(String name, String username) {
         this.name = name;
         this.username = username;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {

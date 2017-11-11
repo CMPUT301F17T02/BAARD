@@ -7,6 +7,8 @@ package com.example.baard;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by biancaangotti on 2017-10-18.
  */
@@ -16,12 +18,31 @@ public class Habit {
     private Date startDate;
     private ArrayList<Day> frequency;
     private HabitEventList events = new HabitEventList();
+    @JestId
+    private String id;
+    private String userId;
 
     public Habit(String title, String reason, Date startDate, ArrayList<Day> frequency) {
         this.title = title;
         this.reason = reason;
         this.startDate = startDate;
         this.frequency = frequency;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getTitle() {

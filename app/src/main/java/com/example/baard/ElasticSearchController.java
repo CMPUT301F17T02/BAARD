@@ -7,15 +7,14 @@ package com.example.baard;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
@@ -38,16 +37,38 @@ public class ElasticSearchController {
             verifySettings();
 
             for (User user : users) {
+                JsonObject o;
+                JsonParser parser = new JsonParser();
+
+                // Get Habits attribute as string
+                o = parser.parse(new Gson().toJson(user.getHabits())).getAsJsonObject();
+                String habitsJSON = o.getAsJsonArray("habits").toString();
+                Log.d("elasticSearch", habitsJSON);
+
+                // Get Friends attribute as string
+                o = parser.parse(new Gson().toJson(user.getFriends())).getAsJsonObject();
+                String friendsJSON = o.getAsJsonArray("users").toString();
+                Log.d("elasticSearch", friendsJSON);
+
+                // Get ReceivedRequests attribute as string
+                o = parser.parse(new Gson().toJson(user.getReceivedRequests())).getAsJsonObject();
+                String receivedRequestsJSON = o.getAsJsonArray("users").toString();
+                Log.d("elasticSearch", receivedRequestsJSON);
+
+                // Create body for POST API of ElasticSearch
                 String source = "{\"name\": \"" + user.getName() + "\"," +
                                 "\"username\": \"" + user.getUsername() + "\"," +
-                                "\"habits\": []," +
-                                "\"friends\": []," +
-                                "\"receivedRequests\": []}";
+                                "\"habits\": " + habitsJSON + "," +
+                                "\"friends\": " + friendsJSON + "," +
+                                "\"receivedRequests\": " + receivedRequestsJSON + "}";
+
                 Index index = new Index.Builder(source).index("cmput301f17t02").type("User").build();
 
                 try {
                     DocumentResult execute = client.execute(index);
-                    if (execute.isSucceeded()) {}
+                    if (execute.isSucceeded()) {
+                        Log.d("elasticSearch", "User has been created.");
+                    }
                 }
                 catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the habits");
@@ -58,7 +79,6 @@ public class ElasticSearchController {
         }
     }
 
-    // TODO we need a function which gets habits from elastic search
     public static class GetUserTask extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... search_parameters) {
@@ -80,36 +100,41 @@ public class ElasticSearchController {
             try {
                 SearchResult result = client.execute(search);
                 JsonObject hits = result.getJsonObject().getAsJsonObject("hits");
+
                 if (result.isSucceeded() && hits.get("total").getAsInt() == 1) {
+
                     JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
                     JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
-                    Log.d("elasticSearch", userInfoSource.toString());
-                    user = new User(userInfoSource.get("name").getAsString(), userInfoSource.get("username").getAsString());
-                    // Create Habit List of User
-                    for (JsonElement habitInfo : userInfo.getAsJsonArray("habits")) {
 
-                    }
-                    // Create Friend List of User
-                    for (JsonElement friendInfo : userInfo.getAsJsonArray("friends")) {
+                    // Create HabitList habits from JSON string
+                    String habitsJSON = "{\"habits\":" + userInfoSource.get("friends").toString() + "}";
+                    HabitList habitsList = new Gson().fromJson(habitsJSON, HabitList.class);
 
-                    }
-                    // Create ReceivedRequest List of User
-                    for (JsonElement receivedRequestInfo : userInfo.getAsJsonArray("receivedRequests")) {
+                    // Create UserList friendsList from JSON string
+                    String friendsJSON = "{\"users\":" + userInfoSource.get("friends").toString() + "}";
+                    UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
 
-                    }
+                    // Create UserList receivedRequest from JSON string
+                    String receivedRequestsJSON = "{\"users\":" + userInfoSource.get("friends").toString() + "}";
+                    UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
+
+                    user = result.getSourceAsObject(User.class);
+                    user.setHabits(habitsList);
+                    user.setFriends(friendsList);
+                    user.setReceivedRequests(receivedRequestsList);
+
+                    Log.d("elasticSearch", "User was found.");
+
                 } else {
-                    Log.e("elasticSearch","The search query failed to find any username that matched.");
+                    Log.i("elasticSearch","The search query failed to find any username that matched.");
                 }
             }
             catch (Exception e) {
-                Log.d("elasticSearch", "Error with elasticsearch Server");
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.e("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-
             return user;
         }
     }
-
 
     public static void verifySettings() {
         if (client == null) {
