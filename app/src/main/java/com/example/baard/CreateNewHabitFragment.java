@@ -15,8 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ToggleButton;
+
+import org.w3c.dom.Node;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -46,11 +50,16 @@ public class CreateNewHabitFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ArrayList<Habit> habits = new ArrayList<Habit>();
+    private HabitList habits = new HabitList();
+    ArrayList<ToggleButton> toggles = new ArrayList<>();
+    ArrayList<Day> trueToggles = new ArrayList<Day>();
+
     private ArrayAdapter<Habit> adapter;
     private EditText titleText;
     private EditText reasonText;
     private EditText startDateText;
+
+    ToggleButton monToggle, tuesToggle, wedToggle, thurToggle, friToggle, satToggle, sunToggle;
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,6 +100,10 @@ public class CreateNewHabitFragment extends Fragment {
         super.onStart();
     }
 
+    public void setToggleButtons(ArrayList<Day> days) {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,6 +112,60 @@ public class CreateNewHabitFragment extends Fragment {
         titleText = (EditText) myView.findViewById(R.id.title);
         reasonText = (EditText) myView.findViewById(R.id.reason);
         startDateText = (EditText) myView.findViewById(R.id.startDate);
+
+        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
+        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
+        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
+        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
+        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
+
+        for (final ToggleButton tog : toggles) {
+            tog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        String newDay;
+                        // TODO The toggle is enabled
+                        // convert to day then add to trueToggles
+
+                        StringBuffer result = new StringBuffer();
+                        result.append(tog.getText());
+                        //String day = tog.getText().toString();
+                        System.out.println("tog: " + tog);
+                        //System.out.println("day: " + newDay);
+
+                        switch(result.toString()) {
+                            case "Mon": trueToggles.add(Day.MONDAY);
+                                        System.out.println("got into monday");
+                                        break;
+                            case "Tue": trueToggles.add(Day.TUESDAY);
+                                        System.out.println("got into tuesday");
+                                        break;
+                            case "Wed": trueToggles.add(Day.WEDNESDAY);
+                                        System.out.println("got into wednesday");
+                                        break;
+                            case "Thu": trueToggles.add(Day.THURSDAY);
+                                        System.out.println("got into thursday");
+                                        break;
+                            case "Fri": trueToggles.add(Day.FRIDAY);
+                                        System.out.println("got into friday");
+                                        break;
+                            case "Sat": trueToggles.add(Day.SATURDAY);
+                                        System.out.println("got into saturday");
+                                        break;
+                            case "Sun": trueToggles.add(Day.SUNDAY);
+                                        System.out.println("got into sunday");
+                                        break;
+                        }
+
+                    } else {
+                        // TODO The toggle is disabled
+                    }
+                }
+            });
+        }
+
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,13 +177,21 @@ public class CreateNewHabitFragment extends Fragment {
                 String startDate = startDateText.getText().toString();
                 Date convertedStartDate = convertDate(startDate);
 
+                //setToggleButtons(habit.getFrequency());
+
+
                 System.out.println("title: " + title_text);
                 System.out.println("reason: " + reason);
                 System.out.println("start Date: " + startDate);
                 System.out.println("Data start date: " + convertedStartDate);
 
                 // Add habit to habit list
-                //habits.add(new Habit(title_text, reason, convertedStartDate, ));
+                habits.add(new Habit(title_text, reason, convertedStartDate, trueToggles));
+
+                //for ( HabitList i: habits) {
+                System.out.println("freq" + habits.getHabit(0).getFrequency());
+                //}
+
                 startActivity(intent);
             }
         });
