@@ -7,6 +7,8 @@ package com.example.baard;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -61,7 +63,7 @@ public class ElasticSearchController {
         @Override
         protected User doInBackground(String... search_parameters) {
             verifySettings();
-            ArrayList<User> users = new ArrayList<User>();
+            User user = null;
 
             String query = "{\n" +
                            "    \"query\" : {\n" +
@@ -76,17 +78,27 @@ public class ElasticSearchController {
                     .build();
 
             try {
-                // TODO get the results of the query
                 SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    Object object = result.getValue("_source");
-                    Log.d("elasticSearch", "source: " + result.getSourceAsString());
-                    List<User> foundUsers = result.getSourceAsObjectList(User.class);
-                    users.addAll(foundUsers);
-                }
-                else {
-                    Log.d("elasticSearch", "Unable to find any habits.");
-                    Log.e("Error","The search query failed to find any habits that matched.");
+                JsonObject hits = result.getJsonObject().getAsJsonObject("hits");
+                if (result.isSucceeded() && hits.get("total").getAsInt() == 1) {
+                    JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
+                    JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
+                    Log.d("elasticSearch", userInfoSource.toString());
+                    user = new User(userInfoSource.get("name").getAsString(), userInfoSource.get("username").getAsString());
+                    // Create Habit List of User
+                    for (JsonElement habitInfo : userInfo.getAsJsonArray("habits")) {
+
+                    }
+                    // Create Friend List of User
+                    for (JsonElement friendInfo : userInfo.getAsJsonArray("friends")) {
+
+                    }
+                    // Create ReceivedRequest List of User
+                    for (JsonElement receivedRequestInfo : userInfo.getAsJsonArray("receivedRequests")) {
+
+                    }
+                } else {
+                    Log.e("elasticSearch","The search query failed to find any username that matched.");
                 }
             }
             catch (Exception e) {
@@ -94,7 +106,7 @@ public class ElasticSearchController {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
-            return new User("hi", "hello");
+            return user;
         }
     }
 
