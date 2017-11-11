@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.zip.DataFormatException;
 
 import static com.example.baard.Day.MONDAY;
 import static com.example.baard.Day.TUESDAY;
@@ -27,11 +28,16 @@ public class ViewHabitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_habit);
-        
+
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(MONDAY);
         days.add(TUESDAY);
-        Habit habit = new Habit("test", "test", new Date(), days);
+        Habit habit = null;
+        try {
+            habit = new Habit("test", "test", new Date(), days);
+        } catch (DataFormatException e) {
+            e.printStackTrace();
+        }
 
         // set all of the values for the habit to be viewed
         TextView titleView = (TextView) findViewById(R.id.title);
@@ -51,6 +57,10 @@ public class ViewHabitActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    /**
+     * @param view
+     */
     /* Called when the user taps the Delete button */
     public void deleteHabit(View view) {
         // TODO delete functionality

@@ -6,6 +6,7 @@ package com.example.baard;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 /**
  * Created by biancaangotti on 2017-10-18.
@@ -17,9 +18,17 @@ public class Habit {
     private ArrayList<Day> frequency;
     private HabitEventList events = new HabitEventList();
 
-    public Habit(String title, String reason, Date startDate, ArrayList<Day> frequency) {
-        this.title = title;
-        this.reason = reason;
+    public Habit(String title, String reason, Date startDate, ArrayList<Day> frequency) throws DataFormatException {
+        if (title.length() <= 20) {
+            this.title = title;
+        } else {
+            throw new DataFormatException();
+        }
+        if (reason.length() <= 30) {
+            this.reason = reason;
+        } else {
+            throw new DataFormatException();
+        }
         this.startDate = startDate;
         this.frequency = frequency;
     }
@@ -28,16 +37,24 @@ public class Habit {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(String title) throws DataFormatException {
+        if (title.length() <= 20) {
+            this.title = title;
+        } else {
+            throw new DataFormatException("Title over 20 characters.");
+        }
     }
 
     public String getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setReason(String reason) throws DataFormatException {
+        if (reason.length() <= 30) {
+            this.reason = reason;
+        } else {
+            throw new DataFormatException("Reason over 30 characters.");
+        }
     }
 
     public Date getStartDate() {

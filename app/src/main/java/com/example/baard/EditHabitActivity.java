@@ -4,8 +4,10 @@
 
 package com.example.baard;
 
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.zip.DataFormatException;
 
 import static com.example.baard.Day.MONDAY;
 import static com.example.baard.Day.TUESDAY;
@@ -27,7 +30,7 @@ public class EditHabitActivity extends AppCompatActivity {
     private Habit habit;
     private EditText editTextTitle, editTextReason, editTextStartDate;
     private ArrayList<Day> frequency;
-    DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,11 @@ public class EditHabitActivity extends AppCompatActivity {
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(MONDAY);
         days.add(TUESDAY);
-        habit = new Habit("test", "test", new Date(), days);
+        try {
+            habit = new Habit("test", "test", new Date(), days);
+        } catch (DataFormatException e) {
+            e.printStackTrace();
+        }
 
         // set all of the values for the habit to be edited
         editTextTitle = (EditText) findViewById(R.id.title);
@@ -99,7 +106,7 @@ public class EditHabitActivity extends AppCompatActivity {
     }
 
     /* Called when the user taps the Save button */
-    public void saveHabit(View view) {
+    public void saveHabit(View view) throws DataFormatException {
         Boolean properEntry = true;
 
         // throw errors if the user does not input into the mandatory fields (name and counters)
@@ -112,7 +119,7 @@ public class EditHabitActivity extends AppCompatActivity {
             properEntry = false;
         }
         Date convertedStartDate = convertDate(editTextStartDate.getText().toString());
-        if (editTextStartDate.getText().toString().equals("") || convertedStartDate == null){
+        if (convertedStartDate == null){
             editTextStartDate.setError("Start date is required!");
             properEntry = false;
         }
@@ -122,12 +129,16 @@ public class EditHabitActivity extends AppCompatActivity {
             properEntry = false;
         }
         if (properEntry) {
-            habit.setTitle(editTextTitle.getText().toString());
-            habit.setReason(editTextReason.getText().toString());
-            habit.setStartDate(convertedStartDate);
-            habit.setFrequency(frequency);
-            commitEdits();
-            finish();
+            try {
+                habit.setTitle(editTextTitle.getText().toString());
+                habit.setReason(editTextReason.getText().toString());
+                habit.setStartDate(convertedStartDate);
+                habit.setFrequency(frequency);
+                commitEdits();
+                finish();
+            } catch (DataFormatException errMsg) {
+                Toast.makeText(this, errMsg.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
