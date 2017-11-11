@@ -5,6 +5,8 @@
 package com.example.baard;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,7 +34,49 @@ class FileController {
     public FileController() {
     }
 
-    // TODO: Check for device online and push to server.
+    /**
+     * Check for internet connection
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @return Boolean true if Network is available
+     */
+    private boolean isNetworkAvailable(Context context) {
+        // Taken from https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
+        ConnectivityManager manager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Network is present and connected
+            isAvailable = true;
+        }
+        return isAvailable;
+    }
+
+    /**
+     * Stores the user both locally and server if network is available
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @param user The user to be stored
+     */
+    public void saveUser(Context context, User user) {
+        saveUserToFile(context, user);
+        if (isNetworkAvailable(context)) {
+            saveUserToServer(context, user);
+        }
+    }
+
+    /**
+     * Load user from server if network is available else from local file
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @return The user stored
+     */
+    public User loadUser(Context context, String username) {
+        if (isNetworkAvailable(context)) {
+            User user = loadUserFromServer(context, username);
+            saveUserToFile(context, user);
+            return user;
+        }
+        return loadUserFromFile(context);
+    }
 
     /**
      * Loads the user stored locally on the device
@@ -40,7 +84,7 @@ class FileController {
      * @param context The Application Context at the time of calling. Use getApplicationContext()
      * @return User stored in the file
      */
-    public User loadUserFromFile(Context context) {
+    private User loadUserFromFile(Context context) {
         User user = null;
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
@@ -61,7 +105,7 @@ class FileController {
      * @param context The Application Context at the time of calling. Use getApplicationContext()
      * @param user User to be stored in the file
      */
-    public void saveUserToFile(Context context, User user) {
+    private void saveUserToFile(Context context, User user) {
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME,
                     Context.MODE_PRIVATE);
@@ -73,5 +117,24 @@ class FileController {
         } catch (IOException e) {
             throw new RuntimeException();
         }
+    }
+
+    /**
+     * Load the user from the server
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @return User stored on server
+     */
+    private User loadUserFromServer(Context context, String username) {
+        // TODO Call ElasticSearchController getUser
+        return new User(null, null); // TODO delete this when implemented; return user
+    }
+
+    /**
+     * Save user to server
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @param user The user to be saved
+     */
+    private void saveUserToServer(Context context, User user) {
+        // TODO: Call ElasticSearchController UpdateUser or AddUser
     }
 }
