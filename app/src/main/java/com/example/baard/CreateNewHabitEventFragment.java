@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -37,6 +39,8 @@ import static android.app.Activity.RESULT_OK;
  * to handle interaction events.
  * Use the {@link CreateNewHabitEventFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * This fragment is used for when creating a new HabitEvent.
  */
 public class CreateNewHabitEventFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -48,6 +52,8 @@ public class CreateNewHabitEventFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Habit habit = null;
+    private Uri imageURI;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,6 +88,13 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
     }
 
+    /**
+     * onCreateView - called when view is constructed, sets listeners and needed variables.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,6 +121,18 @@ public class CreateNewHabitEventFragment extends Fragment {
                 createHabitEvent();
             }
         });
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //set the selected Habit to the habit
+                // habit = ThatOneHabit
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return v;
     }
 
@@ -118,16 +143,31 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
     }
 
+    /**
+     * Method called when save button is pressed. Creates a new HabitEvent and adds it to the
+     * HabitEventList of the Habit selected by the Spinner.
+     */
     public void createHabitEvent(){
         //validate data fields and save the record BOI
         //make sure date string is a valid format
         Date date = null;
+        String comment = "";
         boolean isValidHabitEvent = true;
         DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
         EditText dateEditText = (EditText) getActivity().findViewById(R.id.HabitEventDateEditText);
+        EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
-        }catch(Exception e){
+            comment = commentEditText.getText().toString();
+            HabitEvent habitEvent = new HabitEvent(habit, date, comment);
+        }catch(DataFormatException d){
+            commentEditText.setError("Comment is too long (20 char max).");
+            isValidHabitEvent = false;
+        }
+        catch (IllegalArgumentException i){
+            dateEditText.setError("Date is before habit start date.");
+        }
+        catch(Exception e){
             //invalid date format
             dateEditText.setError("Invalid date entry:");
             isValidHabitEvent = false;
@@ -136,12 +176,17 @@ public class CreateNewHabitEventFragment extends Fragment {
 
         if (isValidHabitEvent) {
             //Habit habit = new Habit();
-            EditText comment = (EditText) getActivity().findViewById(R.id.commentEditText);
+            //EditText comment = (EditText) getActivity().findViewById(R.id.commentEditText);
             //HabitEvent habitEvent = new HabitEvent(habit, date, comment);
             //TODO: SAVE HABIT EVENT IN HABIT 
         }
     }
 
+    /**
+     * Method called when the select image button is pressed. Lets the user select an image to be added to the
+     * habit event. Calls startActivityForResult to handle their selection.
+     * @param view supplied when button is pressed
+     */
     public void onSelectImageButtonPress(View view){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
@@ -155,6 +200,13 @@ public class CreateNewHabitEventFragment extends Fragment {
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
+    /**
+     * Handles the user selecting an image from their photos. When an image is selected, the imageURI
+     * variable is set to the selected image, and a preview of the image is displayed on screen.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -162,6 +214,7 @@ public class CreateNewHabitEventFragment extends Fragment {
 
 
             Uri selectedImage = data.getData();
+            imageURI = selectedImage;
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getActivity().getContentResolver().query(

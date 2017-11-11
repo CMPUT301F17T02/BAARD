@@ -27,6 +27,9 @@ import java.util.List;
  * to handle interaction events.
  * Use the {@link AllHabitEventsFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * This fragment displays all of the HabitEvents from every Habit in the order in which they were
+ * performed.
  */
 public class AllHabitEventsFragment extends Fragment {
 
@@ -76,6 +79,13 @@ public class AllHabitEventsFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates the view when the fragment is started. Sets the onItemClickListener for each habitevent displayed.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_habit_events, container, false);

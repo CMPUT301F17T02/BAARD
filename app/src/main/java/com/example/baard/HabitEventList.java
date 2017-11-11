@@ -10,6 +10,9 @@ import java.util.ArrayList;
  * Created by biancaangotti on 2017-10-20.
  */
 
+/**
+ * A class designed to hold a list of HabitEvents.
+ */
 public class HabitEventList {
 
     private ArrayList<HabitEvent> events = new ArrayList<HabitEvent>();
@@ -33,5 +36,7 @@ public class HabitEventList {
     public void delete(HabitEvent event) {
         events.remove(event);
     }
+
+    public int size(){ return events.size(); }
 
 }

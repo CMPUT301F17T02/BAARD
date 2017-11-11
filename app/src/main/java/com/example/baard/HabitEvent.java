@@ -9,12 +9,16 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 import java.util.Date;
+import java.util.IllegalFormatCodePointException;
 import java.util.zip.DataFormatException;
 
 /**
  * Created by biancaangotti on 2017-10-18.
  */
 
+/**
+ * A HabitEvent that records the user performing an instance of a habit.
+ */
 public class HabitEvent {
     private Habit habit;
     private String comment = "";
@@ -23,63 +27,41 @@ public class HabitEvent {
     // TODO picture variable
     private Uri image;
 
-
-    public HabitEvent(Habit habit, Date eventDate) {
+    /**
+     * Constructor for HabitEvent without the comment.
+     * @param habit habit that the habit event is a part of
+     * @param eventDate date the habit event takes place
+     * @throws IllegalArgumentException throws if date is before the start date of the habit
+     */
+    public HabitEvent(Habit habit, Date eventDate) throws IllegalArgumentException {
         this.habit = habit;
+        if (habit.getStartDate().before(eventDate)){
+            throw new IllegalArgumentException();
+        }
+        // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException {
+    /**
+     * Constructor for HabitEvent with a comment
+     * @param habit habit that the habit event is a part of
+     * @param eventDate date the habit event takes place
+     * @param comment comment describing the habit event
+     * @throws DataFormatException throws if comment is over 20 characters
+     * @throws IllegalArgumentException throws if date is before habit start date
+     */
+    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException, IllegalArgumentException{
         this.habit = habit;
-        this.setComment(comment);
-        this.eventDate = eventDate;
-    }
-
-    /*
-    public HabitEvent(Habit habit, Date eventDate, Picture picture) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.picture = picture;
-    }
-
-    public HabitEvent(Habit habit, Date eventDate, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.picture = picture;
-    }
-
-    public HabitEvent(Habit habit, Date eventDate, String comment, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
+        if (comment.length() > 20){
+            throw new DataFormatException();
+        }
         this.comment = comment;
-        this.picture = picture;
-        this.location = location;
-    }
-
-    public HabitEvent(Habit habit, Date eventDate, String comment, Picture picture) {
-        this.habit = habit;
+        if (habit.getStartDate().before(eventDate)){
+            throw new IllegalArgumentException();
+        }
+        // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
-        this.comment = comment;
-        this.picture = picture;
-        this.location = location;
     }
-
-    public HabitEvent(Habit habit, Date eventDate, Picture picture, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.comment = comment;
-        this.picture = picture;
-        this.location = location;
-    }
-
-    public HabitEvent(Habit habit, Date eventDate, String comment, Picture picture, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.comment = comment;
-        this.picture = picture;
-        this.location = location;
-    }
-    */
 
     public Habit getHabit() {
         return habit;
@@ -93,6 +75,11 @@ public class HabitEvent {
         return comment;
     }
 
+    /**
+     * setter for comment
+     * @param comment
+     * @throws DataFormatException throws if comment is more than 20 chars long
+     */
     public void setComment(String comment) throws DataFormatException {
         if (comment.length() > 20){
             throw new DataFormatException();
@@ -104,7 +91,15 @@ public class HabitEvent {
         return eventDate;
     }
 
-    public void setEventDate(Date eventDate) {
+    /**
+     * setter for event date
+     * @param eventDate
+     * @throws IllegalArgumentException throws if event date is before habit start date
+     */
+    public void setEventDate(Date eventDate) throws IllegalArgumentException {
+        if (habit.getStartDate().after(eventDate)){
+            throw new IllegalArgumentException();
+        }
         this.eventDate = eventDate;
     }
 
@@ -116,22 +111,4 @@ public class HabitEvent {
     public String toString(){
         return this.getHabit().getTitle() + this.getEventDate().toString();
     }
-
-    /*
-    public Picture getPicture() {
-        return picture;
-    }
-
-    public void setPicture(Picture picture) {
-        this.picture = picture;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-    */
 }

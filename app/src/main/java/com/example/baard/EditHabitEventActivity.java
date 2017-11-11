@@ -7,6 +7,9 @@ package com.example.baard;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/**
+ * Activity that is started when the user pressed the edit button when viewing a HabitEvent.
+ */
 public class EditHabitEventActivity extends AppCompatActivity {
 
     @Override

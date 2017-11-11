@@ -13,8 +13,15 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+/**
+ * Activity called when user selects a HabitEvent when viewing all HabitEvents
+ */
 public class ViewHabitEventActivity extends AppCompatActivity {
 
+    /**
+     * When created, sets the content of all of its fields to match the given HabitEvent.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +54,16 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Deletes the viewed HabitEvent from the Habit's HabitEventList
+     */
     private void deleteHabitEvent(){
         //delete this habit event from the Habit's HabitEventList
     }
 
+    /**
+     * Invokes the EditHabitEventActivity
+     */
     private void editHabitEvent(){
         //call a new activity for editing this bizz
     }
