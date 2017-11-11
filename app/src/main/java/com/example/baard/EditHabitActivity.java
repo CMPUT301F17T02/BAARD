@@ -11,7 +11,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,6 +21,7 @@ public class EditHabitActivity extends AppCompatActivity {
 
     private Habit habit;
     private EditText editTextTitle, editTextReason, editTextStartDate;
+    private ArrayList<Day> frequency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class EditHabitActivity extends AppCompatActivity {
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(MONDAY);
         days.add(TUESDAY);
-        Habit habit = new Habit("test", "test", new Date(), days);
+        habit = new Habit("test", "test", new Date(), days);
 
         // set all of the values for the habit to be edited
         editTextTitle = (EditText) findViewById(R.id.title);
@@ -41,32 +41,41 @@ public class EditHabitActivity extends AppCompatActivity {
         editTextTitle.setText(habit.getTitle());
         editTextReason.setText(habit.getReason());
         editTextStartDate.setText(habit.getStartDate().toString());
-        setToggleButtons(habit.getFrequency());
+        frequency = habit.getFrequency();
+        setToggleButtons();
     }
 
-    public void setToggleButtons(ArrayList<Day> days) {
+    public void setToggleButtons() {
         ArrayList<ToggleButton> toggles = new ArrayList<>();
+        toggles.add((ToggleButton) findViewById(R.id.sun));
         toggles.add((ToggleButton) findViewById(R.id.mon));
         toggles.add((ToggleButton) findViewById(R.id.tue));
         toggles.add((ToggleButton) findViewById(R.id.wed));
         toggles.add((ToggleButton) findViewById(R.id.thu));
         toggles.add((ToggleButton) findViewById(R.id.fri));
         toggles.add((ToggleButton) findViewById(R.id.sat));
-        toggles.add((ToggleButton) findViewById(R.id.sun));
+        final Day[] possibleValues  = Day.values();
 
-        for (ToggleButton tog : toggles) {
-            tog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        for (int i = 0; i < toggles.size(); i++) {
+            final int finalI = i;
+            toggles.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         // TODO The toggle is enabled
+                        if (!frequency.contains(possibleValues[finalI])) {
+                            frequency.add(possibleValues[finalI]);
+                        }
                     } else {
                         // TODO The toggle is disabled
+                        frequency.remove(possibleValues[finalI]);
                     }
                 }
             });
+            //TODO set it on or off depending on arraylist state!!
+            if (frequency.contains(possibleValues[finalI])) {
+                toggles.get(i).setChecked(true);
+            }
         }
-
-        //TODO set it on or off depending on arraylist state!!
     }
 
     /* Function that saves the new list into file & online */
@@ -92,6 +101,8 @@ public class EditHabitActivity extends AppCompatActivity {
             editTextStartDate.setError("Start date is required!");
             properEntry = false;
         }
+
+        System.out.println(frequency);
 
         if (properEntry) {
             habit.setTitle(editTextTitle.getText().toString());
