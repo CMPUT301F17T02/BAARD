@@ -6,6 +6,9 @@ package com.example.baard;
 
 /**
  * Created by biancaangotti on 2017-10-21.
+ *
+ * Created enum so that we have a way to indicate what day of the week
+ * each habit event is taking place on.
  */
 
 public enum Day {

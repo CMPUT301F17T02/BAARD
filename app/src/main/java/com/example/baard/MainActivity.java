@@ -20,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.baard.dummy.DummyContent;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_allHabits) {
             Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();
-            AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance("test", "test2");
+            AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
                     R.id.relativelayout_for_fragment,
