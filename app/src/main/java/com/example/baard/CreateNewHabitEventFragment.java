@@ -174,7 +174,8 @@ public class CreateNewHabitEventFragment extends Fragment {
             textView.setText(filePath);
             Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
-            imageView.setImageBitmap(yourSelectedImage);
+            //imageView.setImageBitmap(yourSelectedImage);
+            imageView.setImageURI(selectedImage);
         }
     }
 

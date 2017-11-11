@@ -20,6 +20,7 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //pass this habitevent via intent
         HabitEvent habitEvent = null;
+
         setContentView(R.layout.activity_view_habit_event);
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
