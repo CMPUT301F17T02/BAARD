@@ -124,7 +124,7 @@ public class EditHabitActivity extends AppCompatActivity {
         if (properEntry) {
             habit.setTitle(editTextTitle.getText().toString());
             habit.setReason(editTextReason.getText().toString());
-            habit.setStartDate(new Date(editTextStartDate.getText().toString()));
+            habit.setStartDate(convertedStartDate);
             habit.setFrequency(frequency);
             commitEdits();
             finish();

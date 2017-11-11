@@ -10,18 +10,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.example.baard.Day.MONDAY;
 import static com.example.baard.Day.TUESDAY;
 
 public class ViewHabitActivity extends AppCompatActivity {
 
+    DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_habit);
+        
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(MONDAY);
         days.add(TUESDAY);
@@ -34,7 +40,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         TextView frequencyView = (TextView) findViewById(R.id.frequency);
         titleView.setText(habit.getTitle());
         reasonView.setText(habit.getReason());
-        startDateView.setText(habit.getStartDate().toString());
+        startDateView.setText(formatter.format(habit.getStartDate()));
         frequencyView.setText(habit.getFrequencyString());
     }
 
