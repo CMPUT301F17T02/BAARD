@@ -7,6 +7,7 @@ package com.example.baard;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -15,6 +16,8 @@ import com.google.gson.JsonParser;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
+
+import java.io.IOException;
 
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
@@ -29,8 +32,58 @@ public class ElasticSearchController {
 
     private static JestDroidClient client;
 
-    // TODO we need a function which adds habits to elastic search
-    public static class AddUserTask extends AsyncTask<User, Void, Void> {
+    public static class AddUserTask extends AsyncTask<String, Void, User> {
+
+        @Override
+        protected  User doInBackground(String... parameters) {
+            verifySettings();
+
+            User user = null;
+            // Check if username exists
+            String query = "{\n" +
+                    "    \"query\" : {\n" +
+                    "       \"term\" : {\"username\": \"" + parameters[1] + "\"}\n" +
+                    "    }\n" +
+                    "}";
+            Search search = new Search.Builder(query)
+                    .addIndex("cmput301f17t02")
+                    .addType("User")
+                    .build();
+
+            // Create body for POST API of ElasticSearch
+            String source = "{\"name\": \"" + parameters[0] + "\"," +
+                    "\"username\": \"" + parameters[1] + "\"," +
+                    "\"habits\": []," +
+                    "\"friends\": [],"  +
+                    "\"receivedRequests\": []}";
+            Index index = new Index.Builder(source).index("cmput301f17t02").type("User").build();
+
+            try {
+                SearchResult result = client.execute(search);
+                JsonObject hits = result.getJsonObject().getAsJsonObject("hits");
+                if (result.isSucceeded() && hits.get("total").getAsInt() == 0) {
+                    DocumentResult execute = client.execute(index);
+                    if (execute.isSucceeded()) {
+                        Log.d("elasticSearch", execute.getId());
+                        user = new User(parameters[0], parameters[1]);
+                        user.setId(execute.getId());
+                        Log.d("elasticSearch", "User has been created.");
+                    } else {
+                        Log.d("elasticSearch", "Application failed to create new user.");
+                    }
+                } else {
+                    Log.d("elasticSearch", "User already exists!");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "The application failed to build and send the habits");
+            }
+
+            return user;
+        }
+    }
+
+    public static class UpdateUserTask extends AsyncTask<User, Void, Void> {
 
         @Override
         protected Void doInBackground(User... users) {
@@ -81,13 +134,13 @@ public class ElasticSearchController {
 
     public static class GetUserTask extends AsyncTask<String, Void, User> {
         @Override
-        protected User doInBackground(String... search_parameters) {
+        protected User doInBackground(String... parameters) throws RuntimeExecutionException {
             verifySettings();
-            User user = null;
 
+            User user = null;
             String query = "{\n" +
                            "    \"query\" : {\n" +
-                           "       \"term\" : {\"username\": \"" + search_parameters[0] + "\"}\n" +
+                           "       \"term\" : {\"username\": \"" + parameters[0] + "\"}\n" +
                            "    }\n" +
                            "}";
 
@@ -100,9 +153,9 @@ public class ElasticSearchController {
             try {
                 SearchResult result = client.execute(search);
                 JsonObject hits = result.getJsonObject().getAsJsonObject("hits");
+                Log.d("elasticSearch", hits.toString());
 
                 if (result.isSucceeded() && hits.get("total").getAsInt() == 1) {
-
                     JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
                     JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
 
@@ -124,7 +177,6 @@ public class ElasticSearchController {
                     user.setReceivedRequests(receivedRequestsList);
 
                     Log.d("elasticSearch", "User was found.");
-
                 } else {
                     Log.i("elasticSearch","The search query failed to find any username that matched.");
                 }

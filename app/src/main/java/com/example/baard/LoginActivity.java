@@ -136,16 +136,9 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
-            getUserTask.execute("nathan123");
-            try {
-                User user = getUserTask.get();
-            } catch (Exception e) {
-
-            }
+            //showProgress(true);
             mAuthTask = new UserLoginTask(username);
-            mAuthTask.execute((Void) null);
+            mAuthTask.execute();
         }
     }
 
@@ -195,55 +188,47 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
-            User user1 = new User("Nathan", "nathan123");
-            User user2 = new User("John", "john123");
-            user2.setId("1");
-            UserList friendsList = new UserList();
-            friendsList.add(user2);
-            user1.setFriends(friendsList);
-            addUserTask.execute(user1);
+            //showProgress(true);
             mAuthTask = new UserLoginTask(username,name);
-            mAuthTask.execute((Void) null);
+            mAuthTask.execute();
         }
     }
 
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    //@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    //private void showProgress(final boolean show) {
+    //    // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+    //    // for very easy animations. If available, use these APIs to fade-in
+    //    // the progress spinner.
+    //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+    //        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+    //        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    //        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+    //                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+    //            @Override
+    //            public void onAnimationEnd(Animator animation) {
+    //                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    //            }
+    //        });
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
+    //        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+    //        mProgressView.animate().setDuration(shortAnimTime).alpha(
+    //                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+    //            @Override
+    //            public void onAnimationEnd(Animator animation) {
+    //                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+    //            }
+    //        });
+    //    } else {
+    //        // The ViewPropertyAnimator APIs are not available, so simply show
+    //        // and hide the relevant UI components.
+    //        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+    //        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    //    }
+    //}
 
     /**
      * Calls the intent to move on to the main activity
@@ -258,7 +243,7 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask {
 
         private final String mUsername;
         private final String mName;
@@ -275,26 +260,46 @@ public class LoginActivity extends AppCompatActivity {
 
         private boolean usernameExists(String username) {
             //TODO: Replace this with your own logic and check for username exists in database
+            User user;
+
+            ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
+            getUserTask.execute(username);
+
             try {
                 // Simulate network access.
+                user = getUserTask.get();
                 Thread.sleep(500);
+                if (user == null) {
+                    return true;
+                }
             } catch (Exception e) {
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUsername)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mName);
-                }
-            }
+            //for (String credential : DUMMY_CREDENTIALS) {
+            //    String[] pieces = credential.split(":");
+            //    if (pieces[0].equals(mUsername)) {
+            //        // Account exists, return true if the password matches.
+            //        return pieces[1].equals(mName);
+            //    }
+            //}
 
-            return !username.contains(" ");
+            return false;
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
+        private User registerUser(String name, String username) {
+            User user = null;
+            ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
+            addUserTask.execute(name, username);
+            try {
+                user = addUserTask.get();
+            } catch (Exception e) {
+                Log.e("elasticSearch", "Unable to find user with name");
+            }
+            return user;
+        }
+
+        protected Boolean verify() {
             if (mName == null) {
                 if (!usernameExists(mUsername)) {
                     return false;
@@ -304,15 +309,18 @@ public class LoginActivity extends AppCompatActivity {
                     return false;
                 }
                 // TODO: Register new user
+                User user = registerUser(mName, mUsername);
+                Log.d("elasticSearch", user.getName());
+                Log.d("elasticSearch", user.getUsername());
             }
             return true;
         }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void execute() {
+            Boolean success = verify();
             if (!success) {
                 mAuthTask = null;
-                showProgress(false);
+                //showProgress(false);
 
                 if (mName == null) {
                     mUsernameView.setError(getString(R.string.error_incorrect_username));
@@ -323,15 +331,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             } else {
                 mAuthTask = null;
-                showProgress(false);
+                //showProgress(false);
                 login();
             }
         }
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
+        //protected void onCancelled() {
+        //    mAuthTask = null;
+        //    //showProgress(false);
+        //}
     }
 }

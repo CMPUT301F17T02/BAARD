@@ -15,7 +15,7 @@ import io.searchbox.annotations.JestId;
 public class User {
     private String name;
     private String username;
-    private transient HabitList habits = new HabitList();
+    private HabitList habits = new HabitList();
     private transient UserList friends = new UserList();
     private transient UserList receivedRequests = new UserList();
     @JestId
