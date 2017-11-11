@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Adam on 11/11/2017.
@@ -60,7 +61,7 @@ class FileController {
     public void saveUser(Context context, User user) {
         saveUserToFile(context, user);
         if (isNetworkAvailable(context)) {
-            saveUserToServer(context, user);
+            saveUserToServer(user);
         }
     }
 
@@ -71,7 +72,7 @@ class FileController {
      */
     public User loadUser(Context context, String username) {
         if (isNetworkAvailable(context)) {
-            User user = loadUserFromServer(context, username);
+            User user = loadUserFromServer(username);
             saveUserToFile(context, user);
             return user;
         }
@@ -121,20 +122,24 @@ class FileController {
 
     /**
      * Load the user from the server
-     * @param context The Application Context at the time of calling. Use getApplicationContext()
      * @return User stored on server
      */
-    private User loadUserFromServer(Context context, String username) {
-        // TODO Call ElasticSearchController getUser
-        return new User(null, null); // TODO delete this when implemented; return user
+    private User loadUserFromServer(String username) {
+        ElasticSearchController.GetUserTask ESC = new ElasticSearchController.GetUserTask();
+        ESC.execute(username);
+        try {
+            return ESC.get();
+        } catch (ExecutionException | InterruptedException e) {
+        }
+        return null; // TODO: deal with this null
     }
 
     /**
      * Save user to server
-     * @param context The Application Context at the time of calling. Use getApplicationContext()
      * @param user The user to be saved
      */
-    private void saveUserToServer(Context context, User user) {
-        // TODO: Call ElasticSearchController UpdateUser or AddUser
+    private void saveUserToServer(User user) {
+        ElasticSearchController.UpdateUserTask ESC = new ElasticSearchController.UpdateUserTask();
+        ESC.execute(user);
     }
 }

@@ -23,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.concurrent.ExecutionException;
+
 
 /**
  * A login screen that offers login via email/password.
@@ -233,9 +235,10 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Calls the intent to move on to the main activity
      */
-    private void login() {
+    private void login(User user) {
         // TODO: Pass intent to main activity with user instance
         Intent intent = new Intent(this, MainActivity.class);
+        //intent.putExtra(user);
         startActivity(intent);
     }
 
@@ -244,6 +247,7 @@ public class LoginActivity extends AppCompatActivity {
      * the user.
      */
     public class UserLoginTask {
+        ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
 
         private final String mUsername;
         private final String mName;
@@ -259,44 +263,18 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         private boolean usernameExists(String username) {
-            //TODO: Replace this with your own logic and check for username exists in database
-            User user;
-
+            User user = null;
             ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
             getUserTask.execute(username);
-
             try {
-                // Simulate network access.
                 user = getUserTask.get();
-                Thread.sleep(500);
-                if (user == null) {
-                    return true;
-                }
-            } catch (Exception e) {
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            if (user == null) {
                 return false;
             }
-
-            //for (String credential : DUMMY_CREDENTIALS) {
-            //    String[] pieces = credential.split(":");
-            //    if (pieces[0].equals(mUsername)) {
-            //        // Account exists, return true if the password matches.
-            //        return pieces[1].equals(mName);
-            //    }
-            //}
-
-            return false;
-        }
-
-        private User registerUser(String name, String username) {
-            User user = null;
-            ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
-            addUserTask.execute(name, username);
-            try {
-                user = addUserTask.get();
-            } catch (Exception e) {
-                Log.e("elasticSearch", "Unable to find user with name");
-            }
-            return user;
+            return true;
         }
 
         protected Boolean verify() {
@@ -309,9 +287,13 @@ public class LoginActivity extends AppCompatActivity {
                     return false;
                 }
                 // TODO: Register new user
-                User user = registerUser(mName, mUsername);
-                Log.d("elasticSearch", user.getName());
-                Log.d("elasticSearch", user.getUsername());
+                User user = null;
+                addUserTask.execute(mName, mUsername);
+                /*try {
+                    user = addUserTask.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    Log.e("elasticSearch", "Unable to find user with name");
+                }*/
             }
             return true;
         }
@@ -332,7 +314,11 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 mAuthTask = null;
                 //showProgress(false);
-                login();
+                try {
+                    login(addUserTask.get());
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
