@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.w3c.dom.Node;
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.zip.DataFormatException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -41,24 +43,13 @@ import static android.app.Activity.RESULT_OK;
  * create an instance of this fragment.
  */
 public class CreateNewHabitFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private HabitList habits = new HabitList();
-    ArrayList<ToggleButton> toggles = new ArrayList<>();
-    //ArrayList<Day> trueToggles = new ArrayList<Day>();
 
-    private ArrayAdapter<Habit> adapter;
     private EditText titleText;
     private EditText reasonText;
     private EditText startDateText;
-    private ArrayList<Day> frequency;
+    private ArrayList<Day> frequency = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -71,17 +62,12 @@ public class CreateNewHabitFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment CreateNewHabitFragment.
      */
 
-    // TODO: Rename and change types and number of parameters
-    public static CreateNewHabitFragment newInstance(String param1, String param2) {
+    public static CreateNewHabitFragment newInstance() {
         CreateNewHabitFragment fragment = new CreateNewHabitFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,8 +81,6 @@ public class CreateNewHabitFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -130,6 +114,7 @@ public class CreateNewHabitFragment extends Fragment {
         reasonText = (EditText) myView.findViewById(R.id.reason);
         startDateText = (EditText) myView.findViewById(R.id.startDate);
 
+        setToggleButtons(myView);
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,31 +124,28 @@ public class CreateNewHabitFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                 String title_text = titleText.getText().toString();
                 String reason = reasonText.getText().toString();
+                Date convertedStartDate = convertDate(startDateText.getText().toString());
 
-                String startDate = startDateText.getText().toString();
-                Date convertedStartDate = convertDate(startDate);
-
-                setToggleButtons();
-
-                if (titleText.getText().toString().equals("")) {
+                if (title_text.equals("")) {
                     titleText.setError("Title of habit is required!");
                     properEntry = false;
                 }
-                if (reasonText.getText().toString().equals("")) {
+                if (reason.equals("")) {
                     reasonText.setError("Reason for habit is required!");
                     properEntry = false;
                 }
-                if (startDateText.getText().toString().equals("")) {
+                if (convertedStartDate == null) {
                     startDateText.setError("Start date is required!");
                     properEntry = false;
                 }
 
                 if (properEntry) {
-
-                    habits.add(new Habit(title_text, reason, convertedStartDate, frequency));
-                    //System.out.println("Start Date: " + convertedStartDate);
-                    // System.out.println("freq" + habits.getHabit(0).getFrequency());
-                    startActivity(intent);
+                    try {
+                        habits.add(new Habit(title_text, reason, convertedStartDate, frequency));
+                        startActivity(intent);
+                    } catch (DataFormatException errMsg) {
+                        Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -184,15 +166,15 @@ public class CreateNewHabitFragment extends Fragment {
     /**
      * Sets the toggle buttons for the days of the week when the buttons are pushed on or off.
      */
-    public void setToggleButtons() {
-        //ArrayList<ToggleButton> toggles = new ArrayList<>();
-        toggles.add((ToggleButton) getView().findViewById(R.id.sun));
-        toggles.add((ToggleButton) getView().findViewById(R.id.mon));
-        toggles.add((ToggleButton) getView().findViewById(R.id.tue));
-        toggles.add((ToggleButton) getView().findViewById(R.id.wed));
-        toggles.add((ToggleButton) getView().findViewById(R.id.thu));
-        toggles.add((ToggleButton) getView().findViewById(R.id.fri));
-        toggles.add((ToggleButton) getView().findViewById(R.id.sat));
+    public void setToggleButtons(View myView) {
+        ArrayList<ToggleButton> toggles = new ArrayList<>();
+        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
+        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
+        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
+        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
+        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
+        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
         final Day[] possibleValues  = Day.values();
 
         for (int i = 0; i < toggles.size(); i++) {
@@ -200,20 +182,14 @@ public class CreateNewHabitFragment extends Fragment {
             toggles.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        // TODO The toggle is enabled
                         if (!frequency.contains(possibleValues[finalI])) {
                             frequency.add(possibleValues[finalI]);
                         }
                     } else {
-                        // TODO The toggle is disabled
                         frequency.remove(possibleValues[finalI]);
                     }
                 }
             });
-//            //TODO set it on or off depending on arraylist state!!
-//            if (frequency.contains(possibleValues[finalI])) {
-//                toggles.get(i).setChecked(true);
-//            }
         }
     }
 
@@ -248,12 +224,12 @@ public class CreateNewHabitFragment extends Fragment {
      */
     public Date convertDate(String stringDate) {
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        format.setLenient(false);
         Date date = null;
         try {
             date = format.parse(stringDate);
         } catch (ParseException e) {
             e.printStackTrace();
-            System.out.println(" Please enter date ");
         }
         return date;
     }

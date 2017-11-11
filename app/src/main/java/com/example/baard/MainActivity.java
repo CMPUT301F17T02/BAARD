@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity
             ).commit();
         } else if (id == R.id.nav_newHabit) {
             Toast.makeText(this, "Create New Habit", Toast.LENGTH_SHORT).show();
-            CreateNewHabitFragment createNewHabitFragment = CreateNewHabitFragment.newInstance("test", "test2");
+            CreateNewHabitFragment createNewHabitFragment = CreateNewHabitFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
                     R.id.relativelayout_for_fragment,
