@@ -4,6 +4,8 @@
 
 package com.example.baard;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 
 /**
@@ -16,6 +18,7 @@ public class HabitEvent {
     private Date eventDate;
     // TODO location variable
     // TODO picture variable
+    private Bitmap image;
 
 
     public HabitEvent(Habit habit, Date eventDate) {
@@ -99,6 +102,9 @@ public class HabitEvent {
         this.eventDate = eventDate;
     }
 
+    public void setImage(Bitmap bitmap){ this.image = bitmap; }
+
+    public Bitmap getImage(){ return this.image; }
     /*
     public Picture getPicture() {
         return picture;

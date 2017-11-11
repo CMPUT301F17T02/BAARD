@@ -5,12 +5,14 @@
 package com.example.baard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -83,6 +85,18 @@ public class AllHabitEventsFragment extends Fragment {
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
         adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
+
+        habitEventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //tell the ViewRecordActivity which list item has been selected and start it
+                Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
+                //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
+                intent.putExtra("position",i);
+
+                startActivity(intent);
+            }
+        });
 
         habitEventListView.setAdapter(adapter);
 
