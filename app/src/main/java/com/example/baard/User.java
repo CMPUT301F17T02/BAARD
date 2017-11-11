@@ -14,9 +14,8 @@ public class User {
     private String name;
     private String username;
     private HabitList habits = new HabitList();
-    private UserList friends = new UserList();
-    private UserList receivedRequests = new UserList();
-    // WOW factor TODO --> profile pictures
+    private transient UserList friends = new UserList();
+    private transient UserList receivedRequests = new UserList();
 
     public User(String name, String username) {
         this.name = name;
@@ -61,6 +60,11 @@ public class User {
 
     public void setReceivedRequests(UserList receivedRequests) {
         this.receivedRequests = receivedRequests;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + "\nUsername: " + username + "\n";
     }
 
 }
