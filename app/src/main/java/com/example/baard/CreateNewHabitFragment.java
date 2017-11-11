@@ -66,6 +66,16 @@ public class CreateNewHabitFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment CreateNewHabitFragment.
+     */
+
     // TODO: Rename and change types and number of parameters
     public static CreateNewHabitFragment newInstance(String param1, String param2) {
         CreateNewHabitFragment fragment = new CreateNewHabitFragment();
@@ -76,6 +86,10 @@ public class CreateNewHabitFragment extends Fragment {
         return fragment;
     }
 
+    /** Called when create habit activity is first created
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +100,9 @@ public class CreateNewHabitFragment extends Fragment {
         }
     }
 
+    /**
+     * called when CreateNewHabit activity is opened up and called again.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -95,6 +112,14 @@ public class CreateNewHabitFragment extends Fragment {
 
     }
 
+    /**
+     * Called when create habit activity is first created
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -146,6 +171,9 @@ public class CreateNewHabitFragment extends Fragment {
         return myView;
     }
 
+    /**
+     * @param uri
+     */
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -153,6 +181,9 @@ public class CreateNewHabitFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the toggle buttons for the days of the week when the buttons are pushed on or off.
+     */
     public void setToggleButtons() {
         //ArrayList<ToggleButton> toggles = new ArrayList<>();
         toggles.add((ToggleButton) getView().findViewById(R.id.sun));
@@ -186,6 +217,9 @@ public class CreateNewHabitFragment extends Fragment {
         }
     }
 
+    /**
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -197,12 +231,21 @@ public class CreateNewHabitFragment extends Fragment {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    /**
+     * Converts the date from the input of a string format to a date format.
+     *
+     * @param stringDate
+     * @return
+     */
     public Date convertDate(String stringDate) {
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
