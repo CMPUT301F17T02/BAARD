@@ -8,6 +8,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class HabitListTest {
     }
 
     @Test
-    public void testGetHabit() {
+    public void testGetHabit() throws DataFormatException {
         Habit habit = new Habit("title", "Reason", startDate, array);
         habits.add(habit);
         Habit returnedHabit = habits.getHabit(0);
@@ -40,7 +41,7 @@ public class HabitListTest {
     }
 
     @Test
-    public void testHasHabit() {
+    public void testHasHabit() throws DataFormatException {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
 
         assertFalse(habits.hasHabit(habit));
@@ -49,7 +50,7 @@ public class HabitListTest {
     }
 
     @Test
-    public void testAdd() {
+    public void testAdd() throws DataFormatException {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
 
         habits.add(habit);
@@ -57,7 +58,7 @@ public class HabitListTest {
     }
 
     @Test
-    public void testDelete() {
+    public void testDelete() throws DataFormatException {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
         habits.add(habit);
         habits.delete(habit);
