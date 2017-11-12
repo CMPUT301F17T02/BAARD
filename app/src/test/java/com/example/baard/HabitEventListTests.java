@@ -36,8 +36,12 @@ public class HabitEventListTests {
         date1 = new Date();
         habit = new Habit("test","reason",date1,freq);
         // constructor 1
-        habitEvent = new HabitEvent(habit, date1, "testevent");
-        habitEventList = new HabitEventList();
+        try {
+            habitEvent = new HabitEvent(habit, date1, "testevent");
+            habitEventList = new HabitEventList();
+        }catch(Exception e){
+            fail();
+        }
     }
     @Test
     public void testAdd(){
@@ -54,9 +58,13 @@ public class HabitEventListTests {
     public void testHasHabitEvent(){
         habitEventList.add(habitEvent);
         Date date2 = new Date();
-        HabitEvent habitEvent2 = new HabitEvent(habit, date2, "second");
-        assertTrue(habitEventList.hasHabitEvent(habitEvent));
-        assertFalse(habitEventList.hasHabitEvent(habitEvent2));
+        try {
+            HabitEvent habitEvent2 = new HabitEvent(habit, date2, "second");
+            assertTrue(habitEventList.hasHabitEvent(habitEvent));
+            assertFalse(habitEventList.hasHabitEvent(habitEvent2));
+        }catch(Exception e){
+            fail();
+        }
     }
     @Test
     public void testGetHabitEvent(){

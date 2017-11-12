@@ -66,28 +66,34 @@ public class HabitTest {
     @Test
     public void testGetEvents() {
         Habit habit = new Habit("Test Title", "reason", startDate, array);
-        HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
-        HabitEventList habitEventList = new HabitEventList();
+        try {
+            HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
+            HabitEventList habitEventList = new HabitEventList();
 
-        habitEventList.add(habitEvent);
-        habit.setEvents(habitEventList);
+            habitEventList.add(habitEvent);
+            habit.setEvents(habitEventList);
 
-        HabitEventList returnedEventList = habit.getEvents();
+            HabitEventList returnedEventList = habit.getEvents();
 
-        assertEquals(returnedEventList.getHabitEvent(0), habitEvent);
-
+            assertEquals(returnedEventList.getHabitEvent(0), habitEvent);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
     public void testSetEvents() {
         HabitEventList habitEventList = new HabitEventList();
         Habit habit = new Habit("Test Title", "reason", startDate, array);
-        HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
+        try {
+            HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
 
-        habitEventList.add(habitEvent);
-        habit.setEvents(habitEventList);
+            habitEventList.add(habitEvent);
+            habit.setEvents(habitEventList);
 
-        assertEquals(habit.getEvents(), habitEventList);
-
+            assertEquals(habit.getEvents(), habitEventList);
+        }catch(Exception e){
+            fail();
+        }
     }
 }
