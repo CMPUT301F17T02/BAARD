@@ -6,9 +6,12 @@ package com.example.baard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,8 +86,18 @@ public class AllHabitsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_habits, container, false);
-        final FileController fc = new FileController();
-        final User user = fc.loadUser(getActivity().getApplicationContext(), getActivity().getIntent().getExtras().getString("username"));
+        FileController fc = new FileController();
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+
+        //String username = getActivity().getIntent().getStringExtra("username");
+
+        Log.i("Username", username);
+        final User user = fc.loadUser(getActivity().getApplicationContext(), username);
+
         habitList = user.getHabits();
 
         habitListView = (ListView) view.findViewById(R.id.habitListView);
@@ -95,7 +112,7 @@ public class AllHabitsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                 intent.putExtra("username", user.getUsername());
-                intent.putExtra("position",i);
+                intent.putExtra("position", i);
                 startActivity(intent);
             }
         });

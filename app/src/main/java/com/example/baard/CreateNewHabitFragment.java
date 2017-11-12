@@ -6,8 +6,10 @@ package com.example.baard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,10 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -87,8 +93,14 @@ public class CreateNewHabitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_create_new_habit, container, false);
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+
         final FileController fc = new FileController();
-        final User user = fc.loadUser(getActivity().getApplicationContext(), getActivity().getIntent().getExtras().getString("username"));
+        final User user = fc.loadUser(getActivity().getApplicationContext(), username);
 
         Button createButton = (Button) myView.findViewById(R.id.create);
         titleText = (EditText) myView.findViewById(R.id.title);

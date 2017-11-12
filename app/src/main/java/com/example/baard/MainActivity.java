@@ -25,6 +25,11 @@ public class MainActivity extends AppCompatActivity
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
         CreateNewHabitEventFragment.OnFragmentInteractionListener {
 
+    private String username;
+
+    private String getUsername() {
+        return username;
+    }
     /**
      * On create method for entire activity. Sets up navigation and listener for fragments
      *
@@ -36,6 +41,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        username = getIntent().getStringExtra("username");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
