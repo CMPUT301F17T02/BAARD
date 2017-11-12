@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 
 /**
@@ -41,7 +42,7 @@ public class UserTest extends TestCase {
         assertEquals("qwerty93", user.getUsername());
     }
 
-    public void testGetHabits() {
+    public void testGetHabits() throws DataFormatException {
         HabitList habitList = new HabitList();
         ArrayList<Day> frequency = new ArrayList<Day>();
         frequency.add(Day.MONDAY);
@@ -51,7 +52,7 @@ public class UserTest extends TestCase {
         assertEquals(habitList, user.getHabits());
     }
 
-    public void testSetHabits() {
+    public void testSetHabits() throws DataFormatException {
         HabitList habitList = new HabitList();
         ArrayList<Day> frequency = new ArrayList<Day>();
         frequency.add(Day.MONDAY);
