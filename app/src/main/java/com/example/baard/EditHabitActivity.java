@@ -25,9 +25,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
 
-import static com.example.baard.Day.MONDAY;
-import static com.example.baard.Day.TUESDAY;
-
 public class EditHabitActivity extends AppCompatActivity {
 
     private Habit habit;
