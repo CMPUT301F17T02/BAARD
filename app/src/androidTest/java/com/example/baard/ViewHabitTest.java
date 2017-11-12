@@ -83,7 +83,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<MainActivity
 
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
-        //Test to see if viewing the correct stuff.
+        //Test to see if viewing the correct stuff.g
 
     }
 }
