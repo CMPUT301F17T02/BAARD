@@ -17,13 +17,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
-import java.util.zip.DataFormatException;
-
-import static com.example.baard.Day.MONDAY;
-import static com.example.baard.Day.TUESDAY;
 
 public class ViewHabitActivity extends AppCompatActivity {
 

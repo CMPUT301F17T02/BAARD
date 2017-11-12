@@ -23,10 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
-
-import static com.example.baard.Day.MONDAY;
-import static com.example.baard.Day.TUESDAY;
 
 public class EditHabitActivity extends AppCompatActivity {
 
@@ -177,6 +175,11 @@ public class EditHabitActivity extends AppCompatActivity {
                 habit.setStartDate(convertedStartDate);
                 habit.setFrequency(frequency);
                 commitEdits();
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 finish();
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
