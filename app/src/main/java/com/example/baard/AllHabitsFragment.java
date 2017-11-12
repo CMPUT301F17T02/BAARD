@@ -33,7 +33,7 @@ import java.util.zip.DataFormatException;
 public class AllHabitsFragment extends Fragment {
     private ListView habitListView;
     private ArrayAdapter<Habit> adapter;
-    private List<Habit> habitList = new ArrayList<Habit>();;
+    private HabitList habitList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,16 +79,13 @@ public class AllHabitsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_habits, container, false);
-
-        try {
-            habitList.add(new Habit("test", "just because", new Date(), new ArrayList<Day>()));
-        } catch (DataFormatException e) {
-            e.printStackTrace();
-        }
+        final FileController fc = new FileController();
+        final User user = fc.loadUser(getActivity().getApplicationContext(), getActivity().getIntent().getExtras().getString("username"));
+        habitList = user.getHabits();
 
         habitListView = (ListView) view.findViewById(R.id.habitListView);
 
-        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList);
+        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList.getArrayList());
 
         habitListView.setAdapter(adapter);
 
@@ -97,6 +94,7 @@ public class AllHabitsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                intent.putExtra("username", user.getUsername());
                 intent.putExtra("position",i);
                 startActivity(intent);
             }

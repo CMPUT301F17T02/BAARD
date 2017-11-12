@@ -35,8 +35,6 @@ import java.util.zip.DataFormatException;
  */
 public class CreateNewHabitFragment extends Fragment {
 
-    private HabitList habits = new HabitList();
-
     private EditText titleText;
     private EditText reasonText;
     private EditText startDateText;
@@ -89,6 +87,8 @@ public class CreateNewHabitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_create_new_habit, container, false);
+        final FileController fc = new FileController();
+        final User user = fc.loadUser(getActivity().getApplicationContext(), getActivity().getIntent().getExtras().getString("username"));
 
         Button createButton = (Button) myView.findViewById(R.id.create);
         titleText = (EditText) myView.findViewById(R.id.title);
@@ -124,9 +124,11 @@ public class CreateNewHabitFragment extends Fragment {
                 // if all of the values are entered try to save
                 if (properEntry) {
                     try {
-                        habits.add(new Habit(title_text, reason, convertedStartDate, frequency));
-                        //TODO SAVE TO FILE
+                        Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
+                        user.getHabits().add(habit);
+                        fc.saveUser(getActivity().getApplicationContext(), user);
                         Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                        intent.putExtra("username", user.getUsername());
                         startActivity(intent);
                     } catch (DataFormatException errMsg) {
                         // occurs when title or reason are above their character limits

@@ -34,4 +34,6 @@ public class HabitList {
         habits.remove(habit);
     }
 
+    public ArrayList<Habit> getArrayList() {return habits;}
+
 }
