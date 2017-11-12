@@ -94,7 +94,7 @@ public class ElasticSearchController {
 
                 // Create body for PUT API of ElasticSearch
                 // Need to extract fields separately since some of the fields are transient
-                String source = "{\"name\": \"" + "john" + "\"," +
+                String source = "{\"name\": \"" + user.getName() + "\"," +
                                 "\"username\": \"" + user.getUsername() + "\"," +
                                 "\"habits\": " + gson.toJson(user.getHabits()) + "," +
                                 "\"friends\": " + gson.toJson(user.getFriends()) + "," +
@@ -148,6 +148,9 @@ public class ElasticSearchController {
                         JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
                         JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
 
+                        // Need to extract Id separately because Jest does not seem to be working
+                        String id = userInfo.get("_id").getAsString();
+
                         // Need to extract UserList friends separately because the field is transient
                         String friendsJSON = userInfoSource.get("friends").toString();
                         UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
@@ -156,9 +159,9 @@ public class ElasticSearchController {
                         String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
                         UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
 
-                        Log.d("ESC.GetUserTask", userInfoSource.toString());
-                        user = result.getSourceAsObject(User.class);
-                        //user = new Gson().fromJson(userInfoSource, User.class);
+                        user = new Gson().fromJson(userInfoSource, User.class);
+
+                        user.setId(id);
                         user.setFriends(friendsList);
                         user.setReceivedRequests(receivedRequestsList);
 
