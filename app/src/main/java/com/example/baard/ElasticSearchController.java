@@ -53,9 +53,9 @@ public class ElasticSearchController {
             // Create body for POST API of ElasticSearch
             String source = "{\"name\": \"" + parameters[0] + "\"," +
                     "\"username\": \"" + parameters[1] + "\"," +
-                    "\"habits\": []," +
-                    "\"friends\": [],"  +
-                    "\"receivedRequests\": []}";
+                    "\"habits\": {\"habits\": []}," +
+                    "\"friends\": {\"users\": []},"  +
+                    "\"receivedRequests\": {\"users\": []}}";
             Index index = new Index.Builder(source).index("cmput301f17t02").type("User").build();
 
             try {
@@ -89,6 +89,7 @@ public class ElasticSearchController {
         protected Void doInBackground(User... users) {
             verifySettings();
 
+
             for (User user : users) {
                 JsonObject o;
                 JsonParser parser = new JsonParser();
@@ -96,17 +97,17 @@ public class ElasticSearchController {
                 // Get Habits attribute as string
                 o = parser.parse(new Gson().toJson(user.getHabits())).getAsJsonObject();
                 String habitsJSON = o.getAsJsonArray("habits").toString();
-                Log.d("elasticSearch", habitsJSON);
+                //Log.d("elasticSearch", habitsJSON);
 
                 // Get Friends attribute as string
                 o = parser.parse(new Gson().toJson(user.getFriends())).getAsJsonObject();
                 String friendsJSON = o.getAsJsonArray("users").toString();
-                Log.d("elasticSearch", friendsJSON);
+                //Log.d("elasticSearch", friendsJSON);
 
                 // Get ReceivedRequests attribute as string
                 o = parser.parse(new Gson().toJson(user.getReceivedRequests())).getAsJsonObject();
                 String receivedRequestsJSON = o.getAsJsonArray("users").toString();
-                Log.d("elasticSearch", receivedRequestsJSON);
+                //Log.d("elasticSearch", receivedRequestsJSON);
 
                 // Create body for POST API of ElasticSearch
                 String source = "{\"name\": \"" + user.getName() + "\"," +
@@ -120,7 +121,7 @@ public class ElasticSearchController {
                 try {
                     DocumentResult execute = client.execute(index);
                     if (execute.isSucceeded()) {
-                        Log.d("elasticSearch", "User has been created.");
+                        //Log.d("elasticSearch", "User has been created.");
                     }
                 }
                 catch (Exception e) {
@@ -159,33 +160,26 @@ public class ElasticSearchController {
                     JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
                     JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
 
-                    // Create name string from JSON string
-                    String name = "{\"name\":" + userInfoSource.get("name").toString() + "}";
-
-                    // Create HabitList habits from JSON string
-                    String habitsJSON = "{\"habits\":" + userInfoSource.get("friends").toString() + "}";
-                    HabitList habitsList = new Gson().fromJson(habitsJSON, HabitList.class);
-
-                    // Create UserList friendsList from JSON string
-                    String friendsJSON = "{\"users\":" + userInfoSource.get("friends").toString() + "}";
+                    // Need to extract UserList friends separately because the field is transient
+                    String friendsJSON = userInfoSource.get("friends").toString();
                     UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
 
-                    // Create UserList receivedRequest from JSON string
-                    String receivedRequestsJSON = "{\"users\":" + userInfoSource.get("friends").toString() + "}";
+                    // Need to extract UserList receivedRequests separately because the field is transient
+                    String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
                     UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
 
-                    user = new User(name, parameters[0]); //result.getSourceAsObject(User.class);
-                    user.setHabits(habitsList);
+                    //user = new User(name, parameters[0]); //result.getSourceAsObject(User.class);
+                    user = result.getSourceAsObject(User.class);
                     user.setFriends(friendsList);
                     user.setReceivedRequests(receivedRequestsList);
 
-                    Log.d("elasticSearch", "User was found.");
+                    Log.d("ESC.GetUserTask", "User was found.");
                 } else {
-                    Log.i("elasticSearch","The search query failed to find any username that matched.");
+                    Log.i("ESC.GetUserTask","The search query failed to find any username that matched.");
                 }
             }
             catch (Exception e) {
-                Log.e("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.e("ESC.GetUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
             return user;
         }

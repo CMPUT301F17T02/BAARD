@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -180,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void login(User user) {
         FileController fc = new FileController();
-        fc.saveUser(getApplicationContext(), user);
+        //fc.saveUser(getApplicationContext(), user);
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("username", user.getUsername());
         startActivity(intent);
