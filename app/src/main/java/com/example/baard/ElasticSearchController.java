@@ -9,20 +9,17 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
-
-import java.io.IOException;
 
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 
 /**
  * Created by biancaangotti on 2017-11-05.
@@ -97,22 +94,26 @@ public class ElasticSearchController {
 
                 // Create body for PUT API of ElasticSearch
                 // Need to extract fields separately since some of the fields are transient
-                String source = "{\"name\": \"" + user.getName() + "\"," +
+                String source = "{\"name\": \"" + "john" + "\"," +
                                 "\"username\": \"" + user.getUsername() + "\"," +
                                 "\"habits\": " + gson.toJson(user.getHabits()) + "," +
                                 "\"friends\": " + gson.toJson(user.getFriends()) + "," +
                                 "\"receivedRequests\": " + gson.toJson(user.getReceivedRequests()) + "}";
 
-                Index index = new Index.Builder(source).index("cmput301f17t02").type("User").id(user.getId()).build();
+                String doc = "{" + "\"doc\": " + source + "}";
+                Log.d("ESC.UpdateUserTask", doc);
+
+                Update update = new Update.Builder(doc).index("cmput301f17t02").type("User").id(user.getId()).build();
+                Log.d("ESC.UpdateUserTask", user.getId());
 
                 try {
-                    DocumentResult execute = client.execute(index);
+                    DocumentResult execute = client.execute(update);
                     if (execute.isSucceeded()) {
                       Log.i("ESC.UpdateUserTask", "User has been updated.");
                     }
                 }
                 catch (Exception e) {
-                    Log.i("ESC.UpdateUserTask", "The application failed to build and send the habits");
+                    Log.e("ESC.UpdateUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
                 }
 
             }
@@ -155,7 +156,9 @@ public class ElasticSearchController {
                         String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
                         UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
 
+                        Log.d("ESC.GetUserTask", userInfoSource.toString());
                         user = result.getSourceAsObject(User.class);
+                        //user = new Gson().fromJson(userInfoSource, User.class);
                         user.setFriends(friendsList);
                         user.setReceivedRequests(receivedRequestsList);
 
