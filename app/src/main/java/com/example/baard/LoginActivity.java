@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
 
         if (username != null) {
             Log.i("Username found",username);
-            mUsernameView.setText(username);
             FileController fc = new FileController();
             User user = fc.loadUser(getApplicationContext(), username);
             login(user);
