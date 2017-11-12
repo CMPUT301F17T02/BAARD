@@ -8,8 +8,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.IllegalFormatCodePointException;
+import java.util.Locale;
 import java.util.zip.DataFormatException;
 
 import io.searchbox.annotations.JestId;
@@ -140,6 +143,7 @@ public class HabitEvent {
 
     @Override
     public String toString(){
-        return this.getHabit().getTitle() + this.getEventDate().toString();
+        DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        return this.getHabit().getTitle() + "     " + formatter.format(eventDate);
     }
 }
