@@ -24,6 +24,10 @@ public class ViewHabitActivity extends AppCompatActivity {
 
     DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 
+    /**
+     * This create method sets the text based on habit retrieved
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,18 +54,24 @@ public class ViewHabitActivity extends AppCompatActivity {
         frequencyView.setText(habit.getFrequencyString());
     }
 
-    /* Called when the user taps the Edit button */
+    /**
+     * Called when the user taps the Edit button.
+     * Sends data for user to edit.
+     *
+     * @param view
+     */
     public void editHabit(View view) {
         // TODO pass the habit
         Intent intent = new Intent(this, EditHabitActivity.class);
         startActivity(intent);
     }
 
-
     /**
+     * Called when the user taps the Delete button.
+     * Removes habit from user's habit list.
+     *
      * @param view
      */
-    /* Called when the user taps the Delete button */
     public void deleteHabit(View view) {
         // TODO delete functionality
         finish();

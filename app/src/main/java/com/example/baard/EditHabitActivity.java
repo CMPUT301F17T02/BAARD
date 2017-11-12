@@ -4,10 +4,8 @@
 
 package com.example.baard;
 
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -32,6 +30,11 @@ public class EditHabitActivity extends AppCompatActivity {
     private ArrayList<Day> frequency;
     DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
+    /**
+     * This create method sets the text and toggle buttons based on habit retrieved
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +58,16 @@ public class EditHabitActivity extends AppCompatActivity {
         editTextReason.setText(habit.getReason());
         editTextStartDate.setText(formatter.format(habit.getStartDate()));
         frequency = habit.getFrequency();
+        // set the toggle buttons for the days of the week
         setToggleButtons();
     }
 
+    /**
+     * Sets the required toggle buttons for the days of the week.
+     * This thereby controls the frequency array to which habits should repeat on.
+     */
     public void setToggleButtons() {
+        // store all buttons in order of days in the Day enum
         ArrayList<ToggleButton> toggles = new ArrayList<>();
         toggles.add((ToggleButton) findViewById(R.id.sun));
         toggles.add((ToggleButton) findViewById(R.id.mon));
@@ -67,28 +76,47 @@ public class EditHabitActivity extends AppCompatActivity {
         toggles.add((ToggleButton) findViewById(R.id.thu));
         toggles.add((ToggleButton) findViewById(R.id.fri));
         toggles.add((ToggleButton) findViewById(R.id.sat));
+        // grab all possible enum values of Day
         final Day[] possibleValues  = Day.values();
 
+        // iterate through all the toggle buttons to set the listener
         for (int i = 0; i < toggles.size(); i++) {
             final int finalI = i;
             toggles.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
+                        // if the Day is not in the frequency already, add it
                         if (!frequency.contains(possibleValues[finalI])) {
                             frequency.add(possibleValues[finalI]);
                         }
                     } else {
+                        // remove the Day from the frequency
                         frequency.remove(possibleValues[finalI]);
                     }
                 }
             });
 
+            // based on the habit grabbed, set the toggle to true if it was previously selected
             if (frequency.contains(possibleValues[finalI])) {
                 toggles.get(i).setChecked(true);
             }
         }
     }
 
+    /**
+     * Function that saves the new list into the file & online
+     */
+    private void commitEdits() {
+        //json = gson.toJson(habitList);
+        // TODO functionality of saving
+    }
+
+    /**
+     * Converts the date from the input of a string format to a date format.
+     *
+     * @param stringDate
+     * @return
+     */
     public Date convertDate(String stringDate) {
         Date date = null;
         try {
@@ -99,17 +127,16 @@ public class EditHabitActivity extends AppCompatActivity {
         return date;
     }
 
-    /* Function that saves the new list into file & online */
-    private void commitEdits() {
-        //json = gson.toJson(habitList);
-        // TODO functionality of saving
-    }
-
-    /* Called when the user taps the Save button */
+    /**
+     * Called when the user taps the Save button
+     *
+     * @param view
+     * @throws DataFormatException
+     */
     public void saveHabit(View view) throws DataFormatException {
         Boolean properEntry = true;
 
-        // throw errors if the user does not input into the mandatory fields (name and counters)
+        // throw errors if the user does not input into the mandatory fields
         if (editTextTitle.getText().toString().equals("")) {
             editTextTitle.setError("Title of habit is required!");
             properEntry = false;
@@ -128,6 +155,8 @@ public class EditHabitActivity extends AppCompatActivity {
             Toast.makeText(this, "No frequency selected", Toast.LENGTH_SHORT).show();
             properEntry = false;
         }
+
+        // if all of the values are entered try to save
         if (properEntry) {
             try {
                 habit.setTitle(editTextTitle.getText().toString());
@@ -137,6 +166,7 @@ public class EditHabitActivity extends AppCompatActivity {
                 commitEdits();
                 finish();
             } catch (DataFormatException errMsg) {
+                // occurs when title or reason are above their character limits
                 Toast.makeText(this, errMsg.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }

@@ -25,6 +25,11 @@ public class MainActivity extends AppCompatActivity
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
         CreateNewHabitEventFragment.OnFragmentInteractionListener {
 
+    /**
+     * On create method for entire activity. Sets up navigation and listener for fragments
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * Hides navigation bar when back button is pressed
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -61,6 +69,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Sets up action bar and menu.
+     * Auto-generated method by the navigation menu activity.
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -68,11 +83,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     * Auto-generated method by the navigation menu activity.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -83,6 +104,13 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * When navigation menu item is selected, it compares the id to send the
+     * user to a specific fragment.
+     *
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -93,6 +121,8 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         }
         else if (id == R.id.nav_allHabits) {
+            // Send user to fragment that shows list of all their habits
+            // They can view, edit, and delete a habit once they click on a habit in this list
             Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();
             AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
@@ -102,6 +132,7 @@ public class MainActivity extends AppCompatActivity
                     allHabitsFragment.getTag()
             ).commit();
         } else if (id == R.id.nav_newHabit) {
+            // Send user to fragment that allows them to create a new habit
             Toast.makeText(this, "Create New Habit", Toast.LENGTH_SHORT).show();
             CreateNewHabitFragment createNewHabitFragment = CreateNewHabitFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
@@ -111,7 +142,9 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitFragment.getTag()
             ).commit();
         } else if (id == R.id.nav_allHabitEvents) {
-            Toast.makeText(this, "All Habit Events", Toast.LENGTH_SHORT).show();
+            // Send user to fragment that shows a list of all their habit events
+            // listed with most recent habit events first
+            Toast.makeText(this, "Habit Event History", Toast.LENGTH_SHORT).show();
             AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance("test", "test2");
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
@@ -120,6 +153,7 @@ public class MainActivity extends AppCompatActivity
                     allHabitEventsFragment.getTag()
             ).commit();
         } else if (id == R.id.nav_newHabitEvent) {
+            // Send user to fragment that allows them to create a new habit event
             Toast.makeText(this, "Create New Habit Event", Toast.LENGTH_SHORT).show();
             CreateNewHabitEventFragment createNewHabitEventFragment = CreateNewHabitEventFragment.newInstance("test", "test2");
             FragmentManager manager = getSupportFragmentManager();
@@ -135,6 +169,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
+            // End this session and take users back to the login screen
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -144,8 +179,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Auto-generated method by the navigation menu activity.
+     *
+     * @param uri
+     */
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 }

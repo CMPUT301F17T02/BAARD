@@ -37,8 +37,10 @@ public class AllHabitsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    /**
+     * Required empty public constructor
+     */
     public AllHabitsFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -53,6 +55,11 @@ public class AllHabitsFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Starts on create method, could take and store arguments.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +105,9 @@ public class AllHabitsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Called when AllHabitsFragment activity is opened up and called again.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -105,13 +115,22 @@ public class AllHabitsFragment extends Fragment {
         //  adapter.notifyDataSetChanged();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
+    /**
+     * Auto-generated method for fragment
+     *
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     * Auto-generated method for fragment
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -123,6 +142,9 @@ public class AllHabitsFragment extends Fragment {
         }
     }
 
+    /**
+     * Auto-generated method for fragment
+     */
     @Override
     public void onDetach() {
         super.onDetach();

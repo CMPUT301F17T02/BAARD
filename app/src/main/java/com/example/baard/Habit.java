@@ -18,7 +18,9 @@ public class Habit {
     private ArrayList<Day> frequency;
     private HabitEventList events = new HabitEventList();
 
-    /** Constructor for Habit
+    /**
+     * Constructor for Habit
+     *
      * @param title
      * @param reason
      * @param startDate
@@ -41,6 +43,8 @@ public class Habit {
     }
 
     /**
+     * Returns title for habit
+     *
      * @return
      */
     public String getTitle() {
@@ -48,6 +52,8 @@ public class Habit {
     }
 
     /**
+     * Sets title for habit; if over character limit, returns exception
+     *
      * @param title
      * @throws DataFormatException
      */
@@ -60,6 +66,8 @@ public class Habit {
     }
 
     /**
+     * Returns reason for habit
+     *
      * @return
      */
     public String getReason() {
@@ -67,6 +75,8 @@ public class Habit {
     }
 
     /**
+     * Sets reason for habit; if over character limit, returns exception
+     *
      * @param reason
      * @throws DataFormatException
      */
@@ -79,6 +89,8 @@ public class Habit {
     }
 
     /**
+     * Returns date for habit
+     *
      * @return
      */
     public Date getStartDate() {
@@ -86,6 +98,8 @@ public class Habit {
     }
 
     /**
+     * Sets date for habit
+     *
      * @param startDate
      */
     public void setStartDate(Date startDate) {
@@ -93,6 +107,8 @@ public class Habit {
     }
 
     /**
+     * Returns frequency for habit
+     *
      * @return
      */
     public ArrayList<Day> getFrequency() {
@@ -100,6 +116,8 @@ public class Habit {
     }
 
     /**
+     * Sets frequency for habit
+     *
      * @param frequency
      */
     public void setFrequency(ArrayList<Day> frequency) {
@@ -107,6 +125,8 @@ public class Habit {
     }
 
     /**
+     * Returns frequency for habit in the form of a string
+     *
      * @return
      */
     public String getFrequencyString() {
@@ -123,6 +143,8 @@ public class Habit {
     }
 
     /**
+     * Returns habit events for habit
+     *
      * @return
      */
     public HabitEventList getEvents() {
@@ -130,13 +152,17 @@ public class Habit {
     }
 
     /**
+     * Sets entire list of habit events for habit
+     *
      * @param events
      */
     public void setEvents(HabitEventList events) {
         this.events = events;
     }
 
-    /** Edited String format for habit
+    /**
+     * Returns habit in a specific string
+     *
      * @return
      */
     @Override
