@@ -6,9 +6,12 @@ package com.example.baard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +20,16 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
 
@@ -34,8 +42,6 @@ import java.util.zip.DataFormatException;
  * create an instance of this fragment.
  */
 public class CreateNewHabitFragment extends Fragment {
-
-    private HabitList habits = new HabitList();
 
     private EditText titleText;
     private EditText reasonText;
@@ -90,6 +96,14 @@ public class CreateNewHabitFragment extends Fragment {
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_create_new_habit, container, false);
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+
+        final FileController fc = new FileController();
+        final User user = fc.loadUser(getActivity().getApplicationContext(), username);
+
         Button createButton = (Button) myView.findViewById(R.id.create);
         titleText = (EditText) myView.findViewById(R.id.title);
         reasonText = (EditText) myView.findViewById(R.id.reason);
@@ -124,9 +138,19 @@ public class CreateNewHabitFragment extends Fragment {
                 // if all of the values are entered try to save
                 if (properEntry) {
                     try {
-                        habits.add(new Habit(title_text, reason, convertedStartDate, frequency));
-                        //TODO SAVE TO FILE
+                        Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
+                        HabitList habits = user.getHabits();
+                        habits.add(habit);
+
+                        fc.saveUser(getActivity().getApplicationContext(), user);
+
                         Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                        intent.putExtra("position", habits.size()-1);
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         startActivity(intent);
                     } catch (DataFormatException errMsg) {
                         // occurs when title or reason are above their character limits

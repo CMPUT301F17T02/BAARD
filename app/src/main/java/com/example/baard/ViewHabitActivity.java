@@ -5,24 +5,29 @@
 package com.example.baard;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
-import java.util.zip.DataFormatException;
-
-import static com.example.baard.Day.MONDAY;
-import static com.example.baard.Day.TUESDAY;
 
 public class ViewHabitActivity extends AppCompatActivity {
 
-    DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+    private DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+    private int position;
+    private String username;
+    private HabitList habitList;
+    private Habit habit;
+    private FileController fc;
+    private User user;
 
     /**
      * This create method sets the text based on habit retrieved
@@ -33,15 +38,29 @@ public class ViewHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_habit);
 
-        ArrayList<Day> days = new ArrayList<Day>();
-        days.add(MONDAY);
-        days.add(TUESDAY);
-        Habit habit = null;
-        try {
-            habit = new Habit("test", "test", new Date(), days);
-        } catch (DataFormatException e) {
-            e.printStackTrace();
-        }
+        fc = new FileController();
+
+        // grab the index of the item in the list
+        Bundle extras = getIntent().getExtras();
+        position = extras.getInt("position");
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+    }
+
+
+    /**
+     * Load user
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // load required data
+        user = fc.loadUser(getApplicationContext(), username);
+        habitList = user.getHabits();
+        habit = habitList.getHabit(position);
 
         // set all of the values for the habit to be viewed
         TextView titleView = (TextView) findViewById(R.id.title);
@@ -61,8 +80,8 @@ public class ViewHabitActivity extends AppCompatActivity {
      * @param view
      */
     public void editHabit(View view) {
-        // TODO pass the habit
         Intent intent = new Intent(this, EditHabitActivity.class);
+        intent.putExtra("position", position);
         startActivity(intent);
     }
 
@@ -73,7 +92,8 @@ public class ViewHabitActivity extends AppCompatActivity {
      * @param view
      */
     public void deleteHabit(View view) {
-        // TODO delete functionality
+        habitList.delete(habit);
+        fc.saveUser(getApplicationContext(), user);
         finish();
     }
 }

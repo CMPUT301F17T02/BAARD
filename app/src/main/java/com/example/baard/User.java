@@ -23,9 +23,10 @@ public class User {
     private String id;
     // WOW factor TODO --> profile pictures
 
-    public User(String name, String username) {
+    public User(String name, String username, String id) {
         this.name = name;
         this.username = username;
+        this.id = id;
     }
 
     public String getId() {
