@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /**
- * Activity that is started when the user pressed the edit button when viewing a HabitEvent.
+ * Activity that is started when the user pressed the edit button when viewing a HabitEvent
+ * @author amckerna
+ * @version 1.0
  */
 public class EditHabitEventActivity extends AppCompatActivity {
 

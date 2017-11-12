@@ -28,6 +28,8 @@ import java.util.List;
  * Use the {@link AllHabitEventsFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
+ * @author bangotti and amckerna
+ * @version 1.0
  * This fragment displays all of the HabitEvents from every Habit in the order in which they were
  * performed.
  */

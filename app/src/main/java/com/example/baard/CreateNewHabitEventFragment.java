@@ -40,6 +40,8 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link CreateNewHabitEventFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
+ * @author amckerna
+ * @version 1.0
  * This fragment is used for when creating a new HabitEvent.
  */
 public class CreateNewHabitEventFragment extends Fragment {

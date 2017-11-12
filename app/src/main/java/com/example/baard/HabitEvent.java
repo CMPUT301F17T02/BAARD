@@ -18,6 +18,8 @@ import java.util.zip.DataFormatException;
 
 /**
  * A HabitEvent that records the user performing an instance of a habit.
+ * @author amckerna
+ * @version 1.0
  */
 public class HabitEvent {
     private Habit habit;

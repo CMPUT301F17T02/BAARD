@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 /**
  * A class designed to hold a list of HabitEvents.
+ * @author amckerna
+ * @version 1.0
  */
 public class HabitEventList {
 
