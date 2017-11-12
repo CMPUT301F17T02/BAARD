@@ -104,8 +104,7 @@ public class AllHabitEventsFragment extends Fragment {
                 //tell the ViewRecordActivity which list item has been selected and start it
                 Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
                 //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
-                intent.putExtra("position",i);
-
+                //intent.putExtra("position",i);
                 startActivity(intent);
             }
         });
