@@ -143,7 +143,6 @@ public class CreateNewHabitFragment extends Fragment {
                         fc.saveUser(getActivity().getApplicationContext(), user);
 
                         Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                        intent.putExtra("username", user.getUsername());
                         intent.putExtra("position", habits.size()-1);
                         startActivity(intent);
                     } catch (DataFormatException errMsg) {

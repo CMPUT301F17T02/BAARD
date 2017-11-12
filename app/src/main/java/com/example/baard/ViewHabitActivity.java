@@ -5,10 +5,15 @@
 package com.example.baard;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,23 +49,24 @@ public class ViewHabitActivity extends AppCompatActivity {
         // grab the index of the item in the list
         Bundle extras = getIntent().getExtras();
         position = extras.getInt("position");
-        username = extras.getString("username");
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+    }
+
+
+    /**
+     * Load user
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
 
         // load required data
         user = fc.loadUser(getApplicationContext(), username);
         habitList = user.getHabits();
         habit = habitList.getHabit(position);
-
-        // testing data
-        ArrayList<Day> days = new ArrayList<Day>();
-        days.add(MONDAY);
-        days.add(TUESDAY);
-        try {
-            habit = new Habit("test", "test", new Date(), days);
-        } catch (DataFormatException e) {
-            e.printStackTrace();
-        }
-        // end of testing data
 
         // set all of the values for the habit to be viewed
         TextView titleView = (TextView) findViewById(R.id.title);
@@ -81,7 +87,6 @@ public class ViewHabitActivity extends AppCompatActivity {
      */
     public void editHabit(View view) {
         Intent intent = new Intent(this, EditHabitActivity.class);
-        intent.putExtra("username", username);
         intent.putExtra("position", position);
         startActivity(intent);
     }

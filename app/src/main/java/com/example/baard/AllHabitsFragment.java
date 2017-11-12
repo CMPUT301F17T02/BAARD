@@ -41,6 +41,9 @@ public class AllHabitsFragment extends Fragment {
     private ListView habitListView;
     private ArrayAdapter<Habit> adapter;
     private HabitList habitList;
+    private String username;
+    private User user;
+    private FileController fc;
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,32 +89,20 @@ public class AllHabitsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_habits, container, false);
-        FileController fc = new FileController();
+        fc = new FileController();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
-        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-
-        //String username = getActivity().getIntent().getStringExtra("username");
-
-        Log.i("Username", username);
-        final User user = fc.loadUser(getActivity().getApplicationContext(), username);
-
-        habitList = user.getHabits();
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         habitListView = (ListView) view.findViewById(R.id.habitListView);
-
-        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList.getArrayList());
-
-        habitListView.setAdapter(adapter);
 
         // set the listener so that if you click a habit in the list, you can view it
         habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                intent.putExtra("username", user.getUsername());
                 intent.putExtra("position", i);
                 startActivity(intent);
             }
@@ -126,8 +117,14 @@ public class AllHabitsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // TODO GRAB THE LIST TO DISPLAY
-        //  adapter.notifyDataSetChanged();
+
+        user = fc.loadUser(getActivity().getApplicationContext(), username);
+        habitList = user.getHabits();
+
+        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList.getArrayList());
+        habitListView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
     }
 
 
