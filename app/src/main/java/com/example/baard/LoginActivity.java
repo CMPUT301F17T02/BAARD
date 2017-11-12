@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void login(User user) {
         FileController fc = new FileController();
-        //fc.saveUser(getApplicationContext(), user);
+        fc.saveUser(getApplicationContext(), user);
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("username", user.getUsername());
         startActivity(intent);

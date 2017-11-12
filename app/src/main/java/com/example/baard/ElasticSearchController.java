@@ -39,7 +39,7 @@ public class ElasticSearchController {
             verifySettings();
 
             User user = null;
-            // Check if username exists
+            // Query to check if username exists
             String query = "{\n" +
                     "    \"query\" : {\n" +
                     "       \"term\" : {\"username\": \"" + parameters[1] + "\"}\n" +
@@ -61,22 +61,25 @@ public class ElasticSearchController {
             try {
                 SearchResult result = client.execute(search);
                 JsonObject hits = result.getJsonObject().getAsJsonObject("hits");
-                if (result.isSucceeded() && hits.get("total").getAsInt() == 0) {
-                    DocumentResult execute = client.execute(index);
-                    if (execute.isSucceeded()) {
-                        Log.d("elasticSearch", execute.getId());
-                        user = new User(parameters[0], parameters[1]);
-                        user.setId(execute.getId());
-                        Log.d("elasticSearch", "User has been created.");
+
+                if (result.isSucceeded()) {
+                    if (hits.get("total").getAsInt() == 0) {
+                        DocumentResult execute = client.execute(index);
+                        if (execute.isSucceeded()) {
+                            user = new User(parameters[0], parameters[1], execute.getId());
+                            Log.i("ESC.AddUserTask", "User has been created.");
+                        } else {
+                            Log.i("ESC.AddUserTask", "Application failed to create new user.");
+                        }
                     } else {
-                        Log.d("elasticSearch", "Application failed to create new user.");
+                        Log.i("ESC.AddUserTask", "The user already exists.");
                     }
                 } else {
-                    Log.d("elasticSearch", "User already exists!");
+                    Log.e("ESC.AddUserTask", "The search query failed.");
                 }
             }
             catch (Exception e) {
-                Log.i("Error", "The application failed to build and send the habits");
+                Log.e("ESC.AddUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
             return user;
@@ -89,43 +92,27 @@ public class ElasticSearchController {
         protected Void doInBackground(User... users) {
             verifySettings();
 
-
             for (User user : users) {
-                JsonObject o;
-                JsonParser parser = new JsonParser();
+                Gson gson = new Gson();
 
-                // Get Habits attribute as string
-                o = parser.parse(new Gson().toJson(user.getHabits())).getAsJsonObject();
-                String habitsJSON = o.getAsJsonArray("habits").toString();
-                //Log.d("elasticSearch", habitsJSON);
-
-                // Get Friends attribute as string
-                o = parser.parse(new Gson().toJson(user.getFriends())).getAsJsonObject();
-                String friendsJSON = o.getAsJsonArray("users").toString();
-                //Log.d("elasticSearch", friendsJSON);
-
-                // Get ReceivedRequests attribute as string
-                o = parser.parse(new Gson().toJson(user.getReceivedRequests())).getAsJsonObject();
-                String receivedRequestsJSON = o.getAsJsonArray("users").toString();
-                //Log.d("elasticSearch", receivedRequestsJSON);
-
-                // Create body for POST API of ElasticSearch
+                // Create body for PUT API of ElasticSearch
+                // Need to extract fields separately since some of the fields are transient
                 String source = "{\"name\": \"" + user.getName() + "\"," +
                                 "\"username\": \"" + user.getUsername() + "\"," +
-                                "\"habits\": " + habitsJSON + "," +
-                                "\"friends\": " + friendsJSON + "," +
-                                "\"receivedRequests\": " + receivedRequestsJSON + "}";
+                                "\"habits\": " + gson.toJson(user.getHabits()) + "," +
+                                "\"friends\": " + gson.toJson(user.getFriends()) + "," +
+                                "\"receivedRequests\": " + gson.toJson(user.getReceivedRequests()) + "}";
 
-                Index index = new Index.Builder(source).index("cmput301f17t02").type("User").build();
+                Index index = new Index.Builder(source).index("cmput301f17t02").type("User").id(user.getId()).build();
 
                 try {
                     DocumentResult execute = client.execute(index);
                     if (execute.isSucceeded()) {
-                        //Log.d("elasticSearch", "User has been created.");
+                      Log.i("ESC.UpdateUserTask", "User has been updated.");
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the habits");
+                    Log.i("ESC.UpdateUserTask", "The application failed to build and send the habits");
                 }
 
             }
@@ -145,7 +132,7 @@ public class ElasticSearchController {
                            "    }\n" +
                            "}";
 
-            Log.d("elasticSearch", query);
+            Log.d("ESC.GetUserTask", query);
             Search search = new Search.Builder(query)
                     .addIndex("cmput301f17t02")
                     .addType("User")
@@ -154,28 +141,30 @@ public class ElasticSearchController {
             try {
                 SearchResult result = client.execute(search);
                 JsonObject hits = result.getJsonObject().getAsJsonObject("hits");
-                Log.d("elasticSearch", hits.toString());
 
-                if (result.isSucceeded() && hits.get("total").getAsInt() == 1) {
-                    JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
-                    JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
+                if (result.isSucceeded()) {
+                    if (hits.get("total").getAsInt() == 1) {
+                        JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
+                        JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
 
-                    // Need to extract UserList friends separately because the field is transient
-                    String friendsJSON = userInfoSource.get("friends").toString();
-                    UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
+                        // Need to extract UserList friends separately because the field is transient
+                        String friendsJSON = userInfoSource.get("friends").toString();
+                        UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
 
-                    // Need to extract UserList receivedRequests separately because the field is transient
-                    String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
-                    UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
+                        // Need to extract UserList receivedRequests separately because the field is transient
+                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
+                        UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
 
-                    //user = new User(name, parameters[0]); //result.getSourceAsObject(User.class);
-                    user = result.getSourceAsObject(User.class);
-                    user.setFriends(friendsList);
-                    user.setReceivedRequests(receivedRequestsList);
+                        user = result.getSourceAsObject(User.class);
+                        user.setFriends(friendsList);
+                        user.setReceivedRequests(receivedRequestsList);
 
-                    Log.d("ESC.GetUserTask", "User was found.");
+                        Log.i("ESC.GetUserTask", "Unique user was found.");
+                    } else {
+                        Log.i("ESC.GetUserTask", "User does not exist or is not unique.");
+                    }
                 } else {
-                    Log.i("ESC.GetUserTask","The search query failed to find any username that matched.");
+                    Log.e("ESC.GetUserTask", "The search query failed.");
                 }
             }
             catch (Exception e) {
