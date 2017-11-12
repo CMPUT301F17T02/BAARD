@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -180,9 +179,9 @@ public class LoginActivity extends AppCompatActivity {
      * Calls the intent to move on to the main activity
      */
     private void login(User user) {
-        // TODO: Pass intent to main activity with user instance
+        FileController fc = new FileController();
+        fc.saveUser(getApplicationContext(), user);
         Intent intent = new Intent(this, MainActivity.class);
-        //intent.putExtra(user);
         startActivity(intent);
     }
 

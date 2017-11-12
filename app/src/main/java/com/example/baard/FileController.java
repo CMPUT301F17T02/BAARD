@@ -125,10 +125,10 @@ class FileController {
      * @return User stored on server
      */
     private User loadUserFromServer(String username) {
-        ElasticSearchController.GetUserTask ESC = new ElasticSearchController.GetUserTask();
-        ESC.execute(username);
+        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
+        getUserTask.execute(username);
         try {
-            return ESC.get();
+            return getUserTask.get();
         } catch (ExecutionException | InterruptedException e) {
         }
         return null; // TODO: deal with this null
@@ -139,7 +139,7 @@ class FileController {
      * @param user The user to be saved
      */
     private void saveUserToServer(User user) {
-        ElasticSearchController.UpdateUserTask ESC = new ElasticSearchController.UpdateUserTask();
-        ESC.execute(user);
+        ElasticSearchController.UpdateUserTask updateUserTask = new ElasticSearchController.UpdateUserTask();
+        updateUserTask.execute(user);
     }
 }
