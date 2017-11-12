@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.concurrent.ExecutionException;
 
@@ -29,6 +30,9 @@ import java.util.concurrent.ExecutionException;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor sharedPrefsEditor;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -43,7 +47,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
+
+        // Set up the login form
+        sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        sharedPrefsEditor = sharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         mUsernameView = (EditText) findViewById(R.id.username);
         mUsernameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -68,6 +78,13 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        if (username != null) {
+            Log.i("Username found",username);
+            FileController fc = new FileController();
+            User user = fc.loadUser(getApplicationContext(), username);
+            login(user);
+        }
 
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
@@ -187,8 +204,6 @@ public class LoginActivity extends AppCompatActivity {
         FileController fc = new FileController();
         fc.saveUser(getApplicationContext(), user);
         Intent intent = new Intent(this, MainActivity.class);
-        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(user.getUsername());
         sharedPrefsEditor.putString("username", json);
