@@ -34,6 +34,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<MainAct
 
     Date startDate = new Date();
     ArrayList<Day> frequency = new ArrayList<>();
+    frequency.add(MONDAY);
     Habit habit = new Habit("title", "Reason", startDate, frequency);
 
     public CreateNewHabitTest() throws DataFormatException {
