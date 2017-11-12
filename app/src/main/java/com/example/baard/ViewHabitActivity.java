@@ -22,7 +22,13 @@ import static com.example.baard.Day.TUESDAY;
 
 public class ViewHabitActivity extends AppCompatActivity {
 
-    DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+    private DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+    private int position;
+    private String username;
+    private HabitList habitList;
+    private Habit habit;
+    private FileController fc;
+    private User user;
 
     /**
      * This create method sets the text based on habit retrieved
@@ -33,15 +39,28 @@ public class ViewHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_habit);
 
+        fc = new FileController();
+
+        // grab the index of the item in the list
+        Bundle extras = getIntent().getExtras();
+        position = extras.getInt("position");
+        username = extras.getString("username");
+
+        // load required data
+        user = fc.loadUser(getApplicationContext(), username);
+        habitList = user.getHabits();
+        habit = habitList.getHabit(position);
+
+        // testing data
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(MONDAY);
         days.add(TUESDAY);
-        Habit habit = null;
         try {
             habit = new Habit("test", "test", new Date(), days);
         } catch (DataFormatException e) {
             e.printStackTrace();
         }
+        // end of testing data
 
         // set all of the values for the habit to be viewed
         TextView titleView = (TextView) findViewById(R.id.title);
@@ -61,8 +80,9 @@ public class ViewHabitActivity extends AppCompatActivity {
      * @param view
      */
     public void editHabit(View view) {
-        // TODO pass the habit
         Intent intent = new Intent(this, EditHabitActivity.class);
+        intent.putExtra("username", username);
+        intent.putExtra("position", position);
         startActivity(intent);
     }
 
@@ -73,7 +93,8 @@ public class ViewHabitActivity extends AppCompatActivity {
      * @param view
      */
     public void deleteHabit(View view) {
-        // TODO delete functionality
+        habitList.delete(habit);
+        fc.saveUser(getApplicationContext(), user);
         finish();
     }
 }
