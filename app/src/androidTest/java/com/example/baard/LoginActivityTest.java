@@ -44,28 +44,6 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     }
 
     /**
-     * Test case to test signing in a user and all associated errors
-     */
-    public void testSignIn() {
-        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
-        solo.clickOnButton("Sign in");
-        assertTrue(solo.waitForText("This field is required", 1, 1000));
-
-        solo.enterText((EditText) solo.getView(R.id.username), "Inv@lid Charact#rs");
-        solo.clickOnButton("Sign in");
-        assertTrue(solo.waitForText("This username contains invalid characters", 1, 1000));
-
-        solo.clearEditText((EditText) solo.getView(R.id.username));
-        solo.enterText((EditText) solo.getView(R.id.username), "anarten");
-        solo.clickOnButton("Sign in");
-        solo.assertCurrentActivity("wrong activity", MainActivity.class);
-
-        solo.goBack();
-        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
-        solo.clearEditText((EditText) solo.getView(R.id.username));
-    }
-
-    /**
      * Test case for registering a user and all associated errors
      */
     public void testRegister() {
@@ -91,6 +69,28 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
         solo.clearEditText((EditText) solo.getView(R.id.username));
         solo.clearEditText((EditText) solo.getView(R.id.name));
+    }
+
+    /**
+     * Test case to test signing in a user and all associated errors
+     */
+    public void testSignIn() {
+        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
+        solo.clickOnButton("Sign in");
+        assertTrue(solo.waitForText("This field is required", 1, 1000));
+
+        solo.enterText((EditText) solo.getView(R.id.username), "Inv@lid Charact#rs");
+        solo.clickOnButton("Sign in");
+        assertTrue(solo.waitForText("This username contains invalid characters", 1, 1000));
+
+        solo.clearEditText((EditText) solo.getView(R.id.username));
+        solo.enterText((EditText) solo.getView(R.id.username), "test_username");
+        solo.clickOnButton("Sign in");
+        solo.assertCurrentActivity("wrong activity", MainActivity.class);
+
+        solo.goBack();
+        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
+        solo.clearEditText((EditText) solo.getView(R.id.username));
     }
 
     /**

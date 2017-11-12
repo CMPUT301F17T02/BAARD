@@ -4,6 +4,8 @@
 
 package com.example.baard;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,7 +33,11 @@ public class EditHabitActivity extends AppCompatActivity {
     private Habit habit;
     private EditText editTextTitle, editTextReason, editTextStartDate;
     private ArrayList<Day> frequency;
-    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private int position;
+    private String username;
+    private FileController fc;
+    private User user;
 
     /**
      * This create method sets the text and toggle buttons based on habit retrieved
@@ -40,15 +49,19 @@ public class EditHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_habit);
 
-        // TODO pull real data
-        ArrayList<Day> days = new ArrayList<Day>();
-        days.add(MONDAY);
-        days.add(TUESDAY);
-        try {
-            habit = new Habit("test", "test", new Date(), days);
-        } catch (DataFormatException e) {
-            e.printStackTrace();
-        }
+        fc = new FileController();
+
+        // grab the index of the item in the list
+        Bundle extras = getIntent().getExtras();
+        position = extras.getInt("position");
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+
+        // load required data
+        user = fc.loadUser(getApplicationContext(), username);
+        habit = user.getHabits().getHabit(position);
 
         // set all of the values for the habit to be edited
         editTextTitle = (EditText) findViewById(R.id.title);
@@ -58,6 +71,7 @@ public class EditHabitActivity extends AppCompatActivity {
         editTextReason.setText(habit.getReason());
         editTextStartDate.setText(formatter.format(habit.getStartDate()));
         frequency = habit.getFrequency();
+
         // set the toggle buttons for the days of the week
         setToggleButtons();
     }
@@ -107,8 +121,7 @@ public class EditHabitActivity extends AppCompatActivity {
      * Function that saves the new list into the file & online
      */
     private void commitEdits() {
-        //json = gson.toJson(habitList);
-        // TODO functionality of saving
+        fc.saveUser(getApplicationContext(), user);
     }
 
     /**
