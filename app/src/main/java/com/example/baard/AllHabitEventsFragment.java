@@ -19,6 +19,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,7 +93,11 @@ public class AllHabitEventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_habit_events, container, false);
 
-        habitEventList.add(new HabitEvent(new Habit("test", "just because", new Date(), new ArrayList<Day>()), new Date()));
+        try {
+            habitEventList.add(new HabitEvent(new Habit("test", "just because", new Date(), new ArrayList<Day>()), new Date()));
+        } catch (DataFormatException e) {
+            e.printStackTrace();
+        }
 
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 

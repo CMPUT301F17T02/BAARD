@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.IllegalFormatCodePointException;
 import java.util.zip.DataFormatException;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by biancaangotti on 2017-10-18.
  */
@@ -22,11 +24,14 @@ import java.util.zip.DataFormatException;
  * @version 1.0
  */
 public class HabitEvent {
-    private Habit habit;
+    private transient Habit habit;
     private String comment = "";
     private Date eventDate;
+    @JestId
+    private String id;
+    private String userId;
+    private String habitId;
     // TODO location variable
-    // TODO picture variable
     private Uri image;
 
     /**
@@ -63,6 +68,30 @@ public class HabitEvent {
         }
         // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getHabitId() {
+        return habitId;
+    }
+
+    public void setHabitId(String habitId) {
+        this.habitId = habitId;
     }
 
     public Habit getHabit() {
