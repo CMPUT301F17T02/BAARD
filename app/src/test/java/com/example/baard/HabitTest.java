@@ -32,41 +32,57 @@ public class HabitTest {
     @Test
     public void testGetTitle() {
         String title = "Test Title";
-        Habit habit = new Habit(title, "Reason", startDate, array);
-        String test_title = habit.getTitle();
-        assertEquals(title, test_title);
+        try {
+            Habit habit = new Habit(title, "Reason", startDate, array);
+            String test_title = habit.getTitle();
+            assertEquals(title, test_title);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
     public void testGetReason() {
         String reason = "Reason";
-        Habit habit = new Habit("Test Title", reason, startDate, array);
-        String test_reason = habit.getReason();
-        assertEquals(reason, test_reason);
+        try {
+            Habit habit = new Habit("Test Title", reason, startDate, array);
+            String test_reason = habit.getReason();
+            assertEquals(reason, test_reason);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
     public void testGetStartDate() {
-        Habit habit = new Habit("Test Title", "Reason", startDate, array);
-        Date test_startDate = habit.getStartDate();
-        assertEquals(startDate, test_startDate);
+        try {
+            Habit habit = new Habit("Test Title", "Reason", startDate, array);
+            Date test_startDate = habit.getStartDate();
+            assertEquals(startDate, test_startDate);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
     public void testGetFrequency() {
-        array.add(Day.MONDAY);
-        array.add(Day.WEDNESDAY);
-        array.add(Day.FRIDAY);
-        Habit habit = new Habit("Test Title", "Reason", startDate, array);
-        ArrayList<Day> test_array = new ArrayList<Day>();
-        test_array = habit.getFrequency();
-        assertEquals(array, test_array);
+        try {
+            array.add(Day.MONDAY);
+            array.add(Day.WEDNESDAY);
+            array.add(Day.FRIDAY);
+            Habit habit = new Habit("Test Title", "Reason", startDate, array);
+            ArrayList<Day> test_array = new ArrayList<Day>();
+            test_array = habit.getFrequency();
+            assertEquals(array, test_array);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
     public void testGetEvents() {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
         try {
+            Habit habit = new Habit("Test Title", "reason", startDate, array);
             HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
             HabitEventList habitEventList = new HabitEventList();
 
@@ -84,8 +100,8 @@ public class HabitTest {
     @Test
     public void testSetEvents() {
         HabitEventList habitEventList = new HabitEventList();
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
         try {
+            Habit habit = new Habit("Test Title", "reason", startDate, array);
             HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
 
             habitEventList.add(habitEvent);

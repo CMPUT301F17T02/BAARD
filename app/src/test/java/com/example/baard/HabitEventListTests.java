@@ -34,9 +34,9 @@ public class HabitEventListTests {
     public void setUpTest(){
         freq = new ArrayList<Day>();
         date1 = new Date();
-        habit = new Habit("test","reason",date1,freq);
         // constructor 1
         try {
+            habit = new Habit("test","reason",date1,freq);
             habitEvent = new HabitEvent(habit, date1, "testevent");
             habitEventList = new HabitEventList();
         }catch(Exception e){

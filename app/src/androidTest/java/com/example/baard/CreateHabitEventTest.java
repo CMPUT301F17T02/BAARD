@@ -22,35 +22,43 @@ import org.junit.Test;
 public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private Solo solo;
+    private MainActivity activity;
     public CreateHabitEventTest(){
         super(MainActivity.class);
     }
 
+
     @Override
     public void setUp() throws InterruptedException {
-        //wait(500000);
-        Activity activity = getActivity();
+        MainActivity activity = (MainActivity) getActivity();
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP","setUp()");
     }
 
     @Test
-    public void testStart() throws Exception {
-        Activity activity = getActivity();
-        solo.assertCurrentActivity("yay",LoginActivity.class);
-        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
-        EditText userName = (EditText) solo.getView(R.id.username);
-        solo.clearEditText(userName);
-        solo.enterText(userName, "Andrew");
-        Button loginButton = (Button) solo.getView(R.id.sign_in_button);
-        loginButton.performClick();
+    public void testCreateHabitEvent() throws Exception {
+        //Activity activity = getActivity();
+
+        solo.assertCurrentActivity("yay",MainActivity.class);
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN); // select first item
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER); // press the first item
+        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
+        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        solo.enterText(date, "25/12/2016");
+        EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        solo.enterText(comment, "test comment");
+        //solo.clickOnButton("Add Image"); // successfully pressed button, not sure how to navigate through file system
+
     }
 
     @Test
-    public void testValidInput(){
+    public void testInvalidInput(){
         //solo.something
     }
 

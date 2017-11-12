@@ -30,9 +30,9 @@ public class HabitEventTests {
     public void setUpTest(){
         freq = new ArrayList<Day>();
         date1 = new Date();
-        habit = new Habit("test","reason",date1,freq);
         // constructor 1
         try {
+            habit = new Habit("test","reason",date1,freq);
             habitEvent = new HabitEvent(habit, date1, "testevent");
         }catch(Exception e){
             fail("No exception should be thrown.");
@@ -93,12 +93,16 @@ public class HabitEventTests {
     }
     @Test
     public void testSetHabit(){
-        ArrayList<Day> freq2 = new ArrayList<Day>();
-        Date date2 = new Date();
-        Habit habit2 = new Habit("test2","better reason",date2,freq2);
-        habitEvent.setHabit(habit2);
-        assertNotEquals(habitEvent.getHabit(), habit);
-        assertEquals(habitEvent.getHabit(), habit2);
+        try {
+            ArrayList<Day> freq2 = new ArrayList<Day>();
+            Date date2 = new Date();
+            Habit habit2 = new Habit("test2", "better reason", date2, freq2);
+            habitEvent.setHabit(habit2);
+            assertNotEquals(habitEvent.getHabit(), habit);
+            assertEquals(habitEvent.getHabit(), habit2);
+        }catch(Exception e){
+            fail();
+        }
     }
 
 }
