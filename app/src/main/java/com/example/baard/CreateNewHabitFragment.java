@@ -125,10 +125,14 @@ public class CreateNewHabitFragment extends Fragment {
                 if (properEntry) {
                     try {
                         Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
-                        user.getHabits().add(habit);
+                        HabitList habits = user.getHabits();
+                        habits.add(habit);
+
                         fc.saveUser(getActivity().getApplicationContext(), user);
+
                         Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                         intent.putExtra("username", user.getUsername());
+                        intent.putExtra("position", habits.size()-1);
                         startActivity(intent);
                     } catch (DataFormatException errMsg) {
                         // occurs when title or reason are above their character limits

@@ -36,4 +36,8 @@ public class HabitList {
 
     public ArrayList<Habit> getArrayList() {return habits;}
 
+    public int size() {
+        return habits.size();
+    }
+
 }

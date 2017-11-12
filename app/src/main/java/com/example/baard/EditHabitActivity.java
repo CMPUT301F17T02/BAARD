@@ -28,7 +28,11 @@ public class EditHabitActivity extends AppCompatActivity {
     private Habit habit;
     private EditText editTextTitle, editTextReason, editTextStartDate;
     private ArrayList<Day> frequency;
-    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private int position;
+    private String username;
+    private FileController fc;
+    private User user;
 
     /**
      * This create method sets the text and toggle buttons based on habit retrieved
@@ -40,7 +44,18 @@ public class EditHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_habit);
 
-        // TODO pull real data
+        fc = new FileController();
+
+        // grab the index of the item in the list
+        Bundle extras = getIntent().getExtras();
+        position = extras.getInt("position");
+        username = extras.getString("username");
+
+        // load required data
+        user = fc.loadUser(getApplicationContext(), username);
+        habit = user.getHabits().getHabit(position);
+
+        // testing data
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(MONDAY);
         days.add(TUESDAY);
@@ -49,6 +64,7 @@ public class EditHabitActivity extends AppCompatActivity {
         } catch (DataFormatException e) {
             e.printStackTrace();
         }
+        // end of testing data
 
         // set all of the values for the habit to be edited
         editTextTitle = (EditText) findViewById(R.id.title);
@@ -107,8 +123,7 @@ public class EditHabitActivity extends AppCompatActivity {
      * Function that saves the new list into the file & online
      */
     private void commitEdits() {
-        //json = gson.toJson(habitList);
-        // TODO functionality of saving
+        fc.saveUser(getApplicationContext(), user);
     }
 
     /**
