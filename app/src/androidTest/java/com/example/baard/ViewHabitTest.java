@@ -5,37 +5,26 @@
 package com.example.baard;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ToggleButton;
-import android.view.View;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.zip.DataFormatException;
 import com.robotium.solo.Solo;
 
+import org.junit.Assert;
+
+import java.util.zip.DataFormatException;
+
 /**
- * Created by randi on 11/11/17.
+ * Created by randi on 12/11/17.
  */
 
-public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ViewHabitTest extends ActivityInstrumentationTestCase2<MainActivity>{
 
     private Solo solo;
-    private CreateNewHabitFragment fragment;
 
-    public CreateNewHabitTest() throws DataFormatException {
+    public ViewHabitTest() throws DataFormatException {
         super(MainActivity.class);
     }
 //
@@ -50,17 +39,26 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<MainAct
         // get instrumentation get all info from device writing on
         // get activity gets link to lonely twitter
         Activity activity = getActivity();
-        fragment = new CreateNewHabitFragment();
         solo = new Solo(getInstrumentation(), activity);
         Log.d("SETUP","setUp()");
     }
 
-    public void testCreate() throws Exception {
+    public void testViewAllHabits() throws Exception {
         Activity activity = getActivity();
         solo.waitForActivity(MainActivity.class, 2000);
 
-        solo.waitForFragmentById(R.layout.fragment_create_new_habit);
+        solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("All Habits");
 
+        // Now need to click on a habit and test the viewing of the habit.
+
+    }
+
+    public void testViewHabitFromCreate() throws Exception {
+        Activity activity = getActivity();
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -75,21 +73,17 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<MainAct
 
         solo.enterText(title, "Swimming");
         Assert.assertTrue(solo.searchText("Swimming"));
-
         solo.enterText(reason, "I need to get fit");
         Assert.assertTrue(solo.searchText("I need to get fit"));
-
         solo.enterText(startDate, "20/11/2017");
         Assert.assertTrue(solo.searchText("20/11/2017"));
 
         solo.clickOnText("Mon");
-        solo.isToggleButtonChecked("Mon");
         solo.clickOnButton("Create");
 
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
-        solo.waitForActivity(ViewHabitActivity.class);
+
+        //Test to see if viewing the correct stuff.
 
     }
-
-
 }
