@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
 
@@ -144,6 +145,11 @@ public class CreateNewHabitFragment extends Fragment {
 
                         Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                         intent.putExtra("position", habits.size()-1);
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         startActivity(intent);
                     } catch (DataFormatException errMsg) {
                         // occurs when title or reason are above their character limits
