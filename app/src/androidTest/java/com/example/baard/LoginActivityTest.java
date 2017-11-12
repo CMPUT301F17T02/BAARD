@@ -11,8 +11,6 @@ import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 
-import org.junit.Test;
-
 /**
  * Created by Adam on 11/11/2017.
  */
@@ -35,19 +33,18 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         Activity activity = getActivity();
     }
 
-    @Test
     public void testSignIn() {
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
-        solo.clickOnButton("SIGN IN");
+        solo.clickOnButton("Sign in");
         assertTrue(solo.waitForText("This field is required", 1, 1000));
 
         solo.enterText((EditText) solo.getView(R.id.username), "Inv@lid Charact#rs");
-        solo.clickOnButton("SIGN IN");
+        solo.clickOnButton("Sign in");
         assertTrue(solo.waitForText("This username contains invalid characters", 1, 1000));
 
         solo.clearEditText((EditText) solo.getView(R.id.username));
         solo.enterText((EditText) solo.getView(R.id.username), "anarten");
-        solo.clickOnButton("SIGN IN");
+        solo.clickOnButton("Sign in");
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
 
         solo.goBack();
@@ -55,24 +52,23 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.clearEditText((EditText) solo.getView(R.id.username));
     }
 
-    @Test
     public void testRegister() {
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
-        solo.clickOnButton("REGISTER");
+        solo.clickOnButton("Register");
         assertTrue(solo.waitForText("This field is required", 1, 1000));
 
         solo.enterText((EditText) solo.getView(R.id.username), "Inv@lid Charact#rs");
-        solo.clickOnButton("REGISTER");
+        solo.clickOnButton("Register");
         assertTrue(solo.waitForText("This field is required", 1, 1000));
 
         solo.enterText((EditText) solo.getView(R.id.name), "Test Name");
-        solo.clickOnButton("REGISTER");
+        solo.clickOnButton("Register");
         assertTrue(solo.waitForText("This username contains invalid characters", 1, 1000));
 
         solo.clearEditText((EditText) solo.getView(R.id.username));
         solo.enterText((EditText) solo.getView(R.id.username), "test_username");
 
-        solo.clickOnButton("REGISTER");
+        solo.clickOnButton("Register");
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
 
         solo.goBack();
