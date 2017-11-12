@@ -4,34 +4,33 @@
 
 package com.example.baard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import org.w3c.dom.Node;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
-
-import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -44,8 +43,6 @@ import static android.app.Activity.RESULT_OK;
  */
 public class CreateNewHabitFragment extends Fragment {
 
-    private HabitList habits = new HabitList();
-
     private EditText titleText;
     private EditText reasonText;
     private EditText startDateText;
@@ -53,8 +50,10 @@ public class CreateNewHabitFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    /**
+     * Required empty public constructor
+     */
     public CreateNewHabitFragment() {
-        // Required empty public constructor
     }
 
 
@@ -64,7 +63,6 @@ public class CreateNewHabitFragment extends Fragment {
      *
      * @return A new instance of fragment CreateNewHabitFragment.
      */
-
     public static CreateNewHabitFragment newInstance() {
         CreateNewHabitFragment fragment = new CreateNewHabitFragment();
         Bundle args = new Bundle();
@@ -72,7 +70,8 @@ public class CreateNewHabitFragment extends Fragment {
         return fragment;
     }
 
-    /** Called when create habit activity is first created
+    /**
+     * Called when create habit activity is first created
      *
      * @param savedInstanceState
      */
@@ -82,18 +81,6 @@ public class CreateNewHabitFragment extends Fragment {
 
         if (getArguments() != null) {
         }
-    }
-
-    /**
-     * called when CreateNewHabit activity is opened up and called again.
-     */
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    public void setToggleButtons(ArrayList<Day> days) {
-
     }
 
     /**
@@ -109,23 +96,32 @@ public class CreateNewHabitFragment extends Fragment {
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_create_new_habit, container, false);
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+
+        final FileController fc = new FileController();
+        final User user = fc.loadUser(getActivity().getApplicationContext(), username);
+
         Button createButton = (Button) myView.findViewById(R.id.create);
         titleText = (EditText) myView.findViewById(R.id.title);
         reasonText = (EditText) myView.findViewById(R.id.reason);
         startDateText = (EditText) myView.findViewById(R.id.startDate);
 
+        // set the toggle buttons for the days of the week
         setToggleButtons(myView);
 
+        // set the function to the create button
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Boolean properEntry = true;
-
-                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                 String title_text = titleText.getText().toString();
                 String reason = reasonText.getText().toString();
                 Date convertedStartDate = convertDate(startDateText.getText().toString());
 
+                // throw errors if the user does not input into the mandatory fields
                 if (title_text.equals("")) {
                     titleText.setError("Title of habit is required!");
                     properEntry = false;
@@ -139,11 +135,25 @@ public class CreateNewHabitFragment extends Fragment {
                     properEntry = false;
                 }
 
+                // if all of the values are entered try to save
                 if (properEntry) {
                     try {
-                        habits.add(new Habit(title_text, reason, convertedStartDate, frequency));
+                        Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
+                        HabitList habits = user.getHabits();
+                        habits.add(habit);
+
+                        fc.saveUser(getActivity().getApplicationContext(), user);
+
+                        Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                        intent.putExtra("position", habits.size()-1);
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         startActivity(intent);
                     } catch (DataFormatException errMsg) {
+                        // occurs when title or reason are above their character limits
                         Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -154,9 +164,10 @@ public class CreateNewHabitFragment extends Fragment {
     }
 
     /**
+     * Auto-generated method for fragment
+     *
      * @param uri
      */
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -164,9 +175,11 @@ public class CreateNewHabitFragment extends Fragment {
     }
 
     /**
-     * Sets the toggle buttons for the days of the week when the buttons are pushed on or off.
+     * Sets the required toggle buttons for the days of the week.
+     * This thereby controls the frequency array to which habits should repeat on.
      */
     public void setToggleButtons(View myView) {
+        // store all buttons in order of days in the Day enum
         ArrayList<ToggleButton> toggles = new ArrayList<>();
         toggles.add((ToggleButton) myView.findViewById(R.id.sun));
         toggles.add((ToggleButton) myView.findViewById(R.id.mon));
@@ -175,17 +188,21 @@ public class CreateNewHabitFragment extends Fragment {
         toggles.add((ToggleButton) myView.findViewById(R.id.thu));
         toggles.add((ToggleButton) myView.findViewById(R.id.fri));
         toggles.add((ToggleButton) myView.findViewById(R.id.sat));
+        // grab all possible enum values of Day
         final Day[] possibleValues  = Day.values();
 
+        // iterate through all the toggle buttons to set the listener
         for (int i = 0; i < toggles.size(); i++) {
             final int finalI = i;
             toggles.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
+                        // if the Day is not in the frequency already, add it
                         if (!frequency.contains(possibleValues[finalI])) {
                             frequency.add(possibleValues[finalI]);
                         }
                     } else {
+                        // remove the Day from the frequency
                         frequency.remove(possibleValues[finalI]);
                     }
                 }
@@ -194,6 +211,8 @@ public class CreateNewHabitFragment extends Fragment {
     }
 
     /**
+     * Auto-generated method for fragment
+     *
      * @param context
      */
     @Override
@@ -208,7 +227,7 @@ public class CreateNewHabitFragment extends Fragment {
     }
 
     /**
-     *
+     * Auto-generated method for fragment
      */
     @Override
     public void onDetach() {
@@ -233,8 +252,6 @@ public class CreateNewHabitFragment extends Fragment {
         }
         return date;
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this
