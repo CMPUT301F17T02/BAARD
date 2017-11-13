@@ -63,8 +63,19 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         // if already logged in, log out
         if (!(solo.searchButton("Register", true))) {
             solo.clickOnImage(0);
-            solo.scrollDown();
-            solo.clickOnText("Logout");
+//            solo.scrollDown();
+//            solo.clickOnText("Logout");
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         }
 
         solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
@@ -101,7 +112,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
 //        solo.enterText(startDate, "20/11/2017");
-//        Assert.assertTrue(solo.searchText("20/11/2017"));
+        Assert.assertTrue(solo.searchText("16/03/2017"));
 
         solo.clickOnText("Mon");
         solo.isToggleButtonChecked("Mon");
@@ -141,6 +152,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 //        solo.clickOnText("Logout");
 
         solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);

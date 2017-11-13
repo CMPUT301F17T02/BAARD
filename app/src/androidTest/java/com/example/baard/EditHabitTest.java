@@ -49,16 +49,8 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         // if already logged in, log out
         if (!(solo.searchButton("Register", true))) {
             solo.clickOnImage(0);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+            solo.scrollDown();
+            solo.clickOnText("Logout");
         }
         solo.waitForActivity(LoginActivity.class, 2000);
 
@@ -101,9 +93,10 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.enterText(reason, "I like to jog");
         Assert.assertTrue(solo.searchText("I like to jog"));
 
-        solo.clearEditText(startDate);
-        solo.enterText(startDate, "20/04/2016");
-        Assert.assertTrue(solo.searchText("20/04/2016"));
+        solo.clickOnEditText(2);
+        solo.setDatePicker(0,2017,2,16);
+        solo.clickOnText("OK");
+        Assert.assertTrue(solo.searchText("16/03/2017"));
 
         solo.clickOnText("Mon");
         solo.isToggleButtonChecked("Mon");
