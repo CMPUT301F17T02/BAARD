@@ -78,11 +78,10 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
 //        solo.waitForFragmentById(R.layout.fragment_create_new_habit);
 
-
         solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
-        /tText name = (EditText) solo.getView(R.id.name);
+        //EditText name = (EditText) solo.getView(R.id.name);
         solo.clearEditText(username);
         //solo.clearEditText(name);
         solo.enterText(username, "Andrew.M");
@@ -90,7 +89,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         //Button loginButton = (Button) solo.getView(R.id.sign_in_button);
         solo.clickOnButton("Sign in");
 
-        solo.waitForActivity(ViewHabitActivity.class, 2000);
+        solo.waitForActivity(MainActivity.class, 2000);
         //solo.assertCurrentActivity("Wrong activity", MainActivity.class);
 
         solo.clickOnImage(0);
