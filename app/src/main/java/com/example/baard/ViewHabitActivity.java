@@ -130,10 +130,9 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         ArrayList<PieEntry> yValues = new ArrayList<PieEntry>();
         yValues.add(new PieEntry(6, "Completed"));
-        yValues.add(new PieEntry(3, "Late On Time"));
         yValues.add(new PieEntry(3, "Not Completed"));
 
-        PieDataSet dataSet = new PieDataSet(yValues, "# of Habit Per Week");
+        PieDataSet dataSet = new PieDataSet(yValues, "# of Habits");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setSliceSpace(3f);
         dataSet.setValueFormatter(new IValueFormatter() {
