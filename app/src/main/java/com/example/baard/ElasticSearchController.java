@@ -30,8 +30,19 @@ public class ElasticSearchController {
 
     private static JestDroidClient client;
 
+    /**
+     * Class to control Async background task that will
+     * create a user in the database and return the User class.
+     */
     public static class AddUserTask extends AsyncTask<String, Void, User> {
 
+        /**
+         * Checks for username in database, if it does not find one, it returns a new user.
+         * Adds user into database.
+         *
+         * @param parameters
+         * @return
+         */
         @Override
         protected  User doInBackground(String... parameters) {
             verifySettings();
@@ -89,8 +100,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Class to control Async background task that will update a user in the database
+     */
     public static class UpdateUserTask extends AsyncTask<User, Void, Void> {
 
+        /**
+         * Finds the user in the database, and then stores the updated version of itself.
+         *
+         * @param users
+         * @return
+         */
         @Override
         protected Void doInBackground(User... users) {
             verifySettings();
@@ -127,7 +147,18 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Class to control Async background task that will grab a user from the database
+     */
     public static class GetUserTask extends AsyncTask<String, Void, User> {
+        /**
+         * Finds the user in the database based on the username string, and then
+         * returns the user.
+         *
+         * @param parameters
+         * @return
+         * @throws RuntimeExecutionException
+         */
         @Override
         protected User doInBackground(String... parameters) {
             verifySettings();
@@ -190,29 +221,11 @@ public class ElasticSearchController {
         }
     }
 
-    public static class DeleteUserTask extends AsyncTask<User, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(User... users) {
-            for (User user : users) {
-                try {
-                    DocumentResult execute = client.execute(new Delete.Builder(user.getId())
-                                                        .index("cmput301f17t02")
-                                                        .type("User")
-                                                        .build());
-                    if (execute.isSucceeded()) {
-                        Log.i("ESC.DeleteUserTask", "Successfully delete user.");
-                        return Boolean.TRUE;
-                    } else {
-                        Log.i("ESC.DeleteUserTask", "Was not able to delete user.");
-                    }
-                } catch (Exception e) {
-                    Log.e("ESC.DeleteUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                }
-            }
-            return Boolean.FALSE;
-        }
-    }
 
+    /**
+     * Checks if the client is connected to the server with the right configuration.
+     * @note Generated from the CMPUT 301 labs
+     */
     public static void verifySettings() {
         if (client == null) {
             // classes that build other classes for you

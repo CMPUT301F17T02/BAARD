@@ -20,6 +20,13 @@ import java.util.Set;
 
 public class HabitStatistics {
 
+    /**
+     * Calculates the completion of a habit based on the start and end dates, events and frequency
+     * @param habit
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public HabitCompletionData calcHabitCompletion(Habit habit, Date startDate, Date endDate) {
         HabitEventList habitEventList = habit.getEvents();
         HashSet<Integer> frequency = new HashSet<Integer>();
@@ -48,6 +55,13 @@ public class HabitStatistics {
         return new HabitCompletionData(completed, notCompleted);
     }
 
+    /**
+     * Calculate the habit completion over time based on the start and end dates, events and frequency
+     * @param habit
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public ArrayList<HabitCompletionVsTimeData> getHabitCompletionVsTimeData(Habit habit, Date startDate, Date endDate) {
         ArrayList<Long> times = new ArrayList<Long>();
         ArrayList<Integer> habitCompletions = new ArrayList<Integer>();
@@ -86,6 +100,9 @@ public class HabitStatistics {
 
     }
 
+    /**
+     * Class to define the habit completion data
+     */
     public class HabitCompletionData {
         public final int completed;
         public final int notCompleted;
@@ -96,6 +113,9 @@ public class HabitStatistics {
         }
     }
 
+    /**
+     * Class to define the habit completion versus time
+     */
     public class HabitCompletionVsTimeData {
         long time;
         int habitCompletion;
