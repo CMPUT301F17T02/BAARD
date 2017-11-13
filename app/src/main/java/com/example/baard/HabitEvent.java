@@ -38,11 +38,6 @@ public class HabitEvent implements Comparable<HabitEvent> {
     private transient Habit habit;
     private String comment = "";
     private Date eventDate;
-    //private String habitTitle;
-    //@JestId
-    //private String id;
-    //private String userId;
-    //private String habitId;
     // TODO location variable
     private String imageFilePath;
 
@@ -55,7 +50,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
     public HabitEvent(Habit habit, Date eventDate) throws IllegalArgumentException {
         this.habit = habit;
         //this.habitTitle = habit.getTitle();
-        if (habit.getStartDate().before(eventDate)){
+        if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
         }
         // TODO: make sure the habit doesnt have any habitevents with this date
@@ -76,38 +71,13 @@ public class HabitEvent implements Comparable<HabitEvent> {
             throw new DataFormatException();
         }
         this.comment = comment;
-        if (habit.getStartDate().before(eventDate)){
+        if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
         }
         // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
     }
-    /**
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getHabitId() {
-        return habitId;
-    }
-
-    public void setHabitId(String habitId) {
-        this.habitId = habitId;
-    }
-
-     */
     public Habit getHabit() {
         return habit;
     }
