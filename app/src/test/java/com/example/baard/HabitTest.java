@@ -22,7 +22,7 @@ public class HabitTest {
 
     HabitList habits = new HabitList();
     Date startDate = new Date();
-    Date eventDate;
+    Date eventDate = new Date();
     ArrayList<Day> array = new ArrayList<Day>();
 
     public HabitTest(){
