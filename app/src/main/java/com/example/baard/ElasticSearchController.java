@@ -15,6 +15,7 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -159,7 +160,7 @@ public class ElasticSearchController {
          * @throws RuntimeExecutionException
          */
         @Override
-        protected User doInBackground(String... parameters) throws RuntimeExecutionException {
+        protected User doInBackground(String... parameters) {
             verifySettings();
 
             User user = null;
@@ -219,6 +220,7 @@ public class ElasticSearchController {
             return user;
         }
     }
+
 
     /**
      * Checks if the client is connected to the server with the right configuration.

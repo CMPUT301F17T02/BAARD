@@ -87,6 +87,7 @@ public class HabitEventTests {
         habitEvent.setEventDate(date2);
         //assertNotEquals(habitEvent.getEventDate(), date1);
         assertEquals(habitEvent.getEventDate(), date2);
+
     }
     @Test
     public void testGetHabit(){
