@@ -65,13 +65,13 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         }
 
         // sign the testing user in
         solo.waitForActivity(LoginActivity.class, 2000);
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
-        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
         solo.enterText(username, "Andrew.M");
@@ -84,7 +84,6 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-        solo.clickOnText("All Habits");
 
         // See what the first activity saved is
         TextView textFromList = solo.getText(1);
@@ -112,10 +111,6 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         // already logged in as previous test case
 
         solo.clickOnImage(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("Create New Habit");
         solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_create_new_habit);
 
@@ -133,18 +128,33 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
         solo.clickOnText("Mon");
+
+        // create the habit
         solo.clickOnButton("Create");
 
+        // check that we are on view now
         solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
-        //Test to see if viewing the correct stuff
+        // Test to see if viewing the correct information
         Assert.assertTrue(solo.searchText(title));
         Assert.assertTrue(solo.searchText(reason));
         Assert.assertTrue(solo.searchText(date));
 
+        // delete this habit so it does not interfere with other test cases
         solo.clickOnButton("Delete");
+
         solo.waitForActivity(MainActivity.class, 2000);
+
+        solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+
+        solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_all_habits);
+
+        // ensure it was deleted on main page
+        assertFalse(solo.searchText("Swimming"));
 
         // To log out
         solo.clickOnImage(0);
