@@ -121,6 +121,11 @@ public class CreateNewHabitEventFragment extends Fragment {
         user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
         habits = user.getHabits();
 
+        if (habits.size() < 1) {
+            Toast.makeText(getActivity(), "No habits for events. Please add habit first.", Toast.LENGTH_LONG).show();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        }
+
         Spinner spinner = (Spinner) v.findViewById(R.id.habitSpinner);
         ArrayAdapter<Habit> adapter = new ArrayAdapter<Habit>(this.getActivity(), android.R.layout.simple_spinner_item, habits.getArrayList());
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
