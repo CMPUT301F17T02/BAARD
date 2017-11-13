@@ -88,7 +88,6 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         assertTrue(solo.searchText(textFromList.getText().toString()));
         assertEquals(textFromList.getText(), viewHabitName.getText());
-
     }
 
     public void testViewHabitFromCreate() throws Exception {
@@ -104,25 +103,46 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnText("Create New Habit");
         solo.getCurrentActivity() .getFragmentManager() .findFragmentById(R.layout.fragment_create_new_habit);
 
-        EditText title = (EditText) solo.getView(R.id.title);
-        EditText reason = (EditText) solo.getView(R.id.reason);
-        EditText startDate = (EditText) solo.getView(R.id.startDate);
+        EditText editTextTitle = (EditText) solo.getView(R.id.title);
+        EditText editTextReason = (EditText) solo.getView(R.id.reason);
+        EditText editTextDate = (EditText) solo.getView(R.id.startDate);
+        String title = "Swimming";
+        String reason = "I need to get fit";
+        String date = "16/03/2017";
 
-        solo.enterText(title, "Swimming");
-        Assert.assertTrue(solo.searchText("Swimming"));
-        solo.enterText(reason, "I need to get fit");
-        Assert.assertTrue(solo.searchText("I need to get fit"));
-        solo.enterText(startDate, "20/11/2017");
-        Assert.assertTrue(solo.searchText("20/11/2017"));
+        solo.enterText(editTextTitle, title);
+        Assert.assertTrue(solo.searchText(title));
+        solo.enterText(editTextReason, reason);
+        Assert.assertTrue(solo.searchText(reason));
+
+        solo.clickOnEditText(2);
+        solo.setDatePicker(0,2017,2,16);
+        solo.clickOnText("OK");
+        Assert.assertTrue(solo.searchText(date));
 
         solo.clickOnText("Mon");
         solo.clickOnButton("Create");
 
-        solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
+        solo.assertCurrentActivity("Should be on view habit activity", ViewHabitActivity.class);
 
         //Test to see if viewing the correct stuff
+        Assert.assertTrue(solo.searchText(title));
+        Assert.assertTrue(solo.searchText(reason));
+        Assert.assertTrue(solo.searchText(date));
 
-
-
+        // To log out
+        solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
     }
 }

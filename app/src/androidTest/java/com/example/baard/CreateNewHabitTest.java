@@ -50,7 +50,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
     }
 
     /** Assumed that the user has already been registered */
-    public void testCreate() throws Exception {
+    public void testCreate1() throws Exception {
 
         Activity activity = getActivity();
 
@@ -143,7 +143,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         assertFalse(solo.searchText("Swimming"));
     }
 
-    public void testCreateDuplicate() throws Exception {
+    public void testCreate2Duplicate() throws Exception {
 
         Activity activity = getActivity();
 
@@ -196,6 +196,28 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
         // assert that jogging is seen only once
         Assert.assertTrue(solo.searchText("Jogging", 1));
+    }
+
+    public void testCreate3Blank() throws Exception {
+
+        Activity activity = getActivity();
+
+        // already logged in as previous test case
+
+        // go to main activity
+        solo.waitForActivity(MainActivity.class, 2000);
+
+        // select create new habit
+        solo.clickOnImage(0);
+        solo.clickOnText("Create New Habit");
+        solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_create_new_habit);
+
+        // don't fill out anything
+        solo.clickOnButton("Create");
+        Assert.assertTrue(solo.searchText("Title of habit is required!"));
+        Assert.assertTrue(solo.searchText("Reason of habit is required!"));
+        Assert.assertTrue(solo.searchText("Start date is required!"));
+        Assert.assertTrue(solo.searchText("No frequency selected"));
 
         // To log out
         solo.clickOnImage(0);
