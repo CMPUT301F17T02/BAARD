@@ -33,9 +33,13 @@ public class HabitTest {
     @Test
     public void testGetTitle() throws DataFormatException {
         String title = "Test Title";
-        Habit habit = new Habit(title, "Reason", startDate, array);
-        String test_title = habit.getTitle();
-        assertEquals(title, test_title);
+        try {
+            Habit habit = new Habit(title, "Reason", startDate, array);
+            String test_title = habit.getTitle();
+            assertEquals(title, test_title);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
@@ -49,9 +53,13 @@ public class HabitTest {
     @Test
     public void testGetReason() throws DataFormatException {
         String reason = "Reason";
-        Habit habit = new Habit("Test Title", reason, startDate, array);
-        String test_reason = habit.getReason();
-        assertEquals(reason, test_reason);
+        try {
+            Habit habit = new Habit("Test Title", reason, startDate, array);
+            String test_reason = habit.getReason();
+            assertEquals(reason, test_reason);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
@@ -64,9 +72,13 @@ public class HabitTest {
 
     @Test
     public void testGetStartDate() throws DataFormatException {
-        Habit habit = new Habit("Test Title", "Reason", startDate, array);
-        Date test_startDate = habit.getStartDate();
-        assertEquals(startDate, test_startDate);
+        try {
+            Habit habit = new Habit("Test Title", "Reason", startDate, array);
+            Date test_startDate = habit.getStartDate();
+            assertEquals(startDate, test_startDate);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
@@ -79,13 +91,17 @@ public class HabitTest {
 
     @Test
     public void testGetFrequency() throws DataFormatException {
-        array.add(Day.MONDAY);
-        array.add(Day.WEDNESDAY);
-        array.add(Day.FRIDAY);
-        Habit habit = new Habit("Test Title", "Reason", startDate, array);
-        ArrayList<Day> test_array = new ArrayList<Day>();
-        test_array = habit.getFrequency();
-        assertEquals(array, test_array);
+        try {
+            array.add(Day.MONDAY);
+            array.add(Day.WEDNESDAY);
+            array.add(Day.FRIDAY);
+            Habit habit = new Habit("Test Title", "Reason", startDate, array);
+            ArrayList<Day> test_array = new ArrayList<Day>();
+            test_array = habit.getFrequency();
+            assertEquals(array, test_array);
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
@@ -106,29 +122,35 @@ public class HabitTest {
 
     @Test
     public void testGetEvents() throws DataFormatException {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
-        HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
-        HabitEventList habitEventList = new HabitEventList();
+        try {
+            Habit habit = new Habit("Test Title", "reason", startDate, array);
+            HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
+            HabitEventList habitEventList = new HabitEventList();
 
-        habitEventList.add(habitEvent);
-        habit.setEvents(habitEventList);
+            habitEventList.add(habitEvent);
+            habit.setEvents(habitEventList);
 
-        HabitEventList returnedEventList = habit.getEvents();
+            HabitEventList returnedEventList = habit.getEvents();
 
-        assertEquals(returnedEventList.getHabitEvent(0), habitEvent);
-
+            assertEquals(returnedEventList.getHabitEvent(0), habitEvent);
+        }catch(Exception e) {
+            fail();
+        }
     }
 
     @Test
     public void testSetEvents() throws DataFormatException {
         HabitEventList habitEventList = new HabitEventList();
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
-        HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
+        try {
+            Habit habit = new Habit("Test Title", "reason", startDate, array);
+            HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
 
-        habitEventList.add(habitEvent);
-        habit.setEvents(habitEventList);
+            habitEventList.add(habitEvent);
+            habit.setEvents(habitEventList);
 
-        assertEquals(habit.getEvents(), habitEventList);
-
+            assertEquals(habit.getEvents(), habitEventList);
+        }catch(Exception e){
+            fail();
+        }
     }
 }

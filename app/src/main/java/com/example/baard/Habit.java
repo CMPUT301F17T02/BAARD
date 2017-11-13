@@ -4,6 +4,12 @@
 
 package com.example.baard;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.DataFormatException;
@@ -186,6 +192,16 @@ public class Habit {
      *
      * @return
      */
+
+    public void sendToSharedPreferences(Context context){
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+        sharedPrefsEditor.putString("currentlyViewingHabit", json);
+        sharedPrefsEditor.commit();
+    }
+
     @Override
     public String toString() {
         return title;

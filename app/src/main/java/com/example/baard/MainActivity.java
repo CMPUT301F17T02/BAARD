@@ -56,6 +56,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // view all habits -- front screen to view
+        AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(
+                R.id.relativelayout_for_fragment,
+                allHabitsFragment,
+                allHabitsFragment.getTag()
+        ).commit();
     }
 
     /**
