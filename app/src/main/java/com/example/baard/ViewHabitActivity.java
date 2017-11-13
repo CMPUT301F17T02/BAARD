@@ -6,6 +6,7 @@ package com.example.baard;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.gson.Gson;
@@ -84,6 +92,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         frequencyView.setText(habit.getFrequencyString());
 
         createPieChart();
+        createLineChart();
     }
 
     /**
@@ -111,7 +120,7 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     private void createPieChart() {
-        // Create pie chart
+        // Create Pie Chart
         PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
         pieChart.setHoleRadius(0);
         pieChart.setTransparentCircleRadius(0);
@@ -120,21 +129,75 @@ public class ViewHabitActivity extends AppCompatActivity {
         pieChart.getDescription().setEnabled(false);
 
         ArrayList<PieEntry> yValues = new ArrayList<PieEntry>();
-        yValues.add(new PieEntry((int)6, "Completed"));
-        yValues.add(new PieEntry((int)9, "Not Completed"));
+        yValues.add(new PieEntry(6, "Completed"));
+        yValues.add(new PieEntry(3, "Late On Time"));
+        yValues.add(new PieEntry(3, "Not Completed"));
 
-        PieDataSet dataset = new PieDataSet(yValues, "# of Habit Events");
-        dataset.setColors(ColorTemplate.JOYFUL_COLORS);
-        dataset.setSliceSpace(3f);
-        dataset.setValueFormatter(new IValueFormatter() {
+        PieDataSet dataSet = new PieDataSet(yValues, "# of Habit Per Week");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setSliceSpace(3f);
+        dataSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
                 return "" + ((int)value);
             }
         });
 
-        PieData data = new PieData(dataset);
+        PieData data = new PieData(dataSet);
+        pieChart.setEntryLabelColor(Color.DKGRAY);
         pieChart.setData(data);
 
+    }
+
+    private void createLineChart() {
+        // Create Line Chart
+        LineChart lineChart = (LineChart) findViewById(R.id.habit_lineChart);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(false);
+        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChart.getXAxis().setDrawGridLines(false);
+        lineChart.getAxisLeft().setDrawGridLines(false);
+        lineChart.getAxisRight().setDrawGridLines(false);
+        lineChart.getDescription().setEnabled(false);
+        lineChart.getAxisRight().setEnabled(false);
+
+        ArrayList<Entry> yValues = new ArrayList<Entry>();
+        yValues.add(new Entry(0f, 4f));
+        yValues.add(new Entry(1f, 4f));
+        yValues.add(new Entry(2f, 4f));
+
+        LineDataSet set1 = new LineDataSet(yValues, "DataRed Set 1");
+
+        set1.setFillAlpha(110);
+
+        set1.setColor(Color.BLACK);
+        set1.setLineWidth(1f);
+        set1.setValueTextSize(10f);
+        set1.setValueTextColor(Color.BLACK);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        dataSets.add(set1);
+
+        LineData data = new LineData(dataSets);
+
+        lineChart.setData(data);
+
+        String[] xValues = new String[] {"1", "2", "3"};
+        lineChart.getXAxis().setValueFormatter(new MyAxisValueFormatter(xValues));
+        lineChart.getXAxis().setGranularity(1f);
+    }
+
+    public class MyAxisValueFormatter implements IAxisValueFormatter {
+
+        private String[] xValues;
+
+        public MyAxisValueFormatter(String[] xValues) {
+            this.xValues = xValues;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            return xValues[(int)value];
+        }
     }
 }
