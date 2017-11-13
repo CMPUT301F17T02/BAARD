@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -66,6 +67,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         // load required data
         user = fc.loadUser(getApplicationContext(), username);
         habitList = user.getHabits();
+        Log.d("elasticSearch", Integer.toString(habitList.size()));
         habit = habitList.getHabit(position);
 
         // set all of the values for the habit to be viewed

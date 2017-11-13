@@ -4,12 +4,15 @@
 
 package com.example.baard;
 
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -17,10 +20,12 @@ import android.widget.ToggleButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
@@ -38,6 +43,7 @@ public class EditHabitActivity extends AppCompatActivity {
     private String username;
     private FileController fc;
     private User user;
+    private Calendar calendar = Calendar.getInstance();
 
     /**
      * This create method sets the text and toggle buttons based on habit retrieved
@@ -66,14 +72,46 @@ public class EditHabitActivity extends AppCompatActivity {
         // set all of the values for the habit to be edited
         editTextTitle = (EditText) findViewById(R.id.title);
         editTextReason = (EditText) findViewById(R.id.reason);
-        editTextStartDate = (EditText) findViewById(R.id.startDate);
         editTextTitle.setText(habit.getTitle());
         editTextReason.setText(habit.getReason());
-        editTextStartDate.setText(formatter.format(habit.getStartDate()));
         frequency = habit.getFrequency();
+
+        calendar.setTime(habit.getStartDate());
+        editTextStartDate = (EditText) findViewById(R.id.startDate);
+        editTextStartDate.setText(formatter.format(habit.getStartDate()));
+        editTextStartDate.setFocusable(false);
+        editTextStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        editTextStartDate.setText(sdf.format(calendar.getTime()));
+                    }
+                };
+
+                DatePickerDialog d = new DatePickerDialog(EditHabitActivity.this, listener, calendar.get(Calendar.YEAR)
+                                                            , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                d.show();
+            }
+        });
 
         // set the toggle buttons for the days of the week
         setToggleButtons();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
+        }
+        return true;
     }
 
     /**
