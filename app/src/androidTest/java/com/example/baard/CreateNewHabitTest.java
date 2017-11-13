@@ -60,6 +60,20 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
         Activity activity = getActivity();
 
+        // if already logged in, log out
+        if (!(solo.searchButton("Register", true))) {
+            solo.clickOnImage(0);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        }
 //        solo.waitForActivity(MainActivity.class, 2000);
 
 //        solo.waitForFragmentById(R.layout.fragment_create_new_habit);
@@ -68,7 +82,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
-        //EditText name = (EditText) solo.getView(R.id.name);
+        /tText name = (EditText) solo.getView(R.id.name);
         solo.clearEditText(username);
         //solo.clearEditText(name);
         solo.enterText(username, "Andrew.M");
@@ -107,8 +121,9 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.waitForActivity(ViewHabitActivity.class, 2000);
         //solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
+        solo.clickOnButton("Delete");
 
-        // This part doesn't work yet
+        // To log out
         solo.clickOnImage(0);
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
