@@ -15,9 +15,6 @@ import com.robotium.solo.Solo;
 
 import org.junit.Test;
 
-/**
- * Created by chrygore on 13/11/17.
- */
 
 /**
  * Class for testing the ability to delete habit events.

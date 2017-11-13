@@ -6,7 +6,6 @@ package com.example.baard;
 
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,10 +13,12 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by chrygore on 20/10/17.
- */
 
+/**
+ * A class for testing the functionality of the HabitEvent class.
+ * @author amckerna
+ * @version 1.0
+ */
 public class HabitEventTests {
 
     ArrayList<Day> freq;
@@ -25,7 +26,9 @@ public class HabitEventTests {
     Habit habit;
     HabitEvent habitEvent;
 
-    //this function is run at the start of every test
+    /**
+     * This function is run at the beginning of each test. It sets up the Habit and HabitEvent required for each test.
+     */
     @Before
     public void setUpTest(){
         freq = new ArrayList<Day>();
@@ -38,6 +41,10 @@ public class HabitEventTests {
             fail("No exception should be thrown.");
         }
     }
+
+    /**
+     * A test of all of the different constructors of HabitEvent.
+     */
     @Test
     public void testConstructor(){
         // constructor 1
@@ -58,6 +65,10 @@ public class HabitEventTests {
             fail("No exception should be thrown");
         }
     }
+
+    /**
+     * Test the getComment functionality of the HabitEvent class
+     */
     @Test
     public void testGetComment(){
         try {
@@ -67,6 +78,10 @@ public class HabitEventTests {
             fail("No exception should be thrown");
         }
     }
+
+    /**
+     * Test the setComment functionality of the HabitEvent class.
+     */
     @Test
     public void testSetComment(){
         try {
@@ -76,11 +91,18 @@ public class HabitEventTests {
             fail("No exception should be thrown");
         }
     }
+
+    /**
+     * Test the getEventDate functionality of the HabitEvent class
+     */
     @Test
     public void testGetDate(){
         assertEquals(habitEvent.getEventDate(), date1);
     }
     @Test
+    /**
+     * Test the setEventDate functionality of the HabitEvent class
+     */
     public void testSetDate(){
         Date date2 = new Date();
 
@@ -92,10 +114,18 @@ public class HabitEventTests {
             fail();
         }
     }
+
+    /**
+     * Test the getHabit functionality of the HabitEvent class.
+     */
     @Test
     public void testGetHabit(){
         assertEquals(habitEvent.getHabit(), habit);
     }
+
+    /**
+     * Test the setHabit functionality of the HabitEvent class.
+     */
     @Test
     public void testSetHabit(){
         try {

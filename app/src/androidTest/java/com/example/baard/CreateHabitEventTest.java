@@ -13,9 +13,6 @@ import com.robotium.solo.Solo;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * Created by chrygore on 11/11/17.
- */
 
 /**
  * The class for testing the CreateNewHabitEventFragment UI functions.
