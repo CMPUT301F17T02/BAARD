@@ -118,10 +118,19 @@ public class HabitEvent implements Comparable<HabitEvent> {
         this.eventDate = eventDate;
     }
 
+    /**
+     * Set a path to an image file in storage. Used in getImageBitmap()
+     * @param path path to an image file
+     */
     public void setImageFilePath(String path){ this.imageFilePath = path; }
 
     public String getImageFilePath(){ return this.imageFilePath; }
 
+    /**
+     * If a path to an image file has been set with setImageFilePath, generates a Bitmap object
+     * matching that image.
+     * @return a Bitmap object representing the image at the specified location. Returns null otherwise.
+     */
     public Bitmap getImageBitmap(){
         if (imageFilePath != null) {
             File imgFile = new File(imageFilePath);
