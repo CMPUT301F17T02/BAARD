@@ -21,7 +21,7 @@ public class HabitList {
     public Habit getHabit(int index){
         return habits.get(index);
     }
-    
+
     public Habit getHabit(Habit habit){
         int find = habits.indexOf(habit);
         return habits.get(find);
