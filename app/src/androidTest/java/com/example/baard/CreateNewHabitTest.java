@@ -5,24 +5,12 @@
 package com.example.baard;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ToggleButton;
-import android.view.View;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.zip.DataFormatException;
 import com.robotium.solo.Solo;
 
@@ -58,11 +46,12 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
     /**
      * First creation test ensure that a habit is properly created.
+     * This ALSO tests delete so that create test can run properly next time.
      * @assumption the user account has already been registered
      * @author Randi
      * @throws Exception
      */
-    public void testCreate1() throws Exception {
+    public void testCreate1AndDelete() throws Exception {
 
         Activity activity = getActivity();
 
@@ -255,28 +244,30 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         Assert.assertTrue(solo.searchText("No frequency selected"));
 
         // don't fill out title
-        solo.clearEditText(title);
-
         solo.clickOnText("Mon");
         Assert.assertTrue(solo.isToggleButtonChecked("Mon"));
 
+        solo.clearEditText(title);
+
         solo.clickOnButton("Create");
         Assert.assertTrue(solo.searchText("Title of habit is required!"));
+        title.clearFocus();
 
         // don't fill out reason
-        solo.clearEditText(reason);
-
         solo.enterText(title, "Running");
         Assert.assertTrue(solo.searchText("Running"));
 
+        solo.clearEditText(reason);
+
         solo.clickOnButton("Create");
         Assert.assertTrue(solo.searchText("Reason of habit is required!"));
+        reason.clearFocus();
 
         // don't fill out date
-        solo.clearEditText(2);
-
         solo.enterText(reason, "I need to get fit");
         Assert.assertTrue(solo.searchText("I need to get fit"));
+
+        solo.clearEditText(2);
 
         solo.clickOnButton("Create");
         Assert.assertTrue(solo.searchText("Start date is required!"));
