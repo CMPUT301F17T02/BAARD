@@ -4,77 +4,110 @@
 
 package com.example.baard;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
+import android.support.v4.content.ContextCompat;
+
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.IllegalFormatCodePointException;
+import java.util.Locale;
+import java.util.zip.DataFormatException;
+
+import io.searchbox.annotations.JestId;
 
 /**
  * Created by biancaangotti on 2017-10-18.
  */
 
-public class HabitEvent {
-    private Habit habit;
+/**
+ * A HabitEvent that records the user performing an instance of a habit.
+ * @author amckerna
+ * @version 1.0
+ */
+public class HabitEvent implements Comparable<HabitEvent> {
+    private transient Habit habit;
     private String comment = "";
     private Date eventDate;
+    //private String habitTitle;
+    //@JestId
+    //private String id;
+    //private String userId;
+    //private String habitId;
     // TODO location variable
-    // TODO picture variable
+    private String imageFilePath;
 
-
-    public HabitEvent(Habit habit, Date eventDate) {
+    /**
+     * Constructor for HabitEvent without the comment.
+     * @param habit habit that the habit event is a part of
+     * @param eventDate date the habit event takes place
+     * @throws IllegalArgumentException throws if date is before the start date of the habit
+     */
+    public HabitEvent(Habit habit, Date eventDate) throws IllegalArgumentException {
         this.habit = habit;
+        //this.habitTitle = habit.getTitle();
+        if (habit.getStartDate().before(eventDate)){
+            throw new IllegalArgumentException();
+        }
+        // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, String comment) {
+    /**
+     * Constructor for HabitEvent with a comment
+     * @param habit habit that the habit event is a part of
+     * @param eventDate date the habit event takes place
+     * @param comment comment describing the habit event
+     * @throws DataFormatException throws if comment is over 20 characters
+     * @throws IllegalArgumentException throws if date is before habit start date
+     */
+    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException, IllegalArgumentException{
         this.habit = habit;
+        if (comment.length() > 20){
+            throw new DataFormatException();
+        }
         this.comment = comment;
+        if (habit.getStartDate().before(eventDate)){
+            throw new IllegalArgumentException();
+        }
+        // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
     }
-
-    /*
-    public HabitEvent(Habit habit, Date eventDate, Picture picture) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.picture = picture;
+    /**
+    public String getId() {
+        return id;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.picture = picture;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, String comment, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.comment = comment;
-        this.picture = picture;
-        this.location = location;
+    public String getUserId() {
+        return userId;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, String comment, Picture picture) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.comment = comment;
-        this.picture = picture;
-        this.location = location;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, Picture picture, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.comment = comment;
-        this.picture = picture;
-        this.location = location;
+    public String getHabitId() {
+        return habitId;
     }
 
-    public HabitEvent(Habit habit, Date eventDate, String comment, Picture picture, Location location) {
-        this.habit = habit;
-        this.eventDate = eventDate;
-        this.comment = comment;
-        this.picture = picture;
-        this.location = location;
+    public void setHabitId(String habitId) {
+        this.habitId = habitId;
     }
-    */
 
+     */
     public Habit getHabit() {
         return habit;
     }
@@ -87,7 +120,15 @@ public class HabitEvent {
         return comment;
     }
 
-    public void setComment(String comment) {
+    /**
+     * setter for comment
+     * @param comment
+     * @throws DataFormatException throws if comment is more than 20 chars long
+     */
+    public void setComment(String comment) throws DataFormatException {
+        if (comment.length() > 20){
+            throw new DataFormatException();
+        }
         this.comment = comment;
     }
 
@@ -95,25 +136,41 @@ public class HabitEvent {
         return eventDate;
     }
 
-    public void setEventDate(Date eventDate) {
+    /**
+     * setter for event date
+     * @param eventDate
+     * @throws IllegalArgumentException throws if event date is before habit start date
+     */
+    public void setEventDate(Date eventDate) throws IllegalArgumentException {
+        if (habit.getStartDate().after(eventDate)){
+            throw new IllegalArgumentException();
+        }
         this.eventDate = eventDate;
     }
 
-    /*
-    public Picture getPicture() {
-        return picture;
+    public void setImageFilePath(String path){ this.imageFilePath = path; }
+
+    public String getImageFilePath(){ return this.imageFilePath; }
+
+    public Bitmap getImageBitmap(){
+        if (imageFilePath != null) {
+            File imgFile = new File(imageFilePath);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                return myBitmap;
+            }
+        }
+        return null;
     }
 
-    public void setPicture(Picture picture) {
-        this.picture = picture;
+    @Override
+    public int compareTo(HabitEvent habitEvent){
+        return this.getEventDate().compareTo(habitEvent.getEventDate()) * -1;
     }
 
-    public Location getLocation() {
-        return location;
+    @Override
+    public String toString(){
+        DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        return this.getHabit().getTitle() + "     " + formatter.format(eventDate);
     }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-    */
 }

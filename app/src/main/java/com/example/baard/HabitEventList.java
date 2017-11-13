@@ -10,16 +10,30 @@ import java.util.ArrayList;
  * Created by biancaangotti on 2017-10-20.
  */
 
+/**
+ * A class designed to hold a list of HabitEvents.
+ * @author amckerna
+ * @version 1.0
+ */
 public class HabitEventList {
 
     private ArrayList<HabitEvent> events = new ArrayList<HabitEvent>();
 
     public HabitEventList(){
-
     }
 
     public HabitEvent getHabitEvent(int index){
         return events.get(index);
+    }
+
+    public HabitEvent getHabitEvent(HabitEvent habitEvent){
+        int find = events.indexOf(habitEvent);
+        return events.get(find);
+    }
+
+    public void removeHabitEvent(HabitEvent habitEvent){
+        if (events.contains(habitEvent))
+            events.remove(habitEvent);
     }
 
     public boolean hasHabitEvent(HabitEvent event){
@@ -33,5 +47,11 @@ public class HabitEventList {
     public void delete(HabitEvent event) {
         events.remove(event);
     }
+
+    public ArrayList<HabitEvent> getArrayList(){
+        return events;
+    }
+
+    public int size(){ return events.size(); }
 
 }

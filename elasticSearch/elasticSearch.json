@@ -1,0 +1,163 @@
+// Create Index with mappings
+{
+    "mappings": {
+        "User": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "habits": {
+                    "type": "nested",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "title": {"type": "string"}
+                    }
+                },
+                "friends": {
+                    "type": "nested",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "name": {"type": "string"},
+                        "username": {"type": "string"}
+                    }
+                },
+                "receivedRequests": {
+                    "type": "nested",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "name": {"type": "string"},
+                        "username": {"type": "string"}
+                    }
+                }
+            }
+        },
+        "Habit": {
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "date",
+                    "format": "date_time_no_millis"
+                },
+                "frequency": {
+                    "type": "integer"
+                },
+                "events": {
+                    "type": "nested",
+                    "properties": {
+                        "id": {"type": "string"}
+                    }
+                }
+            }
+        },
+        "HabitEvent": {
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "eventDate": {
+                    "type": "date",
+                    "format": "date_time_no_millis"
+                }
+            }
+        }
+    },
+    "settings": {
+        "index.mapper.dynamic": false,
+        "index.refresh_interval": "100ms"
+    }
+}
+
+// For User
+{
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "username": {
+            "type": "string",
+            "index": "not_analyzed"
+        },
+        "habits": {
+            "type": "nested",
+            "properties": {
+                "id": {"type": "string"},
+                "userId": {"type": "string"},
+                "title": {"type": "string"},
+                "reason": {"type": "string"},
+                "startDate": {"type": "date", "format": "date_time_no_millis"},
+                "frequency": {"type": "integer"},
+                "events": {"type": "nested",
+                           "properties": {
+                               "id": {"type": "string"},
+                               "userId": {"type": "string"},
+                               "habitId": {"type": "string"},
+                               "comment": {"type": "string"},
+                               "eventDate": {"type": "date", "format", "date_time_no_millis"}
+                           }
+                }
+            }
+        },
+        "friends": {
+            "type": "nested",
+            "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "username": {"type": "string"}
+            }
+        },
+        "receivedRequests": {
+            "type": "nested",
+            "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "username": {"type": "string"}
+            }
+        }
+    }
+}
+
+// For Habit
+{
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "reason": {
+            "type": "string"
+        },
+        "startDate": {
+            "type": "date",
+            "format": "date_time_no_millis"
+        },
+        "frequency": {
+            "type": "integer"
+        },
+        "events": {
+            "type": "nested",
+            "properties": {
+                "id": {"type": "string"}
+            }
+        }
+    }
+}
+
+// For HabitEvent
+{
+    "properties": {
+        "comment": {
+            "type": "string"
+        },
+        "eventDate": {
+            "type": "date",
+            "format": "date_time_no_millis"
+        }
+    }
+}

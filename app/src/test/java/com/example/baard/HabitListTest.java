@@ -30,38 +30,55 @@ public class HabitListTest {
     }
 
     @Test
-    public void testGetHabit() throws DataFormatException {
-        Habit habit = new Habit("title", "Reason", startDate, array);
-        habits.add(habit);
-        Habit returnedHabit = habits.getHabit(0);
 
-        assertEquals(returnedHabit.getTitle(), habit.getTitle());
-        assertEquals(returnedHabit.getReason(), habit.getReason());
-        assertEquals(returnedHabit.getFrequency(), habit.getFrequency());
+    public void testGetHabit() {
+        try {
+            Habit habit = new Habit("title", "Reason", startDate, array);
+            habits.add(habit);
+            Habit returnedHabit = habits.getHabit(0);
+            assertEquals(returnedHabit.getTitle(), habit.getTitle());
+            assertEquals(returnedHabit.getReason(), habit.getReason());
+            assertEquals(returnedHabit.getFrequency(), habit.getFrequency());
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
-    public void testHasHabit() throws DataFormatException {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
 
-        assertFalse(habits.hasHabit(habit));
-        habits.add(habit);
-        assertTrue(habits.hasHabit(habit));
+    public void testHasHabit() {
+        try {
+            Habit habit = new Habit("Test Title", "reason", startDate, array);
+            assertFalse(habits.hasHabit(habit));
+            habits.add(habit);
+            assertTrue(habits.hasHabit(habit));
+        }catch(Exception e){
+
+        }
     }
 
     @Test
-    public void testAdd() throws DataFormatException {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
 
-        habits.add(habit);
-        assertTrue(habits.hasHabit(habit));
+    public void testAdd() {
+        try {
+            Habit habit = new Habit("Test Title", "reason", startDate, array);
+            habits.add(habit);
+            assertTrue(habits.hasHabit(habit));
+        }catch(Exception e){
+            fail();
+        }
     }
 
     @Test
-    public void testDelete() throws DataFormatException {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
-        habits.add(habit);
-        habits.delete(habit);
-        assertFalse(habits.hasHabit(habit));
+
+    public void testDelete() {
+        try {
+            Habit habit = new Habit("Test Title", "reason", startDate, array);
+            habits.add(habit);
+            habits.delete(habit);
+            assertFalse(habits.hasHabit(habit));
+        }catch(Exception e){
+            fail();
+        }
     }
 }

@@ -22,6 +22,11 @@ public class HabitList {
         return habits.get(index);
     }
 
+    public Habit getHabit(Habit habit){
+        int find = habits.indexOf(habit);
+        return habits.get(find);
+    }
+
     public boolean hasHabit(Habit habit){
         return habits.contains(habit);
     }
@@ -32,6 +37,12 @@ public class HabitList {
 
     public void delete(Habit habit) {
         habits.remove(habit);
+    }
+
+    public ArrayList<Habit> getArrayList() {return habits;}
+
+    public int size() {
+        return habits.size();
     }
 
 }
