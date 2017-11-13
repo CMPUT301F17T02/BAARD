@@ -18,6 +18,11 @@ import com.robotium.solo.Solo;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by chrygore on 11/11/17.
  */
@@ -35,14 +40,10 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
 
     //note: these tests assume a Habit exists to create a HabitEvent for.
     private Solo solo;
+    //private String dateInput;
     private LoginActivity activity;
     public CreateHabitEventTest(){
         super(LoginActivity.class);
-    }
-
-    @BeforeClass
-    public static void setUpBeforeClass(){
-        //TODO: create Jogging habit if it doesnt exist to prevent issues when database is changed.
     }
 
     /**
@@ -52,7 +53,8 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
      */
     @Override
     public void setUp() throws InterruptedException {
-
+        //DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+        //dateInput = formatter.format(new Date());
         activity = (LoginActivity) getActivity();
         solo = new Solo(getInstrumentation(), getActivity());
         // log out if we are logged in for each test
