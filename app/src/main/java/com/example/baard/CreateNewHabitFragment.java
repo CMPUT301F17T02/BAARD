@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
@@ -47,6 +47,8 @@ public class CreateNewHabitFragment extends Fragment {
     private EditText reasonText;
     private EditText startDateText;
     private ArrayList<Day> frequency = new ArrayList<>();
+    private HabitList habits;
+    private HashSet<String> habitNames = new HashSet<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,6 +105,11 @@ public class CreateNewHabitFragment extends Fragment {
 
         final FileController fc = new FileController();
         final User user = fc.loadUser(getActivity().getApplicationContext(), username);
+        habits = user.getHabits();
+
+        for (int i = 0; i < habits.size(); i++) {
+            habitNames.add(habits.getHabit(i).getTitle().toLowerCase());
+        }
 
         Button createButton = (Button) myView.findViewById(R.id.create);
         titleText = (EditText) myView.findViewById(R.id.title);
@@ -125,6 +132,9 @@ public class CreateNewHabitFragment extends Fragment {
                 if (title_text.equals("")) {
                     titleText.setError("Title of habit is required!");
                     properEntry = false;
+                } else if (habitNames.contains(title_text.toLowerCase())) {
+                    titleText.setError("Title of habit must be unique!");
+                    properEntry = false;
                 }
                 if (reason.equals("")) {
                     reasonText.setError("Reason for habit is required!");
@@ -139,7 +149,6 @@ public class CreateNewHabitFragment extends Fragment {
                 if (properEntry) {
                     try {
                         Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
-                        HabitList habits = user.getHabits();
                         habits.add(habit);
 
                         fc.saveUser(getActivity().getApplicationContext(), user);
@@ -147,7 +156,7 @@ public class CreateNewHabitFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                         intent.putExtra("position", habits.size()-1);
                         try {
-                            TimeUnit.SECONDS.sleep(1);
+                            TimeUnit.SECONDS.sleep(2);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
