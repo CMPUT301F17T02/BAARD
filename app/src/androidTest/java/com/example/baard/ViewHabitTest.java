@@ -26,10 +26,17 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
     private Solo solo;
 
+    /**
+     * @throws DataFormatException
+     */
     public ViewHabitTest() throws DataFormatException {
         super(LoginActivity.class);
     }
 
+    /**
+     * Sets up the basic of the create new habit test.
+     * @throws Exception
+     */
     @Override
     protected void setUp() throws Exception {
         // get instrumentation get all info from device writing on
@@ -39,6 +46,10 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         Log.d("SETUP","setUp()");
     }
 
+    /**
+     * First view test ensure that a habit is properly viewed from all habits screen.
+     * @throws Exception
+     */
     public void testViewAllHabits() throws Exception {
         Activity activity = getActivity();
 
@@ -90,6 +101,10 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         assertEquals(textFromList.getText(), viewHabitName.getText());
     }
 
+    /**
+     * Second view test ensure that a habit is properly viewed from creation screen.
+     * @throws Exception
+     */
     public void testViewHabitFromCreate() throws Exception {
         Activity activity = getActivity();
 
@@ -103,23 +118,19 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnText("Create New Habit");
         solo.getCurrentActivity() .getFragmentManager() .findFragmentById(R.layout.fragment_create_new_habit);
 
+        // enter in all the data to be created
         EditText editTextTitle = (EditText) solo.getView(R.id.title);
         EditText editTextReason = (EditText) solo.getView(R.id.reason);
-        EditText editTextDate = (EditText) solo.getView(R.id.startDate);
+
         String title = "Swimming";
         String reason = "I need to get fit";
         String date = "16/03/2017";
 
         solo.enterText(editTextTitle, title);
-        Assert.assertTrue(solo.searchText(title));
         solo.enterText(editTextReason, reason);
-        Assert.assertTrue(solo.searchText(reason));
-
         solo.clickOnEditText(2);
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
-        Assert.assertTrue(solo.searchText(date));
-
         solo.clickOnText("Mon");
         solo.clickOnButton("Create");
 

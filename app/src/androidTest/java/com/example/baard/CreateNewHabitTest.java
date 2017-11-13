@@ -35,10 +35,17 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
     private Solo solo;
     private CreateNewHabitFragment fragment;
 
+    /**
+     * @throws DataFormatException
+     */
     public CreateNewHabitTest() throws DataFormatException {
         super(LoginActivity.class);
     }
 
+    /**
+     * Sets up the basic of the create new habit test.
+     * @throws Exception
+     */
     @Override
     protected void setUp() throws Exception {
         // get instrumentation get all info from device writing on
@@ -49,7 +56,12 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         Log.d("SETUP","setUp()");
     }
 
-    /** Assumed that the user has already been registered */
+    /**
+     * First creation test ensure that a habit is properly created.
+     * @assumption the user account has already been registered
+     * @author Randi
+     * @throws Exception
+     */
     public void testCreate1() throws Exception {
 
         Activity activity = getActivity();
@@ -120,8 +132,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
 
-        solo.waitForFragmentById(R.layout.fragment_all_habits);
-
+        solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
         assertTrue(solo.searchText("Swimming", true));
 
         // click on it to be deleted (for testing and so that this test can run again
@@ -143,6 +154,12 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         assertFalse(solo.searchText("Swimming"));
     }
 
+    /**
+     * Second creation test ensure that a habits must be unique.
+     * @assumption the user account has already been registered
+     * @author Bianca and Randi
+     * @throws Exception
+     */
     public void testCreate2Duplicate() throws Exception {
 
         Activity activity = getActivity();
@@ -192,12 +209,19 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
 
-        solo.waitForFragmentById(R.layout.fragment_all_habits);
+        solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
 
         // assert that jogging is seen only once
         Assert.assertTrue(solo.searchText("Jogging", 1));
     }
 
+    /**
+     * Third creation test ensure that a habit cannot have blank entries and that there
+     * are error messages displayed.
+     * @assumption the user account has already been registered
+     * @author Bianca and Randi
+     * @throws Exception
+     */
     public void testCreate3Blank() throws Exception {
 
         Activity activity = getActivity();
