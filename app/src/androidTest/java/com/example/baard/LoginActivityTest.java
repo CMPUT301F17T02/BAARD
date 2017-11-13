@@ -69,7 +69,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     @Test
     public void testInvalidUsername() {
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
-        solo.clickOnButton("Sign In");
+        solo.clickOnButton("Sign in");
         assertTrue(solo.waitForText("This field is required", 1, 1000));
 
         solo.enterText((EditText) solo.getView(R.id.username), "Inv@lid Charact#rs");
@@ -100,9 +100,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
         solo.enterText((EditText) solo.getView(R.id.name), "Test Name");
         solo.clickOnButton("Register");
-        solo.assertCurrentActivity("wrong activity", MainActivity.class);
-
-        solo.goBack();
+        // Should not register because this username already exists
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
     }
 
