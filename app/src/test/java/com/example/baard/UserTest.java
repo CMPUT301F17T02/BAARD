@@ -21,7 +21,7 @@ public class UserTest extends TestCase {
     private User user;
 
     public void setUp() {
-        user = new User("Daniel", "daniel.choi123", "id");
+        user = new User("Daniel", "daniel.choi123", "1");
     }
 
     public void testGetName() {
@@ -56,46 +56,56 @@ public class UserTest extends TestCase {
         }
     }
 
-    public void testSetHabits() {
-        try {
-            HabitList habitList = new HabitList();
-            ArrayList<Day> frequency = new ArrayList<Day>();
-            frequency.add(Day.MONDAY);
-            Habit habit = new Habit("Jog", "To be healthy", new Date(), frequency);
-            habitList.add(habit);
-            user.setHabits(habitList);
-            assertEquals(habitList, user.getHabits());
-        }catch(Exception e){
-            fail();
-        }
+
+    public void testSetHabits() throws DataFormatException {
+        HabitList habitList = new HabitList();
+        ArrayList<Day> frequency = new ArrayList<Day>();
+        frequency.add(Day.MONDAY);
+        Habit habit = new Habit("Jog", "To be healthy", new Date(), frequency);
+        habitList.add(habit);
+        user.setHabits(habitList);
+        assertEquals(habitList, user.getHabits());
     }
 
     public void testGetFriends() {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "id"));
+        userList.add(new User("John", "johnSmith232", "2"));
         user.setFriends(userList);
         assertEquals(userList, user.getFriends());
     }
 
-    public void testSetFriends() {
+    public void testSetFriends() throws DataFormatException {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "id"));
+        userList.add(new User("John", "johnSmith232", "2"));
         user.setFriends(userList);
         assertEquals(userList, user.getFriends());
     }
 
     public void testGetReceivedRequests() {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "id"));
+        userList.add(new User("John", "johnSmith232", "2"));
         user.setReceivedRequests(userList);
         assertEquals(userList, user.getReceivedRequests());
     }
 
     public void testSetReceivedRequests() {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "id"));
+        userList.add(new User("John", "johnSmith232", "2"));
         user.setReceivedRequests(userList);
         assertEquals(userList, user.getReceivedRequests());
+    }
+
+    public void testGetId() {
+        assertEquals("1", user.getId());
+    }
+
+    public void testSetId() {
+        user.setId("4");
+        assertEquals("4", user.getId());
+    }
+
+    public void testToString() {
+        assertEquals("Name: Daniel\nUsername: daniel.choi123", user.toString());
     }
 
 }

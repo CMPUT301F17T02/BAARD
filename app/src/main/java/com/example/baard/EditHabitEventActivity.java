@@ -4,16 +4,22 @@
 
 package com.example.baard;
 
+import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -37,6 +44,7 @@ import java.util.zip.DataFormatException;
 public class EditHabitEventActivity extends AppCompatActivity {
 
     private Habit habit;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private HabitEvent habitEvent;
     private static final int PICK_IMAGE = 1;
     private String imageFilePath;
@@ -71,8 +79,30 @@ public class EditHabitEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_habit_event);
 
         DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-        EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
+        final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
         dateEdit.setText(formatter.format(habitEvent.getEventDate()));
+        final Calendar calendar = Calendar.getInstance();
+        dateEdit.setFocusable(false);
+        dateEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        dateEdit.setText(sdf.format(calendar.getTime()));
+                    }
+                };
+
+                DatePickerDialog d = new DatePickerDialog(EditHabitEventActivity.this, listener, calendar.get(Calendar.YEAR)
+                        , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                d.getDatePicker().setMaxDate((new Date()).getTime());
+                d.show();
+            }
+        });
 
         EditText commentEdit = (EditText) findViewById(R.id.commentEditText);
         commentEdit.setText(habitEvent.getComment());
@@ -109,6 +139,39 @@ public class EditHabitEventActivity extends AppCompatActivity {
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
     }
 
+    /**
+     * Check if the user has allowed the app access to read external storage, and if not, request
+     * permission.
+     * @return int representing the status of the permission
+     */
+    public int checkReadPermission(){
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck == -1){ // not allowed, so request
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+        return permissionCheck;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission granted
+                } else {
+                    //permission denied
+                }
+                return;
+            }
+        }
+    }
+
     public void saveChanges() {
         Date date;
         String comment;
@@ -126,6 +189,9 @@ public class EditHabitEventActivity extends AppCompatActivity {
             isValidHabitEvent = false;
         } catch (IllegalArgumentException i) {
             dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
+            isValidHabitEvent = false;
+        } catch (HabitEvent.DateAlreadyExistsException x){
+            dateEditText.setError("A HabitEvent already exists on this date.");
             isValidHabitEvent = false;
         } catch (Exception e) {
             //invalid date format
@@ -153,9 +219,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     }
 
     public void onSelectImageButtonPress(View view){
-        //if (checkReadPermission() == -1){
-        //    return;
-        ///}
+        checkReadPermission();
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 

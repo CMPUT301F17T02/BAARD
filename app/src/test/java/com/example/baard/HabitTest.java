@@ -30,6 +30,7 @@ public class HabitTest {
         super();
     }
 
+
     @Test
     public void testGetTitle() throws DataFormatException {
         String title = "Test Title";
@@ -153,4 +154,5 @@ public class HabitTest {
             fail();
         }
     }
+  
 }
