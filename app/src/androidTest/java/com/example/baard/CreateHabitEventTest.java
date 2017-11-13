@@ -175,7 +175,11 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.assertCurrentActivity("Now viewing HabitEvent after creation",ViewHabitEventActivity.class);
         solo.searchText("test comment");
         solo.searchText(habitName);
-        solo.sendKey(KeyEvent.KEYCODE_BACK);
+        //solo.sendKey(KeyEvent.KEYCODE_BACK);
+        KeyEvent kdown = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
+        solo.sendKey(kdown.getKeyCode());
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Habit Event History");
         solo.clickOnImageButton(0);
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
@@ -188,7 +192,7 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.searchText("A HabitEvent already exists on this date.");
         //now delete it for the sake of other tests
-        solo.sendKey(KeyEvent.KEYCODE_BACK);
+        //solo.sendKey(KeyEvent.KEYCODE_BACK);
         solo.clickOnImageButton(0);
         solo.clickOnText("Habit Event History");
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);
