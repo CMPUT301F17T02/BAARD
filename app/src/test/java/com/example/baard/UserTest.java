@@ -107,7 +107,7 @@ public class UserTest extends TestCase {
     }
 
     public void testToString() {
-        assertEquals("Name: Daniel\nUsername: daniel.choi123", user.toString());
+        assertEquals("Name: Daniel\nUsername: daniel.choi123\n", user.toString());
     }
 
 }

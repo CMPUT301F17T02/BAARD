@@ -31,10 +31,9 @@ public class HabitStatistics {
             frequency.add(day.getValue());
         }
 
+        System.out.println(habitEventList.size());
         for (int i = 0; i < habitEventList.size(); i++) {
             HabitEvent habitEvent = habitEventList.getHabitEvent(i);
-
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             if (startDate.compareTo(habitEvent.getEventDate()) <= 0 && endDate.compareTo(habitEvent.getEventDate()) >= 0) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(habitEvent.getEventDate());
@@ -63,7 +62,6 @@ public class HabitStatistics {
 
         for (int i = 0; i < habitEventList.size(); i++) {
             HabitEvent habitEvent = habitEventList.getHabitEvent(i);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(habitEvent.getEventDate());
 

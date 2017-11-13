@@ -25,7 +25,6 @@ public class HabitStatisticsTest extends TestCase {
         frequency.add(Day.MONDAY);
         frequency.add(Day.WEDNESDAY);
         frequency.add(Day.FRIDAY);
-        Date startDate;
         try {
             habit = new Habit("Practicing guitar", "To get better", sdf.parse("01/11/2017"), frequency);
             habit.getEvents().add(new HabitEvent(habit, sdf.parse("01/11/2017")));
