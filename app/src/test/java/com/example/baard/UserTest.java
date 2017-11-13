@@ -76,7 +76,6 @@ public class UserTest extends TestCase {
 
     public void testSetFriends() throws DataFormatException {
         UserList userList = new UserList();
-
         userList.add(new User("John", "johnSmith232", "2"));
         user.setFriends(userList);
         assertEquals(userList, user.getFriends());
@@ -84,7 +83,6 @@ public class UserTest extends TestCase {
 
     public void testGetReceivedRequests() {
         UserList userList = new UserList();
-
         userList.add(new User("John", "johnSmith232", "2"));
         user.setReceivedRequests(userList);
         assertEquals(userList, user.getReceivedRequests());

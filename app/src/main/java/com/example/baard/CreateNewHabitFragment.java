@@ -170,7 +170,7 @@ public class CreateNewHabitFragment extends Fragment {
                     properEntry = false;
                 }
                 if (frequency.size() < 1) {
-                    Toast.makeText(getActivity(), "No frequency selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No frequency selected", Toast.LENGTH_LONG).show();
                     properEntry = false;
                 }
 
