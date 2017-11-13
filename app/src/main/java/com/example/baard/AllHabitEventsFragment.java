@@ -147,6 +147,24 @@ public class AllHabitEventsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        habitEventList.clear();
+        User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
+        for (Habit habit: user.getHabits().getArrayList()) {
+            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
+                habitEvent.setHabit(habit);
+                habitEventList.add(habitEvent);
+            }
+        }
+        Collections.sort(habitEventList);
+        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
+        habitEventListView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {

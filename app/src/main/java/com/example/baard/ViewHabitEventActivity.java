@@ -23,8 +23,10 @@ import com.google.gson.reflect.TypeToken;
 public class ViewHabitEventActivity extends AppCompatActivity {
 
 
-    Habit habit;
-    HabitEvent habitEvent;
+    private Habit habit;
+    private HabitEvent habitEvent;
+    private final FileController fileController = new FileController();
+    private User user;
     /**
      * When created, sets the content of all of its fields to match the given HabitEvent.
      * @param savedInstanceState
@@ -33,13 +35,19 @@ public class ViewHabitEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = fileController.loadUser(getApplicationContext(), getUsername());
         // retrieve Habitevent identifier (date)
         String eventDateString = getIntent().getStringExtra("habitEventDate");
         SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("currentlyViewingHabit", "");
-        habit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
+        Habit loadHabit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
 
+        for (Habit habits: user.getHabits().getArrayList()){
+            if (habits.getTitle().equals(loadHabit.getTitle())){
+                habit = habits;
+            }
+        }
         for (HabitEvent habitEvent1: habit.getEvents().getArrayList()){
             if (habitEvent1.getEventDate().toString().equals(eventDateString)){
                 habitEvent = habitEvent1;
@@ -78,12 +86,19 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         });
     }
 
+    private String getUsername(){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        return gson.fromJson(json, new TypeToken<String>() {}.getType());
+    }
     /**
      * Deletes the viewed HabitEvent from the Habit's HabitEventList
      */
     private void deleteHabitEvent(){
         //delete this habit event from the Habit's HabitEventList
         habit.getEvents().delete(habitEvent);
+        fileController.saveUser(getApplicationContext(), user);
         finish();
     }
 

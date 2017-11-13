@@ -41,16 +41,25 @@ public class EditHabitEventActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     private String imageFilePath;
     private final FileController fileController = new FileController();
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = fileController.loadUser(getApplicationContext(), getUsername());
 
         // retrieve Habitevent identifier (date)
         String eventDateString = getIntent().getStringExtra("habitEventDate");
         SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("currentlyViewingHabit", "");
-        habit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
+        Habit loadHabit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
+        // do this because we need to set it to the habit found in the user so that the changes are
+        // reflected
+        for (Habit habits: user.getHabits().getArrayList()){
+            if (habits.getTitle().equals(loadHabit.getTitle())){
+                habit = habits;
+            }
+        }
         for (HabitEvent habitEvent1: habit.getEvents().getArrayList()){
             if (habitEvent1.getEventDate().toString().equals(eventDateString)){
                 habitEvent = habitEvent1;
@@ -101,7 +110,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
     }
 
     public void saveChanges() {
-        User user = fileController.loadUser(getApplicationContext(), getUsername());
         Date date;
         String comment;
         boolean isValidHabitEvent = true;
