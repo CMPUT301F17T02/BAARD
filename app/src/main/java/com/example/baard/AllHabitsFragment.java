@@ -22,6 +22,8 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -108,8 +110,8 @@ public class AllHabitsFragment extends Fragment {
      * Called when AllHabitsFragment activity is opened up and called again.
      */
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
 
         user = fc.loadUser(getActivity().getApplicationContext(), username);
         habitList = user.getHabits();
@@ -170,4 +172,5 @@ public class AllHabitsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

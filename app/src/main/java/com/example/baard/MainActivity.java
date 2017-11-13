@@ -4,8 +4,10 @@
 
 package com.example.baard;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Functionality coming soon!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -54,6 +56,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // view all habits -- front screen to view
+        AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(
+                R.id.relativelayout_for_fragment,
+                allHabitsFragment,
+                allHabitsFragment.getTag()
+        ).commit();
     }
 
     /**
@@ -98,6 +109,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -166,10 +178,12 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
             // End this session and take users back to the login screen
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            sharedPrefs.edit().remove("username").commit();
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
             finish();
         }
