@@ -32,6 +32,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="32dp"
         android:text="HabitName"
+        android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewHabitEventTitle" />
 
@@ -42,6 +43,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="32dp"
         android:text="Habit Event Date"
+        android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/HabitName" />
 
@@ -52,6 +54,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="32dp"
         android:text="Comment"
+        android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/HabitEventDate" />
 
@@ -62,6 +65,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="32dp"
         android:text="Location"
+        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commentView" />
 
