@@ -16,6 +16,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 
 /**
  * Activity called when user selects a HabitEvent when viewing all HabitEvents
@@ -61,7 +65,8 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
         TextView date = (TextView) findViewById(R.id.HabitEventDate);
-        date.setText(habitEvent.getEventDate().toString());
+        DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        date.setText(formatter.format(habitEvent.getEventDate()));
         TextView comment = (TextView) findViewById(R.id.commentView);
         comment.setText(habitEvent.getComment());
         ImageView image = (ImageView) findViewById(R.id.ImageView);

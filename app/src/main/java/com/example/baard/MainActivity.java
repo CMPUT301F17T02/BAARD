@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
             // Send user to fragment that shows a list of all their habit events
             // listed with most recent habit events first
             Toast.makeText(this, "Habit Event History", Toast.LENGTH_SHORT).show();
-            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance("test", "test2");
+            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
                     R.id.relativelayout_for_fragment,
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_newHabitEvent) {
             // Send user to fragment that allows them to create a new habit event
             Toast.makeText(this, "Create New Habit Event", Toast.LENGTH_SHORT).show();
-            CreateNewHabitEventFragment createNewHabitEventFragment = CreateNewHabitEventFragment.newInstance("test", "test2");
+            CreateNewHabitEventFragment createNewHabitEventFragment = CreateNewHabitEventFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
                     R.id.relativelayout_for_fragment,
