@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Adam on 11/11/2017.
  */
 
-class FileController {
+public class FileController {
 
     private static final String FILENAME = "BAARD.sav";
 

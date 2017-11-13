@@ -34,4 +34,8 @@ public class HabitEventList {
         events.remove(event);
     }
 
+    public int size() {
+        return events.size();
+    }
+
 }

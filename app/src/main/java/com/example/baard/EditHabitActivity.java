@@ -95,7 +95,9 @@ public class EditHabitActivity extends AppCompatActivity {
 
                 DatePickerDialog d = new DatePickerDialog(EditHabitActivity.this, listener, calendar.get(Calendar.YEAR)
                                                             , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                d.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+                if (habit.getEvents().size() > 0) {
+                    d.getDatePicker().setMaxDate(habit.getEvents().getHabitEvent(0).getEventDate().getTime());
+                }
                 d.show();
             }
         });
@@ -109,7 +111,6 @@ public class EditHabitActivity extends AppCompatActivity {
         switch (item.getItemId()) {
         case android.R.id.home:
             finish();
-            break;
         }
         return true;
     }
@@ -214,11 +215,6 @@ public class EditHabitActivity extends AppCompatActivity {
                 habit.setStartDate(convertedStartDate);
                 habit.setFrequency(frequency);
                 commitEdits();
-                //try {
-                //    //TimeUnit.SECONDS.sleep(1);
-                //} catch (InterruptedException e) {
-                //    e.printStackTrace();
-                //}
                 finish();
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
