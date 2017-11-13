@@ -160,8 +160,9 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         Assert.assertTrue(solo.searchText("I like to jog"));
 
         solo.clearEditText(2);
-        solo.enterText(2, "20/4/2016");
-        Assert.assertTrue(solo.searchText("20/4/2016"));
+        solo.setDatePicker(0,2016,3,20);
+        solo.clickOnText("OK");
+        Assert.assertTrue(solo.searchText("20/04/2016"));
 
         solo.clickOnButton("Save");
 
