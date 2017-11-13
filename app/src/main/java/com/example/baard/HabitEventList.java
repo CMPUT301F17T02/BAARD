@@ -20,11 +20,15 @@ public class HabitEventList {
     private ArrayList<HabitEvent> events = new ArrayList<HabitEvent>();
 
     public HabitEventList(){
-
     }
 
     public HabitEvent getHabitEvent(int index){
         return events.get(index);
+    }
+
+    public HabitEvent getHabitEvent(HabitEvent habitEvent){
+        int find = events.indexOf(habitEvent);
+        return events.get(find);
     }
 
     public boolean hasHabitEvent(HabitEvent event){
