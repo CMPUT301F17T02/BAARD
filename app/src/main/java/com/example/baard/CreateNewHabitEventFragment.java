@@ -228,6 +228,10 @@ public class CreateNewHabitEventFragment extends Fragment {
             dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
             isValidHabitEvent = false;
         }
+        catch (HabitEvent.DateAlreadyExistsException x){
+            dateEditText.setError("A HabitEvent already exists on this date.");
+            isValidHabitEvent = false;
+        }
         catch(Exception e){
             //invalid date format
             dateEditText.setError("Invalid date entry:");
@@ -250,10 +254,15 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
     }
 
+    /**
+     * Check if the user has allowed the app access to read external storage, and if not, request
+     * permission.
+     * @return int representing the status of the permission
+     */
     public int checkReadPermission(){
         int permissionCheck = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (permissionCheck == -1){
+        if (permissionCheck == -1){ // not allowed, so request
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
@@ -285,9 +294,7 @@ public class CreateNewHabitEventFragment extends Fragment {
      */
     public void onSelectImageButtonPress(View view){
         //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
-        //if (checkReadPermission() == -1){
-        //    return;
-       ///}
+        checkReadPermission();
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
