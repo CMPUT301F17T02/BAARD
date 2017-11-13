@@ -51,6 +51,7 @@
                     android:layout_weight="1"
                     android:text="Reason"
                     android:textColor="@android:color/black"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -59,7 +60,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/habit_indent"
                     android:text="TextView"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -77,6 +79,7 @@
                     android:layout_height="wrap_content"
                     android:text="Start Date"
                     android:textColor="@android:color/black"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -85,7 +88,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/habit_indent"
                     android:text="TextView"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -103,6 +107,7 @@
                     android:layout_height="wrap_content"
                     android:text="Frequency"
                     android:textColor="@android:color/black"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -111,7 +116,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/habit_indent"
                     android:text="TextView"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
