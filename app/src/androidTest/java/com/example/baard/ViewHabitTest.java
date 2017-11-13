@@ -70,7 +70,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         // sign the testing user in
         solo.waitForActivity(LoginActivity.class, 2000);
-        solo.assertCurrentActivity("Should be on login activity",LoginActivity.class);
+        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
@@ -92,7 +92,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         // Now need to click on a habit and test the viewing of the habit.
         ArrayList<TextView> list = solo.clickInList(0);
-        solo.assertCurrentActivity("Should be in view habit activity", ViewHabitActivity.class);
+        solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
         TextView viewHabitName = solo.getText(1);
         System.out.println("Clicked on: " + viewHabitName);
@@ -135,7 +135,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnButton("Create");
 
         solo.waitForActivity(ViewHabitActivity.class, 2000);
-        solo.assertCurrentActivity("Should be on view habit activity", ViewHabitActivity.class);
+        solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
         //Test to see if viewing the correct stuff
         Assert.assertTrue(solo.searchText(title));

@@ -7,6 +7,7 @@ package com.example.baard;
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
@@ -47,6 +48,22 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
      * Test case for registering a user and all associated errors
      */
     public void testRegister() {
+        // if already logged in, log out to ensure we are on TEST user
+        if (!(solo.searchButton("Register", true))) {
+            solo.clickOnImage(0);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        }
+
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
         solo.clickOnButton("Register");
         assertTrue(solo.waitForText("This field is required", 1, 1000));

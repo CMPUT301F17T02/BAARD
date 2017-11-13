@@ -26,14 +26,17 @@ import java.util.zip.DataFormatException;
 public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
 
+    /**
+     * @throws DataFormatException
+     */
     public EditHabitTest() throws DataFormatException {
         super(LoginActivity.class);
     }
-//
-//    Date startDate = new Date();
-//    ArrayList<Day> frequency = new ArrayList<>();
-//    Habit habit = new Habit("title", "Reason", startDate, frequency);
 
+    /**
+     * Sets up the basic of the edit habit test.
+     * @throws Exception
+     */
     @Override
     protected void setUp() throws Exception {
         // get instrumentation get all info from device writing on
@@ -43,6 +46,10 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         Log.d("SETUP","setUp()");
     }
 
+    /**
+     * Test if editing a habit from view works
+     * @throws Exception
+     */
     public void testEditHabit() throws Exception {
         Activity activity = getActivity();
 
@@ -55,13 +62,14 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.waitForActivity(LoginActivity.class, 2000);
 
         // Log in
-        solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
+        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
         solo.enterText(username, "Andrew.M");
         solo.clickOnButton("Sign in");
 
-        solo.assertCurrentActivity("Wrong activity",MainActivity.class);
+        solo.waitForActivity(MainActivity.class, 2000);
+        solo.assertCurrentActivity("wrong activity", MainActivity.class);
 
         // Enter menu
         solo.clickOnImage(0);
@@ -71,14 +79,15 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnText("All Habits");
 
         ArrayList<TextView> list = solo.clickInList(0);
-        solo.assertCurrentActivity("Wrong Activity", ViewHabitActivity.class);
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
+        solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
         System.out.println("Clicked on: " + list);
 
         // Start editing
         solo.clickOnButton("Edit");
-
-        solo.assertCurrentActivity("Wrong Activity", EditHabitActivity.class);
+        solo.waitForActivity(EditHabitActivity.class, 2000);
+        solo.assertCurrentActivity("wrong activity", EditHabitActivity.class);
         solo.getCurrentActivity();
 
         EditText title = solo.getCurrentActivity().findViewById(R.id.title);
