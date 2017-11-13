@@ -39,9 +39,14 @@ public class ElasticSearchController {
             // Query to check if username exists
             String query = "{\n" +
                     "    \"query\" : {\n" +
-                    "       \"term\" : {\"username\": \"" + parameters[1] + "\"}\n" +
+                    "       \"constant_score\" : {\n" +
+                    "           \"filter\" : {\n" +
+                    "               \"term\" : {\"username\": \"" + parameters[1] + "\"}\n" +
+                    "             }\n" +
+                    "         }\n" +
                     "    }\n" +
                     "}";
+
             Search search = new Search.Builder(query)
                     .addIndex("cmput301f17t02")
                     .addType("User")
@@ -129,7 +134,11 @@ public class ElasticSearchController {
             User user = null;
             String query = "{\n" +
                            "    \"query\" : {\n" +
-                           "       \"term\" : {\"username\": \"" + parameters[0] + "\"}\n" +
+                           "       \"constant_score\" : {\n" +
+                           "           \"filter\" : {\n" +
+                           "               \"term\" : {\"username\": \"" + parameters[0] + "\"}\n" +
+                           "             }\n" +
+                           "         }\n" +
                            "    }\n" +
                            "}";
 
