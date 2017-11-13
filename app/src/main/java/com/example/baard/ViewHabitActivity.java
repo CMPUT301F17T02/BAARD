@@ -36,6 +36,8 @@ import com.google.gson.reflect.TypeToken;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class ViewHabitActivity extends AppCompatActivity {
@@ -120,6 +122,8 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     private void createPieChart() {
+        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, new Date(Long.MIN_VALUE), new Date());
+
         // Create Pie Chart
         PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
         pieChart.setHoleRadius(0);
@@ -129,8 +133,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         pieChart.getDescription().setEnabled(false);
 
         ArrayList<PieEntry> yValues = new ArrayList<PieEntry>();
-        yValues.add(new PieEntry(6, "Completed"));
-        yValues.add(new PieEntry(3, "Not Completed"));
+        yValues.add(new PieEntry(habitCompletionData.completed, "Completed"));
+        yValues.add(new PieEntry(habitCompletionData.notCompleted, "Not Completed"));
 
         PieDataSet dataSet = new PieDataSet(yValues, "# of Habits");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -145,10 +149,17 @@ public class ViewHabitActivity extends AppCompatActivity {
         PieData data = new PieData(dataSet);
         pieChart.setEntryLabelColor(Color.DKGRAY);
         pieChart.setData(data);
+        if (habitCompletionData.notCompleted == 0 && habitCompletionData.completed == 0) {
+            pieChart.setVisibility(View.GONE);
+        } else {
+          pieChart.setData(data);
+        }
 
     }
 
     private void createLineChart() {
+        ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionByTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
+
         // Create Line Chart
         LineChart lineChart = (LineChart) findViewById(R.id.habit_lineChart);
         lineChart.setDragEnabled(true);
@@ -161,13 +172,14 @@ public class ViewHabitActivity extends AppCompatActivity {
         lineChart.getAxisRight().setEnabled(false);
 
         ArrayList<Entry> yValues = new ArrayList<Entry>();
+        for (HabitStatistics.HabitCompletionVsTimeData data : habitCompletionByTimesData) {
+            yValues.add(new Entry(data.time, data.habitCompletion));
+        }
         yValues.add(new Entry(0f, 4f));
         yValues.add(new Entry(1f, 4f));
         yValues.add(new Entry(2f, 4f));
 
         LineDataSet set1 = new LineDataSet(yValues, "DataRed Set 1");
-
-        set1.setFillAlpha(110);
 
         set1.setColor(Color.BLACK);
         set1.setLineWidth(1f);
@@ -179,24 +191,25 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
 
-        lineChart.setData(data);
+        if (habitCompletionByTimesData.size() > 0) {
+            lineChart.setData(data);
+        } else {
+            lineChart.setVisibility(View.GONE);
+        }
 
-        String[] xValues = new String[] {"1", "2", "3"};
-        lineChart.getXAxis().setValueFormatter(new MyAxisValueFormatter(xValues));
+        lineChart.getXAxis().setValueFormatter(new MyAxisValueFormatter());
         lineChart.getXAxis().setGranularity(1f);
     }
 
     public class MyAxisValueFormatter implements IAxisValueFormatter {
 
-        private String[] xValues;
-
-        public MyAxisValueFormatter(String[] xValues) {
-            this.xValues = xValues;
-        }
-
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            return xValues[(int)value];
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis((long)value * 10000);
+
+            return sdf.format(calendar.getTime());
         }
     }
 }

@@ -28,39 +28,39 @@ public class HabitListTest {
         super();
     }
 
-    @Test
-    public void testGetHabit() {
-        Habit habit = new Habit("title", "Reason", startDate, array);
-        habits.add(habit);
-        Habit returnedHabit = habits.getHabit(0);
+    //@Test
+    //public void testGetHabit() {
+    //    Habit habit = new Habit("title", "Reason", startDate, array);
+    //    habits.add(habit);
+    //    Habit returnedHabit = habits.getHabit(0);
 
-        assertEquals(returnedHabit.getTitle(), habit.getTitle());
-        assertEquals(returnedHabit.getReason(), habit.getReason());
-        assertEquals(returnedHabit.getFrequency(), habit.getFrequency());
-    }
+    //    assertEquals(returnedHabit.getTitle(), habit.getTitle());
+    //    assertEquals(returnedHabit.getReason(), habit.getReason());
+    //    assertEquals(returnedHabit.getFrequency(), habit.getFrequency());
+    //}
 
-    @Test
-    public void testHasHabit() {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
+    //@Test
+    //public void testHasHabit() {
+    //    Habit habit = new Habit("Test Title", "reason", startDate, array);
 
-        assertFalse(habits.hasHabit(habit));
-        habits.add(habit);
-        assertTrue(habits.hasHabit(habit));
-    }
+    //    assertFalse(habits.hasHabit(habit));
+    //    habits.add(habit);
+    //    assertTrue(habits.hasHabit(habit));
+    //}
 
-    @Test
-    public void testAdd() {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
+    //@Test
+    //public void testAdd() {
+    //    Habit habit = new Habit("Test Title", "reason", startDate, array);
 
-        habits.add(habit);
-        assertTrue(habits.hasHabit(habit));
-    }
+    //    habits.add(habit);
+    //    assertTrue(habits.hasHabit(habit));
+    //}
 
-    @Test
-    public void testDelete() {
-        Habit habit = new Habit("Test Title", "reason", startDate, array);
-        habits.add(habit);
-        habits.delete(habit);
-        assertFalse(habits.hasHabit(habit));
-    }
+    //@Test
+    //public void testDelete() {
+    //    Habit habit = new Habit("Test Title", "reason", startDate, array);
+    //    habits.add(habit);
+    //    habits.delete(habit);
+    //    assertFalse(habits.hasHabit(habit));
+    //}
 }

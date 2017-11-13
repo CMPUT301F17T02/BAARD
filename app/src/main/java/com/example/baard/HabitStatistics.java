@@ -34,7 +34,8 @@ public class HabitStatistics {
         for (int i = 0; i < habitEventList.size(); i++) {
             HabitEvent habitEvent = habitEventList.getHabitEvent(i);
 
-            if (startDate.compareTo(habitEvent.getEventDate()) >= 0 && endDate.compareTo(habitEvent.getEventDate()) <= 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            if (startDate.compareTo(habitEvent.getEventDate()) <= 0 && endDate.compareTo(habitEvent.getEventDate()) >= 0) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(habitEvent.getEventDate());
                 if (frequency.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
@@ -48,40 +49,43 @@ public class HabitStatistics {
         return new HabitCompletionData(completed, notCompleted);
     }
 
-    public ArrayList<HabitCompletionByTimeData> getHabitCompletionByTime(Habit habit, Date startDate, Date endDate) {
-        ArrayList<String> datesInStr = new ArrayList<String>();
+    public ArrayList<HabitCompletionVsTimeData> getHabitCompletionVsTimeData(Habit habit, Date startDate, Date endDate) {
         ArrayList<Integer> times = new ArrayList<Integer>();
-        ArrayList<Integer> habitCompletionsByTime = new ArrayList<Integer>();
+        ArrayList<Integer> habitCompletions = new ArrayList<Integer>();
+        HashSet<Integer> frequency = new HashSet<Integer>();
         HabitEventList habitEventList = habit.getEvents();
-        int offset = 0;
+
         int completion = 0;
+
+        for (Day day : habit.getFrequency()) {
+            frequency.add(day.getValue());
+        }
 
         for (int i = 0; i < habitEventList.size(); i++) {
             HabitEvent habitEvent = habitEventList.getHabitEvent(i);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(habitEvent.getEventDate());
 
-            if (startDate.compareTo(habitEvent.getEventDate()) >= 0 && endDate.compareTo(habitEvent.getEventDate()) <= 0) {
+            if (startDate.compareTo(habitEvent.getEventDate()) <= 0 && endDate.compareTo(habitEvent.getEventDate()) >= 0
+                    && frequency.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
                 completion++;
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                datesInStr.add(sdf.format(habitEvent.getEventDate()));
                 int time = (int)(habitEvent.getEventDate().getTime() / 1000);
-                if (offset > time) {
-                    offset = time;
-                }
                 times.add(time);
-                habitCompletionsByTime.add(completion);
+                habitCompletions.add(completion);
             }
         }
 
-        ArrayList<HabitCompletionByTimeData> habitCompletionByTimeData = new ArrayList<HabitCompletionByTimeData>();
+        ArrayList<HabitCompletionVsTimeData> habitCompletionVsTimeDatas = new ArrayList<HabitCompletionVsTimeData>();
 
-        for (int i = 0; i < datesInStr.size(); i++) {
-            String dateInStr = datesInStr.get(i);
-            int timeWithOffset = times.get(i) - offset;
-            int habitCompletionByTime = habitCompletionsByTime.get(i);
-            habitCompletionByTimeData.add(new HabitCompletionByTimeData(dateInStr, timeWithOffset, habitCompletionByTime));
+        for (int i = 0; i < times.size(); i++) {
+            int time = times.get(i);
+            int habitCompletion = habitCompletions.get(i);
+            habitCompletionVsTimeDatas.add(new HabitCompletionVsTimeData(time, habitCompletion));
         }
 
-        return habitCompletionByTimeData;
+        return habitCompletionVsTimeDatas;
+
     }
 
     public class HabitCompletionData {
@@ -94,14 +98,12 @@ public class HabitStatistics {
         }
     }
 
-    public class HabitCompletionByTimeData {
-        String dateInStr;
-        int timeWithOffset;
+    public class HabitCompletionVsTimeData {
+        int time;
         int habitCompletion;
 
-        public HabitCompletionByTimeData(String datesInStr, int timeWithOffset, int habitCompletion) {
-            this.dateInStr = datesInStr;
-            this.timeWithOffset = timeWithOffset;
+        public HabitCompletionVsTimeData(int time, int habitCompletion) {
+            this.time = time;
             this.habitCompletion = habitCompletion;
         }
     }
