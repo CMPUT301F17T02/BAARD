@@ -144,6 +144,10 @@ public class CreateNewHabitFragment extends Fragment {
                     startDateText.setError("Start date is required!");
                     properEntry = false;
                 }
+                if (frequency.size() < 1) {
+                    Toast.makeText(getActivity(), "No frequency selected", Toast.LENGTH_SHORT).show();
+                    properEntry = false;
+                }
 
                 // if all of the values are entered try to save
                 if (properEntry) {

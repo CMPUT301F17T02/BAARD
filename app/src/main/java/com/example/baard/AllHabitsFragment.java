@@ -93,12 +93,6 @@ public class AllHabitsFragment extends Fragment {
 
         habitListView = (ListView) view.findViewById(R.id.habitListView);
 
-        user = fc.loadUser(getActivity().getApplicationContext(), username);
-        habitList = user.getHabits();
-
-        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList.getArrayList());
-        habitListView.setAdapter(adapter);
-
         // set the listener so that if you click a habit in the list, you can view it
         habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
