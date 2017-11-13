@@ -6,13 +6,16 @@ package com.example.baard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +26,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,17 +58,27 @@ public class CreateNewHabitEventFragment extends Fragment {
     private static final int PICK_IMAGE = 1;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private final FileController fileController = new FileController();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Habit habit = null;
+    private HabitList habits;
     private Uri imageURI;
+    private User user = null;
 
     private OnFragmentInteractionListener mListener;
 
     public CreateNewHabitEventFragment() {
         // Required empty public constructor
+    }
+
+    private String getUsername(){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        return gson.fromJson(json, new TypeToken<String>() {}.getType());
     }
 
     /**
@@ -103,12 +121,22 @@ public class CreateNewHabitEventFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_create_new_habit_event, container, false);
 
-        // TODO: GET ACTUAL LIST OF HABITS FROM FILE/SERVER
-        String [] habits = {"Swimming","Eating","Studying"};
+        // get list of habits from user
+        //FileController fileController = new FileController();
+        user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
+        habits = user.getHabits();
+        //String [] habits = {"Swimming","Eating","Studying"};
         Spinner spinner = (Spinner) v.findViewById(R.id.habitSpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, habits);
+        ArrayAdapter<Habit> adapter = new ArrayAdapter<Habit>(this.getActivity(), android.R.layout.simple_spinner_item, habits.getArrayList());
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner.setAdapter(adapter);
+        Button locationButton = (Button) v.findViewById(R.id.addLocationButton);
+        locationButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Toast.makeText(getActivity(), "COMING SOON!", Toast.LENGTH_SHORT).show();
+            }
+        });
         Button imageButton = (Button) v.findViewById(R.id.attachImageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,11 +156,12 @@ public class CreateNewHabitEventFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //set the selected Habit to the habit
                 // habit = ThatOneHabit
+                habit = habits.getHabit(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                // can this even happen? Do nothing for now.
             }
         });
         return v;
@@ -152,6 +181,7 @@ public class CreateNewHabitEventFragment extends Fragment {
     public void createHabitEvent(){
         //validate data fields and save the record BOI
         //make sure date string is a valid format
+        HabitEvent habitEvent = null;
         Date date = null;
         String comment = "";
         boolean isValidHabitEvent = true;
@@ -161,13 +191,14 @@ public class CreateNewHabitEventFragment extends Fragment {
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
             comment = commentEditText.getText().toString();
-            HabitEvent habitEvent = new HabitEvent(habit, date, comment);
+            habitEvent = new HabitEvent(habit, date, comment);
         }catch(DataFormatException d){
             commentEditText.setError("Comment is too long (20 char max).");
             isValidHabitEvent = false;
         }
         catch (IllegalArgumentException i){
-            dateEditText.setError("Date is before habit start date.");
+            dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
+            isValidHabitEvent = false;
         }
         catch(Exception e){
             //invalid date format
@@ -177,10 +208,16 @@ public class CreateNewHabitEventFragment extends Fragment {
         //TODO: make sure there are no HabitEvents on the given date
 
         if (isValidHabitEvent) {
-            //Habit habit = new Habit();
-            //EditText comment = (EditText) getActivity().findViewById(R.id.commentEditText);
-            //HabitEvent habitEvent = new HabitEvent(habit, date, comment);
-            //TODO: SAVE HABIT EVENT IN HABIT 
+            habit.getEvents().add(habitEvent);
+            fileController.saveUser(getActivity().getApplicationContext(), user);
+            // go to AllHabitEvents fragment
+            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance("test", "test2");
+            FragmentManager manager = getActivity().getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    allHabitEventsFragment,
+                    allHabitEventsFragment.getTag()
+            ).commit();
         }
     }
 

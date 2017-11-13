@@ -26,10 +26,11 @@ import io.searchbox.annotations.JestId;
  * @author amckerna
  * @version 1.0
  */
-public class HabitEvent {
+public class HabitEvent implements Comparable<HabitEvent> {
     private transient Habit habit;
     private String comment = "";
     private Date eventDate;
+    //private String habitTitle;
     @JestId
     private String id;
     private String userId;
@@ -45,6 +46,7 @@ public class HabitEvent {
      */
     public HabitEvent(Habit habit, Date eventDate) throws IllegalArgumentException {
         this.habit = habit;
+        //this.habitTitle = habit.getTitle();
         if (habit.getStartDate().before(eventDate)){
             throw new IllegalArgumentException();
         }
@@ -140,6 +142,11 @@ public class HabitEvent {
     public void setImage(Uri imageUri){ this.image = imageUri; }
 
     public Uri getImage(){ return this.image; }
+
+    @Override
+    public int compareTo(HabitEvent habitEvent){
+        return this.getEventDate().compareTo(habitEvent.getEventDate()) * -1;
+    }
 
     @Override
     public String toString(){

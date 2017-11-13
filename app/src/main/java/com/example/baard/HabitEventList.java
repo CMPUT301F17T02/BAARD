@@ -39,6 +39,10 @@ public class HabitEventList {
         events.remove(event);
     }
 
+    public ArrayList<HabitEvent> getArrayList(){
+        return events;
+    }
+
     public int size(){ return events.size(); }
 
 }

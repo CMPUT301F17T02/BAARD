@@ -6,8 +6,10 @@ package com.example.baard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -44,6 +51,7 @@ public class AllHabitEventsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private final FileController fileController = new FileController();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -55,6 +63,12 @@ public class AllHabitEventsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private String getUsername(){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        return gson.fromJson(json, new TypeToken<String>() {}.getType());
+    }
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -93,11 +107,16 @@ public class AllHabitEventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_habit_events, container, false);
 
-        try {
-            habitEventList.add(new HabitEvent(new Habit("test", "just because", new Date(), new ArrayList<Day>()), new Date()));
-        } catch (DataFormatException e) {
-            e.printStackTrace();
+
+        User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
+        for (Habit habit: user.getHabits().getArrayList()) {
+            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
+                habitEvent.setHabit(habit);
+                habitEventList.add(habitEvent);
+            }
         }
+        Collections.sort(habitEventList);
+
 
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
