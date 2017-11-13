@@ -53,15 +53,24 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
     public void testEditHabit() throws Exception {
         Activity activity = getActivity();
 
-        // if already logged in, log out
+        // if already logged in, log out to ensure we are on TEST user
         if (!(solo.searchButton("Register", true))) {
             solo.clickOnImage(0);
-            solo.scrollDown();
-            solo.clickOnText("Logout");
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         }
-        solo.waitForActivity(LoginActivity.class, 2000);
 
-        // Log in
+        // sign the testing user in
+        solo.waitForActivity(LoginActivity.class, 2000);
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
@@ -78,11 +87,18 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("All Habits");
 
+
+        // See what the first activity saved is
+        TextView textFromList = solo.getText(1);
+        Log.i("text: ", textFromList.getText().toString());
+
+        // Now need to click on a habit and test the viewing of the habit.
         ArrayList<TextView> list = solo.clickInList(0);
         solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
-        System.out.println("Clicked on: " + list);
+        TextView viewHabitName = solo.getText(1);
+        Log.i("Clicked on: ", viewHabitName.toString());
 
         // Start editing
         solo.clickOnButton("Edit");
@@ -90,30 +106,41 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.assertCurrentActivity("wrong activity", EditHabitActivity.class);
         solo.getCurrentActivity();
 
-        EditText title = solo.getCurrentActivity().findViewById(R.id.title);
-        EditText reason = solo.getCurrentActivity().findViewById(R.id.reason);
-        EditText startDate = solo.getCurrentActivity().findViewById(R.id.startDate);
+        EditText editTextTitle = (EditText) solo.getView(R.id.title);
+        EditText editTextReason = (EditText) solo.getView(R.id.reason);
+        EditText editTextStartDate = (EditText) solo.getView(R.id.startDate);
+        String title = "Running";
+        String reason = "I like to run";
+        String date = "16/03/2017";
 
-        solo.clearEditText(title);
-        solo.enterText(title, "Jogging");
-        Assert.assertTrue(solo.searchText("Jogging"));
+        solo.clearEditText(editTextTitle);
+        solo.enterText(editTextTitle, title);
+        Assert.assertTrue(solo.searchText(title));
 
-        solo.clearEditText(reason);
-        solo.enterText(reason, "I like to jog");
-        Assert.assertTrue(solo.searchText("I like to jog"));
+        solo.clearEditText(editTextReason);
+        solo.enterText(editTextReason, reason);
+        Assert.assertTrue(solo.searchText(reason));
 
         solo.clickOnEditText(2);
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
-        Assert.assertTrue(solo.searchText("16/03/2017"));
+        Assert.assertTrue(solo.searchText(date));
 
         solo.clickOnText("Mon");
         solo.isToggleButtonChecked("Mon");
         solo.clickOnText("Wed");
         solo.isToggleButtonChecked("Wed");
+
+        // save the completed edits
         solo.clickOnButton("Save");
 
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("Wrong Activity", ViewHabitActivity.class);
+
+        // ensure that the edits stuck
+        Assert.assertTrue(solo.searchText(title));
+        Assert.assertTrue(solo.searchText(reason));
+        Assert.assertTrue(solo.searchText(date));
 
         // Go back to edit and change the habit back to what it previously was.
         solo.clickOnButton("Edit");
@@ -121,28 +148,26 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.assertCurrentActivity("Wrong Activity", EditHabitActivity.class);
         solo.getCurrentActivity();
 
-        solo.clearEditText(title);
-        solo.enterText(title, "Walking");
-        Assert.assertTrue(solo.searchText("Walking"));
+        solo.clearEditText(editTextTitle);
+        solo.enterText(editTextTitle, "Jogging");
+        Assert.assertTrue(solo.searchText("Jogging"));
 
-        solo.clearEditText(reason);
-        solo.enterText(reason, "I like to walk");
-        Assert.assertTrue(solo.searchText("I like to walk"));
+        solo.clearEditText(editTextReason);
+        solo.enterText(editTextReason, "I like to jog");
+        Assert.assertTrue(solo.searchText("I like to jog"));
 
-        solo.clearEditText(startDate);
-        solo.enterText(startDate, "20/11/2017");
+        solo.clearEditText(editTextStartDate);
+        solo.enterText(editTextStartDate, "20/11/2017");
         Assert.assertTrue(solo.searchText("20/11/2017"));
 
-        solo.clickOnText("Mon");
-        solo.isToggleButtonChecked("Mon");
-        solo.clickOnText("Wed");
-        solo.isToggleButtonChecked("Wed");
         solo.clickOnButton("Save");
 
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("Wrong Activity", ViewHabitActivity.class);
 
         solo.clickOnImage(0);
         solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -153,8 +178,6 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-
-        // Now need to click on a habit and test the editing of the habit.
 
     }
 }

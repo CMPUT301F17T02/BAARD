@@ -73,7 +73,6 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
         // sign the testing user in
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
-//        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
         solo.enterText(username, "Andrew.M");

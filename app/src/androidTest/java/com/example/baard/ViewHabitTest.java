@@ -78,6 +78,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnButton("Sign in");
 
         solo.waitForActivity(MainActivity.class, 2000);
+        solo.assertCurrentActivity("wrong activity", MainActivity.class);
 
         // Go to all habits
         solo.clickOnImage(0);
@@ -87,7 +88,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         // See what the first activity saved is
         TextView textFromList = solo.getText(1);
-        System.out.println("text: " + textFromList.getText());
+        Log.i("text: ", textFromList.getText().toString());
 
         // Now need to click on a habit and test the viewing of the habit.
         ArrayList<TextView> list = solo.clickInList(0);
@@ -95,7 +96,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
         TextView viewHabitName = solo.getText(1);
-        System.out.println("Clicked on: " + viewHabitName);
+        Log.i("Clicked on: ", viewHabitName.toString());
 
         assertTrue(solo.searchText(textFromList.getText().toString()));
         assertEquals(textFromList.getText(), viewHabitName.getText());
