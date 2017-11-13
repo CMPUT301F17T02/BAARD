@@ -158,7 +158,7 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     private void createLineChart() {
-        ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionByTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
+        ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionVsTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
 
         // Create Line Chart
         LineChart lineChart = (LineChart) findViewById(R.id.habit_lineChart);
@@ -172,7 +172,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         lineChart.getAxisRight().setEnabled(false);
 
         ArrayList<Entry> yValues = new ArrayList<Entry>();
-        for (HabitStatistics.HabitCompletionVsTimeData data : habitCompletionByTimesData) {
+        for (HabitStatistics.HabitCompletionVsTimeData data : habitCompletionVsTimesData) {
             yValues.add(new Entry(data.time, data.habitCompletion));
         }
         yValues.add(new Entry(0f, 4f));
@@ -191,7 +191,7 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
 
-        if (habitCompletionByTimesData.size() > 0) {
+        if (habitCompletionVsTimesData.size() > 0) {
             lineChart.setData(data);
         } else {
             lineChart.setVisibility(View.GONE);
@@ -207,7 +207,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         public String getFormattedValue(float value, AxisBase axis) {
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis((long)value * 10000);
+            calendar.setTimeInMillis((long)value);
 
             return sdf.format(calendar.getTime());
         }

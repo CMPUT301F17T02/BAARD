@@ -50,7 +50,7 @@ public class HabitStatistics {
     }
 
     public ArrayList<HabitCompletionVsTimeData> getHabitCompletionVsTimeData(Habit habit, Date startDate, Date endDate) {
-        ArrayList<Integer> times = new ArrayList<Integer>();
+        ArrayList<Long> times = new ArrayList<Long>();
         ArrayList<Integer> habitCompletions = new ArrayList<Integer>();
         HashSet<Integer> frequency = new HashSet<Integer>();
         HabitEventList habitEventList = habit.getEvents();
@@ -70,7 +70,7 @@ public class HabitStatistics {
             if (startDate.compareTo(habitEvent.getEventDate()) <= 0 && endDate.compareTo(habitEvent.getEventDate()) >= 0
                     && frequency.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
                 completion++;
-                int time = (int)(habitEvent.getEventDate().getTime() / 1000);
+                long time = habitEvent.getEventDate().getTime();
                 times.add(time);
                 habitCompletions.add(completion);
             }
@@ -79,7 +79,7 @@ public class HabitStatistics {
         ArrayList<HabitCompletionVsTimeData> habitCompletionVsTimeDatas = new ArrayList<HabitCompletionVsTimeData>();
 
         for (int i = 0; i < times.size(); i++) {
-            int time = times.get(i);
+            long time = times.get(i);
             int habitCompletion = habitCompletions.get(i);
             habitCompletionVsTimeDatas.add(new HabitCompletionVsTimeData(time, habitCompletion));
         }
@@ -99,10 +99,10 @@ public class HabitStatistics {
     }
 
     public class HabitCompletionVsTimeData {
-        int time;
+        long time;
         int habitCompletion;
 
-        public HabitCompletionVsTimeData(int time, int habitCompletion) {
+        public HabitCompletionVsTimeData(long time, int habitCompletion) {
             this.time = time;
             this.habitCompletion = habitCompletion;
         }
