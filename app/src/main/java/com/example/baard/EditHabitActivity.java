@@ -161,7 +161,6 @@ public class EditHabitActivity extends AppCompatActivity {
             editTextStartDate.setError("Start date is required!");
             properEntry = false;
         }
-        System.out.println(frequency);
         if (frequency.size() < 1) {
             Toast.makeText(this, "No frequency selected", Toast.LENGTH_SHORT).show();
             properEntry = false;
