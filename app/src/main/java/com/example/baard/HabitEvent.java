@@ -38,11 +38,6 @@ public class HabitEvent implements Comparable<HabitEvent> {
     private transient Habit habit;
     private String comment = "";
     private Date eventDate;
-    //private String habitTitle;
-    //@JestId
-    //private String id;
-    //private String userId;
-    //private String habitId;
     // TODO location variable
     private String imageFilePath;
 
@@ -55,7 +50,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
     public HabitEvent(Habit habit, Date eventDate) throws IllegalArgumentException {
         this.habit = habit;
         //this.habitTitle = habit.getTitle();
-        if (habit.getStartDate().before(eventDate)){
+        if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
         }
         // TODO: make sure the habit doesnt have any habitevents with this date
@@ -70,44 +65,30 @@ public class HabitEvent implements Comparable<HabitEvent> {
      * @throws DataFormatException throws if comment is over 20 characters
      * @throws IllegalArgumentException throws if date is before habit start date
      */
-    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException, IllegalArgumentException{
+    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException, IllegalArgumentException, DateAlreadyExistsException{
         this.habit = habit;
         if (comment.length() > 20){
             throw new DataFormatException();
         }
         this.comment = comment;
-        if (habit.getStartDate().before(eventDate)){
+        if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
         }
-        // TODO: make sure the habit doesnt have any habitevents with this date
+        for (HabitEvent events: habit.getEvents().getArrayList()){
+            if (events.getEventDate().equals(eventDate))
+                throw new DateAlreadyExistsException();
+        }
         this.eventDate = eventDate;
     }
-    /**
-    public String getId() {
-        return id;
+
+    public class DateAlreadyExistsException extends Exception{
+        DateAlreadyExistsException(){}
+
+        DateAlreadyExistsException(String message){
+            super(message);
+        }
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getHabitId() {
-        return habitId;
-    }
-
-    public void setHabitId(String habitId) {
-        this.habitId = habitId;
-    }
-
-     */
     public Habit getHabit() {
         return habit;
     }
@@ -141,17 +122,30 @@ public class HabitEvent implements Comparable<HabitEvent> {
      * @param eventDate
      * @throws IllegalArgumentException throws if event date is before habit start date
      */
-    public void setEventDate(Date eventDate) throws IllegalArgumentException {
+    public void setEventDate(Date eventDate) throws IllegalArgumentException, DateAlreadyExistsException {
         if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
+        }
+        for (HabitEvent events: habit.getEvents().getArrayList()){
+            if (events.getEventDate().equals(eventDate))
+                throw new DateAlreadyExistsException();
         }
         this.eventDate = eventDate;
     }
 
+    /**
+     * Set a path to an image file in storage. Used in getImageBitmap()
+     * @param path path to an image file
+     */
     public void setImageFilePath(String path){ this.imageFilePath = path; }
 
     public String getImageFilePath(){ return this.imageFilePath; }
 
+    /**
+     * If a path to an image file has been set with setImageFilePath, generates a Bitmap object
+     * matching that image.
+     * @return a Bitmap object representing the image at the specified location. Returns null otherwise.
+     */
     public Bitmap getImageBitmap(){
         if (imageFilePath != null) {
             File imgFile = new File(imageFilePath);

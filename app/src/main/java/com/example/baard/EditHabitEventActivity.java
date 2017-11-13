@@ -4,13 +4,17 @@
 
 package com.example.baard;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -41,6 +45,7 @@ import java.util.zip.DataFormatException;
 public class EditHabitEventActivity extends AppCompatActivity {
 
     private Habit habit;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private HabitEvent habitEvent;
     private static final int PICK_IMAGE = 1;
     private String imageFilePath;
@@ -135,6 +140,39 @@ public class EditHabitEventActivity extends AppCompatActivity {
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
     }
 
+    /**
+     * Check if the user has allowed the app access to read external storage, and if not, request
+     * permission.
+     * @return int representing the status of the permission
+     */
+    public int checkReadPermission(){
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck == -1){ // not allowed, so request
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+        return permissionCheck;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission granted
+                } else {
+                    //permission denied
+                }
+                return;
+            }
+        }
+    }
+
     public void saveChanges() {
         Date date;
         String comment;
@@ -152,6 +190,9 @@ public class EditHabitEventActivity extends AppCompatActivity {
             isValidHabitEvent = false;
         } catch (IllegalArgumentException i) {
             dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
+            isValidHabitEvent = false;
+        } catch (HabitEvent.DateAlreadyExistsException x){
+            dateEditText.setError("A HabitEvent already exists on this date.");
             isValidHabitEvent = false;
         } catch (Exception e) {
             //invalid date format
@@ -179,9 +220,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     }
 
     public void onSelectImageButtonPress(View view){
-        //if (checkReadPermission() == -1){
-        //    return;
-        ///}
+        checkReadPermission();
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
