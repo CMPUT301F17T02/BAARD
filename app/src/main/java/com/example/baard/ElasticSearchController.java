@@ -134,7 +134,11 @@ public class ElasticSearchController {
             User user = null;
             String query = "{\n" +
                            "    \"query\" : {\n" +
-                           "       \"term\" : {\"username\": \"" + parameters[0] + "\"}\n" +
+                           "       \"constant_score\" : {\n" +
+                           "           \"filter\" : {\n" +
+                           "               \"term\" : {\"username\": \"" + parameters[0] + "\"}\n" +
+                           "             }\n" +
+                           "         }\n" +
                            "    }\n" +
                            "}";
 

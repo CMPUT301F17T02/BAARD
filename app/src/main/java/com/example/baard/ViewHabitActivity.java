@@ -58,10 +58,10 @@ public class ViewHabitActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
+
         // load required data
         user = fc.loadUser(getApplicationContext(), username);
         habitList = user.getHabits();
-        Log.d("elasticSearch", Integer.toString(habitList.size()));
         habit = habitList.getHabit(position);
 
         // set all of the values for the habit to be viewed

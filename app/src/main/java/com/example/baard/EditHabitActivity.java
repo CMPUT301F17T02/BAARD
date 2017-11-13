@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -94,6 +95,7 @@ public class EditHabitActivity extends AppCompatActivity {
 
                 DatePickerDialog d = new DatePickerDialog(EditHabitActivity.this, listener, calendar.get(Calendar.YEAR)
                                                             , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                d.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
                 d.show();
             }
         });
@@ -213,11 +215,11 @@ public class EditHabitActivity extends AppCompatActivity {
                 habit.setStartDate(convertedStartDate);
                 habit.setFrequency(frequency);
                 commitEdits();
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                //try {
+                //    //TimeUnit.SECONDS.sleep(1);
+                //} catch (InterruptedException e) {
+                //    e.printStackTrace();
+                //}
                 finish();
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
