@@ -63,20 +63,9 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         // if already logged in, log out
         if (!(solo.searchButton("Register", true))) {
             solo.clickOnImage(0);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+            solo.scrollDown();
+            solo.clickOnText("Logout");
         }
-//        solo.waitForActivity(MainActivity.class, 2000);
-
-//        solo.waitForFragmentById(R.layout.fragment_create_new_habit);
 
         solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
@@ -93,16 +82,13 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         //solo.assertCurrentActivity("Wrong activity", MainActivity.class);
 
         solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("Create New Habit");
         solo.getCurrentActivity() .getFragmentManager() .findFragmentById(R.layout.fragment_create_new_habit);
 
         EditText title = (EditText) solo.getView(R.id.title);
         EditText reason = (EditText) solo.getView(R.id.reason);
-        EditText startDate = (EditText) solo.getView(R.id.startDate);
+//        EditText startDate = (EditText) solo.getView(R.id.startDate);
+
 
         solo.enterText(title, "Swimming");
         Assert.assertTrue(solo.searchText("Swimming"));
@@ -110,20 +96,50 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.enterText(reason, "I need to get fit");
         Assert.assertTrue(solo.searchText("I need to get fit"));
 
-        solo.enterText(startDate, "20/11/2017");
-        Assert.assertTrue(solo.searchText("20/11/2017"));
+//        solo.getView(R.id.startDate);
+        solo.clickOnEditText(2);
+        solo.setDatePicker(0,2017,2,16);
+        solo.clickOnText("OK");
+//        solo.enterText(startDate, "20/11/2017");
+//        Assert.assertTrue(solo.searchText("20/11/2017"));
 
         solo.clickOnText("Mon");
         solo.isToggleButtonChecked("Mon");
         solo.clickOnButton("Create");
 
         solo.waitForActivity(ViewHabitActivity.class, 2000);
-        //solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
+        solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
+        assertTrue(solo.searchText("Swimming"));
+
+        solo.clickOnImage(0);
+        solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+
+        solo.waitForFragmentById(R.layout.fragment_all_habits);
+
+        assertTrue(solo.searchText("Swimming", true));
+
+        solo.clickOnText("Swimming");
         solo.clickOnButton("Delete");
 
-        // To log out
         solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+
+        solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_all_habits);
+
+        assertFalse(solo.searchText("Swimming"));
+
+        // To log out
+//        solo.clickOnImage(0);
+//        solo.scrollDown();
+//        solo.scrollDown();
+//        solo.clickOnText("Logout");
+
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -135,7 +151,6 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-
     }
 
 
