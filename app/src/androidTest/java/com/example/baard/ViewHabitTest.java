@@ -92,6 +92,7 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         // Now need to click on a habit and test the viewing of the habit.
         ArrayList<TextView> list = solo.clickInList(0);
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
         TextView viewHabitName = solo.getText(1);
@@ -111,12 +112,12 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         // already logged in as previous test case
 
         solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("Create New Habit");
-        solo.getCurrentActivity() .getFragmentManager() .findFragmentById(R.layout.fragment_create_new_habit);
+        solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_create_new_habit);
 
         // enter in all the data to be created
         EditText editTextTitle = (EditText) solo.getView(R.id.title);
@@ -141,6 +142,9 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         Assert.assertTrue(solo.searchText(title));
         Assert.assertTrue(solo.searchText(reason));
         Assert.assertTrue(solo.searchText(date));
+
+        solo.clickOnButton("Delete");
+        solo.waitForActivity(MainActivity.class, 2000);
 
         // To log out
         solo.clickOnImage(0);
