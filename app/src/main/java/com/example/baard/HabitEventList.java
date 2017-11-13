@@ -19,39 +19,64 @@ public class HabitEventList {
 
     private ArrayList<HabitEvent> events = new ArrayList<HabitEvent>();
 
-    public HabitEventList(){
-    }
+    public HabitEventList(){}
 
+    /**
+     * Return the HabitEvent at the specified index
+     * @param index
+     * @return
+     */
     public HabitEvent getHabitEvent(int index){
         return events.get(index);
     }
 
+    /**
+     * Return the HabitEvent matching the given object.
+     * @param habitEvent
+     * @return
+     */
     public HabitEvent getHabitEvent(HabitEvent habitEvent){
         int find = events.indexOf(habitEvent);
         return events.get(find);
     }
 
-    public void removeHabitEvent(HabitEvent habitEvent){
-        if (events.contains(habitEvent))
-            events.remove(habitEvent);
-    }
-
+    /**
+     * Check whether a given HabitEvent is within the list.
+     * @param event
+     * @return boolean representing whether the HabitEvent is within the list
+     */
     public boolean hasHabitEvent(HabitEvent event){
         return events.contains(event);
     }
 
+    /**
+     * add a given HabitEvent to the list.
+     * @param event
+     */
     public void add(HabitEvent event) {
         events.add(event);
     }
 
+    /**
+     * remove a specified HabitEvent from the list.
+     * @param event
+     */
     public void delete(HabitEvent event) {
         events.remove(event);
     }
 
+    /**
+     * return an ArrayList representing the HabitEventList
+     * @return
+     */
     public ArrayList<HabitEvent> getArrayList(){
         return events;
     }
 
+    /**
+     * return the number of elements of the list as an int.
+     * @return
+     */
     public int size(){ return events.size(); }
 
 }

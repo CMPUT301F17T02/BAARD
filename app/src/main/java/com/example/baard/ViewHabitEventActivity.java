@@ -23,6 +23,8 @@ import java.util.Locale;
 
 /**
  * Activity called when user selects a HabitEvent when viewing all HabitEvents
+ * @author amckerna
+ * @version 1.0
  */
 public class ViewHabitEventActivity extends AppCompatActivity {
 
@@ -91,6 +93,10 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * returns the username of the user stored in SharedPreferences
+     * @return username
+     */
     private String getUsername(){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
@@ -98,7 +104,7 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
     }
     /**
-     * Deletes the viewed HabitEvent from the Habit's HabitEventList
+     * Deletes the viewed HabitEvent from the Habit's HabitEventList and finishes the ViewHabitEventActivity
      */
     private void deleteHabitEvent(){
         //delete this habit event from the Habit's HabitEventList

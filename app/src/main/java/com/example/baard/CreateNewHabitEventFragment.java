@@ -76,6 +76,10 @@ public class CreateNewHabitEventFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * returns the username of the user stored in SharedPreferences
+     * @return username
+     */
     private String getUsername(){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
@@ -270,6 +274,13 @@ public class CreateNewHabitEventFragment extends Fragment {
         return permissionCheck;
     }
 
+    /**
+     * This method dictates the action taken when the user responds to a request for the application to access
+     * it's files for the purpose of reading images.
+     * @param requestCode the request code of the type of request given to the user
+     * @param permissions
+     * @param grantResults contains data on whether permission was granted
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -308,7 +319,7 @@ public class CreateNewHabitEventFragment extends Fragment {
     }
 
     /**
-     * Handles the user selecting an image from their photos. When an image is selected, the imageURI
+     * Handles the user selecting an image from their photos. When an image is selected, the filepath
      * variable is set to the selected image, and a preview of the image is displayed on screen.
      * @param requestCode
      * @param resultCode
