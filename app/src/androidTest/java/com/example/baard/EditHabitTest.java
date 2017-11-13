@@ -84,6 +84,7 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("All Habits");
 
@@ -106,19 +107,19 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.assertCurrentActivity("wrong activity", EditHabitActivity.class);
         solo.getCurrentActivity();
 
-        EditText editTextTitle = (EditText) solo.getView(R.id.title);
-        EditText editTextReason = (EditText) solo.getView(R.id.reason);
-        EditText editTextStartDate = (EditText) solo.getView(R.id.startDate);
+//        EditText editTextTitle = (EditText) solo.getView(R.id.title);
+//        EditText editTextReason = (EditText) solo.getView(R.id.reason);
+//        EditText editTextStartDate = (EditText) solo.getView(R.id.startDate);
         String title = "Running";
         String reason = "I like to run";
         String date = "16/03/2017";
 
-        solo.clearEditText(editTextTitle);
-        solo.enterText(editTextTitle, title);
+        solo.clearEditText(0);
+        solo.enterText(0, title);
         Assert.assertTrue(solo.searchText(title));
 
-        solo.clearEditText(editTextReason);
-        solo.enterText(editTextReason, reason);
+        solo.clearEditText(1);
+        solo.enterText(1, reason);
         Assert.assertTrue(solo.searchText(reason));
 
         solo.clickOnEditText(2);
@@ -136,11 +137,13 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("Wrong Activity", ViewHabitActivity.class);
+        solo.getCurrentActivity();
 
         // ensure that the edits stuck
+        solo.scrollUp();
         Assert.assertTrue(solo.searchText(title));
         Assert.assertTrue(solo.searchText(reason));
-        Assert.assertTrue(solo.searchText(date));
+        Assert.assertTrue(solo.searchText("March 16, 2017"));
 
         // Go back to edit and change the habit back to what it previously was.
         solo.clickOnButton("Edit");
@@ -148,17 +151,17 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.assertCurrentActivity("Wrong Activity", EditHabitActivity.class);
         solo.getCurrentActivity();
 
-        solo.clearEditText(editTextTitle);
-        solo.enterText(editTextTitle, "Jogging");
+        solo.clearEditText(0);
+        solo.enterText(0, "Jogging");
         Assert.assertTrue(solo.searchText("Jogging"));
 
-        solo.clearEditText(editTextReason);
-        solo.enterText(editTextReason, "I like to jog");
+        solo.clearEditText(1);
+        solo.enterText(1, "I like to jog");
         Assert.assertTrue(solo.searchText("I like to jog"));
 
-        solo.clearEditText(editTextStartDate);
-        solo.enterText(editTextStartDate, "20/11/2017");
-        Assert.assertTrue(solo.searchText("20/11/2017"));
+        solo.clearEditText(2);
+        solo.enterText(2, "20/4/2016");
+        Assert.assertTrue(solo.searchText("20/4/2016"));
 
         solo.clickOnButton("Save");
 
