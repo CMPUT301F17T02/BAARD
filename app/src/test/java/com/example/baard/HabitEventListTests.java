@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +37,7 @@ public class HabitEventListTests {
      * Run setup before each test.
      */
     @Before
-    public void setUpTest(){
+    public void setUpTest() throws DataFormatException {
         freq = new ArrayList<Day>();
         date1 = new Date();
         // constructor 1

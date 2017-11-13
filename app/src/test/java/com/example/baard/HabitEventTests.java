@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +31,7 @@ public class HabitEventTests {
      * This function is run at the beginning of each test. It sets up the Habit and HabitEvent required for each test.
      */
     @Before
-    public void setUpTest(){
+    public void setUpTest() throws DataFormatException {
         freq = new ArrayList<Day>();
         date1 = new Date();
         // constructor 1
@@ -105,7 +106,6 @@ public class HabitEventTests {
      */
     public void testSetDate(){
         Date date2 = new Date();
-
         try {
             habitEvent.setEventDate(date2);
             //assertNotEquals(habitEvent.getEventDate(), date1);
@@ -127,6 +127,7 @@ public class HabitEventTests {
      * Test the setHabit functionality of the HabitEvent class.
      */
     @Test
+
     public void testSetHabit(){
         try {
             ArrayList<Day> freq2 = new ArrayList<Day>();

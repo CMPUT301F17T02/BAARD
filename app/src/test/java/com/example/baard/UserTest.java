@@ -42,7 +42,7 @@ public class UserTest extends TestCase {
         assertEquals("qwerty93", user.getUsername());
     }
 
-    public void testGetHabits() throws DataFormatException {
+    public void testGetHabits() {
         HabitList habitList = new HabitList();
         ArrayList<Day> frequency = new ArrayList<Day>();
         frequency.add(Day.MONDAY);
@@ -57,14 +57,18 @@ public class UserTest extends TestCase {
     }
 
 
-    public void testSetHabits() throws DataFormatException {
+    public void testSetHabits() {
         HabitList habitList = new HabitList();
         ArrayList<Day> frequency = new ArrayList<Day>();
         frequency.add(Day.MONDAY);
-        Habit habit = new Habit("Jog", "To be healthy", new Date(), frequency);
-        habitList.add(habit);
-        user.setHabits(habitList);
-        assertEquals(habitList, user.getHabits());
+        try {
+            Habit habit = new Habit("Jog", "To be healthy", new Date(), frequency);
+            habitList.add(habit);
+            user.setHabits(habitList);
+            assertEquals(habitList, user.getHabits());
+        } catch (Exception e) {
+            fail();
+        }
     }
 
     public void testGetFriends() {
@@ -76,7 +80,6 @@ public class UserTest extends TestCase {
 
     public void testSetFriends() throws DataFormatException {
         UserList userList = new UserList();
-
         userList.add(new User("John", "johnSmith232", "2"));
         user.setFriends(userList);
         assertEquals(userList, user.getFriends());
@@ -84,7 +87,6 @@ public class UserTest extends TestCase {
 
     public void testGetReceivedRequests() {
         UserList userList = new UserList();
-
         userList.add(new User("John", "johnSmith232", "2"));
         user.setReceivedRequests(userList);
         assertEquals(userList, user.getReceivedRequests());
@@ -107,7 +109,7 @@ public class UserTest extends TestCase {
     }
 
     public void testToString() {
-        assertEquals("Name: Daniel\nUsername: daniel.choi123", user.toString());
+        assertEquals("Name: Daniel\nUsername: daniel.choi123\n", user.toString());
     }
 
 }

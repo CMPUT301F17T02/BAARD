@@ -10,8 +10,6 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -72,7 +70,7 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     /**
-     * Load user
+     * Load the user to display the updated habit
      */
     @Override
     public void onStart() {
@@ -121,6 +119,9 @@ public class ViewHabitActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Calculates and creates the Pie chart of events to be displayed
+     */
     private void createPieChart() {
         HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, new Date(Long.MIN_VALUE), new Date());
 
@@ -157,6 +158,10 @@ public class ViewHabitActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Calculates and creates the line chart of events to be displayed
+     */
     private void createLineChart() {
         ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionVsTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
 
@@ -201,6 +206,9 @@ public class ViewHabitActivity extends AppCompatActivity {
         lineChart.getXAxis().setGranularity(1f);
     }
 
+    /**
+     * Formats the scale of the x axis for the line chart
+     */
     public class MyAxisValueFormatter implements IAxisValueFormatter {
 
         @Override

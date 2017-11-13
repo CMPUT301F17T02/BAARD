@@ -12,6 +12,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 
 /**
@@ -31,7 +32,7 @@ public class HabitTest {
 
 
     @Test
-    public void testGetTitle() {
+    public void testGetTitle() throws DataFormatException {
         String title = "Test Title";
         try {
             Habit habit = new Habit(title, "Reason", startDate, array);
@@ -43,7 +44,15 @@ public class HabitTest {
     }
 
     @Test
-    public void testGetReason() {
+    public void testSetTitle() throws DataFormatException {
+        String newTitle = "new Title";
+        Habit habit = new Habit("old title", "Reason", startDate, array);
+        habit.setTitle(newTitle);
+        assertEquals(habit.getTitle(), newTitle);
+    }
+
+    @Test
+    public void testGetReason() throws DataFormatException {
         String reason = "Reason";
         try {
             Habit habit = new Habit("Test Title", reason, startDate, array);
@@ -55,7 +64,15 @@ public class HabitTest {
     }
 
     @Test
-    public void testGetStartDate() {
+    public void testSetReason() throws DataFormatException {
+        String newReason = "new Reason";
+        Habit habit = new Habit("Test Title", "old reason", startDate, array);
+        habit.setReason(newReason);
+        assertEquals(habit.getReason(), newReason);
+    }
+
+    @Test
+    public void testGetStartDate() throws DataFormatException {
         try {
             Habit habit = new Habit("Test Title", "Reason", startDate, array);
             Date test_startDate = habit.getStartDate();
@@ -66,7 +83,15 @@ public class HabitTest {
     }
 
     @Test
-    public void testGetFrequency() {
+    public void testSetStartDate() throws DataFormatException {
+        Date newStartDate = new Date();
+        Habit habit = new Habit("Test Title", "Reason", startDate, array);
+        habit.setStartDate(newStartDate);
+        assertEquals(habit.getStartDate(), newStartDate);
+    }
+
+    @Test
+    public void testGetFrequency() throws DataFormatException {
         try {
             array.add(Day.MONDAY);
             array.add(Day.WEDNESDAY);
@@ -81,7 +106,23 @@ public class HabitTest {
     }
 
     @Test
-    public void testGetEvents() {
+    public void testSetFrequency() throws DataFormatException {
+        ArrayList<Day> newArray = new ArrayList<Day>();
+        array.add(Day.MONDAY);
+        array.add(Day.WEDNESDAY);
+        array.add(Day.FRIDAY);
+
+        newArray.add(Day.TUESDAY);
+        newArray.add(Day.THURSDAY);
+
+        Habit habit = new Habit("Test Title", "Reason", startDate, array);
+        ArrayList<Day> test_array = new ArrayList<Day>();
+        habit.setFrequency(newArray);
+        assertEquals(habit.getFrequency(), newArray);
+    }
+
+    @Test
+    public void testGetEvents() throws DataFormatException {
         try {
             Habit habit = new Habit("Test Title", "reason", startDate, array);
             HabitEvent habitEvent = new HabitEvent(habit, eventDate, "comment");
@@ -93,13 +134,13 @@ public class HabitTest {
             HabitEventList returnedEventList = habit.getEvents();
 
             assertEquals(returnedEventList.getHabitEvent(0), habitEvent);
-        }catch(Exception e){
+        }catch(Exception e) {
             fail();
         }
     }
 
     @Test
-    public void testSetEvents() {
+    public void testSetEvents() throws DataFormatException {
         HabitEventList habitEventList = new HabitEventList();
         try {
             Habit habit = new Habit("Test Title", "reason", startDate, array);
