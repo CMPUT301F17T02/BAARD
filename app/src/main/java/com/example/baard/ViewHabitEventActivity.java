@@ -52,7 +52,7 @@ public class ViewHabitEventActivity extends AppCompatActivity {
                 break;
             }
         }
-
+        // set the habit so all methods work properly
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_view_habit_event);
 
@@ -64,8 +64,6 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         comment.setText(habitEvent.getComment());
         ImageView image = (ImageView) findViewById(R.id.ImageView);
         // set image if there is one
-        //Uri uri = habitEvent.getImageURI();
-        Bitmap bm = habitEvent.getImageBitmap();
         if (habitEvent.getImageBitmap() != null) {
             image.setImageBitmap(habitEvent.getImageBitmap());
         }
@@ -84,7 +82,6 @@ public class ViewHabitEventActivity extends AppCompatActivity {
                 editHabitEvent();
             }
         });
-
     }
 
     /**
