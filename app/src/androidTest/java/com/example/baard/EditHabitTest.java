@@ -168,6 +168,7 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("Wrong Activity", ViewHabitActivity.class);
 
+        // log out for other tests
         solo.clickOnImage(0);
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
