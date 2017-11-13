@@ -131,6 +131,10 @@ public class AllHabitEventsFragment extends Fragment {
         }
     }
 
+    /**
+     * this onResume has been overrided to update the data set of all HabitEvents being viewed, in case one has been
+     * deleted since the user was on this screen last.
+     */
     @Override
     public void onResume() {
         super.onResume();

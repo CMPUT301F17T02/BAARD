@@ -133,6 +133,10 @@ public class EditHabitEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * returns the username of the user stored in SharedPreferences
+     * @return username
+     */
     private String getUsername(){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
@@ -156,6 +160,11 @@ public class EditHabitEventActivity extends AppCompatActivity {
         return permissionCheck;
     }
 
+    /**
+     * Check if the user has allowed the app access to read external storage, and if not, request
+     * permission.
+     * @return int representing the status of the permission
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -173,6 +182,9 @@ public class EditHabitEventActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Save the changes made by the user to this HabitEvent. Checks for errors if the user entered invalid information.
+     */
     public void saveChanges() {
         Date date;
         String comment;
@@ -204,9 +216,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
             if (imageFilePath != null) {
                 habitEvent.setImageFilePath(imageFilePath);
             }
-            //habitEvent.setComment(comment);
-            //habitEvent.setEventDate(date);
-            //habit.getEvents().add(habitEvent);
             // sort on change
             Collections.sort(habit.getEvents().getArrayList());
             fileController.saveUser(getApplicationContext(), user);
@@ -219,6 +228,11 @@ public class EditHabitEventActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method called when the select image button is pressed. Lets the user select an image to be added to the
+     * habit event. Calls startActivityForResult to handle their selection.
+     * @param view supplied when button is pressed
+     */
     public void onSelectImageButtonPress(View view){
         checkReadPermission();
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -243,7 +257,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     }
 
     /**
-     * Handles the user selecting an image from their photos. When an image is selected, the imageURI
+     * Handles the user selecting an image from their photos. When an image is selected, the filepath
      * variable is set to the selected image, and a preview of the image is displayed on screen.
      * @param requestCode
      * @param resultCode

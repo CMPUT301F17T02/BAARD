@@ -4,28 +4,15 @@
 
 package com.example.baard;
 
-import android.app.Activity;
-import android.security.keystore.KeyNotYetValidException;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 import com.robotium.solo.Solo;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-/**
- * Created by chrygore on 11/11/17.
- */
 
 /**
  * The class for testing the CreateNewHabitEventFragment UI functions.
@@ -51,6 +38,11 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
      * test username.
      * @throws InterruptedException
      */
+    @BeforeClass
+    public static void setUpDataAndLogIn(){
+
+    }
+
     @Override
     public void setUp() throws InterruptedException {
         //DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
@@ -80,12 +72,20 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.enterText(username, "Andrew.M");
         solo.clickOnButton("Sign in");
         solo.assertCurrentActivity("Should be in MainActivity.",MainActivity.class);
+
+        // delete habitevent on December 25, 2016 if it exists
         solo.clickOnImageButton(0);
+        solo.clickOnText("Habit Event History");
+        solo.waitForFragmentById(R.layout.fragment_all_habit_events);
+        if (solo.searchText("December 25, 2016") == true) {
+            solo.clickOnText("December 25, 2016");
+            solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
+        }
+        //solo.clickOnImageButton(0);
         // select create new habit event
         solo.clickOnImageButton(0);
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
-
         Log.d("SETUP","setUp()");
     }
 
@@ -175,7 +175,11 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.assertCurrentActivity("Now viewing HabitEvent after creation",ViewHabitEventActivity.class);
         solo.searchText("test comment");
         solo.searchText(habitName);
-        solo.sendKey(KeyEvent.KEYCODE_BACK);
+        //solo.sendKey(KeyEvent.KEYCODE_BACK);
+        KeyEvent kdown = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
+        solo.sendKey(kdown.getKeyCode());
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Habit Event History");
         solo.clickOnImageButton(0);
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
@@ -188,7 +192,7 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.searchText("A HabitEvent already exists on this date.");
         //now delete it for the sake of other tests
-        solo.sendKey(KeyEvent.KEYCODE_BACK);
+        //solo.sendKey(KeyEvent.KEYCODE_BACK);
         solo.clickOnImageButton(0);
         solo.clickOnText("Habit Event History");
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);

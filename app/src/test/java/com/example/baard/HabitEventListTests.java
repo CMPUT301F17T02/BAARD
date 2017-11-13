@@ -20,9 +20,12 @@ import java.util.zip.DataFormatException;
 
 import static org.junit.Assert.*;
 
+/**
+ * Class for testing all the HabitEventList functionalities.
+ * @author amckerna
+ * @version 1.0
+ */
 public class HabitEventListTests {
-
-    //do we need test constructor?
 
     ArrayList<Day> freq;
     Date date1;
@@ -30,7 +33,9 @@ public class HabitEventListTests {
     HabitEvent habitEvent;
     HabitEventList habitEventList;
 
-    //run Before every test
+    /**
+     * Run setup before each test.
+     */
     @Before
     public void setUpTest() throws DataFormatException {
         freq = new ArrayList<Day>();
@@ -44,17 +49,29 @@ public class HabitEventListTests {
             fail();
         }
     }
+
+    /**
+     * Add a HabitEvent to the HabitList.
+     */
     @Test
     public void testAdd(){
         habitEventList.add(habitEvent);
         assertTrue(habitEventList.hasHabitEvent(habitEvent));
     }
+
+    /**
+     * Delete a HabitEvent from the HabitList.
+     */
     @Test
     public void testDelete(){
         habitEventList.add(habitEvent);
         habitEventList.delete(habitEvent);
         assertFalse(habitEventList.hasHabitEvent(habitEvent));
     }
+
+    /**
+     * Check if a given HabitEvent is within the HabitList.
+     */
     @Test
     public void testHasHabitEvent(){
         habitEventList.add(habitEvent);
@@ -67,6 +84,10 @@ public class HabitEventListTests {
             fail();
         }
     }
+
+    /**
+     * Test returning a HabitEvent within the HabitList.
+     */
     @Test
     public void testGetHabitEvent(){
         habitEventList.add(habitEvent);
