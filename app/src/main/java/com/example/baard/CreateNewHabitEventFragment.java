@@ -4,9 +4,11 @@
 
 package com.example.baard;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,8 +16,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +38,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.zip.DataFormatException;
 
@@ -61,11 +66,12 @@ public class CreateNewHabitEventFragment extends Fragment {
     private final FileController fileController = new FileController();
 
     // TODO: Rename and change types of parameters
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private String mParam1;
     private String mParam2;
     private Habit habit = null;
     private HabitList habits;
-    private Uri imageURI;
+    private String imageFilePath;
     private User user = null;
 
     private OnFragmentInteractionListener mListener;
@@ -208,16 +214,46 @@ public class CreateNewHabitEventFragment extends Fragment {
         //TODO: make sure there are no HabitEvents on the given date
 
         if (isValidHabitEvent) {
+            if (imageFilePath != null){
+                habitEvent.setImageFilePath(imageFilePath);
+            }
             habit.getEvents().add(habitEvent);
+            // sort on insert
+            Collections.sort(habit.getEvents().getArrayList());
             fileController.saveUser(getActivity().getApplicationContext(), user);
-            // go to AllHabitEvents fragment
-            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance("test", "test2");
-            FragmentManager manager = getActivity().getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relativelayout_for_fragment,
-                    allHabitEventsFragment,
-                    allHabitEventsFragment.getTag()
-            ).commit();
+            habit.sendToSharedPreferences(getActivity().getApplicationContext());
+            // go to view habitevent activity
+            Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
+            intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
+            startActivity(intent);
+        }
+    }
+
+    public int checkReadPermission(){
+        int permissionCheck = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck == -1){
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+        return permissionCheck;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission granted
+                } else {
+                    //permission denied
+                }
+                return;
+            }
         }
     }
 
@@ -227,6 +263,9 @@ public class CreateNewHabitEventFragment extends Fragment {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
+        //if (checkReadPermission() == -1){
+        //    return;
+       ///}
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -251,9 +290,7 @@ public class CreateNewHabitEventFragment extends Fragment {
     {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
 
-
             Uri selectedImage = data.getData();
-            imageURI = selectedImage;
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getActivity().getContentResolver().query(
@@ -264,10 +301,9 @@ public class CreateNewHabitEventFragment extends Fragment {
             String filePath = cursor.getString(columnIndex);
             cursor.close();
             TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
+            imageFilePath = filePath;
             textView.setText(filePath);
-            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
-            //imageView.setImageBitmap(yourSelectedImage);
             imageView.setImageURI(selectedImage);
         }
     }

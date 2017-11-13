@@ -4,10 +4,18 @@
 
 package com.example.baard;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.v4.content.ContextCompat;
 
+import com.google.gson.Gson;
+
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,12 +39,12 @@ public class HabitEvent implements Comparable<HabitEvent> {
     private String comment = "";
     private Date eventDate;
     //private String habitTitle;
-    @JestId
-    private String id;
-    private String userId;
-    private String habitId;
+    //@JestId
+    //private String id;
+    //private String userId;
+    //private String habitId;
     // TODO location variable
-    private Uri image;
+    private String imageFilePath;
 
     /**
      * Constructor for HabitEvent without the comment.
@@ -74,7 +82,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
         // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
     }
-
+    /**
     public String getId() {
         return id;
     }
@@ -99,6 +107,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
         this.habitId = habitId;
     }
 
+     */
     public Habit getHabit() {
         return habit;
     }
@@ -139,9 +148,20 @@ public class HabitEvent implements Comparable<HabitEvent> {
         this.eventDate = eventDate;
     }
 
-    public void setImage(Uri imageUri){ this.image = imageUri; }
+    public void setImageFilePath(String path){ this.imageFilePath = path; }
 
-    public Uri getImage(){ return this.image; }
+    public String getImageFilePath(){ return this.imageFilePath; }
+
+    public Bitmap getImageBitmap(){
+        if (imageFilePath != null) {
+            File imgFile = new File(imageFilePath);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                return myBitmap;
+            }
+        }
+        return null;
+    }
 
     @Override
     public int compareTo(HabitEvent habitEvent){
