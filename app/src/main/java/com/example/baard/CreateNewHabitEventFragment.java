@@ -5,6 +5,7 @@
 package com.example.baard;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -38,6 +40,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.zip.DataFormatException;
@@ -59,13 +62,9 @@ import static android.app.Activity.RESULT_OK;
  */
 public class CreateNewHabitEventFragment extends Fragment {
     private static final int PICK_IMAGE = 1;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private final FileController fileController = new FileController();
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private String mParam1;
-    private String mParam2;
     private Habit habit = null;
     private HabitList habits;
     private String imageFilePath;
@@ -88,16 +87,12 @@ public class CreateNewHabitEventFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment CreateNewHabitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CreateNewHabitEventFragment newInstance(String param1, String param2) {
+    public static CreateNewHabitEventFragment newInstance() {
         CreateNewHabitEventFragment fragment = new CreateNewHabitEventFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -106,8 +101,6 @@ public class CreateNewHabitEventFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -174,7 +167,6 @@ public class CreateNewHabitEventFragment extends Fragment {
         return v;
     }
 
-    // TODO: IS THIS METHOD NEEDED? WAS HERE WHEN I STARTED. IF NOT, DELETE
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -193,8 +185,31 @@ public class CreateNewHabitEventFragment extends Fragment {
         Date date = null;
         String comment = "";
         boolean isValidHabitEvent = true;
-        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-        EditText dateEditText = (EditText) getActivity().findViewById(R.id.HabitEventDateEditText);
+        final DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        final EditText dateEditText = (EditText) getActivity().findViewById(R.id.HabitEventDateEditText);
+        dateEditText.setFocusable(false);
+        dateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        dateEditText.setText(sourceFormat.format(calendar.getTime()));
+                    }
+                };
+
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog d = new DatePickerDialog(getActivity(), listener, calendar.get(Calendar.YEAR)
+                        , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                d.getDatePicker().setMaxDate((new Date()).getTime());
+                d.show();
+            }
+        });
+
         EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
