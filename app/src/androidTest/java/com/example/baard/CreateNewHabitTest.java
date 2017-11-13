@@ -102,7 +102,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         Assert.assertTrue(solo.searchText("16/03/2017"));
 
         solo.clickOnText("Mon");
-        Assert.assertTrue(solo.isToggleButtonChecked("Mon")); //made change here
+        Assert.assertTrue(solo.isToggleButtonChecked("Mon"));
 
         // create the habit
         solo.clickOnButton("Create");
@@ -174,7 +174,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         Assert.assertTrue(solo.searchText("16/03/2017"));
 
         solo.clickOnText("Mon");
-        Assert.assertTrue(solo.isToggleButtonChecked("Mon")); //made change here
+        Assert.assertTrue(solo.isToggleButtonChecked("Mon"));
 
         // create the habit
         solo.clickOnButton("Create");
@@ -212,12 +212,50 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnText("Create New Habit");
         solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_create_new_habit);
 
-        // don't fill out anything
+        EditText title = (EditText) solo.getView(R.id.title);
+        EditText reason = (EditText) solo.getView(R.id.reason);
+
+        // don't fill out toggle buttons
+        solo.enterText(title, "Running");
+        Assert.assertTrue(solo.searchText("Running"));
+
+        solo.enterText(reason, "I need to get fit");
+        Assert.assertTrue(solo.searchText("I need to get fit"));
+
+        solo.clickOnEditText(2);
+        solo.setDatePicker(0,2017,2,16);
+        solo.clickOnText("OK");
+        Assert.assertTrue(solo.searchText("16/03/2017"));
+
+        solo.clickOnButton("Create");
+        Assert.assertTrue(solo.searchText("No frequency selected"));
+
+        // don't fill out title
+        solo.clearEditText(title);
+
+        solo.clickOnText("Mon");
+        Assert.assertTrue(solo.isToggleButtonChecked("Mon"));
+
         solo.clickOnButton("Create");
         Assert.assertTrue(solo.searchText("Title of habit is required!"));
+
+        // don't fill out reason
+        solo.clearEditText(reason);
+
+        solo.enterText(title, "Running");
+        Assert.assertTrue(solo.searchText("Running"));
+
+        solo.clickOnButton("Create");
         Assert.assertTrue(solo.searchText("Reason of habit is required!"));
+
+        // don't fill out date
+        solo.clearEditText(2);
+
+        solo.enterText(reason, "I need to get fit");
+        Assert.assertTrue(solo.searchText("I need to get fit"));
+
+        solo.clickOnButton("Create");
         Assert.assertTrue(solo.searchText("Start date is required!"));
-        Assert.assertTrue(solo.searchText("No frequency selected"));
 
         // To log out
         solo.clickOnImage(0);
