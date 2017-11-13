@@ -29,12 +29,6 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
     public ViewHabitTest() throws DataFormatException {
         super(LoginActivity.class);
     }
-//
-//    Date startDate = new Date();
-//    ArrayList<Day> frequency = new ArrayList<>();
-//    Habit habit = new Habit("title", "Reason", startDate, frequency);
-
-
 
     @Override
     protected void setUp() throws Exception {
@@ -63,9 +57,9 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
             solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         }
 
+        // sign the testing user in
         solo.waitForActivity(LoginActivity.class, 2000);
-
-        solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
+        solo.assertCurrentActivity("Should be on login activity",LoginActivity.class);
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
@@ -74,18 +68,20 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         solo.waitForActivity(MainActivity.class, 2000);
 
+        // Go to all habits
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("All Habits");
 
+        // See what the first activity saved is
         TextView textFromList = solo.getText(1);
         System.out.println("text: " + textFromList.getText());
 
         // Now need to click on a habit and test the viewing of the habit.
         ArrayList<TextView> list = solo.clickInList(0);
-        solo.assertCurrentActivity("Wrong Activity", ViewHabitActivity.class);
+        solo.assertCurrentActivity("Should be in view habit activity", ViewHabitActivity.class);
 
         TextView viewHabitName = solo.getText(1);
         System.out.println("Clicked on: " + viewHabitName);
@@ -93,23 +89,13 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         assertTrue(solo.searchText(textFromList.getText().toString()));
         assertEquals(textFromList.getText(), viewHabitName.getText());
 
-        solo.clickOnImage(0);
-        solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-
     }
 
     public void testViewHabitFromCreate() throws Exception {
         Activity activity = getActivity();
+
+        // already logged in as previous test case
+
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -134,7 +120,9 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
-        //Test to see if viewing the correct stuff.g
+        //Test to see if viewing the correct stuff
+
+
 
     }
 }

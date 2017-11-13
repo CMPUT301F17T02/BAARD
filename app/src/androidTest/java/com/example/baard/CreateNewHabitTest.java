@@ -57,8 +57,6 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         // if already logged in, log out to ensure we are on TEST user
         if (!(solo.searchButton("Register", true))) {
             solo.clickOnImage(0);
-//            solo.scrollDown();
-//            solo.clickOnText("Logout");
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -73,7 +71,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         }
 
         // sign the testing user in
-        solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
+        solo.assertCurrentActivity("Should be on login activity",LoginActivity.class);
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
@@ -131,7 +129,10 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnText("Swimming");
         solo.clickOnButton("Delete");
 
+        solo.waitForActivity(MainActivity.class, 2000);
+
         solo.clickOnImage(0);
+//        solo.clickOnText("All Habits");
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
@@ -186,7 +187,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
         // go to main page and check it is in list
         solo.clickOnImage(0);
-        solo.clickOnImage(0);
+//        solo.clickOnText("All Habits");
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
@@ -197,10 +198,6 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         Assert.assertTrue(solo.searchText("Jogging", 1));
 
         // To log out
-//        solo.clickOnImage(0);
-//        solo.scrollDown();
-//        solo.scrollDown();
-//        solo.clickOnText("Logout");
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
