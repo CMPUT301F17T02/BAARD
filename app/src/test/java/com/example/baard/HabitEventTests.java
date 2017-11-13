@@ -81,11 +81,15 @@ public class HabitEventTests {
         assertEquals(habitEvent.getEventDate(), date1);
     }
     @Test
-    public void testSetDate(){
-        Date date2 = new Date();
-        habitEvent.setEventDate(date2);
-        assertNotEquals(habitEvent.getEventDate(), date1);
-        assertEquals(habitEvent.getEventDate(), date2);
+    public void testSetDate() {
+        try {
+            Date date2 = new Date();
+            habitEvent.setEventDate(date2);
+            assertNotEquals(habitEvent.getEventDate(), date1);
+            assertEquals(habitEvent.getEventDate(), date2);
+        } catch (Exception e) {
+            fail();
+        }
     }
     @Test
     public void testGetHabit(){

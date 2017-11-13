@@ -15,6 +15,7 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -128,7 +129,7 @@ public class ElasticSearchController {
 
     public static class GetUserTask extends AsyncTask<String, Void, User> {
         @Override
-        protected User doInBackground(String... parameters) throws RuntimeExecutionException {
+        protected User doInBackground(String... parameters) {
             verifySettings();
 
             User user = null;
@@ -186,6 +187,29 @@ public class ElasticSearchController {
                 Log.e("ESC.GetUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
             return user;
+        }
+    }
+
+    public static class DeleteUserTask extends AsyncTask<User, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(User... users) {
+            for (User user : users) {
+                try {
+                    DocumentResult execute = client.execute(new Delete.Builder(user.getId())
+                                                        .index("cmput301f17t02")
+                                                        .type("User")
+                                                        .build());
+                    if (execute.isSucceeded()) {
+                        Log.i("ESC.DeleteUserTask", "Successfully delete user.");
+                        return Boolean.TRUE;
+                    } else {
+                        Log.i("ESC.DeleteUserTask", "Was not able to delete user.");
+                    }
+                } catch (Exception e) {
+                    Log.e("ESC.DeleteUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                }
+            }
+            return Boolean.FALSE;
         }
     }
 
