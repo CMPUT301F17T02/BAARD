@@ -16,25 +16,25 @@ public class UserListTest extends TestCase {
     UserList userList = new UserList();
 
     public void testGetUser() {
-        User user = new User("Daniel", "daniel.choi123");
+        User user = new User("Daniel", "daniel.choi123", "1");
         userList.add(user);
         assertEquals(user, userList.getUser(0));
     }
 
     public void testHasUser() {
-        User user = new User("Daniel", "daniel.choi123");
+        User user = new User("Daniel", "daniel.choi123", "1");
         userList.add(user);
         assertTrue(userList.hasUser(user));
     }
 
     public void testAdd() {
-        User user = new User("Daniel", "daniel.choi123");
+        User user = new User("Daniel", "daniel.choi123", "1");
         userList.add(user);
         assertEquals(user, userList.getUser(0));
     }
 
     public void testDelete() {
-        User user = new User("Daniel", "daniel.choi123");
+        User user = new User("Daniel", "daniel.choi123", "1");
         userList.add(user);
         userList.delete(user);
         assertFalse(userList.hasUser(user));

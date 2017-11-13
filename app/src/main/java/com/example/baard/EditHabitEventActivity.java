@@ -5,6 +5,7 @@
 package com.example.baard;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -76,8 +79,30 @@ public class EditHabitEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_habit_event);
 
         DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-        EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
+        final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
         dateEdit.setText(formatter.format(habitEvent.getEventDate()));
+        final Calendar calendar = Calendar.getInstance();
+        dateEdit.setFocusable(false);
+        dateEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        dateEdit.setText(sdf.format(calendar.getTime()));
+                    }
+                };
+
+                DatePickerDialog d = new DatePickerDialog(EditHabitEventActivity.this, listener, calendar.get(Calendar.YEAR)
+                        , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                d.getDatePicker().setMaxDate((new Date()).getTime());
+                d.show();
+            }
+        });
 
         EditText commentEdit = (EditText) findViewById(R.id.commentEditText);
         commentEdit.setText(habitEvent.getComment());

@@ -29,6 +29,7 @@ public class HabitTest {
         super();
     }
 
+
     @Test
     public void testGetTitle() {
         String title = "Test Title";
@@ -112,4 +113,5 @@ public class HabitTest {
             fail();
         }
     }
+  
 }

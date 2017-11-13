@@ -12,6 +12,16 @@ package com.example.baard;
  */
 
 public enum Day {
-    SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
-    THURSDAY, FRIDAY, SATURDAY
+    SUNDAY(1), MONDAY(2), TUESDAY(3), WEDNESDAY(4),
+    THURSDAY(5), FRIDAY(6), SATURDAY(7);
+
+    private final int day;
+
+    Day(int day) {
+        this.day = day;
+    }
+
+    public int getValue() {
+        return day;
+    }
 }
