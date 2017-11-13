@@ -21,7 +21,7 @@ public class UserTest extends TestCase {
     private User user;
 
     public void setUp() {
-        user = new User("Daniel", "daniel.choi123");
+        user = new User("Daniel", "daniel.choi123", "id");
     }
 
     public void testGetName() {
@@ -64,28 +64,28 @@ public class UserTest extends TestCase {
 
     public void testGetFriends() {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232"));
+        userList.add(new User("John", "johnSmith232", "id"));
         user.setFriends(userList);
         assertEquals(userList, user.getFriends());
     }
 
     public void testSetFriends() {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232"));
+        userList.add(new User("John", "johnSmith232", "id"));
         user.setFriends(userList);
         assertEquals(userList, user.getFriends());
     }
 
     public void testGetReceivedRequests() {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232"));
+        userList.add(new User("John", "johnSmith232", "id"));
         user.setReceivedRequests(userList);
         assertEquals(userList, user.getReceivedRequests());
     }
 
     public void testSetReceivedRequests() {
         UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232"));
+        userList.add(new User("John", "johnSmith232", "id"));
         user.setReceivedRequests(userList);
         assertEquals(userList, user.getReceivedRequests());
     }

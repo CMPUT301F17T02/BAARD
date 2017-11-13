@@ -30,13 +30,13 @@ import com.robotium.solo.Solo;
  * Created by randi on 11/11/17.
  */
 
-public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     private Solo solo;
     private CreateNewHabitFragment fragment;
 
     public CreateNewHabitTest() throws DataFormatException {
-        super(MainActivity.class);
+        super(LoginActivity.class);
     }
 //
 //    Date startDate = new Date();
@@ -55,11 +55,29 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<MainAct
         Log.d("SETUP","setUp()");
     }
 
+    /** Assumed that the user has already been registered */
     public void testCreate() throws Exception {
-        Activity activity = getActivity();
-        solo.waitForActivity(MainActivity.class, 2000);
 
-        solo.waitForFragmentById(R.layout.fragment_create_new_habit);
+        Activity activity = getActivity();
+
+//        solo.waitForActivity(MainActivity.class, 2000);
+
+//        solo.waitForFragmentById(R.layout.fragment_create_new_habit);
+
+
+        solo.assertCurrentActivity("Wrong activity",LoginActivity.class);
+        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
+        EditText username = (EditText) solo.getView(R.id.username);
+        //EditText name = (EditText) solo.getView(R.id.name);
+        solo.clearEditText(username);
+        //solo.clearEditText(name);
+        solo.enterText(username, "Andrew.M");
+        //solo.enterText(name, "Andrew");
+        //Button loginButton = (Button) solo.getView(R.id.sign_in_button);
+        solo.clickOnButton("Sign in");
+
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
+        //solo.assertCurrentActivity("Wrong activity", MainActivity.class);
 
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -86,8 +104,21 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<MainAct
         solo.isToggleButtonChecked("Mon");
         solo.clickOnButton("Create");
 
-        solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
-        solo.waitForActivity(ViewHabitActivity.class);
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
+        //solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
+
+
+        // This part doesn't work yet
+        solo.clickOnImage(0);
+        solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("Log out");
 
     }
 

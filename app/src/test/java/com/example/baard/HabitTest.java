@@ -59,7 +59,7 @@ public class HabitTest {
         String newReason = "new Reason";
         Habit habit = new Habit("Test Title", "old reason", startDate, array);
         habit.setReason(newReason);
-        assertEquals(habit.getTitle(), newReason);
+        assertEquals(habit.getReason(), newReason);
     }
 
     @Test
