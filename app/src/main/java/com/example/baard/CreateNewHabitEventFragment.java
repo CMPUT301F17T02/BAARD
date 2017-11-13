@@ -69,6 +69,8 @@ public class CreateNewHabitEventFragment extends Fragment {
     private HabitList habits;
     private String imageFilePath;
     private User user = null;
+    DateFormat sourceFormat;
+    EditText dateEditText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -173,29 +175,8 @@ public class CreateNewHabitEventFragment extends Fragment {
             }
         });
 
-        return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    /**
-     * Method called when save button is pressed. Creates a new HabitEvent and adds it to the
-     * HabitEventList of the Habit selected by the Spinner.
-     */
-    public void createHabitEvent(){
-        //validate data fields and save the record BOI
-        //make sure date string is a valid format
-        HabitEvent habitEvent = null;
-        Date date = null;
-        String comment = "";
-        boolean isValidHabitEvent = true;
-        final DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-        final EditText dateEditText = (EditText) getActivity().findViewById(R.id.HabitEventDateEditText);
+        sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateEditText = (EditText) v.findViewById(R.id.HabitEventDateEditText);
         dateEditText.setFocusable(false);
         dateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,6 +199,28 @@ public class CreateNewHabitEventFragment extends Fragment {
                 d.show();
             }
         });
+
+        return v;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    /**
+     * Method called when save button is pressed. Creates a new HabitEvent and adds it to the
+     * HabitEventList of the Habit selected by the Spinner.
+     */
+    public void createHabitEvent(){
+        //validate data fields and save the record BOI
+        //make sure date string is a valid format
+        HabitEvent habitEvent = null;
+        Date date = null;
+        String comment = "";
+        boolean isValidHabitEvent = true;
 
         EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
         try {
