@@ -4,6 +4,7 @@
 
 package com.example.baard;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -27,6 +29,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -115,6 +118,28 @@ public class CreateNewHabitFragment extends Fragment {
         titleText = (EditText) myView.findViewById(R.id.title);
         reasonText = (EditText) myView.findViewById(R.id.reason);
         startDateText = (EditText) myView.findViewById(R.id.startDate);
+        startDateText.setFocusable(false);
+        startDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        startDateText.setText(sdf.format(calendar.getTime()));
+                    }
+                };
+
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog d = new DatePickerDialog(getActivity(), listener, calendar.get(Calendar.YEAR)
+                        , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                d.show();
+            }
+        });
 
         // set the toggle buttons for the days of the week
         setToggleButtons(myView);
@@ -159,11 +184,6 @@ public class CreateNewHabitFragment extends Fragment {
 
                         Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                         intent.putExtra("position", habits.size()-1);
-                        try {
-                            TimeUnit.SECONDS.sleep(2);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         startActivity(intent);
                     } catch (DataFormatException errMsg) {
                         // occurs when title or reason are above their character limits

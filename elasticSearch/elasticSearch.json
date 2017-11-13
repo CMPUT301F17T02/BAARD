@@ -70,7 +70,8 @@
         }
     },
     "settings": {
-        "index.mapper.dynamic": false
+        "index.mapper.dynamic": false,
+        "index.refresh_interval": "100ms"
     }
 }
 
@@ -81,7 +82,8 @@
             "type": "string"
         },
         "username": {
-            "type": "string"
+            "type": "string",
+            "index": "not_analyzed"
         },
         "habits": {
             "type": "nested",

@@ -113,12 +113,6 @@ public class AllHabitsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         user = fc.loadUser(getActivity().getApplicationContext(), username);
         habitList = user.getHabits();
 
@@ -178,4 +172,5 @@ public class AllHabitsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
