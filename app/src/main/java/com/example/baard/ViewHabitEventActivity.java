@@ -4,32 +4,27 @@
 
 package com.example.baard;
 
-import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
 
 /**
  * Activity called when user selects a HabitEvent when viewing all HabitEvents
  */
 public class ViewHabitEventActivity extends AppCompatActivity {
 
+
+    Habit habit;
+    HabitEvent habitEvent;
     /**
      * When created, sets the content of all of its fields to match the given HabitEvent.
      * @param savedInstanceState
@@ -38,13 +33,12 @@ public class ViewHabitEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //pass this habitevent via intent
+        // retrieve Habitevent identifier (date)
         String eventDateString = getIntent().getStringExtra("habitEventDate");
         SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("currentlyViewingHabit", "");
-        Habit habit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
-        HabitEvent habitEvent = null;
+        habit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
 
         for (HabitEvent habitEvent1: habit.getEvents().getArrayList()){
             if (habitEvent1.getEventDate().toString().equals(eventDateString)){
@@ -89,6 +83,8 @@ public class ViewHabitEventActivity extends AppCompatActivity {
      */
     private void deleteHabitEvent(){
         //delete this habit event from the Habit's HabitEventList
+        habit.getEvents().delete(habitEvent);
+        finish();
     }
 
     /**
@@ -96,5 +92,10 @@ public class ViewHabitEventActivity extends AppCompatActivity {
      */
     private void editHabitEvent(){
         //call a new activity for editing this bizz
+        Intent intent = new Intent(this, EditHabitEventActivity.class);
+        //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
+        intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
+        habit.sendToSharedPreferences(getApplicationContext());
+        startActivity(intent);
     }
 }

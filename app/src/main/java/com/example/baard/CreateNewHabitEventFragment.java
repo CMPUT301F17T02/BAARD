@@ -58,14 +58,11 @@ import static android.app.Activity.RESULT_OK;
  * This fragment is used for when creating a new HabitEvent.
  */
 public class CreateNewHabitEventFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final int PICK_IMAGE = 1;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private final FileController fileController = new FileController();
 
-    // TODO: Rename and change types of parameters
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private String mParam1;
     private String mParam2;
@@ -128,14 +125,14 @@ public class CreateNewHabitEventFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_create_new_habit_event, container, false);
 
         // get list of habits from user
-        //FileController fileController = new FileController();
         user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
         habits = user.getHabits();
-        //String [] habits = {"Swimming","Eating","Studying"};
+
         Spinner spinner = (Spinner) v.findViewById(R.id.habitSpinner);
         ArrayAdapter<Habit> adapter = new ArrayAdapter<Habit>(this.getActivity(), android.R.layout.simple_spinner_item, habits.getArrayList());
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner.setAdapter(adapter);
+
         Button locationButton = (Button) v.findViewById(R.id.addLocationButton);
         locationButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -143,6 +140,7 @@ public class CreateNewHabitEventFragment extends Fragment {
                 Toast.makeText(getActivity(), "COMING SOON!", Toast.LENGTH_SHORT).show();
             }
         });
+
         Button imageButton = (Button) v.findViewById(R.id.attachImageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +148,7 @@ public class CreateNewHabitEventFragment extends Fragment {
                 onSelectImageButtonPress(view);
             }
         });
+
         Button createButton = (Button) v.findViewById(R.id.saveButton);
         createButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -157,6 +156,7 @@ public class CreateNewHabitEventFragment extends Fragment {
                 createHabitEvent();
             }
         });
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -170,9 +170,11 @@ public class CreateNewHabitEventFragment extends Fragment {
                 // can this even happen? Do nothing for now.
             }
         });
+
         return v;
     }
 
+    // TODO: IS THIS METHOD NEEDED? WAS HERE WHEN I STARTED. IF NOT, DELETE
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -211,7 +213,6 @@ public class CreateNewHabitEventFragment extends Fragment {
             dateEditText.setError("Invalid date entry:");
             isValidHabitEvent = false;
         }
-        //TODO: make sure there are no HabitEvents on the given date
 
         if (isValidHabitEvent) {
             if (imageFilePath != null){
@@ -263,6 +264,7 @@ public class CreateNewHabitEventFragment extends Fragment {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
+        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
         //if (checkReadPermission() == -1){
         //    return;
        ///}
@@ -323,13 +325,6 @@ public class CreateNewHabitEventFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        //get eerything ready
-        // go super saiyan 3
     }
 
     /**

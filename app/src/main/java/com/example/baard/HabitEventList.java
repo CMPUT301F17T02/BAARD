@@ -31,6 +31,11 @@ public class HabitEventList {
         return events.get(find);
     }
 
+    public void removeHabitEvent(HabitEvent habitEvent){
+        if (events.contains(habitEvent))
+            events.remove(habitEvent);
+    }
+
     public boolean hasHabitEvent(HabitEvent event){
         return events.contains(event);
     }
