@@ -15,9 +15,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -55,20 +59,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         String json = sharedPrefs.getString("username", "");
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
-        // Create pie chart
-        PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
-        pieChart.setUsePercentValues(true);
-
-        ArrayList<PieEntry> yValues = new ArrayList<PieEntry>();
-        yValues.add(new PieEntry(6, "Completed"));
-        yValues.add(new PieEntry(9, "Not Completed"));
-
-        PieDataSet dataset = new PieDataSet(yValues, "# of Habit Events");
-        PieData data = new PieData(dataset);
-
-        pieChart.setData(data);
     }
-
 
     /**
      * Load user
@@ -76,7 +67,6 @@ public class ViewHabitActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
 
         // load required data
         user = fc.loadUser(getApplicationContext(), username);
@@ -92,6 +82,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         reasonView.setText(habit.getReason());
         startDateView.setText(formatter.format(habit.getStartDate()));
         frequencyView.setText(habit.getFrequencyString());
+
+        createPieChart();
     }
 
     /**
@@ -118,4 +110,31 @@ public class ViewHabitActivity extends AppCompatActivity {
         finish();
     }
 
+    private void createPieChart() {
+        // Create pie chart
+        PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
+        pieChart.setHoleRadius(0);
+        pieChart.setTransparentCircleRadius(0);
+        pieChart.setMaxHighlightDistance(0);
+        pieChart.setDragDecelerationFrictionCoef(0.9f);
+        pieChart.getDescription().setEnabled(false);
+
+        ArrayList<PieEntry> yValues = new ArrayList<PieEntry>();
+        yValues.add(new PieEntry((int)6, "Completed"));
+        yValues.add(new PieEntry((int)9, "Not Completed"));
+
+        PieDataSet dataset = new PieDataSet(yValues, "# of Habit Events");
+        dataset.setColors(ColorTemplate.JOYFUL_COLORS);
+        dataset.setSliceSpace(3f);
+        dataset.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return "" + ((int)value);
+            }
+        });
+
+        PieData data = new PieData(dataset);
+        pieChart.setData(data);
+
+    }
 }
