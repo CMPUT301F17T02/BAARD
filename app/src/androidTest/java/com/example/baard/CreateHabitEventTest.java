@@ -84,7 +84,7 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
             solo.clickOnText("December 25, 2016");
             solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
         }
-        solo.clickOnImageButton(0);
+        //solo.clickOnImageButton(0);
         // select create new habit event
         solo.clickOnImageButton(0);
         solo.clickOnText("Create New Habit Event");

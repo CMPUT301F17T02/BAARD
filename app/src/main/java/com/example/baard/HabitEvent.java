@@ -64,6 +64,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
      * @param comment comment describing the habit event
      * @throws DataFormatException throws if comment is over 20 characters
      * @throws IllegalArgumentException throws if date is before habit start date
+     * @throws DateAlreadyExistsException throws if there is a habit event with this date already associated with this habit
      */
     public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException, IllegalArgumentException, DateAlreadyExistsException{
         this.habit = habit;
@@ -81,6 +82,11 @@ public class HabitEvent implements Comparable<HabitEvent> {
         this.eventDate = eventDate;
     }
 
+    /**
+     * Exception thrown when a habit event is created on the same day as another habit event associated with the same habit.
+     * @author amckerna
+     * @version 1.0
+     */
     public class DateAlreadyExistsException extends Exception{
         DateAlreadyExistsException(){}
 
@@ -121,6 +127,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
      * setter for event date
      * @param eventDate
      * @throws IllegalArgumentException throws if event date is before habit start date
+     * @throws DateAlreadyExistsException throws if there is a habit event with this date already associated with this habit
      */
     public void setEventDate(Date eventDate) throws IllegalArgumentException, DateAlreadyExistsException {
         if (habit.getStartDate().after(eventDate)){
@@ -157,6 +164,11 @@ public class HabitEvent implements Comparable<HabitEvent> {
         return null;
     }
 
+    /**
+     * Compares HabitEvents to each other. Calling Collection.sort will sort them in descending order for display on AllHabitEventsFragment
+     * @param habitEvent
+     * @return
+     */
     @Override
     public int compareTo(HabitEvent habitEvent){
         return this.getEventDate().compareTo(habitEvent.getEventDate()) * -1;
