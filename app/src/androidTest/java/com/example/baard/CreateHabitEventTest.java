@@ -21,46 +21,66 @@ import org.junit.Test;
  * Created by chrygore on 11/11/17.
  */
 
-public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     private Solo solo;
-    private MainActivity activity;
+    private LoginActivity activity;
     public CreateHabitEventTest(){
-        super(MainActivity.class);
+        super(LoginActivity.class);
     }
 
 
     @Override
     public void setUp() throws InterruptedException {
-        activity = (MainActivity) getActivity();
+        activity = (LoginActivity) getActivity();
         solo = new Solo(getInstrumentation(), getActivity());
+        // log out if we are logged in for each test
+        if (!(solo.searchButton("Register", true))) {
+            solo.clickOnImage(0);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        }
+        // sign the testing user in
+        solo.assertCurrentActivity("Login activity at start.",LoginActivity.class);
+        //solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
+        EditText username = (EditText) solo.getView(R.id.username);
+        solo.clearEditText(username);
+        solo.enterText(username, "Andrew.M");
+        solo.clickOnButton("Sign in");
+        solo.assertCurrentActivity("In MainActivity after logging in.",MainActivity.class);
+        solo.clickOnImageButton(0);
+        // select create new habit event
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Create New Habit Event");
+        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
+
         Log.d("SETUP","setUp()");
     }
 
+
+
     @Test
     public void testCreateHabitEvent() throws Exception {
-        // this test requires that you are already logged in
-        solo.assertCurrentActivity("In MainActivity at start of test.",MainActivity.class);
-        solo.clickOnImageButton(0);
-        // navigate to "Create HabitEvent"
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
+
+        //select the first item in the spinner (note that this test will fail if there are no habits)
         solo.pressSpinnerItem(0,0);
         Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
         String habitName = spinner.getSelectedItem().toString();
         EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        String dateString = date.getText().toString();
         solo.enterText(date, "25/12/2016");
+        String dateString = date.getText().toString();
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
-        //solo.wait(1000);
         solo.assertCurrentActivity("Now viewing HabitEvent after creation",ViewHabitEventActivity.class);
         solo.searchText("test comment");
         solo.searchText(habitName);
@@ -68,8 +88,16 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<MainA
     }
 
     @Test
-    public void testInvalidInput(){
+    public void testInvalidDateFormat(){
         //solo.something
+        solo.pressSpinnerItem(0,0);
+        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        solo.enterText(date, "December 25, 2017");
+        EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        solo.enterText(comment, "test comment");
+        solo.clickOnView(solo.getView(R.id.saveButton));
+        //solo.searchText();
+
     }
 
 }

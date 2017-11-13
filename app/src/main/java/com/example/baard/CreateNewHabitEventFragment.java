@@ -208,6 +208,10 @@ public class CreateNewHabitEventFragment extends Fragment {
             dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
             isValidHabitEvent = false;
         }
+        catch (HabitEvent.DateAlreadyExistsException x){
+            dateEditText.setError("A HabitEvent already exists on this date.");
+            isValidHabitEvent = false;
+        }
         catch(Exception e){
             //invalid date format
             dateEditText.setError("Invalid date entry:");

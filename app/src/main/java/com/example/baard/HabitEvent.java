@@ -65,7 +65,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
      * @throws DataFormatException throws if comment is over 20 characters
      * @throws IllegalArgumentException throws if date is before habit start date
      */
-    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException, IllegalArgumentException{
+    public HabitEvent(Habit habit, Date eventDate, String comment) throws DataFormatException, IllegalArgumentException, DateAlreadyExistsException{
         this.habit = habit;
         if (comment.length() > 20){
             throw new DataFormatException();
@@ -74,8 +74,19 @@ public class HabitEvent implements Comparable<HabitEvent> {
         if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
         }
-        // TODO: make sure the habit doesnt have any habitevents with this date
+        for (HabitEvent events: habit.getEvents().getArrayList()){
+            if (events.getEventDate().equals(eventDate))
+                throw new DateAlreadyExistsException();
+        }
         this.eventDate = eventDate;
+    }
+
+    public class DateAlreadyExistsException extends Exception{
+        DateAlreadyExistsException(){}
+
+        DateAlreadyExistsException(String message){
+            super(message);
+        }
     }
 
     public Habit getHabit() {
@@ -111,9 +122,13 @@ public class HabitEvent implements Comparable<HabitEvent> {
      * @param eventDate
      * @throws IllegalArgumentException throws if event date is before habit start date
      */
-    public void setEventDate(Date eventDate) throws IllegalArgumentException {
+    public void setEventDate(Date eventDate) throws IllegalArgumentException, DateAlreadyExistsException {
         if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
+        }
+        for (HabitEvent events: habit.getEvents().getArrayList()){
+            if (events.getEventDate().equals(eventDate))
+                throw new DateAlreadyExistsException();
         }
         this.eventDate = eventDate;
     }
