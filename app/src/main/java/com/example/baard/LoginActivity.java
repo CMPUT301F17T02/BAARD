@@ -6,11 +6,15 @@ package com.example.baard;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,10 +22,13 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.w3c.dom.Text;
 
 import java.util.concurrent.ExecutionException;
 
@@ -42,11 +49,23 @@ public class LoginActivity extends AppCompatActivity {
     // UI references.
     private EditText mUsernameView;
     private EditText mNameView;
+    private TextInputLayout usernameText;
+    private TextInputLayout nameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        //Set font for header
+        TextView loginHeader = (TextView) findViewById(R.id.login_header);
+        loginHeader.setTypeface(font);
+        usernameText = (TextInputLayout)  findViewById(R.id.textInputLayout);
+        usernameText.setTypeface(font);
+        nameText = (TextInputLayout)  findViewById(R.id.textInputLayout2);
+        nameText.setTypeface(font);
 
         // Set up the login form
         sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
@@ -56,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         mUsernameView = (EditText) findViewById(R.id.username);
+        mUsernameView.setTypeface(font);
         mUsernameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -66,8 +86,21 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+        mUsernameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                usernameText.setError(null);
+            }
+        });
 
         mNameView = (EditText) findViewById(R.id.name);
+        mNameView.setTypeface(font);
         mNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -76,6 +109,18 @@ public class LoginActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+        mNameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                nameText.setError(null);
             }
         });
 
@@ -87,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setTypeface(font);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,12 +141,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         Button mRegisterButton = (Button) findViewById(R.id.register_button);
+        mRegisterButton.setTypeface(font);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptRegister();
             }
         });
+
     }
 
     /**
@@ -114,8 +162,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Reset errors.
-        mUsernameView.setError(null);
-        mNameView.setError(null);
+        //mUsernameView.setError(null);
+        //mNameView.setError(null);
+        usernameText.setError(null);
+        nameText.setError(null);
 
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
@@ -125,11 +175,13 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for a valid username.
         if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
+            //mUsernameView.setError(getString(R.string.error_field_required));
+            usernameText.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
         } else if (!username.matches("[a-zA-Z0-9_.-]+")) {
-            mUsernameView.setError(getString(R.string.error_invalid_username));
+            //mUsernameView.setError(getString(R.string.error_invalid_username));
+            usernameText.setError(getString(R.string.error_invalid_username));
             focusView = mUsernameView;
             cancel = true;
         }
@@ -160,6 +212,8 @@ public class LoginActivity extends AppCompatActivity {
         // Reset errors.
         mUsernameView.setError(null);
         mNameView.setError(null);
+        usernameText.setError(null);
+        nameText.setError(null);
 
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
@@ -170,18 +224,21 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for a valid name.
         if (TextUtils.isEmpty(name)) {
-            mNameView.setError(getString(R.string.error_field_required));
+            //mNameView.setError(getString(R.string.error_field_required));
+            nameText.setError("This field is required");
             focusView = mNameView;
             cancel = true;
         }
 
         // Check for a valid username.
         if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
+            //mUsernameView.setError(getString(R.string.error_field_required));
+            usernameText.setError("This field is required");
             focusView = mUsernameView;
             cancel = true;
         } else if (!username.matches("[a-zA-Z0-9_.-]+")) {
-            mUsernameView.setError(getString(R.string.error_invalid_username));
+            //mUsernameView.setError(getString(R.string.error_invalid_username));
+            usernameText.setError("This username contains invalid characters");
             focusView = mUsernameView;
             cancel = true;
         }
@@ -276,10 +333,12 @@ public class LoginActivity extends AppCompatActivity {
             if (!success) {
                 mAuthTask = null;
                 if (mName == null) {
-                    mUsernameView.setError(getString(R.string.error_incorrect_username));
+                    usernameText.setError(getString(R.string.error_incorrect_username));
+                    //mUsernameView.setError(getString(R.string.error_incorrect_username));
                     mUsernameView.requestFocus();
                 } else {
-                    mUsernameView.setError(getString(R.string.error_username_exists));
+                    usernameText.setError(getString(R.string.error_username_exists));
+                    //mUsernameView.setError(getString(R.string.error_username_exists));
                     mUsernameView.requestFocus();
                 }
             } else {
