@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity
                     allHabitsFragment,
                     allHabitsFragment.getTag()
             ).commit();
+            setTitle("All Habits");
         } else if (id == R.id.nav_newHabit) {
             // Send user to fragment that allows them to create a new habit
             Toast.makeText(this, "Create New Habit", Toast.LENGTH_SHORT).show();
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitFragment,
                     createNewHabitFragment.getTag()
             ).commit();
+            setTitle("Create New Habit");
         } else if (id == R.id.nav_allHabitEvents) {
             // Send user to fragment that shows a list of all their habit events
             // listed with most recent habit events first
@@ -164,6 +167,7 @@ public class MainActivity extends AppCompatActivity
                     allHabitEventsFragment,
                     allHabitEventsFragment.getTag()
             ).commit();
+            setTitle("Habit Event History");
         } else if (id == R.id.nav_newHabitEvent) {
             // Send user to fragment that allows them to create a new habit event
             Toast.makeText(this, "Create New Habit Event", Toast.LENGTH_SHORT).show();
@@ -174,6 +178,7 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitEventFragment,
                     createNewHabitEventFragment.getTag()
             ).commit();
+            setTitle("Create New Habit Evevnt");
         } else if (id == R.id.nav_viewMap) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {

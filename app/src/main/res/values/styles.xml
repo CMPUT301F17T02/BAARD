@@ -3,17 +3,21 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:textColor">#dddddd</item>
+        <item name="android:textColorSecondary">#dddddd</item>
+        <item name="colorPrimary">#2a244c</item>
+        <item name="colorPrimaryDark">#0f0c29</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
     </style>
 
     <style name="AppTheme.Login">
+        <item name="android:windowBackground">@drawable/login_bg</item>
+        <item name="android:windowSoftInputMode">stateHidden</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorAccent">#dddddd</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:textColor">#cccccc</item>
+        <item name="colorAccent">#ffffff</item>
+        <item name="android:textColor">#dddddd</item>
         <item name="android:buttonStyle">@style/ButtonStyle</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="editTextStyle">@style/EditTextStyle</item>
@@ -27,8 +31,7 @@
 
     <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">#cccccc</item>
-        <item name="android:iconTint">#cccccc</item>
-        <item name="android:backgroundTint">#cccccc</item>
+        <item name="android:backgroundTint">#80aaaaaa</item>
     </style>
 
     <style name="error_appearance" parent="@android:style/TextAppearance">
@@ -37,9 +40,9 @@
     </style>
 
     <style name="AppTheme.MainActivity">
+        <item name="android:windowBackground">@drawable/background</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

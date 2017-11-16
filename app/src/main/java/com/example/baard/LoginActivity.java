@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,11 +58,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
+        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
         //Set font for header
         TextView loginHeader = (TextView) findViewById(R.id.login_header);
-        loginHeader.setTypeface(font);
+        loginHeader.setTypeface(font2);
         usernameText = (TextInputLayout)  findViewById(R.id.textInputLayout);
         usernameText.setTypeface(font);
         nameText = (TextInputLayout)  findViewById(R.id.textInputLayout2);
