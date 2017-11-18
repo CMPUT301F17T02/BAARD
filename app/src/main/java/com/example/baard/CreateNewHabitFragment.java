@@ -8,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,11 +20,14 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -192,8 +196,45 @@ public class CreateNewHabitFragment extends Fragment {
                 }
             }
         });
+
+        changeFont(myView);
         // Inflate the layout for this fragment
         return myView;
+    }
+
+    public void changeFont(View myView) {
+        Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
+
+        // Change font
+        TextView newHabit_title = (TextView) myView.findViewById(R.id.newHabit_title);
+        TextView newHabit_reason = (TextView) myView.findViewById(R.id.newHabit_reason);
+        TextView newHabit_startDate = (TextView) myView.findViewById(R.id.newHabit_startDate);
+        TextView newHabit_daysOfWeek = (TextView) myView.findViewById(R.id.newHabit_daysOfWeek);
+        newHabit_title.setTypeface(ralewayRegular);
+        newHabit_reason.setTypeface(ralewayRegular);
+        newHabit_startDate.setTypeface(ralewayRegular);
+        newHabit_daysOfWeek.setTypeface(ralewayRegular);
+        Button createButton = (Button) myView.findViewById(R.id.create);
+        createButton.setTypeface(ralewayRegular);
+        titleText = (EditText) myView.findViewById(R.id.title);
+        titleText.setTypeface(ralewayRegular);
+        reasonText = (EditText) myView.findViewById(R.id.reason);
+        reasonText.setTypeface(ralewayRegular);
+        startDateText = (EditText) myView.findViewById(R.id.startDate);
+        startDateText.setTypeface(ralewayRegular);
+
+        ArrayList<ToggleButton> toggles = new ArrayList<>();
+        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
+        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
+        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
+        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
+        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
+        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
+
+        for (ToggleButton toggle : toggles) {
+            toggle.setTypeface(ralewayRegular);
+        }
     }
 
     /**

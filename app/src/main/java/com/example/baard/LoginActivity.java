@@ -4,8 +4,10 @@
 
 package com.example.baard;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
@@ -13,18 +15,20 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -58,16 +62,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
-
-        //Set font for header
-        TextView loginHeader = (TextView) findViewById(R.id.login_header);
-        loginHeader.setTypeface(font2);
         usernameText = (TextInputLayout)  findViewById(R.id.textInputLayout);
-        usernameText.setTypeface(font);
         nameText = (TextInputLayout)  findViewById(R.id.textInputLayout2);
-        nameText.setTypeface(font);
 
         // Set up the login form
         sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
@@ -77,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
         String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         mUsernameView = (EditText) findViewById(R.id.username);
-        mUsernameView.setTypeface(font);
         mUsernameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -102,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mNameView = (EditText) findViewById(R.id.name);
-        mNameView.setTypeface(font);
         mNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -134,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mSignInButton.setTypeface(font);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,7 +136,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         Button mRegisterButton = (Button) findViewById(R.id.register_button);
-        mRegisterButton.setTypeface(font);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,6 +143,28 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        changeFont();
+
+    }
+
+    private void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+        Typeface ralewayLight = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Light.ttf");
+
+        TextView loginHeader = (TextView) findViewById(R.id.login_header);
+        loginHeader.setTypeface(ralewayLight);
+
+        usernameText.setTypeface(ralewayRegular);
+        nameText.setTypeface(ralewayRegular);
+
+        mUsernameView.setTypeface(ralewayRegular);
+        mNameView.setTypeface(ralewayRegular);
+
+        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setTypeface(ralewayRegular);
+
+        Button mRegisterButton = (Button) findViewById(R.id.register_button);
+        mRegisterButton.setTypeface(ralewayRegular);
     }
 
     /**
