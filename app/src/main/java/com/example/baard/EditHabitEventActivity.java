@@ -29,8 +29,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -84,7 +82,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
         TextView habitTitle = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
         habitTitle.setText(habit.getTitle());
 
-        DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
         dateEdit.setText(formatter.format(habitEvent.getEventDate()));
         final Calendar calendar = Calendar.getInstance();
@@ -98,7 +96,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
                         dateEdit.setText(sdf.format(calendar.getTime()));
                     }
                 };
@@ -165,10 +163,14 @@ public class EditHabitEventActivity extends AppCompatActivity {
         return permissionCheck;
     }
 
+
     /**
      * Check if the user has allowed the app access to read external storage, and if not, request
      * permission.
-     * @return int representing the status of the permission
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -182,7 +184,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
                 } else {
                     //permission denied
                 }
-                return;
             }
         }
     }
@@ -194,7 +195,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
         Date date;
         String comment;
         boolean isValidHabitEvent = true;
-        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         EditText dateEditText = (EditText) findViewById(R.id.dateEditText);
         EditText commentEditText = (EditText) findViewById(R.id.commentEditText);
         try {
@@ -279,9 +280,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
-            //TextView textView = (TextView) findViewById(R.id.filenameTextView);
             imageFilePath = filePath;
-            //textView.setText(filePath);
             ImageView imageView = (ImageView) findViewById(R.id.imageViewEditEvent);
             imageView.setImageURI(selectedImage);
         }
