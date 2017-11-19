@@ -112,8 +112,7 @@ public class AllHabitEventsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //tell the ViewRecordActivity which list item has been selected and start it
                 Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
-                //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
-                intent.putExtra("habitEventDate",habitEventList.get(i).getEventDate().toString());
+                intent.putExtra("position", i);
                 habitEventList.get(i).getHabit().sendToSharedPreferences(getActivity().getApplicationContext());
                 startActivity(intent);
             }
