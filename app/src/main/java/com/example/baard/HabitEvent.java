@@ -134,6 +134,9 @@ public class HabitEvent implements Comparable<HabitEvent> {
             throw new IllegalArgumentException();
         }
         for (HabitEvent events: habit.getEvents().getArrayList()){
+            if (this.equals(events)) {
+                continue;
+            }
             if (events.getEventDate().equals(eventDate))
                 throw new DateAlreadyExistsException();
         }
