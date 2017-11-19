@@ -21,6 +21,12 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,12 +37,11 @@ import com.google.gson.reflect.TypeToken;
  * create an instance of this fragment.
  */
 public class DailyHabitsFragment extends Fragment {
-    private ListView habitListView;
-    private ArrayAdapter<Habit> adapter;
-    private HabitList habitList;
-    private String username;
-    private User user;
     private FileController fc;
+    private HabitList habitList;
+    private HabitList dailyHabitList;
+    private ListView habitListView;
+    private String username;
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,24 +64,13 @@ public class DailyHabitsFragment extends Fragment {
     }
 
     /**
-     * Starts on create method, could take and store arguments.
-     * @param savedInstanceState
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
-
-    /**
      * Sets the on item click listener such that habits in the list can be accessed by
      * the view screen.
      *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater The layout inflater
+     * @param container Container for the ViewGroup
+     * @param savedInstanceState Bundle of the saved State
+     * @return View of the fragment activity
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,8 +90,10 @@ public class DailyHabitsFragment extends Fragment {
         habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Habit h = dailyHabitList.getHabit(i);
+                int index = habitList.indexOf(h);
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                intent.putExtra("position", i);
+                intent.putExtra("position", index);
                 startActivity(intent);
             }
         });
@@ -112,10 +108,25 @@ public class DailyHabitsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        user = fc.loadUser(getActivity().getApplicationContext(), username);
+        User user = fc.loadUser(getActivity().getApplicationContext(), username);
         habitList = user.getHabits();
 
-        adapter = new ArrayAdapter<Habit>(getActivity(), R.layout.list_item, habitList.getArrayList());
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        String today = sDF.format(date.getTime()).toUpperCase();
+        Day day = Day.valueOf(today);
+
+        dailyHabitList = new HabitList();
+        for (int i = 0; i< habitList.size(); i++) {
+            Habit h = habitList.getHabit(i);
+            ArrayList<Day> freq = h.getFrequency();
+            if (freq.contains(day)) {
+                dailyHabitList.add(h);
+            }
+        }
+
+        ArrayAdapter<Habit> adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, dailyHabitList.getArrayList());
         habitListView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
@@ -123,7 +134,7 @@ public class DailyHabitsFragment extends Fragment {
 
     /**
      * Auto-generated method for fragment
-     * @param context
+     * @param context The context of the application
      */
     @Override
     public void onAttach(Context context) {
