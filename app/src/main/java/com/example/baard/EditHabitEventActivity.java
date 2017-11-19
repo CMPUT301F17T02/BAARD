@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,6 +80,9 @@ public class EditHabitEventActivity extends AppCompatActivity {
         // set the habit so all methods work properly
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_edit_habit_event);
+
+        TextView habitTitle = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
+        habitTitle.setText(habit.getTitle());
 
         DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
         final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
