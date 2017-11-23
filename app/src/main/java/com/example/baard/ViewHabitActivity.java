@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -249,5 +250,15 @@ public class ViewHabitActivity extends AppCompatActivity {
         ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, habitEventList.getArrayList());
         eventsList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        eventsList.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                // Disallow the touch request for parent scroll on touch of child view
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
     }
 }
