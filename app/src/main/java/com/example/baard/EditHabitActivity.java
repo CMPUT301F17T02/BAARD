@@ -95,9 +95,7 @@ public class EditHabitActivity extends AppCompatActivity {
 
                 DatePickerDialog d = new DatePickerDialog(EditHabitActivity.this, listener, calendar.get(Calendar.YEAR)
                                                             , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                if (habit.getEvents().size() > 0) {
-                    d.getDatePicker().setMaxDate(habit.getEvents().getHabitEvent(0).getEventDate().getTime());
-                }
+
                 d.show();
             }
         });
@@ -202,6 +200,17 @@ public class EditHabitActivity extends AppCompatActivity {
             editTextStartDate.setError("Start date is required!");
             properEntry = false;
         }
+        // set the minimum date if it was incorrectly chosen
+        if (habit.getEvents().size() > 0) {
+            Date minDate = habit.getEvents().getHabitEvent(0).getEventDate();
+            if (minDate.before(convertedStartDate)) {
+                editTextStartDate.setError("Day cannot start after first event");
+                Toast.makeText(this, "Day cannot start after first event", Toast.LENGTH_LONG).show();
+                editTextStartDate.setText(formatter.format(minDate.getTime()));
+                properEntry = false;
+            }
+        }
+
         if (frequency.size() < 1) {
             Toast.makeText(this, "No frequency selected", Toast.LENGTH_SHORT).show();
             properEntry = false;
