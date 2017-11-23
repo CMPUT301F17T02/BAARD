@@ -25,7 +25,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
-        CreateNewHabitEventFragment.OnFragmentInteractionListener {
+        CreateNewHabitEventFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener {
 
     /**
      * On create method for entire activity. Sets up navigation and listener for fragments
@@ -179,7 +179,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_viewFriends) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            // Send user to fragment that allows them to create a new habit event
+            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            SettingsFragment settingsFragment = SettingsFragment.newInstance();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    settingsFragment,
+                    settingsFragment.getTag()
+            ).commit();
         } else if (id == R.id.nav_logout) {
             // End this session and take users back to the login screen
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
