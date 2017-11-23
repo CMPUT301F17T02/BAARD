@@ -221,6 +221,30 @@ public class ElasticSearchController {
         }
     }
 
+    public static class DeleteUserTask extends AsyncTask<User, Void, Void> {
+        protected Void doInBackground(User... users) {
+            verifySettings();
+
+            for (User user : users) {
+                try {
+                    DocumentResult result = client.execute(new Delete.Builder(user.getId())
+                            .index("cmput301f17t02")
+                            .type("User")
+                            .build());
+                   if (result.isSucceeded()) {
+                       Log.i("ESC.DeleteUserTask", "The user was delete successfully.");
+                   } else {
+                       Log.e("ESC.DeleteUserTask", "Failed to delete user.");
+                   }
+                } catch (Exception e) {
+                    Log.e("ESC.UpdateUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                }
+
+            }
+
+            return null;
+        }
+    }
 
     /**
      * Checks if the client is connected to the server with the right configuration.

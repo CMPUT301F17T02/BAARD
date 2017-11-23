@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -35,6 +36,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -163,7 +166,7 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the line chart of events to be displayed
      */
     private void createLineChart() {
-        ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionVsTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
+        final ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionVsTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
 
         // Create Line Chart
         LineChart lineChart = (LineChart) findViewById(R.id.habit_lineChart);
@@ -180,11 +183,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         for (HabitStatistics.HabitCompletionVsTimeData data : habitCompletionVsTimesData) {
             yValues.add(new Entry(data.time, data.habitCompletion));
         }
-        yValues.add(new Entry(0f, 4f));
-        yValues.add(new Entry(1f, 4f));
-        yValues.add(new Entry(2f, 4f));
 
-        LineDataSet set1 = new LineDataSet(yValues, "DataRed Set 1");
+        LineDataSet set1 = new LineDataSet(yValues, "DataSet");
 
         set1.setColor(Color.BLACK);
         set1.setLineWidth(1f);
@@ -215,6 +215,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         public String getFormattedValue(float value, AxisBase axis) {
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
             Calendar calendar = Calendar.getInstance();
+            Log.d("LineChart", Float.toString(value));
             calendar.setTimeInMillis((long)value);
 
             return sdf.format(calendar.getTime());
