@@ -131,6 +131,11 @@ public class EditHabitEventActivity extends AppCompatActivity {
                 saveChanges();
             }
         });
+
+        ImageView image = (ImageView) findViewById(R.id.imageViewEditEvent);
+        if (habitEvent.getImageBitmap() != null) {
+            image.setImageBitmap(habitEvent.getImageBitmap());
+        }
     }
 
     /**
