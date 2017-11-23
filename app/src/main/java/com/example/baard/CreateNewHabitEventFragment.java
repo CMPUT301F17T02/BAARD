@@ -196,6 +196,7 @@ public class CreateNewHabitEventFragment extends Fragment {
                 DatePickerDialog d = new DatePickerDialog(getActivity(), listener, calendar.get(Calendar.YEAR)
                         , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 d.getDatePicker().setMaxDate((new Date()).getTime());
+                d.getDatePicker().setMinDate(habit.getStartDate().getTime());
                 d.show();
             }
         });
