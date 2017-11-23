@@ -52,7 +52,7 @@ public class ViewHabitEventActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        System.out.println();
+
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
         TextView date = (TextView) findViewById(R.id.HabitEventDate);
@@ -82,14 +82,18 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Runs when returning from editEvent Activity
+     * @param requestCode code provided by view activity
+     * @param resultCode code provided by edit activity
+     * @param data intent passed backwards
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("In Activity Result function!");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 String eventDateString = data.getStringExtra("habitEventDate");
-                System.out.println("Result ok inside activity result");
                 fetchHabitEvent(eventDateString);
             }
         }
