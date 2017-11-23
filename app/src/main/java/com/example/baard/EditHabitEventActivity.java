@@ -79,7 +79,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_edit_habit_event);
 
-        DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
         dateEdit.setText(formatter.format(habitEvent.getEventDate()));
         final Calendar calendar = Calendar.getInstance();
