@@ -125,13 +125,13 @@ public class EditHabitEventActivity extends AppCompatActivity {
             }
         });
 
-        Button saveButton = (Button) findViewById(R.id.saveChangesButton);
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                saveChanges();
-            }
-        });
+//        Button saveButton = (Button) findViewById(R.id.saveChangesButton);
+//        saveButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                saveChanges();
+//            }
+//        });
     }
 
     /**
@@ -186,7 +186,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     /**
      * Save the changes made by the user to this HabitEvent. Checks for errors if the user entered invalid information.
      */
-    public void saveChanges() {
+    public void saveChanges(View view) {
         Date date;
         String comment;
         boolean isValidHabitEvent = true;
