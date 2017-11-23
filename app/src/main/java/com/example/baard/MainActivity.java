@@ -31,7 +31,7 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
-        CreateNewHabitEventFragment.OnFragmentInteractionListener {
+        CreateNewHabitEventFragment.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener {
 
     /**
      * On create method for entire activity. Sets up navigation and listener for fragments
@@ -64,12 +64,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // view all habits -- front screen to view
-        AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance();
+        DailyHabitsFragment dailyHabitsFragment = DailyHabitsFragment.newInstance();
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(
                 R.id.relativelayout_for_fragment,
-                allHabitsFragment,
-                allHabitsFragment.getTag()
+                dailyHabitsFragment,
+                dailyHabitsFragment.getTag()
         ).commit();
 
         changeFont();
@@ -147,7 +147,16 @@ public class MainActivity extends AppCompatActivity
         TextView title = (TextView) findViewById(R.id.toolbar_title);
 
         if (id == R.id.nav_dailyHabits) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            // Send user to fragment that shows list of all their daily habits
+            // They can view, edit, and delete a habit once they click on a habit in this list
+            Toast.makeText(this, "Daily Habits", Toast.LENGTH_SHORT).show();
+            DailyHabitsFragment dailyHabitsFragment = DailyHabitsFragment.newInstance();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(
+                    R.id.relativelayout_for_fragment,
+                    dailyHabitsFragment,
+                    dailyHabitsFragment.getTag()
+            ).commit();
         }
         else if (id == R.id.nav_allHabits) {
             // Send user to fragment that shows list of all their habits

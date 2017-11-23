@@ -31,6 +31,10 @@ public class HabitList {
         return habits.contains(habit);
     }
 
+    public int indexOf(Habit habit) {
+        return habits.indexOf(habit);
+    }
+
     public void add(Habit habit) {
         habits.add(habit);
     }

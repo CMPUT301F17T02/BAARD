@@ -79,7 +79,15 @@ public class EditHabitEventActivity extends AppCompatActivity {
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_edit_habit_event);
 
-        DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+        ImageView image = (ImageView) findViewById(R.id.imageViewEditEvent);
+            if (habitEvent.getImageBitmap() != null) {
+                image.setImageBitmap(habitEvent.getImageBitmap());
+            }
+
+        TextView habitTitle = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
+        habitTitle.setText(habit.getTitle());
+
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
         dateEdit.setText(formatter.format(habitEvent.getEventDate()));
         final Calendar calendar = Calendar.getInstance();
@@ -93,7 +101,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
                         dateEdit.setText(sdf.format(calendar.getTime()));
                     }
                 };
@@ -101,6 +109,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
                 DatePickerDialog d = new DatePickerDialog(EditHabitEventActivity.this, listener, calendar.get(Calendar.YEAR)
                         , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 d.getDatePicker().setMaxDate((new Date()).getTime());
+                d.getDatePicker().setMinDate(habit.getStartDate().getTime());
                 d.show();
             }
         });
@@ -124,13 +133,13 @@ public class EditHabitEventActivity extends AppCompatActivity {
             }
         });
 
-        Button saveButton = (Button) findViewById(R.id.saveChangesButton);
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                saveChanges();
-            }
-        });
+//        Button saveButton = (Button) findViewById(R.id.saveChangesButton);
+//        saveButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                saveChanges();
+//            }
+//        });
     }
 
     /**
@@ -163,7 +172,10 @@ public class EditHabitEventActivity extends AppCompatActivity {
     /**
      * Check if the user has allowed the app access to read external storage, and if not, request
      * permission.
-     * @return int representing the status of the permission
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -177,7 +189,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
                 } else {
                     //permission denied
                 }
-                return;
             }
         }
     }
@@ -185,11 +196,11 @@ public class EditHabitEventActivity extends AppCompatActivity {
     /**
      * Save the changes made by the user to this HabitEvent. Checks for errors if the user entered invalid information.
      */
-    public void saveChanges() {
+    public void saveChanges(View view) {
         Date date;
         String comment;
         boolean isValidHabitEvent = true;
-        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         EditText dateEditText = (EditText) findViewById(R.id.dateEditText);
         EditText commentEditText = (EditText) findViewById(R.id.commentEditText);
         try {
@@ -278,9 +289,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
-            //TextView textView = (TextView) findViewById(R.id.filenameTextView);
             imageFilePath = filePath;
-            //textView.setText(filePath);
             ImageView imageView = (ImageView) findViewById(R.id.imageViewEditEvent);
             imageView.setImageURI(selectedImage);
         }

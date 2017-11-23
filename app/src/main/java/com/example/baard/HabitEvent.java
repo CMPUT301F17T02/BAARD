@@ -52,6 +52,8 @@ public class HabitEvent implements Comparable<HabitEvent> {
         //this.habitTitle = habit.getTitle();
         if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
+        } else if (eventDate.after(new Date())) {
+            throw new IllegalArgumentException();
         }
         // TODO: make sure the habit doesnt have any habitevents with this date
         this.eventDate = eventDate;
@@ -73,6 +75,8 @@ public class HabitEvent implements Comparable<HabitEvent> {
         }
         this.comment = comment;
         if (habit.getStartDate().after(eventDate)){
+            throw new IllegalArgumentException();
+        } else if (eventDate.after(new Date())) {
             throw new IllegalArgumentException();
         }
         for (HabitEvent events: habit.getEvents().getArrayList()){
@@ -132,8 +136,13 @@ public class HabitEvent implements Comparable<HabitEvent> {
     public void setEventDate(Date eventDate) throws IllegalArgumentException, DateAlreadyExistsException {
         if (habit.getStartDate().after(eventDate)){
             throw new IllegalArgumentException();
+        } else if (eventDate.after(new Date())) {
+            throw new IllegalArgumentException();
         }
         for (HabitEvent events: habit.getEvents().getArrayList()){
+            if (this.equals(events)) {
+                continue;
+            }
             if (events.getEventDate().equals(eventDate))
                 throw new DateAlreadyExistsException();
         }

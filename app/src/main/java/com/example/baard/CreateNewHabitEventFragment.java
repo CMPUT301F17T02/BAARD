@@ -39,6 +39,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
@@ -69,6 +70,8 @@ public class CreateNewHabitEventFragment extends Fragment {
     private HabitList habits;
     private String imageFilePath;
     private User user = null;
+    private DateFormat sourceFormat;
+    private EditText dateEditText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -173,6 +176,36 @@ public class CreateNewHabitEventFragment extends Fragment {
             }
         });
 
+        sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateEditText = (EditText) v.findViewById(R.id.HabitEventDateEditText);
+        dateEditText.setFocusable(false);
+        dateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        dateEditText.setText(sourceFormat.format(calendar.getTime()));
+                    }
+                };
+
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog d = new DatePickerDialog(getActivity(), listener, calendar.get(Calendar.YEAR)
+                        , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                if (habit.getStartDate().before(new Date())) {
+                    d.getDatePicker().setMaxDate((new Date()).getTime());
+                    d.getDatePicker().setMinDate(habit.getStartDate().getTime());
+                    d.show();
+                } else {
+                    Toast.makeText(getActivity(), "Habit's start date is in the future, please choose another habit", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         return v;
     }
 
@@ -194,30 +227,6 @@ public class CreateNewHabitEventFragment extends Fragment {
         Date date = null;
         String comment = "";
         boolean isValidHabitEvent = true;
-        final DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-        final EditText dateEditText = (EditText) getActivity().findViewById(R.id.HabitEventDateEditText);
-        dateEditText.setFocusable(false);
-        dateEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, month);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateEditText.setText(sourceFormat.format(calendar.getTime()));
-                    }
-                };
-
-                Calendar calendar = Calendar.getInstance();
-                DatePickerDialog d = new DatePickerDialog(getActivity(), listener, calendar.get(Calendar.YEAR)
-                        , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                d.getDatePicker().setMaxDate((new Date()).getTime());
-                d.show();
-            }
-        });
 
         EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
         try {
@@ -229,16 +238,17 @@ public class CreateNewHabitEventFragment extends Fragment {
             isValidHabitEvent = false;
         }
         catch (IllegalArgumentException i){
-            dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
+            dateEditText.setError("Invalid date entry");
+            Toast.makeText(getActivity(), "Invalid date entry", Toast.LENGTH_LONG).show();
             isValidHabitEvent = false;
         }
         catch (HabitEvent.DateAlreadyExistsException x){
-            dateEditText.setError("A HabitEvent already exists on this date.");
+            dateEditText.setError("A HabitEvent already exists on this date");
+            Toast.makeText(getActivity(), "A HabitEvent already exists on this date", Toast.LENGTH_LONG).show();
             isValidHabitEvent = false;
-        }
-        catch(Exception e){
-            //invalid date format
-            dateEditText.setError("Invalid date entry:");
+        } catch (ParseException e) {
+            dateEditText.setError("Please choose another habit");
+            Toast.makeText(getActivity(), "Please choose another habit", Toast.LENGTH_LONG).show();
             isValidHabitEvent = false;
         }
 

@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -96,6 +97,20 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         createPieChart();
         createLineChart();
+    }
+
+    /**
+     * Ensures the app returns to the proper fragment of main when back pressed
+     * @param item the menu item of the toolbar (only home in this case)
+     * @return boolean
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
