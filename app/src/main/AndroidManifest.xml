@@ -11,11 +11,10 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--
-         The WRITE_EXTERNAL_STORAGE permissions are to ensure images are saved and written correctly
-    -->
+    <!--          The WRITE_EXTERNAL_STORAGE permissions are to ensure images are saved and written correctly -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -58,18 +57,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
-        <activity android:name=".ViewHabitEventActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".EditHabitEventActivity"
-            android:parentActivityName=".ViewHabitEventActivity"></activity>
-
-        <activity android:name=".EditHabitActivity"
+        <activity
+            android:name=".ViewHabitEventActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".EditHabitEventActivity"
+            android:parentActivityName=".ViewHabitEventActivity" />
+        <activity
+            android:name=".EditHabitActivity"
             android:parentActivityName=".ViewHabitActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ViewHabitActivity" />
         </activity>
+        <activity
+            android:name=".ExploreFriends"
+            android:label="@string/title_activity_explore_friends"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

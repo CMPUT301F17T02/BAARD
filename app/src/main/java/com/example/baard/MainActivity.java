@@ -4,6 +4,7 @@
 
 package com.example.baard;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
-        CreateNewHabitEventFragment.OnFragmentInteractionListener, ExploreFriends.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener {
+        CreateNewHabitEventFragment.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener {
 
     /**
      * On create method for entire activity. Sets up navigation and listener for fragments
@@ -186,15 +187,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_viewMap) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
-            // Send user to fragment that allows them to create a new habit event
-            Toast.makeText(this, "Explore Friends", Toast.LENGTH_SHORT).show();
-            ExploreFriends exploreFriendsFragment = ExploreFriends.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relativelayout_for_fragment,
-                    exploreFriendsFragment,
-                    exploreFriendsFragment.getTag()
-            ).commit();
+            Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
+            startActivity(intent);
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
