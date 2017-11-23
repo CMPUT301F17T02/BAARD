@@ -69,8 +69,8 @@ public class CreateNewHabitEventFragment extends Fragment {
     private HabitList habits;
     private String imageFilePath;
     private User user = null;
-    DateFormat sourceFormat;
-    EditText dateEditText;
+    private DateFormat sourceFormat;
+    private EditText dateEditText;
 
     private OnFragmentInteractionListener mListener;
 
