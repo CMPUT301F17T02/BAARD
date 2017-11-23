@@ -163,7 +163,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
         return permissionCheck;
     }
 
-
     /**
      * Check if the user has allowed the app access to read external storage, and if not, request
      * permission.
@@ -226,6 +225,10 @@ public class EditHabitEventActivity extends AppCompatActivity {
             Collections.sort(habit.getEvents().getArrayList());
             fileController.saveUser(getApplicationContext(), user);
             habit.sendToSharedPreferences(getApplicationContext());
+            // go to view habitevent activity
+            Intent intent = new Intent(this, ViewHabitEventActivity.class);
+            intent.putExtra("habitEventDate", habitEvent.getEventDate().toString());
+            startActivity(intent);
             finish();
         }
     }

@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,9 +18,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -32,57 +28,41 @@ import java.util.Locale;
  */
 public class ViewHabitEventActivity extends AppCompatActivity {
 
-    private int position;
-    private List<HabitEvent> habitEventList = new ArrayList<>();
+
     private Habit habit;
     private HabitEvent habitEvent;
-    private FileController fileController;
+    private final FileController fileController = new FileController();
     private User user;
-
     /**
      * When created, sets the content of all of its fields to match the given HabitEvent.
      * @param savedInstanceState
      */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_habit_event);
-
-        fileController = new FileController();
-
-        // grab the index of the item in the list
-        Bundle extras = getIntent().getExtras();
-        position = extras.getInt("position");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         user = fileController.loadUser(getApplicationContext(), getUsername());
-//        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        Gson gson = new Gson();
-//        String json = sharedPrefs.getString("currentlyViewingHabit", "");
-//        Habit loadHabit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
-//
-//        for (Habit habits: user.getHabits().getArrayList()){
-//            if (habits.getTitle().equals(loadHabit.getTitle())){
-//                habit = habits;
-//                break;
-//            }
-//        }
+        // retrieve Habitevent identifier (date)
+        String eventDateString = getIntent().getStringExtra("habitEventDate");
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("currentlyViewingHabit", "");
+        Habit loadHabit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
 
-        habitEventList.clear();
-        for (Habit habit: user.getHabits().getArrayList()) {
-            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
-                habitEvent.setHabit(habit);
-                habitEventList.add(habitEvent);
+        for (Habit habits: user.getHabits().getArrayList()){
+            if (habits.getTitle().equals(loadHabit.getTitle())){
+                habit = habits;
             }
         }
-        Collections.sort(habitEventList);
-
-        habitEvent = habitEventList.get(position);
-        habit = habitEvent.getHabit();
+        for (HabitEvent habitEvent1: habit.getEvents().getArrayList()){
+            if (habitEvent1.getEventDate().toString().equals(eventDateString)){
+                habitEvent = habitEvent1;
+                break;
+            }
+        }
+        // set the habit so all methods work properly
+        habitEvent.setHabit(habit);
+        setContentView(R.layout.activity_view_habit_event);
 
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
@@ -143,14 +123,5 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
         habit.sendToSharedPreferences(getApplicationContext());
         startActivity(intent);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
