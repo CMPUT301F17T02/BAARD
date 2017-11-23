@@ -39,6 +39,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
@@ -233,16 +234,16 @@ public class CreateNewHabitEventFragment extends Fragment {
             isValidHabitEvent = false;
         }
         catch (IllegalArgumentException i){
-            dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
+            dateEditText.setError("Invalid date entry");
+            Toast.makeText(getActivity(), "Invalid date entry", Toast.LENGTH_LONG).show();
             isValidHabitEvent = false;
         }
         catch (HabitEvent.DateAlreadyExistsException x){
-            dateEditText.setError("A HabitEvent already exists on this date.");
+            dateEditText.setError("A HabitEvent already exists on this date");
+            Toast.makeText(getActivity(), "A HabitEvent already exists on this date", Toast.LENGTH_LONG).show();
             isValidHabitEvent = false;
-        }
-        catch(Exception e){
-            //invalid date format
-            dateEditText.setError("Invalid date entry:");
+        } catch (ParseException e) {
+            e.printStackTrace();
             isValidHabitEvent = false;
         }
 
