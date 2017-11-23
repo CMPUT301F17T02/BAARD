@@ -196,9 +196,13 @@ public class CreateNewHabitEventFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance();
                 DatePickerDialog d = new DatePickerDialog(getActivity(), listener, calendar.get(Calendar.YEAR)
                         , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                d.getDatePicker().setMaxDate((new Date()).getTime());
-                d.getDatePicker().setMinDate(habit.getStartDate().getTime());
-                d.show();
+                if (habit.getStartDate().before(new Date())) {
+                    d.getDatePicker().setMaxDate((new Date()).getTime());
+                    d.getDatePicker().setMinDate(habit.getStartDate().getTime());
+                    d.show();
+                } else {
+                    Toast.makeText(getActivity(), "Habit's start date is in the future, please choose another habit", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -243,7 +247,8 @@ public class CreateNewHabitEventFragment extends Fragment {
             Toast.makeText(getActivity(), "A HabitEvent already exists on this date", Toast.LENGTH_LONG).show();
             isValidHabitEvent = false;
         } catch (ParseException e) {
-            e.printStackTrace();
+            dateEditText.setError("Please choose another habit");
+            Toast.makeText(getActivity(), "Please choose another habit", Toast.LENGTH_LONG).show();
             isValidHabitEvent = false;
         }
 
