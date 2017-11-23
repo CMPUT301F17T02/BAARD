@@ -75,6 +75,7 @@ public class SettingsFragment extends Fragment {
         user = fc.loadUser(getActivity().getApplicationContext(), username);
 
         Button deleteButton = myView.findViewById(R.id.delete);
+        Button editButton = myView.findViewById(R.id.edit);
         TextView nameView = myView.findViewById(R.id.name);
         TextView userNameView = myView.findViewById(R.id.username);
 
@@ -88,6 +89,12 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        editButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Toast.makeText(getActivity(), "COMING SOON", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Inflate the layout for this fragment
         return myView;
