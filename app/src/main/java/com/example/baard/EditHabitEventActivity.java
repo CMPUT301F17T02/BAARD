@@ -79,7 +79,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_edit_habit_event);
 
-        DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
         dateEdit.setText(formatter.format(habitEvent.getEventDate()));
         final Calendar calendar = Calendar.getInstance();
@@ -101,6 +101,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
                 DatePickerDialog d = new DatePickerDialog(EditHabitEventActivity.this, listener, calendar.get(Calendar.YEAR)
                         , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 d.getDatePicker().setMaxDate((new Date()).getTime());
+                d.getDatePicker().setMinDate(habit.getStartDate().getTime());
                 d.show();
             }
         });
@@ -124,13 +125,13 @@ public class EditHabitEventActivity extends AppCompatActivity {
             }
         });
 
-        Button saveButton = (Button) findViewById(R.id.saveChangesButton);
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                saveChanges();
-            }
-        });
+//        Button saveButton = (Button) findViewById(R.id.saveChangesButton);
+//        saveButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                saveChanges();
+//            }
+//        });
     }
 
     /**
@@ -185,7 +186,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     /**
      * Save the changes made by the user to this HabitEvent. Checks for errors if the user entered invalid information.
      */
-    public void saveChanges() {
+    public void saveChanges(View view) {
         Date date;
         String comment;
         boolean isValidHabitEvent = true;
