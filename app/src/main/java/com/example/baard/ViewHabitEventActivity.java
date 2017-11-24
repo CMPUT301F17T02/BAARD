@@ -38,32 +38,21 @@ public class ViewHabitEventActivity extends AppCompatActivity {
      * When created, sets the content of all of its fields to match the given HabitEvent.
      * @param savedInstanceState
      */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = fileController.loadUser(getApplicationContext(), getUsername());
+
         // retrieve Habitevent identifier (date)
         String eventDateString = getIntent().getStringExtra("habitEventDate");
-        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
-        String json = sharedPrefs.getString("currentlyViewingHabit", "");
-        Habit loadHabit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
 
-        for (Habit habits: user.getHabits().getArrayList()){
-            if (habits.getTitle().equals(loadHabit.getTitle())){
-                habit = habits;
-            }
-        }
-        for (HabitEvent habitEvent1: habit.getEvents().getArrayList()){
-            if (habitEvent1.getEventDate().toString().equals(eventDateString)){
-                habitEvent = habitEvent1;
-                break;
-            }
-        }
-        // set the habit so all methods work properly
-        habitEvent.setHabit(habit);
+        fetchHabitEvent(eventDateString);
+
         setContentView(R.layout.activity_view_habit_event);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
@@ -104,6 +93,23 @@ public class ViewHabitEventActivity extends AppCompatActivity {
     }
 
     /**
+     * Runs when returning from editEvent Activity
+     * @param requestCode code provided by view activity
+     * @param resultCode code provided by edit activity
+     * @param data intent passed backwards
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String eventDateString = data.getStringExtra("habitEventDate");
+                fetchHabitEvent(eventDateString);
+            }
+        }
+    }
+
+    /**
      * returns the username of the user stored in SharedPreferences
      * @return username
      */
@@ -113,6 +119,30 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         String json = sharedPrefs.getString("username", "");
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
     }
+
+    private void fetchHabitEvent(String eventDateString) {
+        user = fileController.loadUser(getApplicationContext(), getUsername());
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("currentlyViewingHabit", "");
+        Habit loadHabit = gson.fromJson(json, new TypeToken<Habit>() {
+        }.getType());
+
+        for (Habit habits : user.getHabits().getArrayList()) {
+            if (habits.getTitle().equals(loadHabit.getTitle())) {
+                habit = habits;
+            }
+        }
+        for (HabitEvent habitEvents : habit.getEvents().getArrayList()) {
+            if (habitEvents.getEventDate().toString().equals(eventDateString)) {
+                habitEvent = habitEvents;
+                break;
+            }
+        }
+        // set the habit so all methods work properly
+        habitEvent.setHabit(habit);
+    }
+
     /**
      * Deletes the viewed HabitEvent from the Habit's HabitEventList and finishes the ViewHabitEventActivity
      */
@@ -132,6 +162,6 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
         intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
         habit.sendToSharedPreferences(getApplicationContext());
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
 }

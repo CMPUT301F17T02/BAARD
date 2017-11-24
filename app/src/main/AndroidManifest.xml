@@ -74,7 +74,12 @@
         <activity
             android:name=".ExploreFriends"
             android:label="@string/title_activity_explore_friends"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoTitle.Transulcent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.baard.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
