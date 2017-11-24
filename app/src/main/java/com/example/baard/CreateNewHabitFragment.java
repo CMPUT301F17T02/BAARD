@@ -8,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,11 +20,14 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -52,6 +56,8 @@ public class CreateNewHabitFragment extends Fragment {
     private ArrayList<Day> frequency = new ArrayList<>();
     private HabitList habits;
     private HashSet<String> habitNames = new HashSet<>();
+    private FileController fc;
+    private User user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -106,8 +112,8 @@ public class CreateNewHabitFragment extends Fragment {
         String json = sharedPrefs.getString("username", "");
         String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
-        final FileController fc = new FileController();
-        final User user = fc.loadUser(getActivity().getApplicationContext(), username);
+        fc = new FileController();
+        user = fc.loadUser(getActivity().getApplicationContext(), username);
         habits = user.getHabits();
 
         for (int i = 0; i < habits.size(); i++) {
@@ -148,52 +154,48 @@ public class CreateNewHabitFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Boolean properEntry = true;
-                String title_text = titleText.getText().toString();
-                String reason = reasonText.getText().toString();
-                Date convertedStartDate = convertDate(startDateText.getText().toString());
-
-                // throw errors if the user does not input into the mandatory fields
-                if (title_text.equals("")) {
-                    titleText.setError("Title of habit is required!");
-                    properEntry = false;
-                } else if (habitNames.contains(title_text.toLowerCase())) {
-                    titleText.setError("Title of habit must be unique!");
-                    properEntry = false;
-                }
-                if (reason.equals("")) {
-                    reasonText.setError("Reason for habit is required!");
-                    properEntry = false;
-                }
-                if (convertedStartDate == null) {
-                    startDateText.setError("Start date is required!");
-                    properEntry = false;
-                }
-                if (frequency.size() < 1) {
-                    Toast.makeText(getActivity(), "No frequency selected", Toast.LENGTH_LONG).show();
-                    properEntry = false;
-                }
-
-                // if all of the values are entered try to save
-                if (properEntry) {
-                    try {
-                        Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
-                        habits.add(habit);
-
-                        fc.saveUser(getActivity().getApplicationContext(), user);
-
-                        Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                        intent.putExtra("position", habits.size()-1);
-                        startActivity(intent);
-                    } catch (DataFormatException errMsg) {
-                        // occurs when title or reason are above their character limits
-                        Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
+                createHabit();
             }
         });
+
+        changeFont(myView);
         // Inflate the layout for this fragment
         return myView;
+    }
+
+    public void changeFont(View myView) {
+        Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
+
+        // Change font
+        TextView newHabit_title = (TextView) myView.findViewById(R.id.newHabit_title);
+        TextView newHabit_reason = (TextView) myView.findViewById(R.id.newHabit_reason);
+        TextView newHabit_startDate = (TextView) myView.findViewById(R.id.newHabit_startDate);
+        TextView newHabit_daysOfWeek = (TextView) myView.findViewById(R.id.newHabit_daysOfWeek);
+        newHabit_title.setTypeface(ralewayRegular);
+        newHabit_reason.setTypeface(ralewayRegular);
+        newHabit_startDate.setTypeface(ralewayRegular);
+        newHabit_daysOfWeek.setTypeface(ralewayRegular);
+        Button createButton = (Button) myView.findViewById(R.id.create);
+        createButton.setTypeface(ralewayRegular);
+        titleText = (EditText) myView.findViewById(R.id.title);
+        titleText.setTypeface(ralewayRegular);
+        reasonText = (EditText) myView.findViewById(R.id.reason);
+        reasonText.setTypeface(ralewayRegular);
+        startDateText = (EditText) myView.findViewById(R.id.startDate);
+        startDateText.setTypeface(ralewayRegular);
+
+        ArrayList<ToggleButton> toggles = new ArrayList<>();
+        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
+        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
+        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
+        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
+        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
+        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
+
+        for (ToggleButton toggle : toggles) {
+            toggle.setTypeface(ralewayRegular);
+        }
     }
 
     /**
@@ -204,6 +206,55 @@ public class CreateNewHabitFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    /**
+     * Method called when save button is pressed. Creates a new Habit and adds it to the
+     * user's list.
+     */
+    public void createHabit() {
+        Boolean properEntry = true;
+        String title_text = titleText.getText().toString();
+        String reason = reasonText.getText().toString();
+        Date convertedStartDate = convertDate(startDateText.getText().toString());
+
+        // throw errors if the user does not input into the mandatory fields
+        if (title_text.equals("")) {
+            titleText.setError("Title of habit is required!");
+            properEntry = false;
+        } else if (habitNames.contains(title_text.toLowerCase())) {
+            titleText.setError("Title of habit must be unique!");
+            properEntry = false;
+        }
+        if (reason.equals("")) {
+            reasonText.setError("Reason for habit is required!");
+            properEntry = false;
+        }
+        if (convertedStartDate == null) {
+            startDateText.setError("Start date is required!");
+            properEntry = false;
+        }
+        if (frequency.size() < 1) {
+            Toast.makeText(getActivity(), "No frequency selected", Toast.LENGTH_LONG).show();
+            properEntry = false;
+        }
+
+        // if all of the values are entered try to save
+        if (properEntry) {
+            try {
+                Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
+                habits.add(habit);
+
+                fc.saveUser(getActivity().getApplicationContext(), user);
+
+                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+                intent.putExtra("position", habits.size()-1);
+                startActivity(intent);
+            } catch (DataFormatException errMsg) {
+                // occurs when title or reason are above their character limits
+                Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

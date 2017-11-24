@@ -6,12 +6,15 @@ package com.example.baard;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,7 +24,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
@@ -66,6 +72,16 @@ public class MainActivity extends AppCompatActivity
                 dailyHabitsFragment,
                 dailyHabitsFragment.getTag()
         ).commit();
+
+        changeFont();
+    }
+
+    private void changeFont() {
+        // Set toolbar font
+        setTitle("");
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        title.setTypeface(ralewayRegular);
     }
 
     /**
@@ -129,6 +145,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
 
         if (id == R.id.nav_dailyHabits) {
             // Send user to fragment that shows list of all their daily habits
@@ -153,6 +170,7 @@ public class MainActivity extends AppCompatActivity
                     allHabitsFragment,
                     allHabitsFragment.getTag()
             ).commit();
+            title.setText("All Habits");
         } else if (id == R.id.nav_newHabit) {
             // Send user to fragment that allows them to create a new habit
             Toast.makeText(this, "Create New Habit", Toast.LENGTH_SHORT).show();
@@ -163,6 +181,7 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitFragment,
                     createNewHabitFragment.getTag()
             ).commit();
+            title.setText("Create New Habit");
         } else if (id == R.id.nav_allHabitEvents) {
             // Send user to fragment that shows a list of all their habit events
             // listed with most recent habit events first
@@ -174,6 +193,7 @@ public class MainActivity extends AppCompatActivity
                     allHabitEventsFragment,
                     allHabitEventsFragment.getTag()
             ).commit();
+            title.setText("Habit Event History");
         } else if (id == R.id.nav_newHabitEvent) {
             // Send user to fragment that allows them to create a new habit event
             Toast.makeText(this, "Create New Habit Event", Toast.LENGTH_SHORT).show();
@@ -184,6 +204,7 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitEventFragment,
                     createNewHabitEventFragment.getTag()
             ).commit();
+            title.setText("Create New Habit Event");
         } else if (id == R.id.nav_viewMap) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
