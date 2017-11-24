@@ -12,7 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -97,6 +100,7 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         createPieChart();
         createLineChart();
+        listHabitEvents();
     }
 
     /**
@@ -228,12 +232,34 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd",Locale.ENGLISH);
             Calendar calendar = Calendar.getInstance();
             Log.d("LineChart", Float.toString(value));
             calendar.setTimeInMillis((long)value);
 
             return sdf.format(calendar.getTime());
         }
+    }
+
+    private void listHabitEvents() {
+        ListView eventsList = (ListView) findViewById(R.id.habit_events_scroller_ListView);
+        HabitEventList habitEventList = habit.getEvents();
+        for (HabitEvent e: habitEventList.getArrayList()) {
+            e.setHabit(habit);
+        }
+
+        ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, habitEventList.getArrayList());
+        eventsList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        eventsList.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                // Disallow the touch request for parent scroll on touch of child view
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
     }
 }
