@@ -14,9 +14,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.*;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -42,6 +42,10 @@ public class DailyHabitsFragment extends Fragment {
     private HabitList dailyHabitList;
     private ListView habitListView;
     private String username;
+    private ExpandableListAdapter listAdapter;
+    private ExpandableListView expandableListView;
+    private List<String> listDataHeader;
+    private HashMap<String, List<String>> listDataChild;
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,17 +90,27 @@ public class DailyHabitsFragment extends Fragment {
 
         habitListView = view.findViewById(R.id.dailyHabitsListView);
 
+        expandableListView = view.findViewById(R.id.dailyHabitsListView);
+
+        // preparing list data
+        prepareListData();
+
+        listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
+
+        // setting list adapter
+        expandableListView.setAdapter(listAdapter);
+
         // set the listener so that if you click a habit in the list, you can view it
-        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Habit h = dailyHabitList.getHabit(i);
-                int index = habitList.indexOf(h);
-                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                intent.putExtra("position", index);
-                startActivity(intent);
-            }
-        });
+//        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Habit h = dailyHabitList.getHabit(i);
+//                int index = habitList.indexOf(h);
+//                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+//                intent.putExtra("position", index);
+//                startActivity(intent);
+//            }
+//        });
 
         return view;
     }
@@ -127,9 +141,9 @@ public class DailyHabitsFragment extends Fragment {
         }
 
         ArrayAdapter<Habit> adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, dailyHabitList.getArrayList());
-        habitListView.setAdapter(adapter);
+//        habitListView.setAdapter(adapter);
 
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -169,5 +183,47 @@ public class DailyHabitsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    /*
+     * Preparing the list data
+     */
+    private void prepareListData() {
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+
+        // Adding child data
+        listDataHeader.add("Top 250");
+        listDataHeader.add("Now Showing");
+        listDataHeader.add("Coming Soon..");
+
+        // Adding child data
+        List<String> top250 = new ArrayList<String>();
+        top250.add("The Shawshank Redemption");
+        top250.add("The Godfather");
+        top250.add("The Godfather: Part II");
+        top250.add("Pulp Fiction");
+        top250.add("The Good, the Bad and the Ugly");
+        top250.add("The Dark Knight");
+        top250.add("12 Angry Men");
+
+        List<String> nowShowing = new ArrayList<String>();
+        nowShowing.add("The Conjuring");
+        nowShowing.add("Despicable Me 2");
+        nowShowing.add("Turbo");
+        nowShowing.add("Grown Ups 2");
+        nowShowing.add("Red 2");
+        nowShowing.add("The Wolverine");
+
+        List<String> comingSoon = new ArrayList<String>();
+        comingSoon.add("2 Guns");
+        comingSoon.add("The Smurfs 2");
+        comingSoon.add("The Spectacular Now");
+        comingSoon.add("The Canyons");
+        comingSoon.add("Europa Report");
+
+        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), nowShowing);
+        listDataChild.put(listDataHeader.get(2), comingSoon);
     }
 }
