@@ -48,6 +48,8 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         fetchHabitEvent(eventDateString);
 
         setContentView(R.layout.activity_view_habit_event);
+
+        getSupportActionBar().setTitle("View Habit Event");
     }
 
     @Override
