@@ -46,6 +46,7 @@ public class DailyHabitsFragment extends Fragment {
     private ExpandableListView expandableListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
+    private int flatpos;
 
     private OnFragmentInteractionListener mListener;
 
@@ -100,6 +101,12 @@ public class DailyHabitsFragment extends Fragment {
         // setting list adapter
         expandableListView.setAdapter(listAdapter);
 
+        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                flatpos = i;
+            }
+        });
         // set the listener so that if you click a habit in the list, you can view it
 //        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -199,31 +206,31 @@ public class DailyHabitsFragment extends Fragment {
 
         // Adding child data
         List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
+        top250.add("Evnet");
 
         List<String> nowShowing = new ArrayList<String>();
         nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
 
         List<String> comingSoon = new ArrayList<String>();
         comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
 
         listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
         listDataChild.put(listDataHeader.get(1), nowShowing);
         listDataChild.put(listDataHeader.get(2), comingSoon);
+    }
+
+    /**
+     * Called when the user taps the Edit button.
+     * Sends data for user to edit.
+     *
+     * @param view the context view
+     */
+    public void viewHabit(View view) {
+//        expandableListView.getExpandableListPosition(flatpos);
+//        Habit h = dailyHabitList.getHabit(i);
+//        int index = habitList.indexOf(h);
+//        Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+//        intent.putExtra("position", index);
+//        startActivity(intent);
     }
 }

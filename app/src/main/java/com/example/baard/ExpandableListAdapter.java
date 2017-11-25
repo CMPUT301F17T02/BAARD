@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_item_expandable, null);
         }
 
-        TextView txtListChild = convertView
+        Button txtListChild = convertView
                 .findViewById(R.id.lblListItem);
 
         txtListChild.setText(childText);

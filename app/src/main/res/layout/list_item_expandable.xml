@@ -6,15 +6,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dip"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
-    <TextView
+    <Button
         android:id="@+id/lblListItem"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+        android:layout_weight="1"
+        android:text="Event"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp" />
+
+    <Button
+        android:id="@+id/ViewHabitButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="View"
+        android:layout_marginRight="1dp"/>
+
+    <Button
+        android:id="@+id/editHabitButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Edit"
+        android:layout_marginRight="1dp"/>
+
+    <Button
+        android:id="@+id/deleteHabitButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Delete" />
 
 </LinearLayout>
