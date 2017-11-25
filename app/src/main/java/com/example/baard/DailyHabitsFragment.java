@@ -43,8 +43,6 @@ public class DailyHabitsFragment extends Fragment {
     private ListView habitListView;
     private String username;
 
-    private OnFragmentInteractionListener mListener;
-
     /**
      * Required empty public constructor
      */
@@ -139,21 +137,10 @@ public class DailyHabitsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
+        if (!(context instanceof OnFragmentInteractionListener)) {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    /**
-     * Auto-generated method for fragment
-     */
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -167,7 +154,6 @@ public class DailyHabitsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
