@@ -13,9 +13,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class FindFriendsFragment extends Fragment {
+
+    private ListView habitListView;
+    private ArrayAdapter<Habit> adapter;
+    private HabitList habitList;
+    private String username;
+    private User user;
+    private FileController fc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

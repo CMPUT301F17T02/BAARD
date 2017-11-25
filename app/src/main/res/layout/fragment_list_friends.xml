@@ -20,7 +20,7 @@
         android:text="Coming Soon" />
 
     <ListView
-        android:id="@+id/habitListView"
+        android:id="@+id/friendListView"
         android:layout_width="352dp"
         android:layout_height="411dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
         tools:layout_editor_absoluteY="62dp" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
