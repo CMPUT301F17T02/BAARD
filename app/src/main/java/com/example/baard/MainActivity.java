@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity
                 dailyHabitsFragment,
                 dailyHabitsFragment.getTag()
         ).commit();
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        title.setText(R.string.daily_habits);
 
         changeFont();
     }

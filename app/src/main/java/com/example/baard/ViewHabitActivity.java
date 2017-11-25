@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -129,6 +130,8 @@ public class ViewHabitActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        getSupportActionBar().setTitle("View Habit: "+habit.getTitle());
     }
 
     /**
