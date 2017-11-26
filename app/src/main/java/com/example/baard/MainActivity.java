@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * On create method for entire activity. Sets up navigation and listener for fragments
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Bundle for the saved state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity
                 dailyHabitsFragment,
                 dailyHabitsFragment.getTag()
         ).commit();
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        title.setText(R.string.daily_habits);
 
         changeFont();
     }
@@ -100,8 +102,8 @@ public class MainActivity extends AppCompatActivity
      * Sets up action bar and menu.
      * Auto-generated method by the navigation menu activity.
      *
-     * @param menu
-     * @return
+     * @param menu the menu pop up
+     * @return boolean true for success
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,8 +118,8 @@ public class MainActivity extends AppCompatActivity
      * as you specify a parent activity in AndroidManifest.xml.
      * Auto-generated method by the navigation menu activity.
      *
-     * @param item
-     * @return
+     * @param item the item in the options menu seleted
+     * @return boolean true if successful
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -136,10 +138,9 @@ public class MainActivity extends AppCompatActivity
      * When navigation menu item is selected, it compares the id to send the
      * user to a specific fragment.
      *
-     * @param item
-     * @return
+     * @param item The item selected in the navigation menu
+     * @return boolean true if successful
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -157,11 +158,12 @@ public class MainActivity extends AppCompatActivity
                     dailyHabitsFragment,
                     dailyHabitsFragment.getTag()
             ).commit();
+            title.setText(R.string.daily_habits);
         }
         else if (id == R.id.nav_allHabits) {
             // Send user to fragment that shows list of all their habits
             // They can view, edit, and delete a habit once they click on a habit in this list
-            Toast.makeText(this, "All Habits", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.all_habits, Toast.LENGTH_SHORT).show();
             AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
@@ -169,10 +171,10 @@ public class MainActivity extends AppCompatActivity
                     allHabitsFragment,
                     allHabitsFragment.getTag()
             ).commit();
-            title.setText("All Habits");
+            title.setText(R.string.all_habits);
         } else if (id == R.id.nav_newHabit) {
             // Send user to fragment that allows them to create a new habit
-            Toast.makeText(this, "Create New Habit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.create_habit, Toast.LENGTH_SHORT).show();
             CreateNewHabitFragment createNewHabitFragment = CreateNewHabitFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
@@ -180,11 +182,11 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitFragment,
                     createNewHabitFragment.getTag()
             ).commit();
-            title.setText("Create New Habit");
+            title.setText(R.string.create_habit);
         } else if (id == R.id.nav_allHabitEvents) {
             // Send user to fragment that shows a list of all their habit events
             // listed with most recent habit events first
-            Toast.makeText(this, "Habit Event History", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.habit_history, Toast.LENGTH_SHORT).show();
             AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
@@ -192,10 +194,10 @@ public class MainActivity extends AppCompatActivity
                     allHabitEventsFragment,
                     allHabitEventsFragment.getTag()
             ).commit();
-            title.setText("Habit Event History");
+            title.setText(R.string.habit_history);
         } else if (id == R.id.nav_newHabitEvent) {
             // Send user to fragment that allows them to create a new habit event
-            Toast.makeText(this, "Create New Habit Event", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.create_event, Toast.LENGTH_SHORT).show();
             CreateNewHabitEventFragment createNewHabitEventFragment = CreateNewHabitEventFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
@@ -203,7 +205,7 @@ public class MainActivity extends AppCompatActivity
                     createNewHabitEventFragment,
                     createNewHabitEventFragment.getTag()
             ).commit();
-            title.setText("Create New Habit Event");
+            title.setText(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Auto-generated method by the navigation menu activity.
      *
-     * @param uri
+     * @param uri Uri of the fragment
      */
     @Override
     public void onFragmentInteraction(Uri uri) {
