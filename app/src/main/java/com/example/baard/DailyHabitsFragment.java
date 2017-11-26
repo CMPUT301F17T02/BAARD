@@ -46,7 +46,7 @@ public class DailyHabitsFragment extends Fragment {
     private ExpandableListView expandableListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
-    private int flatpos;
+    private int pos;
 
     private OnFragmentInteractionListener mListener;
 
@@ -152,12 +152,35 @@ public class DailyHabitsFragment extends Fragment {
         // setting list adapter
         expandableListView.setAdapter(listAdapter);
 
-        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            // Keep track of previous expanded parent
+            int previousGroup = -1;
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                flatpos = i;
+            public void onGroupExpand(int groupPosition) {
+                // Collapse previous parent if expanded.
+                if ((previousGroup != -1) && (groupPosition != previousGroup)) {
+                    expandableListView.collapseGroup(previousGroup);
+                }
+                previousGroup = groupPosition;
             }
         });
+
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
+
+                System.out.println(i);
+                pos = i;
+                return false;
+            }
+        });
+
+//        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//            }
+//        });
 
 //        ArrayAdapter<Habit> adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, dailyHabitList.getArrayList());
 //        habitListView.setAdapter(adapter);
@@ -211,11 +234,10 @@ public class DailyHabitsFragment extends Fragment {
      * @param view the context view
      */
     public void viewHabit(View view) {
-        expandableListView.getExpandableListPosition(flatpos);
-//        Habit h = dailyHabitList.getHabit(i);
-//        int index = habitList.indexOf(h);
-//        Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-//        intent.putExtra("position", index);
-//        startActivity(intent);
+        Habit h = dailyHabitList.getHabit(pos);
+        int index = habitList.indexOf(h);
+        Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
+        intent.putExtra("position", index);
+        startActivity(intent);
     }
 }
