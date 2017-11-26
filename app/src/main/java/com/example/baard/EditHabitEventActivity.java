@@ -51,6 +51,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     private String imageFilePath;
     private final FileController fileController = new FileController();
     private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +141,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
 //                saveChanges();
 //            }
 //        });
+
+        getSupportActionBar().setTitle("Edit Habit Event");
     }
 
     /**
@@ -232,9 +235,9 @@ public class EditHabitEventActivity extends AppCompatActivity {
             fileController.saveUser(getApplicationContext(), user);
             habit.sendToSharedPreferences(getApplicationContext());
             // go to view habitevent activity
-            Intent intent = new Intent(this, ViewHabitEventActivity.class);
+            Intent intent = new Intent();
             intent.putExtra("habitEventDate", habitEvent.getEventDate().toString());
-            startActivity(intent);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
@@ -258,13 +261,18 @@ public class EditHabitEventActivity extends AppCompatActivity {
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
+    /**
+     * Ensures the app returns to the proper fragment of main when back pressed
+     * @param item the menu item of the toolbar (only home in this case)
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     /**
