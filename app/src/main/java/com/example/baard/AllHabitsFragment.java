@@ -5,20 +5,15 @@
 package com.example.baard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,7 +21,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,12 +29,11 @@ import java.util.concurrent.TimeUnit;
  * to handle interaction events.
  * Use the {@link AllHabitsFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * @see MainActivity
  */
 public class AllHabitsFragment extends Fragment {
     private ExpandableListView expandableListView;
-    private HabitList habitList;
     private String username;
-    private User user;
     private FileController fc;
 
     private OnFragmentInteractionListener mListener;
@@ -94,8 +87,8 @@ public class AllHabitsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        user = fc.loadUser(getActivity().getApplicationContext(), username);
-        habitList = user.getHabits();
+        User user = fc.loadUser(getActivity().getApplicationContext(), username);
+        HabitList habitList = user.getHabits();
 
         List<String> listDataHeader = new ArrayList<>();
         HashMap<String, List<String>> listDataChild = new HashMap<>();

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -30,12 +29,12 @@ import java.util.List;
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
     // Referenced and copied from https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
-    private Context _context;
-    private List<String> _listDataHeader; // header titles
+    private final Context _context;
+    private final List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
-    private HabitList allHabitsList;
-    private HabitList seenHabitsList;
+    private final HashMap<String, List<String>> _listDataChild;
+    private final HabitList allHabitsList;
+    private final HabitList seenHabitsList;
 
     /**
      * Constructor for Expandable List Adapter
@@ -119,7 +118,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
                 Habit h = seenHabitsList.getHabit(groupPosition);
-                int index = allHabitsList.indexOf(h);
                 FileController fc = new FileController();
                 allHabitsList.delete(h);
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
