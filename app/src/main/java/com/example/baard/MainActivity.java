@@ -4,6 +4,7 @@
 
 package com.example.baard;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -135,7 +136,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = new DailyHabitsFragment(); //TODO: Move this into the IF once other activities implmented
         // Send user to selected fragment
         if (id == R.id.nav_dailyHabits) {
-            Toast.makeText(this, "Daily Habits", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.daily_habits, Toast.LENGTH_SHORT).show();
             nextHeader = getResources().getString(R.string.daily_habits);
         }
         else if (id == R.id.nav_allHabits) {
@@ -180,8 +182,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_viewMap) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
             // End this session and take users back to the login screen

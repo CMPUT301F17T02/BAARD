@@ -11,11 +11,10 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--
-         The WRITE_EXTERNAL_STORAGE permissions are to ensure images are saved and written correctly
-    -->
+    <!--          The WRITE_EXTERNAL_STORAGE permissions are to ensure images are saved and written correctly -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,8 +24,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoTitle"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,8 +34,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoTitle.Transulcent"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoTitle.Transulcent" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -59,17 +58,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
-        <activity android:name=".ViewHabitEventActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".EditHabitEventActivity"
-            android:parentActivityName=".ViewHabitEventActivity"></activity>
-
-        <activity android:name=".EditHabitActivity"
+        <activity
+            android:name=".ViewHabitEventActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".EditHabitEventActivity"
+            android:parentActivityName=".ViewHabitEventActivity" />
+        <activity
+            android:name=".EditHabitActivity"
             android:parentActivityName=".ViewHabitActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ViewHabitActivity" />
+        </activity>
+        <activity android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
     </application>
 
