@@ -93,20 +93,7 @@ public class DailyHabitsFragment extends Fragment {
 
         expandableListView = view.findViewById(R.id.dailyHabitsListView);
 
-        // preparing list data
-        prepareListData();
 
-        listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
-
-        // setting list adapter
-        expandableListView.setAdapter(listAdapter);
-
-        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                flatpos = i;
-            }
-        });
         // set the listener so that if you click a habit in the list, you can view it
 //        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -138,16 +125,41 @@ public class DailyHabitsFragment extends Fragment {
         String today = sDF.format(date.getTime()).toUpperCase();
         Day day = Day.valueOf(today);
 
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
         dailyHabitList = new HabitList();
+        List<String> dummy = new ArrayList<>();
+        dummy.add("");
         for (int i = 0; i< habitList.size(); i++) {
             Habit h = habitList.getHabit(i);
             ArrayList<Day> freq = h.getFrequency();
             if (freq.contains(day)) {
                 dailyHabitList.add(h);
+                listDataHeader.add(h.getTitle());
+                listDataChild.put(listDataHeader.get(listDataHeader.size()-1), dummy);
             }
         }
 
-        ArrayAdapter<Habit> adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, dailyHabitList.getArrayList());
+        // preparing list data
+
+        // Adding child data
+//        listDataHeader.add();
+//        listDataHeader.add("Now Showing");
+//        listDataHeader.add("Coming Soon..");
+
+        listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
+
+        // setting list adapter
+        expandableListView.setAdapter(listAdapter);
+
+        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                flatpos = i;
+            }
+        });
+
+//        ArrayAdapter<Habit> adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, dailyHabitList.getArrayList());
 //        habitListView.setAdapter(adapter);
 
 //        adapter.notifyDataSetChanged();
@@ -192,33 +204,6 @@ public class DailyHabitsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    /*
-     * Preparing the list data
-     */
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-
-        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
-
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("Evnet");
-
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
-    }
-
     /**
      * Called when the user taps the Edit button.
      * Sends data for user to edit.
@@ -226,7 +211,7 @@ public class DailyHabitsFragment extends Fragment {
      * @param view the context view
      */
     public void viewHabit(View view) {
-//        expandableListView.getExpandableListPosition(flatpos);
+        expandableListView.getExpandableListPosition(flatpos);
 //        Habit h = dailyHabitList.getHabit(i);
 //        int index = habitList.indexOf(h);
 //        Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
