@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -270,6 +271,29 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
         return permissionCheck;
     }
+
+    /**
+     * This method dictates the action taken when the user responds to a request for the application to access
+     * it's files for the purpose of reading images.
+     * @param requestCode the request code of the type of request given to the user
+     * @param permissions
+     * @param grantResults contains data on whether permission was granted
+     */
+     @Override
+     public void onRequestPermissionsResult(int requestCode,
+                                            String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission granted
+                } else {
+                    //permission denied
+                }
+            }
+        }
+     }
 
     /**
      * Method called when the select image button is pressed. Lets the user select an image to be added to the
