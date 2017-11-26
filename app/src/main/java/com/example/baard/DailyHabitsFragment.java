@@ -106,15 +106,15 @@ public class DailyHabitsFragment extends Fragment {
         List<String> listDataHeader = new ArrayList<>();
         HashMap<String, List<String>> listDataChild = new HashMap<>();
         HabitList dailyHabitList = new HabitList();
-        List<String> dummy = new ArrayList<>();
-        dummy.add("");
+        List<String> child = new ArrayList<>();
+        child.add("");
         for (int i = 0; i< habitList.size(); i++) {
             Habit h = habitList.getHabit(i);
             ArrayList<Day> freq = h.getFrequency();
             if (freq.contains(day)) {
                 dailyHabitList.add(h);
                 listDataHeader.add(h.getTitle());
-                listDataChild.put(listDataHeader.get(listDataHeader.size()-1), dummy);
+                listDataChild.put(listDataHeader.get(listDataHeader.size()-1), child);
             }
         }
 

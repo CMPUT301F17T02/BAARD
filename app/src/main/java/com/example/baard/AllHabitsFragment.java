@@ -92,12 +92,12 @@ public class AllHabitsFragment extends Fragment {
 
         List<String> listDataHeader = new ArrayList<>();
         HashMap<String, List<String>> listDataChild = new HashMap<>();
-        List<String> dummy = new ArrayList<>();
-        dummy.add("");
+        List<String> child = new ArrayList<>();
+        child.add("");
         for (int i = 0; i < habitList.size(); i++) {
             Habit h = habitList.getHabit(i);
             listDataHeader.add(h.getTitle());
-            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), dummy);
+            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
         }
 
         ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitList, habitList);
