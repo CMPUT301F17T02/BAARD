@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         nextHeader = getResources().getString(R.string.daily_habits);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
-                .addToBackStack(fragment.getTag())
+                .addToBackStack(null)
                 .commit();
         TextView title = (TextView) findViewById(R.id.toolbar_title);
         title.setText(R.string.daily_habits);
@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (headerStack.empty()) {
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            sharedPrefs.edit().remove("username").apply();
             finish();
         } else {
             TextView title = (TextView) findViewById(R.id.toolbar_title);
@@ -183,15 +185,15 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
             // End this session and take users back to the login screen
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-            sharedPrefs.edit().remove("username").commit();
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            sharedPrefs.edit().remove("username").apply();
             finish();
         }
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
-                .addToBackStack(fragment.getTag())
+                .addToBackStack(null)
                 .commit();
 
         title.setText(nextHeader);

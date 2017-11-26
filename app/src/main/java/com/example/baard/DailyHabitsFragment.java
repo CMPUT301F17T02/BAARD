@@ -95,6 +95,10 @@ public class DailyHabitsFragment extends Fragment {
         super.onResume();
 
         User user = fc.loadUser(getActivity().getApplicationContext(), username);
+        if (user == null) {
+            getActivity().finish();
+            return;
+        }
         HabitList habitList = user.getHabits();
 
         Calendar calendar = Calendar.getInstance();
