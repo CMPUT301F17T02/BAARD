@@ -24,6 +24,12 @@ public class SettingsActivity extends AppCompatActivity {
     private Button editButton, saveButton;
     private EditText nameEdit;
 
+    /**
+     * Opens up the settings activity, allowing users to see their username and their full name.
+     * If they wish, they can then edit their name or delete their acocunt.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +56,21 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Settings");
     }
 
+    /**
+     * Allows users to completely delete their account locally and online.
+     *
+     * @param view
+     */
     public void delete(View view) {
         Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Allows users to edit their name and see the "save" button if they wish to
+     * save those changes.
+     *
+     * @param view
+     */
     public void edit(View view) {
         // show editable fields and save button
         nameEdit.setFocusable(true);
@@ -62,6 +79,12 @@ public class SettingsActivity extends AppCompatActivity {
         editButton.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Saves changes to the user's name to the database. Locks the editable field until
+     * asked to edit again.
+     *
+     * @param view
+     */
     public void save(View view) {
         // hide editable fields and save button
         nameEdit.setFocusable(false);
