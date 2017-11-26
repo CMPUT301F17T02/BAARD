@@ -5,7 +5,6 @@
 package com.example.baard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,9 +13,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -35,13 +34,12 @@ import java.util.Locale;
  * to handle interaction events.
  * Use the {@link DailyHabitsFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * @see MainActivity
  */
 public class DailyHabitsFragment extends Fragment {
     private FileController fc;
-    private HabitList habitList;
-    private HabitList dailyHabitList;
-    private ListView habitListView;
     private String username;
+    private ExpandableListView expandableListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,19 +82,7 @@ public class DailyHabitsFragment extends Fragment {
         String json = sharedPrefs.getString("username", "");
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
-        habitListView = view.findViewById(R.id.dailyHabitsListView);
-
-        // set the listener so that if you click a habit in the list, you can view it
-        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Habit h = dailyHabitList.getHabit(i);
-                int index = habitList.indexOf(h);
-                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                intent.putExtra("position", index);
-                startActivity(intent);
-            }
-        });
+        expandableListView = view.findViewById(R.id.dailyHabitsListView);
 
         return view;
     }
@@ -109,7 +95,7 @@ public class DailyHabitsFragment extends Fragment {
         super.onResume();
 
         User user = fc.loadUser(getActivity().getApplicationContext(), username);
-        habitList = user.getHabits();
+        HabitList habitList = user.getHabits();
 
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
@@ -117,19 +103,24 @@ public class DailyHabitsFragment extends Fragment {
         String today = sDF.format(date.getTime()).toUpperCase();
         Day day = Day.valueOf(today);
 
-        dailyHabitList = new HabitList();
+        List<String> listDataHeader = new ArrayList<>();
+        HashMap<String, List<String>> listDataChild = new HashMap<>();
+        HabitList dailyHabitList = new HabitList();
+        List<String> child = new ArrayList<>();
+        child.add("");
         for (int i = 0; i< habitList.size(); i++) {
             Habit h = habitList.getHabit(i);
             ArrayList<Day> freq = h.getFrequency();
             if (freq.contains(day)) {
                 dailyHabitList.add(h);
+                listDataHeader.add(h.getTitle());
+                listDataChild.put(listDataHeader.get(listDataHeader.size()-1), child);
             }
         }
 
-        ArrayAdapter<Habit> adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, dailyHabitList.getArrayList());
-        habitListView.setAdapter(adapter);
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitList, dailyHabitList);
 
-        adapter.notifyDataSetChanged();
+        expandableListView.setAdapter(listAdapter);
     }
 
     /**
@@ -167,7 +158,7 @@ public class DailyHabitsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

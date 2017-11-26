@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.baard.DailyHabitsFragment">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/dailyHabitsListView"
         android:layout_width="352dp"
         android:layout_height="411dp"
