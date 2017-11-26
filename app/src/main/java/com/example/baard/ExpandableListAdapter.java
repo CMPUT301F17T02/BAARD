@@ -5,7 +5,10 @@
 package com.example.baard;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +16,16 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Adam on 11/25/2017.
@@ -25,12 +36,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<String>> _listDataChild;
+    private HabitList allHabitsList;
+    private HabitList seenHabitsList;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData) {
+                                 HashMap<String, List<String>> listChildData, HabitList allHabitsList, HabitList seenHabitsList) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+        this.allHabitsList = allHabitsList;
+        this.seenHabitsList = seenHabitsList;
     }
 
     @Override
@@ -45,7 +60,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
@@ -55,6 +70,47 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item_expandable, null);
         }
+
+        convertView.findViewById(R.id.viewHabitButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Habit h = seenHabitsList.getHabit(groupPosition);
+                int index = allHabitsList.indexOf(h);
+                Intent intent = new Intent(_context, ViewHabitActivity.class);
+                intent.putExtra("position", index);
+                _context.startActivity(intent);
+            }
+        });
+
+        convertView.findViewById(R.id.editHabitButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Habit h = seenHabitsList.getHabit(groupPosition);
+                int index = allHabitsList.indexOf(h);
+                Intent intent = new Intent(_context, EditHabitActivity.class);
+                intent.putExtra("position", index);
+                _context.startActivity(intent);
+            }
+        });
+
+        convertView.findViewById(R.id.deleteHabitButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Habit h = seenHabitsList.getHabit(groupPosition);
+                int index = allHabitsList.indexOf(h);
+                FileController fc = new FileController();
+                allHabitsList.delete(h);
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+                Gson gson = new Gson();
+                String json = sharedPrefs.getString("username", "");
+                String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+                User user = fc.loadUser(_context, username);
+                user.setHabits(allHabitsList);
+                fc.saveUser(_context, user);
+                _listDataHeader.remove(groupPosition);
+                notifyDataSetChanged();
+            }
+        });
 
         return convertView;
     }

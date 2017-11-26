@@ -46,7 +46,7 @@ public class DailyHabitsFragment extends Fragment {
     private ExpandableListView expandableListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
-    private int pos;
+//    private int pos;
 
     private OnFragmentInteractionListener mListener;
 
@@ -140,40 +140,31 @@ public class DailyHabitsFragment extends Fragment {
             }
         }
 
-        // preparing list data
+        listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitList, dailyHabitList);
 
-        // Adding child data
-//        listDataHeader.add();
-//        listDataHeader.add("Now Showing");
-//        listDataHeader.add("Coming Soon..");
-
-        listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
-
-        // setting list adapter
         expandableListView.setAdapter(listAdapter);
-
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            // Keep track of previous expanded parent
-            int previousGroup = -1;
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                // Collapse previous parent if expanded.
-                if ((previousGroup != -1) && (groupPosition != previousGroup)) {
-                    expandableListView.collapseGroup(previousGroup);
-                }
-                previousGroup = groupPosition;
-            }
-        });
-
-        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
-
-                System.out.println(i);
-                pos = i;
-                return false;
-            }
-        });
+//
+//        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+//            // To close any other expanded groups
+//            int previousGroup = -1;
+//            @Override
+//            public void onGroupExpand(int groupPosition) {
+//                if ((previousGroup != -1) && (groupPosition != previousGroup)) {
+//                    expandableListView.collapseGroup(previousGroup);
+//                }
+//                previousGroup = groupPosition;
+//            }
+//        });
+//
+//        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//            @Override
+//            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
+//
+//                System.out.println(i);
+//                pos = i;
+//                return false;
+//            }
+//        });
 
 //        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -227,17 +218,4 @@ public class DailyHabitsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    /**
-     * Called when the user taps the Edit button.
-     * Sends data for user to edit.
-     *
-     * @param view the context view
-     */
-    public void viewHabit(View view) {
-        Habit h = dailyHabitList.getHabit(pos);
-        int index = habitList.indexOf(h);
-        Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-        intent.putExtra("position", index);
-        startActivity(intent);
-    }
 }

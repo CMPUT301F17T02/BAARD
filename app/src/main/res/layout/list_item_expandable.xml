@@ -9,20 +9,12 @@
     android:orientation="horizontal" >
 
     <Button
-        android:id="@+id/lblListItem"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Event"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp" />
-
-    <Button
-        android:id="@+id/ViewHabitButton"
+        android:id="@+id/viewHabitButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="View"
+        android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"/>
 
     <Button
