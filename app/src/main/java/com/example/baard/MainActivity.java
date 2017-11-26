@@ -4,6 +4,7 @@
 
 package com.example.baard;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -205,7 +206,9 @@ public class MainActivity extends AppCompatActivity
             ).commit();
             title.setText("Create New Habit Event");
         } else if (id == R.id.nav_viewMap) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_viewFriends) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
