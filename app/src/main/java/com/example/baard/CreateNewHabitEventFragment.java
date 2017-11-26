@@ -9,17 +9,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +33,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -208,13 +203,6 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     /**
      * Method called when save button is pressed. Creates a new HabitEvent and adds it to the
      * HabitEventList of the Habit selected by the Spinner.
@@ -325,10 +313,10 @@ public class CreateNewHabitEventFragment extends Fragment {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
-            TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
+            TextView textView = getActivity().findViewById(R.id.filenameTextView);
             imageFilePath = filePath;
             textView.setText(filePath);
-            ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+            ImageView imageView = getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
         }
     }
