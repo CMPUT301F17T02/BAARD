@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.baard.SettingsActivity">
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="179dp"
+        android:layout_height="35dp"
+        android:text="username"
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/username_prompt"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="16dp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="178dp"
+        android:layout_height="38dp"
+        android:text="name"
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/name_prompt"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="16dp" />
+
+    <TextView
+        android:id="@+id/username_prompt"
+        android:layout_width="115dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/prompt_username"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/name_prompt"
+        android:layout_marginLeft="33dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="33dp" />
+
+    <TextView
+        android:id="@+id/name_prompt"
+        android:layout_width="77dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="100dp"
+        android:text="@string/prompt_name"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="33dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="33dp" />
+
+    <Button
+        android:id="@+id/edit"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:onClick="edit"
+        android:text="@string/edit"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/delete"
+        app:layout_constraintTop_toBottomOf="@+id/username_prompt" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="119dp"
+        android:layout_height="49dp"
+        android:onClick="delete"
+        android:text="@string/delete"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit"
+        app:layout_constraintLeft_toRightOf="@+id/edit"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/user_profile"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
