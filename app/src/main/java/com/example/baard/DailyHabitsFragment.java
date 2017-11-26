@@ -5,7 +5,6 @@
 package com.example.baard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,18 +34,12 @@ import java.util.Locale;
  * to handle interaction events.
  * Use the {@link DailyHabitsFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * @see MainActivity
  */
 public class DailyHabitsFragment extends Fragment {
     private FileController fc;
-    private HabitList habitList;
-    private HabitList dailyHabitList;
-    private ListView habitListView;
     private String username;
-    private ExpandableListAdapter listAdapter;
     private ExpandableListView expandableListView;
-    private List<String> listDataHeader;
-    private HashMap<String, List<String>> listDataChild;
-//    private int pos;
 
     private OnFragmentInteractionListener mListener;
 
@@ -89,22 +82,7 @@ public class DailyHabitsFragment extends Fragment {
         String json = sharedPrefs.getString("username", "");
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
-        habitListView = view.findViewById(R.id.dailyHabitsListView);
-
         expandableListView = view.findViewById(R.id.dailyHabitsListView);
-
-
-        // set the listener so that if you click a habit in the list, you can view it
-//        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Habit h = dailyHabitList.getHabit(i);
-//                int index = habitList.indexOf(h);
-//                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-//                intent.putExtra("position", index);
-//                startActivity(intent);
-//            }
-//        });
 
         return view;
     }
@@ -117,7 +95,7 @@ public class DailyHabitsFragment extends Fragment {
         super.onResume();
 
         User user = fc.loadUser(getActivity().getApplicationContext(), username);
-        habitList = user.getHabits();
+        HabitList habitList = user.getHabits();
 
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
@@ -125,9 +103,9 @@ public class DailyHabitsFragment extends Fragment {
         String today = sDF.format(date.getTime()).toUpperCase();
         Day day = Day.valueOf(today);
 
-        listDataHeader = new ArrayList<>();
-        listDataChild = new HashMap<>();
-        dailyHabitList = new HabitList();
+        List<String> listDataHeader = new ArrayList<>();
+        HashMap<String, List<String>> listDataChild = new HashMap<>();
+        HabitList dailyHabitList = new HabitList();
         List<String> dummy = new ArrayList<>();
         dummy.add("");
         for (int i = 0; i< habitList.size(); i++) {
@@ -140,43 +118,9 @@ public class DailyHabitsFragment extends Fragment {
             }
         }
 
-        listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitList, dailyHabitList);
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitList, dailyHabitList);
 
         expandableListView.setAdapter(listAdapter);
-//
-//        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-//            // To close any other expanded groups
-//            int previousGroup = -1;
-//            @Override
-//            public void onGroupExpand(int groupPosition) {
-//                if ((previousGroup != -1) && (groupPosition != previousGroup)) {
-//                    expandableListView.collapseGroup(previousGroup);
-//                }
-//                previousGroup = groupPosition;
-//            }
-//        });
-//
-//        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//            @Override
-//            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
-//
-//                System.out.println(i);
-//                pos = i;
-//                return false;
-//            }
-//        });
-
-//        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//            }
-//        });
-
-//        ArrayAdapter<Habit> adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, dailyHabitList.getArrayList());
-//        habitListView.setAdapter(adapter);
-
-//        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -214,7 +158,6 @@ public class DailyHabitsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
