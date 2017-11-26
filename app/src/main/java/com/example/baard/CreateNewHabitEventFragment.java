@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import java.util.zip.DataFormatException;
 
 import static android.app.Activity.RESULT_OK;
@@ -54,8 +55,6 @@ import static android.app.Activity.RESULT_OK;
  * Activities that contain this fragment must implement the
  * {@link CreateNewHabitEventFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CreateNewHabitEventFragment#newInstance} factory method to
- * create an instance of this fragment.
  *
  * @author amckerna
  * @version 1.0
@@ -88,27 +87,6 @@ public class CreateNewHabitEventFragment extends Fragment {
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment CreateNewHabitFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CreateNewHabitEventFragment newInstance() {
-        CreateNewHabitEventFragment fragment = new CreateNewHabitEventFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     /**
@@ -176,7 +154,7 @@ public class CreateNewHabitEventFragment extends Fragment {
             }
         });
 
-        sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        sourceFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         dateEditText = (EditText) v.findViewById(R.id.HabitEventDateEditText);
         dateEditText.setFocusable(false);
         dateEditText.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +185,27 @@ public class CreateNewHabitEventFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
+        try {
+            Date date = sourceFormat.parse(dateEditText.getText().toString());
+            HabitEvent habitEvent = new HabitEvent(habit, date, commentEditText.getText().toString());
+        } catch (HabitEvent.DateAlreadyExistsException e) {
+            dateEditText.setText("");
+            commentEditText.setText("");
+            //TODO: Clear Location from screen here
+            imageFilePath = null;
+            ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+            imageView.setImageURI(null);
+            TextView filename = getActivity().findViewById(R.id.filenameTextView);
+            filename.setText("");
+        } catch (ParseException | DataFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -282,30 +281,6 @@ public class CreateNewHabitEventFragment extends Fragment {
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }
         return permissionCheck;
-    }
-
-    /**
-     * This method dictates the action taken when the user responds to a request for the application to access
-     * it's files for the purpose of reading images.
-     * @param requestCode the request code of the type of request given to the user
-     * @param permissions
-     * @param grantResults contains data on whether permission was granted
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //permission granted
-                } else {
-                    //permission denied
-                }
-                return;
-            }
-        }
     }
 
     /**
