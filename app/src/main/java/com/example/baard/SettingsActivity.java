@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private FileController fc;
     private User user;
+    private Button editButton, saveButton;
+    private EditText nameEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextView nameView = (TextView) findViewById(R.id.name);
         TextView userNameView = (TextView) findViewById(R.id.username);
+        nameEdit = (EditText) findViewById(R.id.name);
+        editButton = (Button) findViewById(R.id.edit);
+        saveButton = (Button) findViewById(R.id.save);
 
         nameView.setText(user.getName());
 
@@ -49,6 +55,22 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void edit(View view) {
-        Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
+        // show editable fields and save button
+        nameEdit.setFocusable(true);
+        saveButton.setVisibility(View.VISIBLE);
+        // hide edit Button
+        editButton.setVisibility(View.INVISIBLE);
     }
+
+    public void save(View view) {
+        // hide editable fields and save button
+        nameEdit.setFocusable(false);
+        saveButton.setVisibility(View.INVISIBLE);
+        // show edit button
+        editButton.setVisibility(View.VISIBLE);
+
+        user.setName(nameEdit.getText().toString());
+        fc.saveUser(getApplicationContext(), user);
+    }
+
 }

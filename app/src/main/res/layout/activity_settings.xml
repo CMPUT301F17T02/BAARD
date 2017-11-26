@@ -12,29 +12,37 @@
 
     <TextView
         android:id="@+id/username"
-        android:layout_width="179dp"
-        android:layout_height="35dp"
+        android:layout_width="215dp"
+        android:layout_height="36dp"
         android:text="username"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/username_prompt"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/username_prompt"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="1.0" />
 
-    <TextView
+    <EditText
         android:id="@+id/name"
-        android:layout_width="178dp"
-        android:layout_height="38dp"
+        android:layout_width="218dp"
+        android:layout_height="75dp"
         android:text="name"
         android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/name_prompt"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="16dp"
+        android:focusable="false"
+        android:inputType="none"
+        app:layout_constraintLeft_toRightOf="@+id/name_prompt"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintBaseline_toBaselineOf="@+id/name_prompt" />
 
     <TextView
         android:id="@+id/username_prompt"
-        android:layout_width="115dp"
+        android:layout_width="0dp"
         android:layout_height="31dp"
         android:layout_marginTop="50dp"
         android:text="@string/prompt_username"
@@ -42,13 +50,13 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/name_prompt"
-        android:layout_marginLeft="33dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="33dp" />
 
     <TextView
         android:id="@+id/name_prompt"
-        android:layout_width="77dp"
+        android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginTop="100dp"
         android:text="@string/prompt_name"
@@ -56,14 +64,14 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="33dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="33dp" />
 
     <Button
         android:id="@+id/edit"
         android:layout_width="119dp"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:layout_marginTop="72dp"
         android:onClick="edit"
         android:text="@string/edit"
@@ -71,6 +79,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/delete"
         app:layout_constraintTop_toBottomOf="@+id/username_prompt" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="119dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="72dp"
+        android:onClick="save"
+        android:text="@string/save"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/delete"
+        app:layout_constraintTop_toBottomOf="@+id/username_prompt"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/delete"
