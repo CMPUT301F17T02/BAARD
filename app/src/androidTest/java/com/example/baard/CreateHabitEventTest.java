@@ -172,6 +172,22 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     }
 
     /**
+     * Create a HabitEvent before the start date of a Habit.
+     */
+    @Test
+    public void testCreateHabitEventBeforeHabitStart(){
+        solo.pressSpinnerItem(0,0);
+        Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
+        String habitName = spinner.getSelectedItem().toString();
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+        solo.setDatePicker(0,2016,11,25);
+        solo.clickOnText("OK");
+        EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        solo.enterText(comment, "test comment");
+        solo.clickOnView(solo.getView(R.id.saveButton));
+    }
+
+    /**
      * Create a HabitEvent on the same day as another HabitEvent.
      * @throws Exception
      */
