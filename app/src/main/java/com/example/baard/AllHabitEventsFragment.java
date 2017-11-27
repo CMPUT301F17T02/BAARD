@@ -108,25 +108,29 @@ public class AllHabitEventsFragment extends Fragment {
         habitList = user.getHabits().getArrayList();
         try {
             noneHabit = new Habit("None", "", new Date(), new ArrayList<Day>());
-            habitList.add(noneHabit);
+            habitList.add(0,noneHabit);
         }catch(Exception e){
             //unexpected behaviour
 
         }
         habitSpinner = (Spinner) view.findViewById(R.id.habitFilterSpinner);
-        habitSpinner.setSelection(habitList.size()-1);
+
 
         ArrayAdapter<Habit> habitAdapter = new ArrayAdapter<Habit>(this.getActivity(), android.R.layout.simple_spinner_item, habitList);
 
         habitSpinner.setAdapter(habitAdapter);
 
+        habitAdapter.notifyDataSetChanged();
         commentFilter = (EditText) view.findViewById(R.id.commentFilterEditText);
 
         Button filterButton = (Button) view.findViewById(R.id.filterButton);
-
+        filterButton.setText("");
+        
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
         adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
+
+        sendHabitEventsToSharedPreferences();
 
         habitEventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -159,6 +163,15 @@ public class AllHabitEventsFragment extends Fragment {
         }
     }
 
+    public void sendHabitEventsToSharedPreferences(){
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(habitEventList);
+        sharedPrefsEditor.putString("filteredHabitEvents", json);
+        sharedPrefsEditor.commit();
+    }
+
     public void filterHabitEvents(){
         createHabitEventList();
         Habit selected = (Habit) habitSpinner.getSelectedItem();
@@ -174,6 +187,7 @@ public class AllHabitEventsFragment extends Fragment {
         }
 
         adapter.notifyDataSetChanged();
+        sendHabitEventsToSharedPreferences();
     }
 
     public void createHabitEventList(){
