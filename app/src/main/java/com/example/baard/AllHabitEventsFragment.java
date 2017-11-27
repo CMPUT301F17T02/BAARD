@@ -125,7 +125,7 @@ public class AllHabitEventsFragment extends Fragment {
 
         Button filterButton = (Button) view.findViewById(R.id.filterButton);
         filterButton.setText("");
-        
+
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
         adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
