@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -45,6 +46,7 @@ public class AllHabitEventsFragment extends Fragment {
 
     private ListView habitEventListView;
     private ArrayAdapter<HabitEvent> adapter;
+    private List<Habit> habitList;
     private List<HabitEvent> habitEventList = new ArrayList<HabitEvent>();
     private final FileController fileController = new FileController();
 
@@ -101,6 +103,11 @@ public class AllHabitEventsFragment extends Fragment {
             }
         }
         Collections.sort(habitEventList);
+
+        habitList = user.getHabits().getArrayList();
+
+        Spinner habitSpinner = (Spinner) view.findViewById(R.id.habitFilterSpinner);
+
 
 
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
