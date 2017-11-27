@@ -102,6 +102,8 @@ public class EditHabitActivity extends AppCompatActivity {
 
         // set the toggle buttons for the days of the week
         setToggleButtons();
+
+        getSupportActionBar().setTitle("Edit Habit");
     }
 
     @Override

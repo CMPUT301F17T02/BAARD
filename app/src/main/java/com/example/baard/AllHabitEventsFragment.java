@@ -11,11 +11,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
@@ -49,6 +53,9 @@ public class AllHabitEventsFragment extends Fragment {
     private List<Habit> habitList;
     private List<HabitEvent> habitEventList = new ArrayList<HabitEvent>();
     private final FileController fileController = new FileController();
+    Habit noneHabit;
+    Spinner habitSpinner;
+    EditText commentFilter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -96,19 +103,26 @@ public class AllHabitEventsFragment extends Fragment {
 
 
         User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
-        for (Habit habit: user.getHabits().getArrayList()) {
-            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
-                habitEvent.setHabit(habit);
-                habitEventList.add(habitEvent);
-            }
-        }
-        Collections.sort(habitEventList);
+        createHabitEventList();
 
         habitList = user.getHabits().getArrayList();
+        try {
+            noneHabit = new Habit("None", "", new Date(), new ArrayList<Day>());
+            habitList.add(noneHabit);
+        }catch(Exception e){
+            //unexpected behaviour
 
-        Spinner habitSpinner = (Spinner) view.findViewById(R.id.habitFilterSpinner);
+        }
+        habitSpinner = (Spinner) view.findViewById(R.id.habitFilterSpinner);
+        habitSpinner.setSelection(habitList.size()-1);
 
+        ArrayAdapter<Habit> habitAdapter = new ArrayAdapter<Habit>(this.getActivity(), android.R.layout.simple_spinner_item, habitList);
 
+        habitSpinner.setAdapter(habitAdapter);
+
+        commentFilter = (EditText) view.findViewById(R.id.commentFilterEditText);
+
+        Button filterButton = (Button) view.findViewById(R.id.filterButton);
 
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
@@ -126,6 +140,13 @@ public class AllHabitEventsFragment extends Fragment {
             }
         });
 
+        filterButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                filterHabitEvents();
+            }
+        });
+
         habitEventListView.setAdapter(adapter);
 
         return view;
@@ -136,6 +157,35 @@ public class AllHabitEventsFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void filterHabitEvents(){
+        createHabitEventList();
+        Habit selected = (Habit) habitSpinner.getSelectedItem();
+            Iterator<HabitEvent> iter = habitEventList.iterator();
+        while(iter.hasNext()){
+            HabitEvent next = iter.next();
+            if(!selected.getTitle().equals(noneHabit.getTitle()) && !next.getHabit().getTitle().equals(selected.getTitle())){
+                iter.remove();
+            }
+            if (!next.getComment().contains(commentFilter.getText().toString())){
+                iter.remove();
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    public void createHabitEventList(){
+        User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
+        habitEventList.clear();
+        for (Habit habit: user.getHabits().getArrayList()) {
+            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
+                habitEvent.setHabit(habit);
+                habitEventList.add(habitEvent);
+            }
+        }
+        Collections.sort(habitEventList);
     }
 
     /**

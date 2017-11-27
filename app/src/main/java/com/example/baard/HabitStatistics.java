@@ -10,6 +10,8 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -66,7 +68,13 @@ public class HabitStatistics {
         ArrayList<Long> times = new ArrayList<Long>();
         ArrayList<Integer> habitCompletions = new ArrayList<Integer>();
         HashSet<Integer> frequency = new HashSet<Integer>();
-        HabitEventList habitEventList = habit.getEvents();
+        ArrayList<HabitEvent> habitEventList = habit.getEvents().getArrayList();
+        Collections.sort(habitEventList, new Comparator<HabitEvent>() {
+            @Override
+            public int compare(HabitEvent event1, HabitEvent event2) {
+                return event1.getEventDate().compareTo(event2.getEventDate());
+            }
+        });
 
         int completion = 0;
 
@@ -75,7 +83,7 @@ public class HabitStatistics {
         }
 
         for (int i = 0; i < habitEventList.size(); i++) {
-            HabitEvent habitEvent = habitEventList.getHabitEvent(i);
+            HabitEvent habitEvent = habitEventList.get(i);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(habitEvent.getEventDate());
 
