@@ -180,11 +180,12 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
         String habitName = spinner.getSelectedItem().toString();
         solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
-        solo.setDatePicker(0,2016,11,25);
+        solo.setDatePicker(0,2010,11,25);
         solo.clickOnText("OK");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
+        solo.searchText("Invalid date entry");
     }
 
     /**
