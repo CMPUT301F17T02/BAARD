@@ -16,13 +16,10 @@
         android:layout_height="36dp"
         android:text="username"
         android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/username_prompt"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="16dp"
-        app:layout_constraintLeft_toRightOf="@+id/username_prompt"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/username_prompt" />
 
     <EditText
         android:id="@+id/name"
