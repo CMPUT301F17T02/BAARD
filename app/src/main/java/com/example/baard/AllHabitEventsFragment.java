@@ -130,7 +130,7 @@ public class AllHabitEventsFragment extends Fragment {
 
         adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
 
-        //sendHabitEventsToSharedPreferences();
+        sendHabitEventsToSharedPreferences();
 
         habitEventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -187,7 +187,7 @@ public class AllHabitEventsFragment extends Fragment {
         }
 
         adapter.notifyDataSetChanged();
-        //sendHabitEventsToSharedPreferences();
+        sendHabitEventsToSharedPreferences();
     }
 
     public void createHabitEventList(){
