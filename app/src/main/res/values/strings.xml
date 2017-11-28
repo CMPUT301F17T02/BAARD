@@ -26,6 +26,12 @@
     <string name="title_activity_view_habit">ViewHabitActivity</string>
     <string name="title_activity_view_map">Map</string>
 
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <string name="noLocation">No Location</string>
+    <string name="yesLocation">Location Added</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create">Create</string>

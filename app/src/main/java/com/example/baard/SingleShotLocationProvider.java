@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by biancaangotti on 2017-11-27.
+ * Credits go to: https://stackoverflow.com/questions/29657948/get-the-current-location-fast-and-once-in-android
  */
 
 public class SingleShotLocationProvider {
@@ -82,21 +83,4 @@ public class SingleShotLocationProvider {
             }
         }
     }
-
-
-    // consider returning Location instead of this dummy wrapper class
-//    public static class GPSCoordinates {
-//        public float longitude = -1;
-//        public float latitude = -1;
-//
-//        public GPSCoordinates(float theLatitude, float theLongitude) {
-//            longitude = theLongitude;
-//            latitude = theLatitude;
-//        }
-//
-//        public GPSCoordinates(double theLatitude, double theLongitude) {
-//            longitude = (float) theLongitude;
-//            latitude = (float) theLatitude;
-//        }
-//    }
 }

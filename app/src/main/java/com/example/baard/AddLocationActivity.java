@@ -5,20 +5,14 @@
 package com.example.baard;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
 
-//import com.google.android.gms.location.FusedLocationProviderClient;
-//import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,24 +20,26 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import static java.lang.Thread.sleep;
 
 public class AddLocationActivity extends FragmentActivity implements OnMapReadyCallback {
-    // GoogleMap.OnMyLocationButtonClickListener
+
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private GoogleMap mMap;
-//    private FusedLocationProviderClient mFusedLocationClient;
     private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
     private LatLng pinPosition, currentPosition;
+    private Gson gson;
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor sharedPrefsEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
+
+        gson = new Gson();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPrefsEditor = sharedPrefs.edit();
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == -1) { // not allowed, so request
             ActivityCompat.requestPermissions(this,
@@ -57,6 +53,8 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
                         @Override
                         public void onNewLocationAvailable(LatLng location) {
                             currentPosition = location;
+//                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 14.0f));
+//                            marker.position(currentPosition);
                         }
                     });
         }
@@ -102,8 +100,16 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        final MarkerOptions marker = new MarkerOptions()
+                .title("Habit Event Location")
+                .snippet("Is this the right location?")
+                .position(mDefaultLocation);
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mMap.addMarker(marker).setDraggable(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14.0f));
+        pinPosition = marker.getPosition();
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)  != -1){
             mMap.setMyLocationEnabled(true);
@@ -111,25 +117,11 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
         }
         //mMap.setOnMyLocationButtonClickListener(this);
 
-        LatLng pos;
-        if (currentPosition == null) {
-            pos = mDefaultLocation;
-        } else {
-            pos = currentPosition;
-            //pos = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
-        }
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 14.0f));
-        mMap.addMarker(new MarkerOptions()
-                .title("Habit Event Location")
-                .snippet("Is this the right location?")
-                .position(pos))
-                .setDraggable(true);
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
-
+                pinPosition = marker.getPosition();
             }
 
             @Override
@@ -140,14 +132,21 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 pinPosition = marker.getPosition();
-                Gson gson = new Gson();
-                String json = gson.toJson(pinPosition);
-                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
-                sharedPrefsEditor.putString("locationPosition", json);
-                sharedPrefsEditor.commit();
             }
         });
+    }
+
+    public void cancel(View view) {
+        sharedPrefsEditor.remove("locationPosition");
+        sharedPrefsEditor.commit();
+        finish();
+    }
+
+    public void save(View view) {
+        String json = gson.toJson(pinPosition);
+        sharedPrefsEditor.putString("locationPosition", json);
+        sharedPrefsEditor.commit();
+        finish();
     }
 
 }
