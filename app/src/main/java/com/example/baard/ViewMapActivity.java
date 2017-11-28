@@ -29,6 +29,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.text.SimpleDateFormat;
+
 public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "ViewMapActivity";
@@ -96,11 +98,13 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14.0f));
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+
+        SimpleDateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
         // set all the markers a user has on their events
         for (Habit habit : user.getHabits().getArrayList()) {
             for (HabitEvent habitEvent : habit.getEvents().getArrayList()) {
                 if (habitEvent.getLocation() != null) {
-                    mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation()).title(habitEvent.getHabit().getTitle()));
+                    mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation()).title(habit.getTitle()).snippet(sourceFormat.format(habitEvent.getEventDate())));
                 }
             }
         }
