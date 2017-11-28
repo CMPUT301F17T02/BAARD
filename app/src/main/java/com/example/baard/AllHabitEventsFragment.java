@@ -124,7 +124,7 @@ public class AllHabitEventsFragment extends Fragment {
         commentFilter = (EditText) view.findViewById(R.id.commentFilterEditText);
 
         Button filterButton = (Button) view.findViewById(R.id.filterButton);
-        filterButton.setText("");
+        commentFilter.setText("");
 
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
