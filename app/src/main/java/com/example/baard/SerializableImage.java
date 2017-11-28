@@ -6,6 +6,7 @@ package com.example.baard;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,48 +18,30 @@ import java.io.Serializable;
  * Created by chrygore on 27/11/17.
  */
 
-public class SerializableImage implements Serializable {
+public class SerializableImage {
 
-    private Bitmap currentImage;
+    //private transient Bitmap currentImage;
 
-    public void setBitmap(Bitmap image){ this.currentImage = image; }
+    //private String bitmapString;
 
-    public Bitmap getBitmap(){ return this.currentImage; }
+    //public void setBitmap(Bitmap image){ this.currentImage = image; }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+    //public Bitmap getBitmap(){ return this.currentImage; }
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        currentImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-        byte[] byteArray = stream.toByteArray();
-
-        out.writeInt(byteArray.length);
-        out.write(byteArray);
-
-        currentImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
+    public static Bitmap getBitmapFromString(String bitmapString){
+            byte[] decodedString = Base64.decode(bitmapString, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            return decodedByte;
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-
-
-        int bufferLength = in.readInt();
-
-        byte[] byteArray = new byte[bufferLength];
-
-        int pos = 0;
-        do {
-            int read = in.read(byteArray, pos, bufferLength - pos);
-
-            if (read != -1) {
-                pos += read;
-            } else {
-                break;
-            }
-
-        } while (pos < bufferLength);
-
-        currentImage = BitmapFactory.decodeByteArray(byteArray, 0, bufferLength);
-
+    public static String getStringFromBitmap(Bitmap bitmapPicture) {
+        final int COMPRESSION_QUALITY = 100;
+        String encodedImage;
+        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+        bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
+                byteArrayBitmapStream);
+        byte[] b = byteArrayBitmapStream.toByteArray();
+        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return encodedImage;
     }
 }

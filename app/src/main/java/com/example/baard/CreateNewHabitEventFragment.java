@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -35,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -69,7 +71,9 @@ public class CreateNewHabitEventFragment extends Fragment {
     private Habit habit = null;
     private HabitList habits;
     private String imageFilePath;
-    private SerializableImage image = new SerializableImage();
+    //private SerializableImage image = new SerializableImage();
+    private String bitmapString;
+    private Bitmap image;
     private User user = null;
     private DateFormat sourceFormat;
     private EditText dateEditText;
@@ -256,7 +260,7 @@ public class CreateNewHabitEventFragment extends Fragment {
         if (isValidHabitEvent) {
             if (imageFilePath != null){
                 habitEvent.setImageFilePath(imageFilePath);
-                habitEvent.setImage(image);
+                habitEvent.setBitmapString(SerializableImage.getStringFromBitmap(image));
             }
             habit.getEvents().add(habitEvent);
             // sort on insert
@@ -355,7 +359,8 @@ public class CreateNewHabitEventFragment extends Fragment {
             TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
             imageFilePath = filePath;
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
-            image.setBitmap(myBitmap);
+            //image.setBitmap(myBitmap);
+            image = myBitmap;
             textView.setText(filePath);
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);

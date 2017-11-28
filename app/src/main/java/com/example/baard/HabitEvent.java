@@ -40,7 +40,8 @@ public class HabitEvent implements Comparable<HabitEvent> {
     private Date eventDate;
     // TODO location variable
     private String imageFilePath;
-    private SerializableImage image;
+    private String bitmapString;
+    //private SerializableImage image;
 
     /**
      * Constructor for HabitEvent without the comment.
@@ -112,6 +113,14 @@ public class HabitEvent implements Comparable<HabitEvent> {
         return comment;
     }
 
+    public String getBitmapString() {
+        return bitmapString;
+    }
+
+    public void setBitmapString(String bitmapString) {
+        this.bitmapString = bitmapString;
+    }
+
     /**
      * setter for comment
      * @param comment
@@ -157,10 +166,6 @@ public class HabitEvent implements Comparable<HabitEvent> {
     public void setImageFilePath(String path){ this.imageFilePath = path; }
 
     public String getImageFilePath(){ return this.imageFilePath; }
-
-    public void setImage(SerializableImage image){ this.image = image; }
-
-    public SerializableImage getImage(){ return this.image; }
 
     /**
      * If a path to an image file has been set with setImageFilePath, generates a Bitmap object

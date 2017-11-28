@@ -67,8 +67,8 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         ImageView image = (ImageView) findViewById(R.id.ImageView);
         // set image if there is one
         //Bitmap bmp = habitEvent.getImage().getBitmap();
-        if (habitEvent.getImage() != null) {
-            image.setImageBitmap(habitEvent.getImage().getBitmap());
+        if (habitEvent.getBitmapString() != null) {
+            image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
         }
         //set onClick listeners for the edit/delete buttons
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitEventButton);

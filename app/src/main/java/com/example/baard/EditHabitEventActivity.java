@@ -81,8 +81,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_habit_event);
 
         ImageView image = (ImageView) findViewById(R.id.imageViewEditEvent);
-            if (habitEvent.getImage() != null) {
-                image.setImageBitmap(habitEvent.getImage().getBitmap());
+            if (habitEvent.getBitmapString() != null) {
+                image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
             }
 
         TextView habitTitle = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
