@@ -4,7 +4,9 @@
 
 package com.example.baard;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -24,11 +26,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "ViewMapActivity";
+
     private GoogleMap mMap;
+    private User user;
+
     private boolean mLocationPermissionGranted;
     private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
     private LatLng mLastKnownLocation = new LatLng(53.5444, -113.490);
@@ -49,6 +56,15 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
 //        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+
+        FileController fc = new FileController();
+        user = fc.loadUser(getApplicationContext(), username);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -76,12 +92,25 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        // set the camera to the default location with zoom enabled
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14.0f));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        // Do other setup activities here too, as described elsewhere in this tutorial.
-        mMap.addMarker(new MarkerOptions().position(mDefaultLocation).title("Marker in Edmonton"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mDefaultLocation));
-        mMap.setMinZoomPreference(2.0f);
+        // set all the markers a user has on their events
+        for (Habit habit : user.getHabits().getArrayList()) {
+            for (HabitEvent habitEvent : habit.getEvents().getArrayList()) {
+                if (habitEvent.getLocation() != null) {
+                    mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation()).title(habitEvent.getHabit().getTitle()));
+                }
+            }
+        }
 
     }
+
+    // hide all markers if not within 5km
+
+    // hide or show friends markers
+
+    // if pull from shared preferences,
 
 }

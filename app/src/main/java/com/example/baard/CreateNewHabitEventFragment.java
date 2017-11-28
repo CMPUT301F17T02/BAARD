@@ -142,7 +142,8 @@ public class CreateNewHabitEventFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(getActivity(), "COMING SOON!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), AddLocationActivity.class);
+                startActivity(intent);
             }
         });
 
