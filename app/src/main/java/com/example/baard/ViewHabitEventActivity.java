@@ -6,6 +6,7 @@ package com.example.baard;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -65,8 +66,9 @@ public class ViewHabitEventActivity extends AppCompatActivity {
         comment.setText(habitEvent.getComment());
         ImageView image = (ImageView) findViewById(R.id.ImageView);
         // set image if there is one
-        if (habitEvent.getImageBitmap() != null) {
-            image.setImageBitmap(habitEvent.getImageBitmap());
+        //Bitmap bmp = habitEvent.getImage().getBitmap();
+        if (habitEvent.getImage() != null) {
+            image.setImageBitmap(habitEvent.getImage().getBitmap());
         }
         //set onClick listeners for the edit/delete buttons
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitEventButton);

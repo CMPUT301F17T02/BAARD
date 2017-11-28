@@ -69,6 +69,7 @@ public class CreateNewHabitEventFragment extends Fragment {
     private Habit habit = null;
     private HabitList habits;
     private String imageFilePath;
+    private SerializableImage image = new SerializableImage();
     private User user = null;
     private DateFormat sourceFormat;
     private EditText dateEditText;
@@ -255,6 +256,7 @@ public class CreateNewHabitEventFragment extends Fragment {
         if (isValidHabitEvent) {
             if (imageFilePath != null){
                 habitEvent.setImageFilePath(imageFilePath);
+                habitEvent.setImage(image);
             }
             habit.getEvents().add(habitEvent);
             // sort on insert
@@ -352,6 +354,8 @@ public class CreateNewHabitEventFragment extends Fragment {
             cursor.close();
             TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
             imageFilePath = filePath;
+            Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
+            image.setBitmap(myBitmap);
             textView.setText(filePath);
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
