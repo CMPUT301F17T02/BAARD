@@ -5,7 +5,12 @@
 package com.example.baard;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,12 +20,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +56,7 @@ import java.util.Date;
 import java.util.zip.DataFormatException;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 
 /**
@@ -261,6 +271,26 @@ public class CreateNewHabitEventFragment extends Fragment {
             Collections.sort(habit.getEvents().getArrayList());
             fileController.saveUser(getActivity().getApplicationContext(), user);
             habit.sendToSharedPreferences(getActivity().getApplicationContext());
+
+            //set up notification TODO: If on streak
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 13);
+            calendar.set(Calendar.MINUTE, 28);
+            calendar.set(Calendar.SECOND, 45);
+
+            Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
+            PendingIntent resultPendingIntent =
+                    PendingIntent.getBroadcast(
+                            getActivity(),
+                            0,
+                            alarmIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(alarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), resultPendingIntent);
+
             // go to view habitevent activity
             Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
             intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
