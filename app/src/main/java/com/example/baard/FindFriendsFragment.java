@@ -40,6 +40,7 @@ public class FindFriendsFragment extends Fragment {
     List<User> allUserList = new ArrayList<>();
     ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
     UserList allUsers = new UserList();
+    private UserList friendList = new UserList();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,10 +64,10 @@ public class FindFriendsFragment extends Fragment {
 
         //fc = new FileController();
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Gson gson = new Gson();
-        String json = sharedPrefs.getString("username", "");
-        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+//        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+//        Gson gson = new Gson();
+//        String json = sharedPrefs.getString("username", "");
+//        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
@@ -90,6 +91,9 @@ public class FindFriendsFragment extends Fragment {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        System.out.println(allUsers.getArrayList());
+
 
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
@@ -117,12 +121,20 @@ public class FindFriendsFragment extends Fragment {
                 viewHolder.button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (viewHolder.button.getText() == "UNFOLLOW") {
-                            viewHolder.button.setText("FOLLOW");
-                        } else { viewHolder.button.setText("UNFOLLOW"); }
 
-                        // set friend to list.
-                        
+                        if (viewHolder.button.getText() == "FOLLOWING") {
+                            System.out.println(friendList.getArrayList());
+                        }
+                        else {
+                            viewHolder.button.setText("FOLLOWING");
+                            friendList.add(getItem(position));
+                            System.out.println(friendList.getArrayList());
+                            // set friends to user
+                            //user.setFriends(friendList);
+                        }
+
+
+
                     }
                 });
                 convertView.setTag(viewHolder);

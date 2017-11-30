@@ -44,6 +44,9 @@ public class FriendRequestsFragment extends Fragment {
     //private String username;
     //private FileController fc;
     ArrayList<User> allUserList = new ArrayList<>();
+    private UserList getFriendRequestsList = new UserList();
+    private User user;
+
 
     private FriendRequestsFragment.OnFragmentInteractionListener mListener;
 
@@ -98,7 +101,8 @@ public class FriendRequestsFragment extends Fragment {
 
         //User user = fc.loadUser(getActivity().getApplicationContext(), username);
         //HabitList habitList = user.getHabits();
-
+        //getFriendRequestsList = user.getReceivedRequests();
+        //getFriendRequestsList.getArrayList();
         List<String> listDataHeader = new ArrayList<>();
         HashMap<String, List<String>> listDataChild = new HashMap<>();
         List<String> child = new ArrayList<>();
