@@ -263,7 +263,7 @@ public class CreateNewHabitEventFragment extends Fragment {
             fileController.saveUser(getActivity().getApplicationContext(), user);
             habit.sendToSharedPreferences(getActivity().getApplicationContext());
 
-            //set up notification TODO: If on streak
+            //set up notification
             if (habit.isStreak()) {
 
                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -279,6 +279,7 @@ public class CreateNewHabitEventFragment extends Fragment {
 
                 if (PendingIntent.getBroadcast(getActivity(),habits.indexOf(habit),alarmIntent,PendingIntent.FLAG_NO_CREATE) != null) {
                     alarmManager.cancel(resultPendingIntent);
+                    Log.i("Deleted Alarm", habit.getTitle());
                 }
 
                 ArrayList<Day> freq = habit.getFrequency();

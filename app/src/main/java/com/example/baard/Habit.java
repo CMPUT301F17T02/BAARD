@@ -228,21 +228,17 @@ public class Habit {
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.YEAR, start.get(Calendar.YEAR));
         int streak = 0;
-        for ( ; !calendar.equals(start) ; ) {
-            Log.i("Current Date", calendar.toString());
-            Log.i("startDate", start.toString());
-            Log.i("In loop?", "Looping");
+        int count = 0;
+        while ( !calendar.equals(start) && count < 5) {
+            calendar.add(Calendar.DATE, -1);
             String date = sDF.format(calendar.getTime().getTime()).toUpperCase();
             Day day = Day.valueOf(date);
             if (frequency.contains(day)) {
+                count++;
                 for (HabitEvent event: events.getArrayList()){
-                    Log.i("eventDate", event.getEventDate().toString());
-                    Log.i("calendarDate", calendar.getTime().toString());
                     if (event.getEventDate().equals(calendar.getTime())) {
                         streak++;
-                        Log.i("Equals", "Added to streak");
                         if (streak > 4) {
-                            Log.i("return", "true");
                             return true;
                         }
                         break;
@@ -250,9 +246,6 @@ public class Habit {
                 }
 
             }
-//            calendar.setTime(currentDate);
-            calendar.add(Calendar.DATE, -1);
-//            currentDate = calendar.getTime();
         }
         return false;
     }
