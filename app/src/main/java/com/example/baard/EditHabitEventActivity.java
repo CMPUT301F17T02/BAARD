@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -301,14 +302,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
             String filePath = cursor.getString(columnIndex);
             cursor.close();
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
-            int size = 0;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
-                size = myBitmap.getRowBytes() * myBitmap.getHeight();
-            } else {
-                size = myBitmap.getByteCount();
-            }
-
-            if (size > 65536){
+            File file = new File(filePath);
+            if (file.length() > 65536){
                 Toast.makeText(this, "Image is too large.", Toast.LENGTH_LONG).show();
                 return;
             }

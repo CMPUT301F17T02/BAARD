@@ -363,14 +363,8 @@ public class CreateNewHabitEventFragment extends Fragment {
             cursor.close();
             TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
-            int size = 0;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
-                size = myBitmap.getRowBytes() * myBitmap.getHeight();
-            } else {
-                size = myBitmap.getByteCount();
-            }
-
-            if (size > 65536){
+            File file = new File(filePath);
+            if (file.length() > 65536){
                 Toast.makeText(getActivity(), "Image is too large.", Toast.LENGTH_LONG).show();
                 return;
             }
