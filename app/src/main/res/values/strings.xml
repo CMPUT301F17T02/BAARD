@@ -28,6 +28,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_view_map">View Map</string>
+    <string name="title_activity_add_location">Map</string>
 
     <string name="habit_title">Habit Title</string>
     <string name="reason">Reason</string>
@@ -36,9 +37,12 @@
     <string name="no_events">No Habit Events to Display</string>
     <string name="user_profile">User Profile</string>
 
+    <string name="noLocation">No Location</string>
+    <string name="yesLocation">Location Added</string>
+
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="create">Create</string>
     <string name="save">Save</string>
-
+    <string name="cancel">Cancel</string>
 </resources>

@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
     private transient Habit habit;
     private String comment = "";
     private Date eventDate;
-    // TODO location variable
+    private LatLng location;
     private String imageFilePath;
 
     /**
@@ -171,6 +172,24 @@ public class HabitEvent implements Comparable<HabitEvent> {
             }
         }
         return null;
+    }
+
+    /**
+     * Return location of habit event
+     *
+     * @return location
+     */
+    public LatLng getLocation() {
+        return location;
+    }
+
+    /**
+     * Set the optional location for a habit event based on user dropping pin
+     *
+     * @param location
+     */
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 
     /**

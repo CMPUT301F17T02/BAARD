@@ -27,10 +27,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -67,6 +69,11 @@ public class CreateNewHabitEventFragment extends Fragment {
     private User user = null;
     private DateFormat sourceFormat;
     private EditText dateEditText;
+    private SharedPreferences sharedPrefs;
+    private Gson gson;
+    private LatLng locationPosition;
+//    private GoogleMap map;
+//    private MapView mapView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,10 +86,14 @@ public class CreateNewHabitEventFragment extends Fragment {
      * @return username
      */
     private String getUsername(){
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
+    }
+
+    private void clearLocation(){
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        sharedPrefsEditor.remove("locationPosition");
+        sharedPrefsEditor.commit();
     }
 
     /**
@@ -97,6 +108,18 @@ public class CreateNewHabitEventFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_create_new_habit_event, container, false);
+
+        // initialize shared preferences and clear location if it exists
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        gson = new Gson();
+        clearLocation();
+
+        // set the map icon
+//        mapView = (MapView) v.findViewById(R.id.mapView);
+//        mapView.onCreate(savedInstanceState);
+//        if (mapView != null) {
+//            map = mapView.getMapAsync(getActivity());
+//        }
 
         // get list of habits from user
         user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
@@ -116,7 +139,8 @@ public class CreateNewHabitEventFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(getActivity(), "COMING SOON!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), AddLocationActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -184,23 +208,30 @@ public class CreateNewHabitEventFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
-        try {
-            Date date = sourceFormat.parse(dateEditText.getText().toString());
-            HabitEvent habitEvent = new HabitEvent(habit, date, commentEditText.getText().toString());
-        } catch (HabitEvent.DateAlreadyExistsException e) {
-            dateEditText.setText("");
-            commentEditText.setText("");
-            //TODO: Clear Location from screen here
-            imageFilePath = null;
-            ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
-            imageView.setImageURI(null);
-            TextView filename = getActivity().findViewById(R.id.filenameTextView);
-            filename.setText("");
-        } catch (ParseException | DataFormatException e) {
-            e.printStackTrace();
+    public void onResume() {
+        super.onResume();
+        String json = sharedPrefs.getString("locationPosition", "");
+        locationPosition = gson.fromJson(json, new TypeToken<LatLng>() {}.getType());
+        RadioButton radioButton = (RadioButton) getActivity().findViewById(R.id.radioButton);
+        if (locationPosition != null) {
+            radioButton.setChecked(true);
+            radioButton.setText(R.string.yesLocation);
+//            mapView.setVisibility(View.VISIBLE);
+//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(locationPosition, 15f));
+//            map.addMarker(new MarkerOptions().position(locationPosition));
+
+        } else {
+            radioButton.setChecked(false);
+            radioButton.setText(R.string.noLocation);
+//            mapView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -243,6 +274,9 @@ public class CreateNewHabitEventFragment extends Fragment {
         if (isValidHabitEvent) {
             if (imageFilePath != null){
                 habitEvent.setImageFilePath(imageFilePath);
+            }
+            if (locationPosition != null) {
+                habitEvent.setLocation(locationPosition);
             }
             habit.getEvents().add(habitEvent);
             // sort on insert

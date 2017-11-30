@@ -174,7 +174,9 @@ public class MainActivity extends AppCompatActivity
             fragment = new CreateNewHabitEventFragment();
             nextHeader = getResources().getString(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_viewFriends) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {

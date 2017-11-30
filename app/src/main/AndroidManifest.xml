@@ -50,7 +50,12 @@
 
         <activity
             android:name=".ViewMapActivity"
-            android:label="@string/title_activity_view_map" />
+            android:label="@string/title_activity_view_map"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name=".ViewHabitActivity"
             android:theme="@style/AppTheme.Translucent"
@@ -72,6 +77,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ViewHabitActivity" />
+        </activity>
+        <activity
+            android:name=".AddLocationActivity"
+            android:label="@string/title_activity_add_location">
         </activity>
         <activity android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity">
