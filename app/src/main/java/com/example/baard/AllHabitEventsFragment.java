@@ -184,7 +184,6 @@ public class AllHabitEventsFragment extends Fragment {
             }
             if (!next.getComment().contains(commentFilter.getText().toString())){
                 iter.remove();
-                continue;
             }
         }
 
