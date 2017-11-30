@@ -38,60 +38,6 @@ import java.util.List;
 
 public class FriendRequestsFragment extends Fragment {
 
-//    private ListView requestFriendsView;
-//    private ExpandableListView adapter;
-//    private String username;
-//    private User user;
-//    private FileController fc;
-//    List<User> allUserList = new ArrayList<>();
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        View rootView = inflater.inflate(R.layout.fragment_friend_requests, container, false);
-//
-//        for (int i = 0; i < 10; i++) {
-//            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
-//            System.out.println(allUserList.get(i).getName());
-//        }
-//        requestFriendsView = (ListView) rootView.findViewById(R.id.friendRequestsView);
-//
-//
-//        //fc = new FileController();
-//
-//        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-//        Gson gson = new Gson();
-//        String json = sharedPrefs.getString("username", "");
-//        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-//        //List<String> data = new ArrayList<>();
-//
-//        // dummy data for now just to play around with things
-//
-//
-//
-//        adapter = new MyFriendsRequestAdapter(this.getContext(), R.layout.list_item_friend_request, allUserList);
-//        requestFriendsView.setAdapter(adapter);
-//
-//        //adapter.notifyDataSetChanged();
-//
-//        return rootView;
-//    }
-//
-//    /**
-//     * Called when AllHabitsFragment activity is opened up and called again.
-//     */
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//        //user = fc.loadUser(getActivity().getApplicationContext(), username);
-//
-//        adapter = new MyFriendsRequestAdapter(this.getContext(), R.layout.friend_list_item, allUserList);
-//        requestFriendsView.setAdapter(adapter);
-//
-//        //adapter.notifyDataSetChanged();
-//    }
-
 
     private ExpandableListView friendRequestsView;
     MyFriendsRequestAdapter adapter;
@@ -157,7 +103,7 @@ public class FriendRequestsFragment extends Fragment {
         HashMap<String, List<String>> listDataChild = new HashMap<>();
         List<String> child = new ArrayList<>();
         child.add("");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
         }
 
