@@ -13,24 +13,30 @@
 
     <LinearLayout
         android:id="@+id/linearLayout7"
-        android:elevation="2dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="34dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="18dp"
         android:background="@drawable/input"
+        android:elevation="3dp"
         android:orientation="vertical"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
         <TextView
             android:id="@+id/newHabit_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
+            android:textSize="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,13 +45,11 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:background="@null"
             android:ems="10"
             android:inputType="textPersonName"
-            android:layout_marginTop="4dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textSize="16sp"
+            android:textSize="@dimen/default_font_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -54,11 +58,11 @@
             app:layout_constraintTop_toBottomOf="@+id/newHabit_title" />
 
         <View
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorSecondary"/>
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorSecondary" />
 
         <TextView
             android:id="@+id/newHabit_reason"
@@ -72,25 +76,23 @@
         <EditText
             android:id="@+id/reason"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_marginTop="4dp"
             android:background="@null"
+            android:ems="10"
             android:inputType="textMultiLine"
-            android:textSize="16sp"
+            android:textSize="@dimen/default_font_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newHabit_reason" />
 
         <View
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorSecondary"/>
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorSecondary" />
 
         <TextView
             android:id="@+id/newHabit_startDate"
@@ -108,13 +110,11 @@
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:background="@null"
             android:layout_marginTop="4dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:background="@null"
+            android:ems="10"
             android:inputType="textPersonName"
-            android:textSize="16sp"
+            android:textSize="@dimen/default_font_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.082"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -123,11 +123,11 @@
             app:layout_constraintTop_toBottomOf="@+id/newHabit_startDate" />
 
         <View
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorSecondary"/>
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorSecondary" />
 
         <TextView
             android:id="@+id/newHabit_daysOfWeek"
@@ -145,8 +145,8 @@
         <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
             android:layout_height="45dp"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -159,16 +159,16 @@
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:textColor="@color/white"
                 android:background="@drawable/toggle_button"
                 android:elevation="2dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:text="Sun"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textOff="Sun"
                 android:textOn="Sun"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:layout_editor_absoluteX="74dp"
                 tools:layout_editor_absoluteY="366dp" />
 
@@ -178,16 +178,16 @@
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:textColor="@color/white"
                 android:background="@drawable/toggle_button"
                 android:elevation="2dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:text="Mon"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textOff="Mon"
                 android:textOn="Mon"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="399dp" />
 
@@ -197,16 +197,16 @@
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:textColor="@color/white"
                 android:background="@drawable/toggle_button"
                 android:elevation="2dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:text="Tues"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textOff="Tue"
                 android:textOn="Tue"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:layout_editor_absoluteX="250dp"
                 tools:layout_editor_absoluteY="447dp" />
 
@@ -217,15 +217,15 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:background="@drawable/toggle_button"
-                android:textColor="@color/white"
                 android:elevation="2dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:text="Wed"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textOff="Wed"
                 android:textOn="Wed"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:layout_editor_absoluteX="296dp"
                 tools:layout_editor_absoluteY="343dp" />
         </LinearLayout>
@@ -242,7 +242,6 @@
             <ToggleButton
                 android:id="@+id/thu"
                 android:layout_width="0dp"
-                android:textColor="@color/white"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
@@ -252,16 +251,16 @@
                 android:gravity="center"
                 android:text="Thu"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textOff="Thu"
                 android:textOn="Thu"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:layout_editor_absoluteX="51dp"
                 tools:layout_editor_absoluteY="447dp" />
 
             <ToggleButton
                 android:id="@+id/fri"
                 android:layout_width="0dp"
-                android:textColor="@color/white"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
@@ -271,9 +270,10 @@
                 android:gravity="center"
                 android:text="Fri"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textOff="Fri"
                 android:textOn="Fri"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:layout_editor_absoluteX="234dp"
                 tools:layout_editor_absoluteY="432dp" />
 
@@ -284,16 +284,16 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:background="@drawable/toggle_button"
-                android:textColor="@color/white"
                 android:checked="false"
                 android:elevation="2dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:text="Sat"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textOff="Sat"
                 android:textOn="Sat"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:layout_editor_absoluteX="280dp"
                 tools:layout_editor_absoluteY="414dp" />
 
@@ -311,14 +311,19 @@
         android:id="@+id/create"
 
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginStart="34dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:text="@string/create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -10,164 +10,316 @@
     android:layout_height="match_parent"
     tools:context="com.example.baard.EditHabitActivity">
 
-    <EditText
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:ems="10"
-        android:hint="Title"
-        android:inputType="textPersonName"
-        android:layout_marginTop="31dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <EditText
-        android:id="@+id/reason"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Reason"
-        android:inputType="textPersonName"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.502" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit Habit"
-        android:textAllCaps="false"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="34dp"
-        app:layout_constraintHorizontal_bias="0.502" />
-
-    <TextView
-        android:id="@+id/newHabit_daysOfWeek"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Days of the Week"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        android:layout_marginTop="81dp"
-        app:layout_constraintTop_toBottomOf="@+id/reason" />
-
-    <ToggleButton
-        android:id="@+id/mon"
-        android:layout_width="52dp"
-        android:layout_height="48dp"
-        android:text="Mon"
-        android:textOff="Mon"
-        android:textOn="Mon"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/wed"
-        app:layout_constraintLeft_toRightOf="@+id/sun"
-        android:layout_marginLeft="1dp" />
-
-    <ToggleButton
-        android:id="@+id/tue"
-        android:layout_width="52dp"
-        android:layout_height="wrap_content"
-        android:text="Tues"
-        android:textOff="Tue"
-        android:textOn="Tue"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/wed"
-        app:layout_constraintLeft_toRightOf="@+id/mon"
-        android:layout_marginLeft="1dp" />
-
-    <ToggleButton
-        android:id="@+id/wed"
-        android:layout_width="52dp"
-        android:layout_height="48dp"
-        android:text="Wed"
-        android:textOff="Wed"
-        android:textOn="Wed"
-        android:textSize="12sp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_daysOfWeek"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <ToggleButton
-        android:id="@+id/thu"
-        android:layout_width="52dp"
-        android:layout_height="wrap_content"
-        android:text="Thu"
-        android:textOff="Thu"
-        android:textOn="Thu"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/wed"
-        app:layout_constraintRight_toLeftOf="@+id/fri"
-        android:layout_marginRight="1dp" />
-
-    <ToggleButton
-        android:id="@+id/fri"
-        android:layout_width="52dp"
-        android:layout_height="wrap_content"
-        android:text="Fri"
-        android:textOff="Fri"
-        android:textOn="Fri"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/wed"
-        app:layout_constraintRight_toLeftOf="@+id/sat"
-        android:layout_marginRight="1dp" />
-
-    <ToggleButton
-        android:id="@+id/sat"
-        android:layout_width="52dp"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="Sat"
-        android:textOff="Sat"
-        android:textOn="Sat"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/wed"
-        android:layout_marginRight="1dp"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <ToggleButton
-        android:id="@+id/sun"
-        android:layout_width="52dp"
-        android:layout_height="48dp"
-        android:text="Sun"
-        android:textOff="Sun"
-        android:textOn="Sun"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/wed"
-        android:layout_marginLeft="2dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
     <Button
         android:id="@+id/save"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="20dp"
         android:onClick="saveHabit"
         android:text="Save"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wed" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp" />
 
-    <EditText
-        android:id="@+id/startDate"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="eg. DD/MM/YYYY"
-        android:inputType="date"
-        android:layout_marginTop="28dp"
-        app:layout_constraintTop_toBottomOf="@+id/reason"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/input"
+        android:elevation="3dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/newHabit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@null"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textSize="@dimen/default_font_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newHabit_title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/newHabit_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reason"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <EditText
+            android:id="@+id/reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@null"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:textSize="@dimen/default_font_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newHabit_reason" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/newHabit_startDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Date"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reason" />
+
+        <EditText
+            android:id="@+id/startDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@null"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textSize="@dimen/default_font_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.082"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newHabit_startDate" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/newHabit_daysOfWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Days of the Week"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startDate" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newHabit_daysOfWeek">
+
+            <ToggleButton
+                android:id="@+id/sun"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_button"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Sun"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textOff="Sun"
+                android:textOn="Sun"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="74dp"
+                tools:layout_editor_absoluteY="366dp" />
+
+            <ToggleButton
+                android:id="@+id/mon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_button"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Mon"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textOff="Mon"
+                android:textOn="Mon"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="399dp" />
+
+            <ToggleButton
+                android:id="@+id/tue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_button"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Tues"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textOff="Tue"
+                android:textOn="Tue"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="250dp"
+                tools:layout_editor_absoluteY="447dp" />
+
+            <ToggleButton
+                android:id="@+id/wed"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_button"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Wed"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textOff="Wed"
+                android:textOn="Wed"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="296dp"
+                tools:layout_editor_absoluteY="343dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+            <ToggleButton
+                android:id="@+id/thu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_button"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Thu"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textOff="Thu"
+                android:textOn="Thu"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="51dp"
+                tools:layout_editor_absoluteY="447dp" />
+
+            <ToggleButton
+                android:id="@+id/fri"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_button"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Fri"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textOff="Fri"
+                android:textOn="Fri"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="234dp"
+                tools:layout_editor_absoluteY="432dp" />
+
+            <ToggleButton
+                android:id="@+id/sat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_button"
+                android:checked="false"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Sat"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textOff="Sat"
+                android:textOn="Sat"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="280dp"
+                tools:layout_editor_absoluteY="414dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="3dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

@@ -52,6 +52,7 @@
             android:name=".ViewMapActivity"
             android:label="@string/title_activity_view_map" />
         <activity
+            android:theme="@style/AppTheme.NoTitle.Transulcent"
             android:name=".ViewHabitActivity"
             android:parentActivityName=".MainActivity">
             <meta-data

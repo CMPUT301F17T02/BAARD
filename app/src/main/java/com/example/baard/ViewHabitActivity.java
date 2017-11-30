@@ -126,7 +126,7 @@ public class ViewHabitActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setTitle("View Habit");
+        //getSupportActionBar().setTitle("View Habit");
     }
 
     /**
