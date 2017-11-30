@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.preference.PreferenceManager;
@@ -70,9 +71,6 @@ public class CreateNewHabitEventFragment extends Fragment {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private Habit habit = null;
     private HabitList habits;
-    private String imageFilePath;
-    //private SerializableImage image = new SerializableImage();
-    private String bitmapString;
     private Bitmap image;
     private User user = null;
     private DateFormat sourceFormat;
@@ -258,8 +256,7 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
 
         if (isValidHabitEvent) {
-            if (imageFilePath != null){
-                habitEvent.setImageFilePath(imageFilePath);
+            if (image != null){
                 habitEvent.setBitmapString(SerializableImage.getStringFromBitmap(image));
             }
             habit.getEvents().add(habitEvent);
@@ -365,9 +362,18 @@ public class CreateNewHabitEventFragment extends Fragment {
             String filePath = cursor.getString(columnIndex);
             cursor.close();
             TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
-            imageFilePath = filePath;
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
-            //image.setBitmap(myBitmap);
+            int size = 0;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
+                size = myBitmap.getRowBytes() * myBitmap.getHeight();
+            } else {
+                size = myBitmap.getByteCount();
+            }
+
+            if (size > 65536){
+                Toast.makeText(getActivity(), "Image is too large.", Toast.LENGTH_LONG).show();
+                return;
+            }
             image = myBitmap;
             textView.setText(filePath);
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
