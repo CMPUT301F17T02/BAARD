@@ -99,9 +99,12 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.pressSpinnerItem(0,0);
         Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
         String habitName = spinner.getSelectedItem().toString();
-        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "25/12/2016");
-        String dateString = date.getText().toString();
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+        solo.setDatePicker(0,2016,11,25);
+        solo.clickOnText("OK");
+        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        //solo.enterText(date, "25/12/2016");
+        //String dateString = date.getText().toString();
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
@@ -112,9 +115,15 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
 
+
+
     /**
      * Create a habit event with a date not in the format dd/mm/yyyy
      */
+
+    // This test may no longer be valid since we are now using a DatePicker.
+
+    /**
     @Test
     public void testInvalidDateFormat(){
         //select the first item in the spinner (note that this test will fail if there are no habits)
@@ -127,6 +136,8 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.searchText("Invalid date entry:");
     }
 
+    */
+
     /**
      * Create a HabitEvent with no date entered.
      */
@@ -134,8 +145,8 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     public void testNoDateEntry(){
         //select the first item in the spinner (note that this test will fail if there are no habits)
         solo.pressSpinnerItem(0,0);
-        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "");
+        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        //solo.enterText(date, "");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
@@ -149,12 +160,32 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     public void testCommentTooLong(){
         //select the first item in the spinner (note that this test will fail if there are no habits)
         solo.pressSpinnerItem(0,0);
-        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "25/12/2012");
+        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        //solo.enterText(date, "25/12/2012");
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+        solo.setDatePicker(0,2016,11,25);
+        solo.clickOnText("OK");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "This comment surely is far too long. It might even have more than 20 characters! Truly shocking...");
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.searchText("Comment is too long (20 char max).");
+    }
+
+    /**
+     * Create a HabitEvent before the start date of a Habit.
+     */
+    @Test
+    public void testCreateHabitEventBeforeHabitStart(){
+        solo.pressSpinnerItem(0,0);
+        Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
+        String habitName = spinner.getSelectedItem().toString();
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+        solo.setDatePicker(0,2010,11,25);
+        solo.clickOnText("OK");
+        EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        solo.enterText(comment, "test comment");
+        solo.clickOnView(solo.getView(R.id.saveButton));
+        solo.searchText("Invalid date entry");
     }
 
     /**
@@ -167,8 +198,11 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.pressSpinnerItem(0,0);
         Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
         String habitName = spinner.getSelectedItem().toString();
-        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "25/12/2016");
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+        solo.setDatePicker(0,2016,11,25);
+        solo.clickOnText("OK");
+        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        //solo.enterText(date, "25/12/2016");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
@@ -185,8 +219,12 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         // create another HabitEvent on the same date
         solo.pressSpinnerItem(0,0);
-        date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "25/12/2016");
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+
+        solo.setDatePicker(0,2016,11,25);
+        solo.clickOnText("OK");
+        //date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        //solo.enterText(date, "25/12/2016");
         comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
@@ -210,8 +248,11 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(habitSpinner);
         solo.clickOnText("Jogging");
         //Jogging has a start date of April 20, 2016
-        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "25/01/2016");
+        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
+        //solo.enterText(date, "25/01/2016");
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+        solo.setDatePicker(0,2016,01,25);
+        solo.clickOnText("OK");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));

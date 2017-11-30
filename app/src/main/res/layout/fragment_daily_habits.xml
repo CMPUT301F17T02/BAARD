@@ -9,29 +9,16 @@
     android:layout_height="match_parent"
     tools:context="com.example.baard.DailyHabitsFragment">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/dailyHabitsListView"
-        android:layout_width="352dp"
-        android:layout_height="411dp"
+        android:layout_width="343dp"
+        android:layout_height="483dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.716"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="62dp" />
-
-    <TextView
-        android:id="@+id/dailyHabitsHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Daily Habits"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.512"/>
 
 </android.support.constraint.ConstraintLayout>

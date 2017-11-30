@@ -141,6 +141,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
 //                saveChanges();
 //            }
 //        });
+
+        getSupportActionBar().setTitle("Edit Habit Event");
     }
 
     /**
