@@ -233,6 +233,13 @@ public class CreateNewHabitEventFragment extends Fragment {
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
             comment = commentEditText.getText().toString();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            date = c.getTime();
             habitEvent = new HabitEvent(habit, date, comment);
         }catch(DataFormatException d){
             commentEditText.setError("Comment is too long (20 char max).");

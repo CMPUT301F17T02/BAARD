@@ -255,7 +255,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         public String getFormattedValue(float value, AxisBase axis) {
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd",Locale.ENGLISH);
             Calendar calendar = Calendar.getInstance();
-            Log.d("LineChart", Float.toString(value));
+//            Log.d("LineChart", Float.toString(value));
             calendar.setTimeInMillis((long)value);
 
             return sdf.format(calendar.getTime());

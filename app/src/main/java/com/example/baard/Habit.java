@@ -226,7 +226,6 @@ public class Habit {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        calendar.set(Calendar.YEAR, start.get(Calendar.YEAR));
         int streak = 0;
         while ( !calendar.equals(start) ) {
             calendar.add(Calendar.DATE, -1);
