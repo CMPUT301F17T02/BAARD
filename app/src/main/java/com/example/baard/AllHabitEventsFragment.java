@@ -180,9 +180,11 @@ public class AllHabitEventsFragment extends Fragment {
             HabitEvent next = iter.next();
             if(!selected.getTitle().equals(noneHabit.getTitle()) && !next.getHabit().getTitle().equals(selected.getTitle())){
                 iter.remove();
+                continue;
             }
             if (!next.getComment().contains(commentFilter.getText().toString())){
                 iter.remove();
+                continue;
             }
         }
 
