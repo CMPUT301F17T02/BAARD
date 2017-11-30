@@ -273,24 +273,25 @@ public class CreateNewHabitEventFragment extends Fragment {
             habit.sendToSharedPreferences(getActivity().getApplicationContext());
 
             //set up notification TODO: If on streak
+            if (habit.isStreak()) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, 19);
+                calendar.set(Calendar.MINUTE, 26);
+                calendar.set(Calendar.SECOND, 00);
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 19);
-            calendar.set(Calendar.MINUTE, 26);
-            calendar.set(Calendar.SECOND, 00);
+                Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
+                alarmIntent.putExtra("name", habit.getTitle());
+                PendingIntent resultPendingIntent =
+                        PendingIntent.getBroadcast(
+                                getActivity(),
+                                0,
+                                alarmIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
 
-            Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
-            alarmIntent.putExtra("name", habit.getTitle());
-            PendingIntent resultPendingIntent =
-                    PendingIntent.getBroadcast(
-                            getActivity(),
-                            0,
-                            alarmIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-
-            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(alarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), resultPendingIntent);
+                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(alarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), resultPendingIntent);
+            }
 
             // go to view habitevent activity
             Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);

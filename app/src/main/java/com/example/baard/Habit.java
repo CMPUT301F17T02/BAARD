@@ -5,13 +5,19 @@
 package com.example.baard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 
 import io.searchbox.annotations.JestId;
@@ -200,6 +206,59 @@ public class Habit {
         String json = gson.toJson(this);
         sharedPrefsEditor.putString("currentlyViewingHabit", json);
         sharedPrefsEditor.commit();
+    }
+
+    /**
+     * Determines whether this habit is on a streak of being completed 5 times in a row most recently
+     * @return Boolean true if streak is current
+     */
+    public boolean isStreak() {
+        SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        Calendar calendar = Calendar.getInstance();
+        int streak = 0;
+        for ( Date currentDate = new Date() ; !currentDate.equals(startDate) ; ) {
+            String date = sDF.format(currentDate.getTime()).toUpperCase();
+            Day day = Day.valueOf(date);
+            if (frequency.contains(day)) {
+                for (HabitEvent event: events.getArrayList()){
+                    if (event.getEventDate().equals(currentDate)) {
+                        streak++;
+                        break;
+                    }
+                }
+                if (streak > 4) {
+                    return true;
+                }
+            }
+            calendar.setTime(currentDate);
+            calendar.add(Calendar.DATE, -1);
+            currentDate = calendar.getTime();
+        }
+        return false;
+    }
+
+    /**
+     * Determines if this habit has achieved a milestone of 5, 10, 25, 50, or 100 overall events.
+     * @return integer representing the last milestone achieved. Otherwise 0.
+     */
+    public int milestone() {
+        Set<Integer> milestones = new HashSet<>();
+        milestones.add(5);
+        milestones.add(10);
+        milestones.add(25);
+        milestones.add(50);
+        milestones.add(100);
+
+        int toReturn = 0;
+        int count = events.size();
+        for (Integer m : milestones) {
+            if (count < m) {
+                return toReturn;
+            } else {
+                toReturn = m;
+            }
+        }
+        return toReturn;
     }
 
     @Override
