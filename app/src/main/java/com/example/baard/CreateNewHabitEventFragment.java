@@ -264,7 +264,7 @@ public class CreateNewHabitEventFragment extends Fragment {
             habit.sendToSharedPreferences(getActivity().getApplicationContext());
 
             //set up notification
-            if (habit.isStreak()) {
+            if (habit.streak() > 4) {
 
                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                 Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);

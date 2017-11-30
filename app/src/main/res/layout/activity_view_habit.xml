@@ -171,7 +171,6 @@
             android:textColor="@android:color/black"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="@string/streak"
             android:visibility="gone" />
 
         <LinearLayout

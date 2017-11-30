@@ -211,10 +211,10 @@ public class Habit {
     }
 
     /**
-     * Determines whether this habit is on a streak of being completed 5 times in a row most recently
+     * Determines whether this habit is on a streak and returns the length in number of days
      * @return Boolean true if streak is current
      */
-    public boolean isStreak() {
+    public int streak() {
         SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
         Calendar start = Calendar.getInstance();
@@ -228,26 +228,25 @@ public class Habit {
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.YEAR, start.get(Calendar.YEAR));
         int streak = 0;
-        int count = 0;
-        while ( !calendar.equals(start) && count < 5) {
+        while ( !calendar.equals(start) ) {
             calendar.add(Calendar.DATE, -1);
             String date = sDF.format(calendar.getTime().getTime()).toUpperCase();
             Day day = Day.valueOf(date);
             if (frequency.contains(day)) {
-                count++;
+                boolean found = false;
                 for (HabitEvent event: events.getArrayList()){
                     if (event.getEventDate().equals(calendar.getTime())) {
                         streak++;
-                        if (streak > 4) {
-                            return true;
-                        }
+                        found = true;
                         break;
                     }
                 }
-
+                if (!found) {
+                    return streak;
+                }
             }
         }
-        return false;
+        return streak;
     }
 
     /**
