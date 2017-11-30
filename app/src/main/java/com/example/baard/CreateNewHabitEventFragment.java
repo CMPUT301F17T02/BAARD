@@ -14,14 +14,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +30,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -361,7 +356,6 @@ public class CreateNewHabitEventFragment extends Fragment {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
-            TextView textView = (TextView) getActivity().findViewById(R.id.filenameTextView);
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
             File file = new File(filePath);
             if (file.length() > 65536){
@@ -369,7 +363,6 @@ public class CreateNewHabitEventFragment extends Fragment {
                 return;
             }
             image = myBitmap;
-            textView.setText(filePath);
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
         }
