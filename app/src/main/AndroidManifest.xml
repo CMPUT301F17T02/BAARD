@@ -52,8 +52,8 @@
             android:name=".ViewMapActivity"
             android:label="@string/title_activity_view_map" />
         <activity
-            android:theme="@style/AppTheme.NoTitle.Transulcent"
             android:name=".ViewHabitActivity"
+            android:theme="@style/AppTheme.Translucent"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -67,6 +67,7 @@
             android:parentActivityName=".ViewHabitEventActivity" />
         <activity
             android:name=".EditHabitActivity"
+            android:theme="@style/AppTheme.Translucent"
             android:parentActivityName=".ViewHabitActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
