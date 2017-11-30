@@ -51,7 +51,7 @@
         <activity
             android:name=".ViewMapActivity"
             android:label="@string/title_activity_view_map"
-            android:parentActivityName=".MainActivity">
+            android:theme="@style/AppTheme.Translucent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

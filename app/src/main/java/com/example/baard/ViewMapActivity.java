@@ -12,6 +12,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -31,7 +35,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.text.SimpleDateFormat;
 
-public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ViewMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "ViewMapActivity";
 
@@ -51,7 +55,7 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_map);
 
-
+        setActionBarTitle(getString(R.string.title_activity_view_map));
 //        if (savedInstanceState != null) {
 //            mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
 //            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
@@ -72,6 +76,19 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
+    }
 
 //    @Override
 //    protected void onSaveInstanceState(Bundle outState) {

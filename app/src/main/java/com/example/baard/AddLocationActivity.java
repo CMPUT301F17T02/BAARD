@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -25,7 +26,7 @@ import com.google.gson.Gson;
 
 import static android.view.View.VISIBLE;
 
-public class AddLocationActivity extends FragmentActivity implements OnMapReadyCallback {
+public class AddLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private GoogleMap mMap;
@@ -39,9 +40,6 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setVisibility(VISIBLE);
 
         gson = new Gson();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -111,7 +109,6 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
                 .snippet("Is this the right location?")
                 .position(mDefaultLocation);
         mMap = googleMap;
-        mMap.getUiSettings().setZoomControlsEnabled(true);
 
         mMap.addMarker(marker).setDraggable(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14.0f));
