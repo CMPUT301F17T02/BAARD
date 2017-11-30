@@ -7,7 +7,9 @@ package com.example.baard;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -215,24 +217,42 @@ public class Habit {
     public boolean isStreak() {
         SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        calendar.set(Calendar.DST_OFFSET, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.AM_PM, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.YEAR, start.get(Calendar.YEAR));
         int streak = 0;
-        for ( Date currentDate = new Date() ; !currentDate.equals(startDate) ; ) {
-            String date = sDF.format(currentDate.getTime()).toUpperCase();
+        for ( ; !calendar.equals(start) ; ) {
+            Log.i("Current Date", calendar.toString());
+            Log.i("startDate", start.toString());
+            Log.i("In loop?", "Looping");
+            String date = sDF.format(calendar.getTime().getTime()).toUpperCase();
             Day day = Day.valueOf(date);
             if (frequency.contains(day)) {
                 for (HabitEvent event: events.getArrayList()){
-                    if (event.getEventDate().equals(currentDate)) {
+                    Log.i("eventDate", event.getEventDate().toString());
+                    Log.i("calendarDate", calendar.getTime().toString());
+                    if (event.getEventDate().equals(calendar.getTime())) {
                         streak++;
+                        Log.i("Equals", "Added to streak");
+                        if (streak > 4) {
+                            Log.i("return", "true");
+                            return true;
+                        }
                         break;
                     }
                 }
-                if (streak > 4) {
-                    return true;
-                }
+
             }
-            calendar.setTime(currentDate);
+//            calendar.setTime(currentDate);
             calendar.add(Calendar.DATE, -1);
-            currentDate = calendar.getTime();
+//            currentDate = calendar.getTime();
         }
         return false;
     }

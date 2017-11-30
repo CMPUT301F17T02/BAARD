@@ -12,10 +12,18 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-/**
- * Created by Adam on 11/29/2017.
- */
 
+/**
+ * Implements the receiver to be called by an Alarm Manager to then instantiate a notification
+ *
+ * Made with reference to:
+ * https://developer.android.com/training/notify-user/build-notification.html#notify
+ * https://thenewboston.com/forum/topic.php?id=13015
+ *
+ * @author anarten
+ * @see android.content.BroadcastReceiver
+ * @see CreateNewHabitEventFragment
+ */
 public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
