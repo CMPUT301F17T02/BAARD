@@ -255,7 +255,7 @@ public class Habit {
      * @return integer representing the last milestone achieved. Otherwise 0.
      */
     public int milestone() {
-        Set<Integer> milestones = new HashSet<>();
+        ArrayList<Integer> milestones = new ArrayList<>();
         milestones.add(5);
         milestones.add(10);
         milestones.add(25);

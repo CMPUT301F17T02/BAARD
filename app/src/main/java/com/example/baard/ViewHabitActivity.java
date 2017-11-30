@@ -105,6 +105,23 @@ public class ViewHabitActivity extends AppCompatActivity {
         createLineChart();
         listHabitEvents();
 
+        TextView milestoneTextView = (TextView) findViewById(R.id.milestoneTextView);
+        int milestone = habit.milestone();
+        System.out.println("Milestone: "+Integer.toString(milestone));
+        if (milestone > 0) {
+            milestoneTextView.setText("Milestone reached: "+Integer.toString(milestone)+" habit events completed!");
+            milestoneTextView.setVisibility(View.VISIBLE);
+        } else {
+            milestoneTextView.setVisibility(View.GONE);
+        }
+
+        TextView streakTextView = (TextView) findViewById(R.id.streakTextView);
+        if (habit.isStreak()) {
+            streakTextView.setVisibility(View.VISIBLE);
+        } else {
+            streakTextView.setVisibility(View.GONE);
+        }
+
         Button edit = (Button) findViewById(R.id.edit);
         Button delete = (Button) findViewById(R.id.delete);
 
