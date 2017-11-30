@@ -147,6 +147,14 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        mUsernameView.setText("");
+        mNameView.setText("");
+        mUsernameView.requestFocus();
+    }
+
     private void changeFont() {
         Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
         Typeface ralewayLight = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Light.ttf");

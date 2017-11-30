@@ -28,6 +28,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class FindFriendsFragment extends Fragment {
 
@@ -37,15 +38,25 @@ public class FindFriendsFragment extends Fragment {
     private User user;
     private FileController fc;
     List<User> allUserList = new ArrayList<>();
+    ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
+    UserList allUsers = new UserList();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_find_friends, container, false);
 
-        for (int i = 0; i < 10; i++) {
-            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
-            System.out.println(allUserList.get(i).getName());
+//        for (int i = 0; i < 10; i++) {
+//            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
+//            System.out.println(allUserList.get(i).getName());
+//        }
+
+        getAllUsersTask.execute();
+
+        try {
+            allUsers = getAllUsersTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
@@ -62,7 +73,7 @@ public class FindFriendsFragment extends Fragment {
 
 
 
-        adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUserList);
+        adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
@@ -79,7 +90,15 @@ public class FindFriendsFragment extends Fragment {
 
         //user = fc.loadUser(getActivity().getApplicationContext(), username);
 
-        adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUserList);
+        getAllUsersTask.execute();
+
+        try {
+            allUsers = getAllUsersTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
@@ -87,7 +106,7 @@ public class FindFriendsFragment extends Fragment {
 
     private class MyFriendsListAdapter extends ArrayAdapter<User> {
         private int layout;
-        public MyFriendsListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<User> objects) {
+        public MyFriendsListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull UserList objects) {
             super(context, resource, objects);
             layout = resource;
         }

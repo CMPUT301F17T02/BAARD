@@ -12,9 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,12 +25,15 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
         CreateNewHabitEventFragment.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener {
+
+    private Stack<String> headerStack = new Stack<>();
+    private String nextHeader;
 
     /**
      * On create method for entire activity. Sets up navigation and listener for fragments
@@ -65,13 +66,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // view all habits -- front screen to view
-        DailyHabitsFragment dailyHabitsFragment = DailyHabitsFragment.newInstance();
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(
-                R.id.relativelayout_for_fragment,
-                dailyHabitsFragment,
-                dailyHabitsFragment.getTag()
-        ).commit();
+        Fragment fragment = new DailyHabitsFragment();
+        nextHeader = getResources().getString(R.string.daily_habits);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
+                .addToBackStack(null)
+                .commit();
         TextView title = (TextView) findViewById(R.id.toolbar_title);
         title.setText(R.string.daily_habits);
 
@@ -94,7 +94,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (headerStack.empty()) {
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            sharedPrefs.edit().remove("username").apply();
+            finish();
         } else {
+            TextView title = (TextView) findViewById(R.id.toolbar_title);
+            String name=headerStack.pop();
+            System.out.println(name);
+            title.setText(name);
             super.onBackPressed();
         }
     }
@@ -148,66 +156,29 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         TextView title = (TextView) findViewById(R.id.toolbar_title);
-
+        headerStack.push(nextHeader);
+        Fragment fragment = new DailyHabitsFragment(); //TODO: Move this into the IF once other activities implmented
+        // Send user to selected fragment
         if (id == R.id.nav_dailyHabits) {
-            // Send user to fragment that shows list of all their daily habits
-            // They can view, edit, and delete a habit once they click on a habit in this list
             Toast.makeText(this, R.string.daily_habits, Toast.LENGTH_SHORT).show();
-            DailyHabitsFragment dailyHabitsFragment = DailyHabitsFragment.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relativelayout_for_fragment,
-                    dailyHabitsFragment,
-                    dailyHabitsFragment.getTag()
-            ).commit();
-            title.setText(R.string.daily_habits);
+            nextHeader = getResources().getString(R.string.daily_habits);
         }
         else if (id == R.id.nav_allHabits) {
-            // Send user to fragment that shows list of all their habits
-            // They can view, edit, and delete a habit once they click on a habit in this list
             Toast.makeText(this, R.string.all_habits, Toast.LENGTH_SHORT).show();
-            AllHabitsFragment allHabitsFragment = AllHabitsFragment.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relativelayout_for_fragment,
-                    allHabitsFragment,
-                    allHabitsFragment.getTag()
-            ).commit();
-            title.setText(R.string.all_habits);
+            fragment = new AllHabitsFragment();
+            nextHeader = getResources().getString(R.string.all_habits);
         } else if (id == R.id.nav_newHabit) {
-            // Send user to fragment that allows them to create a new habit
             Toast.makeText(this, R.string.create_habit, Toast.LENGTH_SHORT).show();
-            CreateNewHabitFragment createNewHabitFragment = CreateNewHabitFragment.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relativelayout_for_fragment,
-                    createNewHabitFragment,
-                    createNewHabitFragment.getTag()
-            ).commit();
-            title.setText(R.string.create_habit);
+            fragment = new CreateNewHabitFragment();
+            nextHeader = getResources().getString(R.string.create_habit);
         } else if (id == R.id.nav_allHabitEvents) {
-            // Send user to fragment that shows a list of all their habit events
-            // listed with most recent habit events first
             Toast.makeText(this, R.string.habit_history, Toast.LENGTH_SHORT).show();
-            AllHabitEventsFragment allHabitEventsFragment = AllHabitEventsFragment.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relativelayout_for_fragment,
-                    allHabitEventsFragment,
-                    allHabitEventsFragment.getTag()
-            ).commit();
-            title.setText(R.string.habit_history);
+            fragment = new AllHabitEventsFragment();
+            nextHeader = getResources().getString(R.string.habit_history);
         } else if (id == R.id.nav_newHabitEvent) {
-            // Send user to fragment that allows them to create a new habit event
             Toast.makeText(this, R.string.create_event, Toast.LENGTH_SHORT).show();
-            CreateNewHabitEventFragment createNewHabitEventFragment = CreateNewHabitEventFragment.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relativelayout_for_fragment,
-                    createNewHabitEventFragment,
-                    createNewHabitEventFragment.getTag()
-            ).commit();
-            title.setText(R.string.create_event);
+            fragment = new CreateNewHabitEventFragment();
+            nextHeader = getResources().getString(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
@@ -216,11 +187,18 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             // End this session and take users back to the login screen
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-            sharedPrefs.edit().remove("username").commit();
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            sharedPrefs.edit().remove("username").apply();
             finish();
         }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
+                .addToBackStack(null)
+                .commit();
+
+        title.setText(nextHeader);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
