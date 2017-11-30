@@ -67,11 +67,6 @@ public class FindFriendsFragment extends Fragment {
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-        //List<String> data = new ArrayList<>();
-
-        // dummy data for now just to play around with things
-
-
 
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
@@ -82,15 +77,13 @@ public class FindFriendsFragment extends Fragment {
     }
 
     /**
-     * Called when AllHabitsFragment activity is opened up and called again.
+     * Called when FindFriendsFragment activity is opened up and called again.
      */
     @Override
     public void onResume() {
         super.onResume();
 
         //user = fc.loadUser(getActivity().getApplicationContext(), username);
-
-        getAllUsersTask.execute();
 
         try {
             allUsers = getAllUsersTask.get();
@@ -107,7 +100,7 @@ public class FindFriendsFragment extends Fragment {
     private class MyFriendsListAdapter extends ArrayAdapter<User> {
         private int layout;
         public MyFriendsListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull UserList objects) {
-            super(context, resource, objects);
+            super(context, resource, objects.getArrayList());
             layout = resource;
         }
 
@@ -129,6 +122,7 @@ public class FindFriendsFragment extends Fragment {
                         } else { viewHolder.button.setText("UNFOLLOW"); }
 
                         // set friend to list.
+                        
                     }
                 });
                 convertView.setTag(viewHolder);
