@@ -39,8 +39,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
+                .setContentTitle("BAARD Habit Tracker")
+                .setContentText("Reminder to complete your "+intent.getExtras().getString("name","streak")+" habit! Don't lose your streak!")
+                .setAutoCancel(true)
+                .setVibrate(new long[]{1000,1000})
                 .setContentIntent(pendingIntent);
         Log.i("ALARM", "Receiver sending notification");
         // Builds the notification and issues it.

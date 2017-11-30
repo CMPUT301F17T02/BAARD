@@ -275,11 +275,12 @@ public class CreateNewHabitEventFragment extends Fragment {
             //set up notification TODO: If on streak
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 13);
-            calendar.set(Calendar.MINUTE, 28);
-            calendar.set(Calendar.SECOND, 45);
+            calendar.set(Calendar.HOUR_OF_DAY, 19);
+            calendar.set(Calendar.MINUTE, 26);
+            calendar.set(Calendar.SECOND, 00);
 
             Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
+            alarmIntent.putExtra("name", habit.getTitle());
             PendingIntent resultPendingIntent =
                     PendingIntent.getBroadcast(
                             getActivity(),
