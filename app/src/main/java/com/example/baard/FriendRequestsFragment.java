@@ -107,7 +107,7 @@ public class FriendRequestsFragment extends Fragment {
             allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
         }
 
-        for (int j = 0; j < allUserList.size(); j++) {
+        for (int j = 0; j < 12; j++) {
             listDataHeader.add(allUserList.get(j).getName());
             listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
         }

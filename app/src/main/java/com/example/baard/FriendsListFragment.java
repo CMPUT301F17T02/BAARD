@@ -96,9 +96,9 @@ public class FriendsListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // Make the intent go to seeing the friend's habits and most recent habit event.
-//                Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-//                intent.putExtra("position", i);
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
+                intent.putExtra("position", i);
+                startActivity(intent);
             }
         });
 
@@ -117,7 +117,7 @@ public class FriendsListFragment extends Fragment {
 
 //        friendsList = user.getFriends();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             friendsList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
         }
 
