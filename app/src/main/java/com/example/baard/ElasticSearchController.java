@@ -221,6 +221,77 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Class to control Async background task that will grab all users from the database
+     */
+    public static class GetAllUsersTask extends AsyncTask<String, Void, UserList> {
+        /**
+         * Finds all users in the database , and then
+         * returns the user list.
+         *
+         * @param parameters not used
+         * @return UserList of all users
+         * @throws RuntimeExecutionException upon search failure
+         */
+        @Override
+        protected UserList doInBackground(String... parameters) {
+            verifySettings();
+
+            UserList users = new UserList();
+            String query = "{\n" +
+                    "    \"size\": 1000,\n" +
+                    "    \"query\": {\n" +
+                    "       \"match_all\" : {}\n" +
+                    "    }\n" +
+                    "}";
+
+            Log.d("ESC.GetAllUsersTask", query);
+            Search search = new Search.Builder(query)
+                    .addIndex("cmput301f17t02")
+                    .addType("User")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                JsonObject hits = result.getJsonObject().getAsJsonObject("hits");
+
+                if (result.isSucceeded()) {
+                    Log.d("ESC.GetAllUsersTask", "Number of hits: "+hits.get("total").getAsString());
+                    for (int i = 0; i<hits.get("total").getAsInt(); i++) {
+                        JsonObject userInfo = hits.getAsJsonArray("hits").get(i).getAsJsonObject();
+                        JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
+
+                        // Need to extract Id separately because Jest does not seem to be working
+                        String id = userInfo.get("_id").getAsString();
+
+                        // Need to extract UserList friends separately because the field is transient
+                        String friendsJSON = userInfoSource.get("friends").toString();
+                        UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
+
+                        // Need to extract UserList receivedRequests separately because the field is transient
+                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
+                        UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
+
+                        User user = new Gson().fromJson(userInfoSource, User.class);
+
+                        user.setId(id);
+                        user.setFriends(friendsList);
+                        user.setReceivedRequests(receivedRequestsList);
+
+                        users.add(user);
+                    }
+                } else {
+                    Log.e("ESC.GetUserTask", "The search query failed.");
+                }
+            }
+            catch (Exception e) {
+                Log.e("ESC.GetUserTask", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return users;
+        }
+    }
+
+
     public static class DeleteUserTask extends AsyncTask<User, Void, Void> {
         protected Void doInBackground(User... users) {
             verifySettings();
