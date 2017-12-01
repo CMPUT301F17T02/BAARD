@@ -4,10 +4,8 @@
 
 package com.example.baard;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
@@ -15,11 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,18 +23,20 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.w3c.dom.Text;
 
 import java.util.concurrent.ExecutionException;
 
 
 /**
- * A login screen that offers login via email/password.
+ * A login activity that allows users to sign in with a username
+ * or create a new account with username and name
+ * @author anarten
+ * @see AppCompatActivity
+ * @since 1.0
+ * @version 1.2
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -186,8 +183,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Reset errors.
-        //mUsernameView.setError(null);
-        //mNameView.setError(null);
         usernameText.setError(null);
         nameText.setError(null);
 
@@ -199,12 +194,10 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for a valid username.
         if (TextUtils.isEmpty(username)) {
-            //mUsernameView.setError(getString(R.string.error_field_required));
             usernameText.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
         } else if (!username.matches("[a-zA-Z0-9_.-]+")) {
-            //mUsernameView.setError(getString(R.string.error_invalid_username));
             usernameText.setError(getString(R.string.error_invalid_username));
             focusView = mUsernameView;
             cancel = true;
@@ -215,11 +208,14 @@ public class LoginActivity extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            //showProgress(true);
-            mAuthTask = new UserLoginTask(username);
-            mAuthTask.execute();
+            FileController fileController = new FileController();
+            User user = fileController.loadUser(getApplicationContext(), username);
+            if (user != null && user.getUsername().equals(username)) {
+                login(user);
+            } else {
+                mAuthTask = new UserLoginTask(username);
+                mAuthTask.execute();
+            }
         }
     }
 
@@ -248,7 +244,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for a valid name.
         if (TextUtils.isEmpty(name)) {
-            //mNameView.setError(getString(R.string.error_field_required));
             nameText.setError("This field is required");
             focusView = mNameView;
             cancel = true;
@@ -256,12 +251,10 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for a valid username.
         if (TextUtils.isEmpty(username)) {
-            //mUsernameView.setError(getString(R.string.error_field_required));
             usernameText.setError("This field is required");
             focusView = mUsernameView;
             cancel = true;
         } else if (!username.matches("[a-zA-Z0-9_.-]+")) {
-            //mUsernameView.setError(getString(R.string.error_invalid_username));
             usernameText.setError("This username contains invalid characters");
             focusView = mUsernameView;
             cancel = true;
@@ -328,7 +321,7 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
 
-        protected Boolean verify() {
+        private Boolean verify() {
             if (mName == null) {
                 if (!usernameExists(mUsername)) {
                     return false;
@@ -352,7 +345,7 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
 
-        protected void execute() {
+        public void execute() {
             Boolean success = verify();
             if (!success) {
                 mAuthTask = null;
