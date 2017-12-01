@@ -7,7 +7,6 @@ package com.example.baard;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,9 +22,12 @@ import java.lang.reflect.Type;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by Adam on 11/11/2017.
+ * Controls JSON Serialization and Elastic Searches for loading and saving users
+ * @see ElasticSearchController
+ * @author anarten
+ * @since 1.0
+ * @version 1.1
  */
-
 public class FileController {
 
     private static final String FILENAME = "BAARD.sav";
@@ -74,11 +76,7 @@ public class FileController {
     public User loadUser(Context context, String username) {
         User fileUser = loadUserFromFile(context);
         if (isNetworkAvailable(context)) {
-            System.out.println("======================================== NETWORK AVAILIABLE =========================================================");
             User user = loadUserFromServer(username);
-            System.out.println(user);
-            System.out.println(fileUser);
-            System.out.println(user==fileUser);
             if (user != fileUser) {
                 saveUserToServer(fileUser);
             }
@@ -134,11 +132,13 @@ public class FileController {
     private User loadUserFromServer(String username) {
         ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
         getUserTask.execute(username);
+        User user;
         try {
-            return getUserTask.get();
+            user = getUserTask.get();
         } catch (ExecutionException | InterruptedException e) {
+            user = null;
         }
-        return null; // TODO: deal with this null
+        return user;
     }
 
     /**
