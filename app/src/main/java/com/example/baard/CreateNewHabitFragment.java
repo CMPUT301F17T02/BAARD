@@ -163,6 +163,16 @@ public class CreateNewHabitFragment extends Fragment {
         return myView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        titleText.setText("");
+        reasonText.setText("");
+        startDateText.setText("");
+        setToggleButtons(getView());
+        titleText.requestFocus();
+    }
+
     public void changeFont(View myView) {
         Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
 
@@ -278,6 +288,7 @@ public class CreateNewHabitFragment extends Fragment {
         // iterate through all the toggle buttons to set the listener
         for (int i = 0; i < toggles.size(); i++) {
             final int finalI = i;
+            toggles.get(i).setChecked(false);
             toggles.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
