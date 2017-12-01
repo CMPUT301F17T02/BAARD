@@ -40,8 +40,8 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setVisibility(VISIBLE);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setVisibility(VISIBLE);
 
         gson = new Gson();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

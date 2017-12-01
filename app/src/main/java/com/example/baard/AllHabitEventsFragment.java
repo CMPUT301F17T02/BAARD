@@ -11,12 +11,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
@@ -45,8 +50,12 @@ public class AllHabitEventsFragment extends Fragment {
 
     private ListView habitEventListView;
     private ArrayAdapter<HabitEvent> adapter;
+    private List<Habit> habitList;
     private List<HabitEvent> habitEventList = new ArrayList<HabitEvent>();
     private final FileController fileController = new FileController();
+    Habit noneHabit;
+    Spinner habitSpinner;
+    EditText commentFilter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -94,18 +103,34 @@ public class AllHabitEventsFragment extends Fragment {
 
 
         User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
-        for (Habit habit: user.getHabits().getArrayList()) {
-            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
-                habitEvent.setHabit(habit);
-                habitEventList.add(habitEvent);
-            }
-        }
-        Collections.sort(habitEventList);
+        createHabitEventList();
 
+        habitList = user.getHabits().getArrayList();
+        try {
+            noneHabit = new Habit("None", "", new Date(), new ArrayList<Day>());
+            habitList.add(0,noneHabit);
+        }catch(Exception e){
+            //unexpected behaviour
+
+        }
+        habitSpinner = (Spinner) view.findViewById(R.id.habitFilterSpinner);
+
+
+        ArrayAdapter<Habit> habitAdapter = new ArrayAdapter<Habit>(this.getActivity(), android.R.layout.simple_spinner_item, habitList);
+
+        habitSpinner.setAdapter(habitAdapter);
+
+        habitAdapter.notifyDataSetChanged();
+        commentFilter = (EditText) view.findViewById(R.id.commentFilterEditText);
+
+        Button filterButton = (Button) view.findViewById(R.id.filterButton);
+        commentFilter.setText("");
 
         habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
 
         adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
+
+        sendHabitEventsToSharedPreferences();
 
         habitEventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,6 +144,13 @@ public class AllHabitEventsFragment extends Fragment {
             }
         });
 
+        filterButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                filterHabitEvents();
+            }
+        });
+
         habitEventListView.setAdapter(adapter);
 
         return view;
@@ -129,6 +161,46 @@ public class AllHabitEventsFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void sendHabitEventsToSharedPreferences(){
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(habitEventList);
+        sharedPrefsEditor.putString("filteredHabitEvents", json);
+        sharedPrefsEditor.commit();
+    }
+
+    public void filterHabitEvents(){
+        createHabitEventList();
+        Habit selected = (Habit) habitSpinner.getSelectedItem();
+            Iterator<HabitEvent> iter = habitEventList.iterator();
+        while(iter.hasNext()){
+            HabitEvent next = iter.next();
+            if(!selected.getTitle().equals(noneHabit.getTitle()) && !next.getHabit().getTitle().equals(selected.getTitle())){
+                iter.remove();
+                continue;
+            }
+            if (!next.getComment().contains(commentFilter.getText().toString())){
+                iter.remove();
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+        sendHabitEventsToSharedPreferences();
+    }
+
+    public void createHabitEventList(){
+        User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
+        habitEventList.clear();
+        for (Habit habit: user.getHabits().getArrayList()) {
+            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
+                habitEvent.setHabit(habit);
+                habitEventList.add(habitEvent);
+            }
+        }
+        Collections.sort(habitEventList);
     }
 
     /**
