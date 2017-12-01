@@ -241,7 +241,7 @@ public class CreateNewHabitEventFragment extends Fragment {
         } catch (HabitEvent.DateAlreadyExistsException e) {
             dateEditText.setText("");
             commentEditText.setText("");
-            //TODO: REVIEW THIS ALL
+            locationPosition = null;
             imageFilePath = null;
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(null);

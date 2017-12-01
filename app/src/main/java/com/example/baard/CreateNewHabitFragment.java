@@ -171,6 +171,7 @@ public class CreateNewHabitFragment extends Fragment {
         startDateText.setText("");
         setToggleButtons(getView());
         titleText.requestFocus();
+        frequency =  new ArrayList<>();
     }
 
     public void changeFont(View myView) {
