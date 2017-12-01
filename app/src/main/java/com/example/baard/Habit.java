@@ -130,7 +130,7 @@ public class Habit {
      * @return
      */
     public Date getStartDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         try {
             return sdf.parse(startDate);
         } catch (Exception e) {
@@ -144,7 +144,7 @@ public class Habit {
      * @param startDate
      */
     public void setStartDate(Date startDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         this.startDate = sdf.format(startDate);
     }
 
@@ -225,7 +225,7 @@ public class Habit {
         SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
         Calendar start = Calendar.getInstance();
-        start.setTime(startDate);
+        start.setTime(getStartDate());
         calendar.set(Calendar.DST_OFFSET, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.HOUR, 0);
