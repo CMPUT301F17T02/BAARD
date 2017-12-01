@@ -193,7 +193,14 @@ public class HabitEvent implements Comparable<HabitEvent> {
 
     @Override
     public String toString(){
+        Date date;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            date = sdf.parse(eventDate);
+        } catch (Exception e) {
+            date = null;
+        }
         DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-        return this.getHabit().getTitle() + "     " + formatter.format(eventDate);
+        return this.getHabit().getTitle() + "     " + formatter.format(date);
     }
 }
