@@ -143,4 +143,23 @@ public class FileController {
         ElasticSearchController.UpdateUserTask updateUserTask = new ElasticSearchController.UpdateUserTask();
         updateUserTask.execute(user);
     }
+
+    /**
+     * Saves the received requests list of the desired friend
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @param myUsername String username of the current user
+     * @param friendUsername String username of the friend we're trying to follow
+     * @return boolean true if other user found; false if friend not found.
+     */
+    public boolean sendFriendRequest(Context context, String myUsername, String friendUsername) {
+        User friend = loadUserFromServer(friendUsername);
+        User me = loadUser(context, myUsername);
+        if (friend != null) {
+            friend.getReceivedRequests().add(me);
+            saveUserToServer(friend);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
