@@ -39,7 +39,8 @@ public class HabitEvent implements Comparable<HabitEvent> {
     private String comment = "";
     private String eventDate;
     // TODO location variable
-    private String imageFilePath;
+    private String bitmapString;
+    //private SerializableImage image;
 
     /**
      * Constructor for HabitEvent without the comment.
@@ -113,6 +114,14 @@ public class HabitEvent implements Comparable<HabitEvent> {
         return comment;
     }
 
+    public String getBitmapString() {
+        return bitmapString;
+    }
+
+    public void setBitmapString(String bitmapString) {
+        this.bitmapString = bitmapString;
+    }
+
     /**
      * setter for comment
      * @param comment
@@ -155,30 +164,6 @@ public class HabitEvent implements Comparable<HabitEvent> {
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         this.eventDate = sdf.format(eventDate);
-    }
-
-    /**
-     * Set a path to an image file in storage. Used in getImageBitmap()
-     * @param path path to an image file
-     */
-    public void setImageFilePath(String path){ this.imageFilePath = path; }
-
-    public String getImageFilePath(){ return this.imageFilePath; }
-
-    /**
-     * If a path to an image file has been set with setImageFilePath, generates a Bitmap object
-     * matching that image.
-     * @return a Bitmap object representing the image at the specified location. Returns null otherwise.
-     */
-    public Bitmap getImageBitmap(){
-        if (imageFilePath != null) {
-            File imgFile = new File(imageFilePath);
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                return myBitmap;
-            }
-        }
-        return null;
     }
 
     /**
