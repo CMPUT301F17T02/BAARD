@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -340,16 +341,15 @@ public class CreateNewHabitEventFragment extends Fragment {
             Cursor cursor = getActivity().getContentResolver().query(
                     selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
             if (filePath == null){
-                filePath = selectedImage.getPath();
+                // error, they probably didnt use Photos
+                Toast.makeText(getActivity(), "Please select an image with the Photos application.", Toast.LENGTH_LONG).show();
             }
             File file = new File(filePath);
-            double lengthOfFile = file.length();
             if (file.length() > 65536){
                 Toast.makeText(getActivity(), "Image is too large.", Toast.LENGTH_LONG).show();
                 return;

@@ -309,6 +309,10 @@ public class EditHabitEventActivity extends AppCompatActivity {
             String filePath = cursor.getString(columnIndex);
             cursor.close();
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
+            if (filePath == null){
+                // error, they probably didnt use Photos
+                Toast.makeText(this, "Please select an image with the Photos application.", Toast.LENGTH_LONG).show();
+            }
             File file = new File(filePath);
             if (file.length() > 65536){
                 Toast.makeText(this, "Image is too large.", Toast.LENGTH_LONG).show();
