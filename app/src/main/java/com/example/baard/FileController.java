@@ -76,10 +76,10 @@ public class FileController {
     public User loadUser(Context context, String username) {
         User fileUser = loadUserFromFile(context);
         if (isNetworkAvailable(context)) {
-            User user = loadUserFromServer(username);
-            if (user != fileUser) {
-                saveUserToServer(fileUser);
-            }
+            User serverUser = loadUserFromServer(username);
+            fileUser.setReceivedRequests(serverUser.getReceivedRequests());
+            fileUser.setFriends(serverUser.getFriends());
+            saveUser(context, fileUser);
         }
         return fileUser;
     }
