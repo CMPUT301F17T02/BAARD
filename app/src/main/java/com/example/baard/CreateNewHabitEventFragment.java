@@ -5,12 +5,16 @@
 package com.example.baard;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +22,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +34,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,9 +44,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -69,7 +75,7 @@ public class CreateNewHabitEventFragment extends Fragment {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private Habit habit = null;
     private HabitList habits;
-    private String imageFilePath;
+    private Bitmap image;
     private User user = null;
     private DateFormat sourceFormat;
     private EditText dateEditText;
@@ -242,7 +248,6 @@ public class CreateNewHabitEventFragment extends Fragment {
             dateEditText.setText("");
             commentEditText.setText("");
             locationPosition = null;
-            imageFilePath = null;
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(null);
         } catch (ParseException | DataFormatException e) {
@@ -266,6 +271,13 @@ public class CreateNewHabitEventFragment extends Fragment {
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
             comment = commentEditText.getText().toString();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            date = c.getTime();
             habitEvent = new HabitEvent(habit, date, comment);
         }catch(DataFormatException d){
             commentEditText.setError("Comment is too long (20 char max).");
@@ -287,8 +299,8 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
 
         if (isValidHabitEvent) {
-            if (imageFilePath != null){
-                habitEvent.setImageFilePath(imageFilePath);
+            if (image != null){
+                habitEvent.setBitmapString(SerializableImage.getStringFromBitmap(image));
             }
             if (locationPosition != null) {
                 habitEvent.setLocation(locationPosition);
@@ -298,6 +310,52 @@ public class CreateNewHabitEventFragment extends Fragment {
             Collections.sort(habit.getEvents().getArrayList());
             fileController.saveUser(getActivity().getApplicationContext(), user);
             habit.sendToSharedPreferences(getActivity().getApplicationContext());
+
+            //set up notification
+            if (habit.streak() > 4) {
+
+                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
+                alarmIntent.putExtra("name", habit.getTitle());
+                PendingIntent resultPendingIntent =
+                        PendingIntent.getBroadcast(
+                                getActivity(),
+                                habits.indexOf(habit),
+                                alarmIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+
+                if (PendingIntent.getBroadcast(getActivity(),habits.indexOf(habit),alarmIntent,PendingIntent.FLAG_NO_CREATE) != null) {
+                    alarmManager.cancel(resultPendingIntent);
+                    Log.i("Deleted Alarm", habit.getTitle());
+                }
+
+                ArrayList<Day> freq = habit.getFrequency();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                Date today = calendar.getTime();
+                if (!date.before(today)) {
+                    calendar.add(Calendar.DATE, 1);
+                }
+                Date dayDate = calendar.getTime();
+                SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+                for (int i = 0; i < 7; i++) {
+                    String dayString = sDF.format(dayDate.getTime()).toUpperCase();
+                    if (freq.contains(Day.valueOf(dayString))) {
+                        break;
+                    }
+                    calendar.add(Calendar.DATE, 1);
+                    dayDate = calendar.getTime();
+                }
+                calendar.set(Calendar.HOUR_OF_DAY, 16);
+                Log.i("Notification set", calendar.toString());
+
+                alarmManager.set(alarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), resultPendingIntent);
+            }
+
             // go to view habitevent activity
             Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
             intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
@@ -318,7 +376,8 @@ public class CreateNewHabitEventFragment extends Fragment {
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }
-        return permissionCheck;
+        return ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     /**
@@ -337,6 +396,7 @@ public class CreateNewHabitEventFragment extends Fragment {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted
+                    //getImage();
                 } else {
                     //permission denied
                 }
@@ -350,8 +410,13 @@ public class CreateNewHabitEventFragment extends Fragment {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
-        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
-        checkReadPermission();
+        if (checkReadPermission() == -1){
+            return;
+        }
+        getImage();
+    }
+
+    public void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -386,10 +451,14 @@ public class CreateNewHabitEventFragment extends Fragment {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
-            TextView textView = getActivity().findViewById(R.id.filenameTextView);
-            imageFilePath = filePath;
-            textView.setText(filePath);
-            ImageView imageView = getActivity().findViewById(R.id.imageView);
+            Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
+            File file = new File(filePath);
+            if (file.length() > 65536){
+                Toast.makeText(getActivity(), "Image is too large.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            image = myBitmap;
+            ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
         }
     }

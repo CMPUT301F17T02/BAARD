@@ -105,6 +105,25 @@ public class ViewHabitActivity extends AppCompatActivity {
         createLineChart();
         listHabitEvents();
 
+        TextView milestoneTextView = (TextView) findViewById(R.id.milestoneTextView);
+        int milestone = habit.milestone();
+
+        if (milestone > 0) {
+            milestoneTextView.setText("Milestone reached: "+Integer.toString(milestone)+" habit events completed!");
+            milestoneTextView.setVisibility(View.VISIBLE);
+        } else {
+            milestoneTextView.setVisibility(View.GONE);
+        }
+
+        TextView streakTextView = (TextView) findViewById(R.id.streakTextView);
+        int streak = habit.streak();
+        if (streak > 4) {
+            streakTextView.setText("This habit is currently on a streak of "+Integer.toString(streak)+"!");
+            streakTextView.setVisibility(View.VISIBLE);
+        } else {
+            streakTextView.setVisibility(View.GONE);
+        }
+
         Button edit = (Button) findViewById(R.id.edit);
         Button delete = (Button) findViewById(R.id.delete);
 
@@ -236,7 +255,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         public String getFormattedValue(float value, AxisBase axis) {
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd",Locale.ENGLISH);
             Calendar calendar = Calendar.getInstance();
-            Log.d("LineChart", Float.toString(value));
+//            Log.d("LineChart", Float.toString(value));
             calendar.setTimeInMillis((long)value);
 
             return sdf.format(calendar.getTime());
