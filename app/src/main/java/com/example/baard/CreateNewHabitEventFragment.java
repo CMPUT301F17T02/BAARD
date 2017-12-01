@@ -28,7 +28,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -63,7 +62,7 @@ public class CreateNewHabitEventFragment extends Fragment {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private Habit habit = null;
     private HabitList habits;
-    private String imageFilePath;
+    private Bitmap image;
     private User user = null;
     private DateFormat sourceFormat;
     private EditText dateEditText;
@@ -241,8 +240,8 @@ public class CreateNewHabitEventFragment extends Fragment {
         }
 
         if (isValidHabitEvent) {
-            if (imageFilePath != null){
-                habitEvent.setImageFilePath(imageFilePath);
+            if (image != null){
+                habitEvent.setBitmapString(SerializableImage.getStringFromBitmap(image));
             }
             habit.getEvents().add(habitEvent);
             // sort on insert
@@ -269,7 +268,8 @@ public class CreateNewHabitEventFragment extends Fragment {
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }
-        return permissionCheck;
+        return ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     /**
@@ -288,6 +288,7 @@ public class CreateNewHabitEventFragment extends Fragment {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted
+                    //getImage();
                 } else {
                     //permission denied
                 }
@@ -302,7 +303,13 @@ public class CreateNewHabitEventFragment extends Fragment {
      */
     public void onSelectImageButtonPress(View view){
         //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
-        checkReadPermission();
+        if (checkReadPermission() == -1){
+            return;
+        }
+        getImage();
+    }
+
+    public void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -337,10 +344,14 @@ public class CreateNewHabitEventFragment extends Fragment {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
-            TextView textView = getActivity().findViewById(R.id.filenameTextView);
-            imageFilePath = filePath;
-            textView.setText(filePath);
-            ImageView imageView = getActivity().findViewById(R.id.imageView);
+            Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
+            File file = new File(filePath);
+            if (file.length() > 65536){
+                Toast.makeText(getActivity(), "Image is too large.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            image = myBitmap;
+            ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
         }
     }
