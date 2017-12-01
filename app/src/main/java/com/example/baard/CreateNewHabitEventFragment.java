@@ -309,7 +309,7 @@ public class CreateNewHabitEventFragment extends Fragment {
         getImage();
     }
 
-    public void getImage(){
+    private void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -345,7 +345,11 @@ public class CreateNewHabitEventFragment extends Fragment {
             String filePath = cursor.getString(columnIndex);
             cursor.close();
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
+            if (filePath == null){
+                filePath = selectedImage.getPath();
+            }
             File file = new File(filePath);
+            double lengthOfFile = file.length();
             if (file.length() > 65536){
                 Toast.makeText(getActivity(), "Image is too large.", Toast.LENGTH_LONG).show();
                 return;

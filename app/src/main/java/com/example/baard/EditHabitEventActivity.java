@@ -252,7 +252,14 @@ public class EditHabitEventActivity extends AppCompatActivity {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
-        checkReadPermission();
+        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
+        if (checkReadPermission() == -1){
+            return;
+        }
+        getImage();
+    }
+
+    private void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
