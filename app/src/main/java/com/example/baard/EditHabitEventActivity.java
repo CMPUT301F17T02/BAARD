@@ -312,6 +312,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
             if (filePath == null){
                 // error, they probably didnt use Photos
                 Toast.makeText(this, "Please select an image with the Photos application.", Toast.LENGTH_LONG).show();
+                return;
             }
             File file = new File(filePath);
             if (file.length() > 65536){
