@@ -38,8 +38,9 @@ import io.searchbox.annotations.JestId;
 public class HabitEvent implements Comparable<HabitEvent> {
     private transient Habit habit;
     private String comment = "";
-    private Date eventDate;
     private LatLng location;
+    private String eventDate;
+    // TODO location variable
     private String imageFilePath;
 
     /**
@@ -57,7 +58,8 @@ public class HabitEvent implements Comparable<HabitEvent> {
             throw new IllegalArgumentException();
         }
         // TODO: make sure the habit doesnt have any habitevents with this date
-        this.eventDate = eventDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        this.eventDate = sdf.format(eventDate);
     }
 
     /**
@@ -84,7 +86,8 @@ public class HabitEvent implements Comparable<HabitEvent> {
             if (events.getEventDate().equals(eventDate))
                 throw new DateAlreadyExistsException();
         }
-        this.eventDate = eventDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        this.eventDate = sdf.format(eventDate);
     }
 
     /**
@@ -125,7 +128,12 @@ public class HabitEvent implements Comparable<HabitEvent> {
     }
 
     public Date getEventDate() {
-        return eventDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return sdf.parse(eventDate);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -147,7 +155,8 @@ public class HabitEvent implements Comparable<HabitEvent> {
             if (events.getEventDate().equals(eventDate))
                 throw new DateAlreadyExistsException();
         }
-        this.eventDate = eventDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        this.eventDate = sdf.format(eventDate);
     }
 
     /**
@@ -204,7 +213,14 @@ public class HabitEvent implements Comparable<HabitEvent> {
 
     @Override
     public String toString(){
+        Date date;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            date = sdf.parse(eventDate);
+        } catch (Exception e) {
+            date = null;
+        }
         DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-        return this.getHabit().getTitle() + "     " + formatter.format(eventDate);
+        return this.getHabit().getTitle() + "     " + formatter.format(date);
     }
 }
