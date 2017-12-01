@@ -5,14 +5,21 @@
 package com.example.baard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 
 import io.searchbox.annotations.JestId;
@@ -208,6 +215,68 @@ public class Habit {
         String json = gson.toJson(this);
         sharedPrefsEditor.putString("currentlyViewingHabit", json);
         sharedPrefsEditor.commit();
+    }
+
+    /**
+     * Determines whether this habit is on a streak and returns the length in number of days
+     * @return Boolean true if streak is current
+     */
+    public int streak() {
+        SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        Calendar calendar = Calendar.getInstance();
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        calendar.set(Calendar.DST_OFFSET, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.AM_PM, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int streak = 0;
+        while ( !calendar.equals(start) ) {
+            calendar.add(Calendar.DATE, -1);
+            String date = sDF.format(calendar.getTime().getTime()).toUpperCase();
+            Day day = Day.valueOf(date);
+            if (frequency.contains(day)) {
+                boolean found = false;
+                for (HabitEvent event: events.getArrayList()){
+                    if (event.getEventDate().equals(calendar.getTime())) {
+                        streak++;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    return streak;
+                }
+            }
+        }
+        return streak;
+    }
+
+    /**
+     * Determines if this habit has achieved a milestone of 5, 10, 25, 50, or 100 overall events.
+     * @return integer representing the last milestone achieved. Otherwise 0.
+     */
+    public int milestone() {
+        ArrayList<Integer> milestones = new ArrayList<>();
+        milestones.add(5);
+        milestones.add(10);
+        milestones.add(25);
+        milestones.add(50);
+        milestones.add(100);
+
+        int toReturn = 0;
+        int count = events.size();
+        for (Integer m : milestones) {
+            if (count < m) {
+                return toReturn;
+            } else {
+                toReturn = m;
+            }
+        }
+        return toReturn;
     }
 
     @Override
