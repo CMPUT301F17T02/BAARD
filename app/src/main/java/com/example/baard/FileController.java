@@ -72,12 +72,18 @@ public class FileController {
      * @return The user stored
      */
     public User loadUser(Context context, String username) {
+        User fileUser = loadUserFromFile(context);
         if (isNetworkAvailable(context)) {
+            System.out.println("======================================== NETWORK AVAILIABLE =========================================================");
             User user = loadUserFromServer(username);
-            saveUserToFile(context, user);
-            return user;
+            System.out.println(user);
+            System.out.println(fileUser);
+            System.out.println(user==fileUser);
+            if (user != fileUser) {
+                saveUserToServer(fileUser);
+            }
         }
-        return loadUserFromFile(context);
+        return fileUser;
     }
 
     /**
