@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -29,6 +32,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +52,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private HabitEvent habitEvent;
     private static final int PICK_IMAGE = 1;
-    private String imageFilePath;
+    private Bitmap image;
     private final FileController fileController = new FileController();
     private User user;
 
@@ -81,8 +85,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_habit_event);
 
         ImageView image = (ImageView) findViewById(R.id.imageViewEditEvent);
-            if (habitEvent.getImageBitmap() != null) {
-                image.setImageBitmap(habitEvent.getImageBitmap());
+            if (habitEvent.getBitmapString() != null) {
+                image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
             }
 
         TextView habitTitle = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
@@ -209,6 +213,13 @@ public class EditHabitEventActivity extends AppCompatActivity {
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
             comment = commentEditText.getText().toString();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            date = c.getTime();
             habitEvent.setEventDate(date);
             habitEvent.setComment(comment);
         } catch (DataFormatException d) {
@@ -227,8 +238,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
         }
 
         if (isValidHabitEvent) {
-            if (imageFilePath != null) {
-                habitEvent.setImageFilePath(imageFilePath);
+            if (image != null) {
+                habitEvent.setBitmapString(SerializableImage.getStringFromBitmap(image));
             }
             // sort on change
             Collections.sort(habit.getEvents().getArrayList());
@@ -248,7 +259,14 @@ public class EditHabitEventActivity extends AppCompatActivity {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
-        checkReadPermission();
+        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
+        if (checkReadPermission() == -1){
+            return;
+        }
+        getImage();
+    }
+
+    private void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -297,7 +315,18 @@ public class EditHabitEventActivity extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String filePath = cursor.getString(columnIndex);
             cursor.close();
-            imageFilePath = filePath;
+            Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
+            if (filePath == null){
+                // error, they probably didnt use Photos
+                Toast.makeText(this, "Please select an image with the Photos application.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            File file = new File(filePath);
+            if (file.length() > 65536){
+                Toast.makeText(this, "Image is too large.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            image = myBitmap;
             ImageView imageView = (ImageView) findViewById(R.id.imageViewEditEvent);
             imageView.setImageURI(selectedImage);
         }

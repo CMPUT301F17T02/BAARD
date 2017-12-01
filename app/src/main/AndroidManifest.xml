@@ -91,6 +91,13 @@
             android:name=".ViewFriendActivity"
             android:label="@string/title_activity_view_friend"
             android:parentActivityName=".MainActivity"></activity>
+        <receiver
+            android:name="com.example.baard.AlarmReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.NOTIFY" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
