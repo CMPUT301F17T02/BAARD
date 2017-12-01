@@ -5,21 +5,17 @@
 package com.example.baard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 
 import io.searchbox.annotations.JestId;
@@ -173,6 +169,7 @@ public class Habit {
      */
     public String getFrequencyString() {
         String days = "";
+
         for (int i = 0; i < frequency.size(); i++) {
             // alternate string replacement
             //  StringBuilder day = new StringBuilder(frequency.get(i).toString());
@@ -222,7 +219,7 @@ public class Habit {
      * @return Boolean true if streak is current
      */
     public int streak() {
-        SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
         Calendar start = Calendar.getInstance();
         start.setTime(getStartDate());
@@ -234,24 +231,32 @@ public class Habit {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         int streak = 0;
+        Calendar today = (Calendar) calendar.clone();
+        Date date = null;
+
         while ( !calendar.equals(start) ) {
             calendar.add(Calendar.DATE, -1);
-            String date = sDF.format(calendar.getTime().getTime()).toUpperCase();
-            Day day = Day.valueOf(date);
-            if (frequency.contains(day)) {
+            String dateString = sdf.format(calendar.getTime().getTime()).toUpperCase();
+            Day dayEnum = Day.valueOf(dateString);
+            if (frequency.contains(dayEnum)) {
                 boolean found = false;
-                for (HabitEvent event: events.getArrayList()){
-                    if (event.getEventDate().equals(calendar.getTime())) {
+                for (int i = events.size()-1; i >= 0; i--) {
+                    date = events.getHabitEvent(i).getEventDate();
+                    if (date.equals(calendar.getTime())) {
                         streak++;
                         found = true;
                         break;
                     }
                 }
                 if (!found) {
+                    if (date.equals(today.getTime())) {
+                        streak++;
+                    }
                     return streak;
                 }
             }
         }
+
         return streak;
     }
 
@@ -276,7 +281,14 @@ public class Habit {
                 toReturn = m;
             }
         }
-        return toReturn;
+        // For milestones greater than 100
+        while(true) {
+            if (count > toReturn) {
+                toReturn += 50;
+            } else {
+                return toReturn;
+            }
+        }
     }
 
     @Override
