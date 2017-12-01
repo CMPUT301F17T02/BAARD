@@ -25,6 +25,7 @@
             class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:context="com.example.baard.AddLocationActivity"
             android:layout_weight="1"
             android:scrollbars="vertical"
             map:layout_constraintBottom_toBottomOf="parent"
