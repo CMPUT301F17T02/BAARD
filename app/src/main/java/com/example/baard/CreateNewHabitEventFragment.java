@@ -131,15 +131,9 @@ public class CreateNewHabitEventFragment extends Fragment {
             habits = user.getHabits();
         } catch(Exception e) {
             Toast.makeText(getActivity(), "Unknown error. Please try again.", Toast.LENGTH_LONG).show();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
             getActivity().onBackPressed();
         }
-
-//        if (habits.size() < 1) {
-//            Toast.makeText(getActivity(), "No habits for events. Please add habit first.", Toast.LENGTH_LONG).show();
-//            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-//            getActivity().onBackPressed();
-//        }
-
 
         Spinner spinner = (Spinner) v.findViewById(R.id.habitSpinner);
         ArrayAdapter<Habit> adapter = new ArrayAdapter<Habit>(this.getActivity(), android.R.layout.simple_spinner_item, habits.getArrayList());

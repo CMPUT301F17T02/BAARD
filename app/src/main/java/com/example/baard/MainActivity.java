@@ -181,23 +181,9 @@ public class MainActivity extends AppCompatActivity
             fragment = new AllHabitEventsFragment();
             nextHeader = getResources().getString(R.string.habit_history);
         } else if (id == R.id.nav_newHabitEvent) {
-            FileController fileController = new FileController();
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            Gson gson = new Gson();
-            String json = sharedPrefs.getString("username", "");
-            String username =  gson.fromJson(json, new TypeToken<String>() {}.getType());
-            User user = fileController.loadUser(getApplicationContext(), username);
-            try {
-                if (user.getHabits().size() > 0) {
-                    Toast.makeText(this, R.string.create_event, Toast.LENGTH_SHORT).show();
-                    fragment = new CreateNewHabitEventFragment();
-                    nextHeader = getResources().getString(R.string.create_event);
-                } else {
-                    Toast.makeText(this, "No habits for events. Please add habit first.", Toast.LENGTH_LONG).show();
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, "No habits for events. Please add habit first.", Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(this, R.string.create_event, Toast.LENGTH_SHORT).show();
+            fragment = new CreateNewHabitEventFragment();
+            nextHeader = getResources().getString(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
             Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
