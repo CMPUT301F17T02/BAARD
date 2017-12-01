@@ -11,14 +11,55 @@
 
     <ListView
         android:id="@+id/habitEventListView"
-        android:layout_width="343dp"
-        android:layout_height="483dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="361dp"
+        android:layout_height="441dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterButton"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Spinner
+        android:id="@+id/habitFilterSpinner"
+        android:layout_width="221dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/commentFilterEditText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/commentFilterEditText"
+        android:layout_width="0dp"
+        android:layout_height="43dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:hint="Search comment"
+        android:inputType="textPersonName"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/habitFilterSpinner"
+        android:layout_marginLeft="8dp" />
+
+    <Button
+        android:id="@+id/filterButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Filter"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"/>
+        app:layout_constraintTop_toBottomOf="@+id/commentFilterEditText" />
 
 </android.support.constraint.ConstraintLayout>

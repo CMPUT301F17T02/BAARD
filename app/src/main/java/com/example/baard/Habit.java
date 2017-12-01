@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.DataFormatException;
@@ -22,7 +23,7 @@ import io.searchbox.annotations.JestId;
 
 public class Habit {
     private String title, reason;
-    private Date startDate;
+    private String startDate;
     private ArrayList<Day> frequency;
     private HabitEventList events = new HabitEventList();
     @JestId
@@ -49,7 +50,8 @@ public class Habit {
         } else {
             throw new DataFormatException();
         }
-        this.startDate = startDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        this.startDate = sdf.format(startDate);
         this.frequency = frequency;
     }
 
@@ -121,7 +123,12 @@ public class Habit {
      * @return
      */
     public Date getStartDate() {
-        return startDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return sdf.parse(startDate);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -130,7 +137,8 @@ public class Habit {
      * @param startDate
      */
     public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        this.startDate = sdf.format(startDate);
     }
 
     /**
