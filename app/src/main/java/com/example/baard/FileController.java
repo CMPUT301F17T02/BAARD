@@ -162,4 +162,23 @@ public class FileController {
             return false;
         }
     }
+
+    /**
+     * Accepts the pending friend request
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @param myUsername String username of the current user
+     * @param friendUsername String username of the friend trying to follow me
+     * @return boolean true if other user found; false if not found.
+     */
+    public boolean acceptFriendRequest(Context context, String myUsername, String friendUsername) {
+        User friend = loadUserFromServer(friendUsername);
+        User me = loadUser(context, myUsername);
+        if (friend != null) {
+            me.getReceivedRequests().delete(friend);
+            friend.getFriends().add(me);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
