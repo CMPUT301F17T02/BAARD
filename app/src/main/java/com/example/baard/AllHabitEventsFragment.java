@@ -177,7 +177,7 @@ public class AllHabitEventsFragment extends Fragment {
     public void filterHabitEvents(){
         createHabitEventList();
         Habit selected = (Habit) habitSpinner.getSelectedItem();
-            Iterator<HabitEvent> iter = habitEventList.iterator();
+        Iterator<HabitEvent> iter = habitEventList.iterator();
         while(iter.hasNext()){
             HabitEvent next = iter.next();
             if(!selected.getTitle().equals(noneHabit.getTitle()) && !next.getHabit().getTitle().equals(selected.getTitle())){
@@ -226,21 +226,22 @@ public class AllHabitEventsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        createHabitEventList();
-
-        List<String> listDataHeader = new ArrayList<>();
-        HashMap<String, List<String>> listDataChild = new HashMap<>();
-        List<String> child = new ArrayList<>();
-        child.add("");
-        for (int i = 0; i < habitEventList.size(); i++) {
-            HabitEvent event = habitEventList.get(i);
-            listDataHeader.add(event.toString());
-            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
-        }
-
-        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
-
-        expandableEventListView.setAdapter(listAdapter);
+        filterHabitEvents();
+//        createHabitEventList();
+//
+//        List<String> listDataHeader = new ArrayList<>();
+//        HashMap<String, List<String>> listDataChild = new HashMap<>();
+//        List<String> child = new ArrayList<>();
+//        child.add("");
+//        for (int i = 0; i < habitEventList.size(); i++) {
+//            HabitEvent event = habitEventList.get(i);
+//            listDataHeader.add(event.toString());
+//            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+//        }
+//
+//        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
+//
+//        expandableEventListView.setAdapter(listAdapter);
 
 //        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
 //        expandableEventListView.setAdapter(adapter);
