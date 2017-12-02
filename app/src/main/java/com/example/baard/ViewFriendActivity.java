@@ -10,16 +10,22 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
 
 
 public class ViewFriendActivity extends AppCompatActivity {
 
     private int position;
     private String username;
-//    private FileController fc;
+    private FileController fileController;
     private User user;
 
     /**
@@ -30,16 +36,16 @@ public class ViewFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_friend);
-
-        //fc = new FileController();
-
+        fileController = new FileController();
         // grab the index of the item in the list
         Bundle extras = getIntent().getExtras();
         position = extras.getInt("position");
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
+        //TODO: GRAB FRIEND USERNAME FROM FRIENDS MAP
         String json = sharedPrefs.getString("username", "");
-//        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        user = fileController.loadUser(getApplicationContext(), username);
 
     }
 
@@ -49,9 +55,19 @@ public class ViewFriendActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-        // load required data
-//        user = fc.loadUser(getApplicationContext(), username);
+        final List habitList = user.getHabits().getArrayList();
+        ListView listView = (ListView) findViewById(R.id.habit_scroller_listview);
+        ArrayAdapter<Habit> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, habitList);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //tell the ViewRecordActivity which list item has been selected and start it
+                Intent intent = new Intent(getApplicationContext(), ViewFriendHabitActivity.class);
+                intent.putExtra("HabitPosition", i);
+                startActivity(intent);
+            }
+        });
 
     }
 

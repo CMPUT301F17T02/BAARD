@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.baard.ViewFriendHabitActivity">
+
+    <LinearLayout
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:id="@+id/view_layout_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/title_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/habit_title"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewReason_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reason"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="2dp" />
+
+            <TextView
+                android:id="@+id/reason_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:padding="@dimen/habit_indent"
+                android:text="@string/reason"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewStartDate_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="2dp"/>
+
+            <TextView
+                android:id="@+id/startDate_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/habit_indent"
+                android:text="@string/start_date"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewFreq_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/frequency"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="2dp" />
+
+            <TextView
+                android:id="@+id/frequency_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/habit_indent"
+                android:text="@string/frequency"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/milestoneTextView_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/streakTextView_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/most_recent_event"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewComment_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/friend_comment"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="2dp" />
+
+            <TextView
+                android:id="@+id/comment_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:padding="@dimen/habit_indent"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewEventStartDate_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/friend_event_date"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="2dp"/>
+
+            <TextView
+                android:id="@+id/eventStartDate_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/habit_indent"
+                android:text="@string/friend_event_date"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewLocation_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/friend_location_title"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="2dp"/>
+
+            <TextView
+                android:id="@+id/location_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/habit_indent"
+                android:text="@string/start_date"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/friendEventImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</ScrollView>
