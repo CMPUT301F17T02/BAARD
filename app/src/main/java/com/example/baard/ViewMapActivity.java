@@ -131,9 +131,15 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
             }
         }
 
-
+        // hide all markers if not within 5km
+        
     }
 
+    /**
+     * Depending on the filter set by the user, make the appropriate markers visible for them
+     * to see on the map.
+     * @param events
+     */
     private void setVisibleMarkers(HabitEventList events) {
         for (HabitEvent habitEvent : events.getArrayList()) {
             if (myMarkers.get(habitEvent.getLocation()) != null) {
@@ -142,9 +148,6 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         }
 
     }
-
-    // hide all markers if not within 5km
-
 
     /**
      * Generates all markers for the map.
