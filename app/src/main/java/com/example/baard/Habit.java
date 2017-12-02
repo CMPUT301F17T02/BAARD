@@ -221,6 +221,10 @@ public class Habit {
      * @return Boolean true if streak is current
      */
     public int streak() {
+        if (events.size() == 0) {
+            return 0;
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
         Calendar start = Calendar.getInstance();
