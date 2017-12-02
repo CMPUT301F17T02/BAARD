@@ -199,7 +199,7 @@ public class AllHabitEventsFragment extends Fragment {
             listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
         }
 
-        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
+        ExpandableEventListAdapter listAdapter = new ExpandableEventListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
 
         expandableEventListView.setAdapter(listAdapter);
 //        adapter.notifyDataSetChanged();
@@ -279,5 +279,47 @@ public class AllHabitEventsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class ExpandableEventListAdapter extends ExpandableListAdapter {
+
+        private List<HabitEvent> habitEventList = null;
+
+        public ExpandableEventListAdapter(Context context, List<String> listDataHeader, HashMap<String, List<String>> listChildData, List<HabitEvent> habitEventList) {
+            super(context, listDataHeader, listChildData, null, null);
+            this.habitEventList = habitEventList;
+        }
+
+        @Override
+        public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.list_item_event_expandable, null);
+            }
+
+            convertView.findViewById(R.id.viewButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HabitEvent event = habitEventList.get(groupPosition);
+                    int index = habitEventList.indexOf(event);
+                    Intent intent = new Intent(_context, ViewHabitEventActivity.class);
+                    intent.putExtra("habitEventDate", habitEventList.get(index).getEventDate().toString());
+                    habitEventList.get(index).getHabit().sendToSharedPreferences(_context);
+                    _context.startActivity(intent);
+                }
+            });
+
+            convertView.findViewById(R.id.editButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HabitEvent event = habitEventList.get(groupPosition);
+                    Intent intent = new Intent(_context, EditHabitEventActivity.class);
+                    intent.putExtra("habitEventDate", event.getEventDate().toString());
+                    event.getHabit().sendToSharedPreferences(_context);
+                    _context.startActivity(intent);
+                }
+            });
+            return convertView;
+        }
     }
 }
