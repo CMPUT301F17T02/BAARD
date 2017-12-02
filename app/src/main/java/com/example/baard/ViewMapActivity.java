@@ -30,12 +30,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "ViewMapActivity";
 
     private GoogleMap mMap;
+    private HashMap<LatLng, MarkerOptions> markers = new HashMap<>();
     private User user;
 
     private boolean mLocationPermissionGranted;
@@ -45,6 +48,9 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
+
+    private SharedPreferences sharedPrefs;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +65,8 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
@@ -104,10 +110,28 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         for (Habit habit : user.getHabits().getArrayList()) {
             for (HabitEvent habitEvent : habit.getEvents().getArrayList()) {
                 if (habitEvent.getLocation() != null) {
-                    mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation()).title(habit.getTitle()).snippet(sourceFormat.format(habitEvent.getEventDate())));
+                    MarkerOptions marker = new MarkerOptions().position(habitEvent.getLocation())
+                            .draggable(false)
+                            .title(habit.getTitle())
+                            .visible(false)
+                            .snippet(sourceFormat.format(habitEvent.getEventDate()));
+                    markers.put(habitEvent.getLocation(), marker);
+                    mMap.addMarker(marker);
                 }
             }
         }
+
+        // now make visible all markers that are filtered in habit history
+        String json = sharedPrefs.getString("filteredHabitEvents", "");
+        HabitEventList filteredHabitEvents = gson.fromJson(json, new TypeToken<HabitEventList>() {}.getType());
+        if (filteredHabitEvents != null) {
+            for (HabitEvent habitEvent : filteredHabitEvents.getArrayList()) {
+                if (markers.get(habitEvent.getLocation()) != null) {
+                    markers.get(habitEvent.getLocation()).visible(true);
+                }
+            }
+        }
+
 
     }
 
