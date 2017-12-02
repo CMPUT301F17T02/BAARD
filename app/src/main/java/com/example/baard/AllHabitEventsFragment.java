@@ -51,7 +51,6 @@ import java.util.zip.DataFormatException;
 public class AllHabitEventsFragment extends Fragment {
 
     private ExpandableListView expandableEventListView;
-//    private ArrayAdapter<HabitEvent> adapter;
     private List<Habit> habitList;
     private List<HabitEvent> habitEventList = new ArrayList<HabitEvent>();
     private final FileController fileController = new FileController();
@@ -77,7 +76,6 @@ public class AllHabitEventsFragment extends Fragment {
      *
      * @return A new instance of fragment AllHabitEventsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AllHabitEventsFragment newInstance() {
         AllHabitEventsFragment fragment = new AllHabitEventsFragment();
         Bundle args = new Bundle();
@@ -113,7 +111,6 @@ public class AllHabitEventsFragment extends Fragment {
             habitList.add(0,noneHabit);
         }catch(Exception e){
             //unexpected behaviour
-
         }
         habitSpinner = (Spinner) view.findViewById(R.id.habitFilterSpinner);
 
@@ -130,21 +127,7 @@ public class AllHabitEventsFragment extends Fragment {
 
         expandableEventListView = (ExpandableListView) view.findViewById(R.id.habitEventListView);
 
-//        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
-
         sendHabitEventsToSharedPreferences();
-
-//        habitEventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                //tell the ViewRecordActivity which list item has been selected and start it
-//                Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
-//                //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
-//                intent.putExtra("habitEventDate",habitEventList.get(i).getEventDate().toString());
-//                habitEventList.get(i).getHabit().sendToSharedPreferences(getActivity().getApplicationContext());
-//                startActivity(intent);
-//            }
-//        });
 
         filterButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -153,12 +136,9 @@ public class AllHabitEventsFragment extends Fragment {
             }
         });
 
-//        habitEventListView.setAdapter(adapter);
-
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -202,7 +182,6 @@ public class AllHabitEventsFragment extends Fragment {
         ExpandableEventListAdapter listAdapter = new ExpandableEventListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
 
         expandableEventListView.setAdapter(listAdapter);
-//        adapter.notifyDataSetChanged();
         sendHabitEventsToSharedPreferences();
     }
 
@@ -227,26 +206,6 @@ public class AllHabitEventsFragment extends Fragment {
         super.onResume();
 
         filterHabitEvents();
-//        createHabitEventList();
-//
-//        List<String> listDataHeader = new ArrayList<>();
-//        HashMap<String, List<String>> listDataChild = new HashMap<>();
-//        List<String> child = new ArrayList<>();
-//        child.add("");
-//        for (int i = 0; i < habitEventList.size(); i++) {
-//            HabitEvent event = habitEventList.get(i);
-//            listDataHeader.add(event.toString());
-//            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
-//        }
-//
-//        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
-//
-//        expandableEventListView.setAdapter(listAdapter);
-
-//        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
-//        expandableEventListView.setAdapter(adapter);
-
-//        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -277,7 +236,6 @@ public class AllHabitEventsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

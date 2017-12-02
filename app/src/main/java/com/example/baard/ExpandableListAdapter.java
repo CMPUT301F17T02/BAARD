@@ -24,11 +24,12 @@ import java.util.List;
 
 /**
  * Adapter for Expandable List Views in Daily Habits and All Habits Fragments of Main Activity
+ * Referenced and copied from https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
+ * @version 1.0
  * @see DailyHabitsFragment
  * @see AllHabitsFragment
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
-    // Referenced and copied from https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
     public final Context _context;
     private final List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
