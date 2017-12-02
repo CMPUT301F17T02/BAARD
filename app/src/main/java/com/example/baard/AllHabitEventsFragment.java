@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -48,8 +50,8 @@ import java.util.zip.DataFormatException;
  */
 public class AllHabitEventsFragment extends Fragment {
 
-    private ListView habitEventListView;
-    private ArrayAdapter<HabitEvent> adapter;
+    private ExpandableListView expandableEventListView;
+//    private ArrayAdapter<HabitEvent> adapter;
     private List<Habit> habitList;
     private List<HabitEvent> habitEventList = new ArrayList<HabitEvent>();
     private final FileController fileController = new FileController();
@@ -126,23 +128,23 @@ public class AllHabitEventsFragment extends Fragment {
         Button filterButton = (Button) view.findViewById(R.id.filterButton);
         commentFilter.setText("");
 
-        habitEventListView = (ListView) view.findViewById(R.id.habitEventListView);
+        expandableEventListView = (ExpandableListView) view.findViewById(R.id.habitEventListView);
 
-        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
+//        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
 
         sendHabitEventsToSharedPreferences();
 
-        habitEventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //tell the ViewRecordActivity which list item has been selected and start it
-                Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
-                //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
-                intent.putExtra("habitEventDate",habitEventList.get(i).getEventDate().toString());
-                habitEventList.get(i).getHabit().sendToSharedPreferences(getActivity().getApplicationContext());
-                startActivity(intent);
-            }
-        });
+//        habitEventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                //tell the ViewRecordActivity which list item has been selected and start it
+//                Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
+//                //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
+//                intent.putExtra("habitEventDate",habitEventList.get(i).getEventDate().toString());
+//                habitEventList.get(i).getHabit().sendToSharedPreferences(getActivity().getApplicationContext());
+//                startActivity(intent);
+//            }
+//        });
 
         filterButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -151,7 +153,7 @@ public class AllHabitEventsFragment extends Fragment {
             }
         });
 
-        habitEventListView.setAdapter(adapter);
+//        habitEventListView.setAdapter(adapter);
 
         return view;
     }
@@ -187,7 +189,20 @@ public class AllHabitEventsFragment extends Fragment {
             }
         }
 
-        adapter.notifyDataSetChanged();
+        List<String> listDataHeader = new ArrayList<>();
+        HashMap<String, List<String>> listDataChild = new HashMap<>();
+        List<String> child = new ArrayList<>();
+        child.add("");
+        for (int i = 0; i < habitEventList.size(); i++) {
+            HabitEvent event = habitEventList.get(i);
+            listDataHeader.add(event.toString());
+            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+        }
+
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
+
+        expandableEventListView.setAdapter(listAdapter);
+//        adapter.notifyDataSetChanged();
         sendHabitEventsToSharedPreferences();
     }
 
@@ -210,19 +225,27 @@ public class AllHabitEventsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        habitEventList.clear();
-        User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
-        for (Habit habit: user.getHabits().getArrayList()) {
-            for(HabitEvent habitEvent: habit.getEvents().getArrayList()){
-                habitEvent.setHabit(habit);
-                habitEventList.add(habitEvent);
-            }
-        }
-        Collections.sort(habitEventList);
-        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
-        habitEventListView.setAdapter(adapter);
 
-        adapter.notifyDataSetChanged();
+        createHabitEventList();
+
+        List<String> listDataHeader = new ArrayList<>();
+        HashMap<String, List<String>> listDataChild = new HashMap<>();
+        List<String> child = new ArrayList<>();
+        child.add("");
+        for (int i = 0; i < habitEventList.size(); i++) {
+            HabitEvent event = habitEventList.get(i);
+            listDataHeader.add(event.toString());
+            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+        }
+
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitEventList);
+
+        expandableEventListView.setAdapter(listAdapter);
+
+//        adapter = new ArrayAdapter<HabitEvent>(getActivity(), R.layout.list_item, habitEventList);
+//        expandableEventListView.setAdapter(adapter);
+
+//        adapter.notifyDataSetChanged();
     }
 
     @Override

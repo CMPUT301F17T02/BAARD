@@ -33,8 +33,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private final List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private final HashMap<String, List<String>> _listDataChild;
-    private final HabitList allHabitsList;
-    private final HabitList seenHabitsList;
+    private HabitList allHabitsList = null;
+    private HabitList seenHabitsList = null;
+    private List<HabitEvent> habitEventList = null;
 
     /**
      * Constructor for Expandable List Adapter
@@ -51,6 +52,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._listDataChild = listChildData;
         this.allHabitsList = allHabitsList;
         this.seenHabitsList = seenHabitsList;
+    }
+
+    /**
+     * Constructor for Expandable List Adapter
+     * @param context The context of the Application
+     * @param listDataHeader The header names for the list (Habit names)
+     * @param listChildData Child Strings (not used in this implementation) Pass in HashMap with Strings of Headers and a List<String> of just ""
+     * @param habitEventList All habits of the user
+     */
+    public ExpandableListAdapter(Context context, List<String> listDataHeader,
+                                 HashMap<String, List<String>> listChildData, List<HabitEvent> habitEventList) {
+        this._context = context;
+        this._listDataHeader = listDataHeader;
+        this._listDataChild = listChildData;
+        this.habitEventList = habitEventList;
     }
 
     /**
@@ -92,43 +108,76 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_item_expandable, null);
         }
 
-        convertView.findViewById(R.id.viewHabitButton).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.viewButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Habit h = seenHabitsList.getHabit(groupPosition);
-                int index = allHabitsList.indexOf(h);
-                Intent intent = new Intent(_context, ViewHabitActivity.class);
-                intent.putExtra("position", index);
-                _context.startActivity(intent);
+                if (habitEventList == null) {
+                    Habit h = seenHabitsList.getHabit(groupPosition);
+                    int index = allHabitsList.indexOf(h);
+                    Intent intent = new Intent(_context, ViewHabitActivity.class);
+                    intent.putExtra("position", index);
+                    _context.startActivity(intent);
+                } else {
+                    HabitEvent event = habitEventList.get(groupPosition);
+                    int index = habitEventList.indexOf(event);
+                    Intent intent = new Intent(_context, ViewHabitEventActivity.class);
+                    intent.putExtra("habitEventDate",habitEventList.get(index).getEventDate().toString());
+                    habitEventList.get(index).getHabit().sendToSharedPreferences(_context);
+                    _context.startActivity(intent);
+                }
             }
         });
 
-        convertView.findViewById(R.id.editHabitButton).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.editButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Habit h = seenHabitsList.getHabit(groupPosition);
-                int index = allHabitsList.indexOf(h);
-                Intent intent = new Intent(_context, EditHabitActivity.class);
-                intent.putExtra("position", index);
-                _context.startActivity(intent);
+                if (habitEventList == null) {
+                    Habit h = seenHabitsList.getHabit(groupPosition);
+                    int index = allHabitsList.indexOf(h);
+                    Intent intent = new Intent(_context, EditHabitActivity.class);
+                    intent.putExtra("position", index);
+                    _context.startActivity(intent);
+                } else {
+                    HabitEvent event = habitEventList.get(groupPosition);
+                    Intent intent = new Intent(_context, EditHabitEventActivity.class);
+                    intent.putExtra("habitEventDate",event.getEventDate().toString());
+                    event.getHabit().sendToSharedPreferences(_context);
+                    _context.startActivity(intent);
+                }
             }
         });
 
-        convertView.findViewById(R.id.deleteHabitButton).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Habit h = seenHabitsList.getHabit(groupPosition);
                 FileController fc = new FileController();
-                allHabitsList.delete(h);
-                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
-                Gson gson = new Gson();
-                String json = sharedPrefs.getString("username", "");
-                String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-                User user = fc.loadUser(_context, username);
-                user.setHabits(allHabitsList);
-                fc.saveUser(_context, user);
-                _listDataHeader.remove(groupPosition);
-                notifyDataSetChanged();
+                if (habitEventList == null) {
+                    Habit h = seenHabitsList.getHabit(groupPosition);
+                    allHabitsList.delete(h);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+                    Gson gson = new Gson();
+                    String json = sharedPrefs.getString("username", "");
+                    String username = gson.fromJson(json, new TypeToken<String>() {
+                    }.getType());
+                    User user = fc.loadUser(_context, username);
+                    user.setHabits(allHabitsList);
+                    fc.saveUser(_context, user);
+                    _listDataHeader.remove(groupPosition);
+                    notifyDataSetChanged();
+                } else {
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+                    Gson gson = new Gson();
+                    String json = sharedPrefs.getString("username", "");
+                    String username = gson.fromJson(json, new TypeToken<String>() {
+                    }.getType());
+                    User user = fc.loadUser(_context, username);
+
+                    HabitEvent event = habitEventList.get(groupPosition);
+                    event.getHabit().getEvents().delete(event);
+                    fc.saveUser(_context, user);
+                    _listDataHeader.remove(groupPosition);
+                    notifyDataSetChanged();
+                }
             }
         });
 

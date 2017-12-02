@@ -9,7 +9,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.baard.AllHabitEventsFragment">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/habitEventListView"
         android:layout_width="361dp"
         android:layout_height="441dp"
