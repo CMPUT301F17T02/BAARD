@@ -152,6 +152,9 @@ public class CreateNewHabitEventFragment extends Fragment {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(getActivity(), AddLocationActivity.class);
+                if (locationPosition != null) {
+                    intent.putExtra("myLocation", locationPosition);
+                }
                 startActivity(intent);
             }
         });

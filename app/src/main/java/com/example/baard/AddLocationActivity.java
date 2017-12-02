@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import static android.view.View.VISIBLE;
 
@@ -40,8 +41,12 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setVisibility(VISIBLE);
+        try {
+            LatLng myLocation = (LatLng) getIntent().getExtras().get("myLocation");
+            if (myLocation != null) {
+                mDefaultLocation = myLocation;
+            }
+        } catch (Exception e){}
 
         gson = new Gson();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -74,6 +79,7 @@ public class AddLocationActivity extends FragmentActivity implements OnMapReadyC
     @Override
     protected void onStart() {
         super.onStart();
+
 //        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != -1) {
 //            SingleShotLocationProvider.requestSingleUpdate(this,
 //                    new SingleShotLocationProvider.LocationCallback() {

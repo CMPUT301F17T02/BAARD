@@ -132,7 +132,7 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         }
 
         // hide all markers if not within 5km
-        
+
     }
 
     /**
