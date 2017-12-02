@@ -15,12 +15,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -38,7 +40,8 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
     private static final String TAG = "ViewMapActivity";
 
     private GoogleMap mMap;
-    private HashMap<LatLng, MarkerOptions> markers = new HashMap<>();
+    private HashMap<LatLng, Marker> myMarkers = new HashMap<>();
+    private HashMap<LatLng, Marker> friendMarkers = new HashMap<>();
     private User user;
 
     private boolean mLocationPermissionGranted;
@@ -104,41 +107,81 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14.0f));
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+        // set markers for user
+        setMarkers(user, false, myMarkers);
 
-        SimpleDateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-        // set all the markers a user has on their events
-        for (Habit habit : user.getHabits().getArrayList()) {
-            for (HabitEvent habitEvent : habit.getEvents().getArrayList()) {
-                if (habitEvent.getLocation() != null) {
-                    MarkerOptions marker = new MarkerOptions().position(habitEvent.getLocation())
-                            .draggable(false)
-                            .title(habit.getTitle())
-                            .visible(false)
-                            .snippet(sourceFormat.format(habitEvent.getEventDate()));
-                    markers.put(habitEvent.getLocation(), marker);
-                    mMap.addMarker(marker);
-                }
+        try {
+            // now make visible all markers that are filtered in habit history
+            String json = sharedPrefs.getString("filteredHabitEvents", "");
+            HabitEventList filteredHabitEvents = gson.fromJson(json, new TypeToken<HabitEventList>() {}.getType());
+            setVisibleMarkers(filteredHabitEvents);
+        } catch (Exception e) {
+            // in case there was no filter saved, just show them all
+            Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
+            for (Habit habit : user.getHabits().getArrayList()) {
+                setVisibleMarkers(habit.getEvents());
             }
+
         }
 
-        // now make visible all markers that are filtered in habit history
-        String json = sharedPrefs.getString("filteredHabitEvents", "");
-        HabitEventList filteredHabitEvents = gson.fromJson(json, new TypeToken<HabitEventList>() {}.getType());
-        if (filteredHabitEvents != null) {
-            for (HabitEvent habitEvent : filteredHabitEvents.getArrayList()) {
-                if (markers.get(habitEvent.getLocation()) != null) {
-                    markers.get(habitEvent.getLocation()).visible(true);
-                }
+        // set the markers for friends
+        if (user.getFriends().size() > 0) {
+            for (User friend : user.getFriends().getArrayList()) {
+                setMarkers(friend, true, friendMarkers);
             }
         }
 
 
     }
 
+    private void setVisibleMarkers(HabitEventList events) {
+        for (HabitEvent habitEvent : events.getArrayList()) {
+            if (myMarkers.get(habitEvent.getLocation()) != null) {
+                myMarkers.get(habitEvent.getLocation()).setVisible(true);
+            }
+        }
+
+    }
+
     // hide all markers if not within 5km
 
-    // hide or show friends markers
 
-    // if pull from shared preferences,
+    /**
+     * Generates all markers for the map.
+     * By specifying whether or not it is a friend, the color is set appropriately,
+     * as well as only showing the most recent habit event for the friend.
+     * @param user
+     * @param isFriend
+     * @param markerMap
+     */
+    private void setMarkers(User user, Boolean isFriend, HashMap<LatLng, Marker> markerMap) {
+        SimpleDateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Float bitMapColor;
 
+        if (isFriend) { //green for friend
+            bitMapColor = BitmapDescriptorFactory.HUE_BLUE;
+        } else { // red for user
+            bitMapColor = BitmapDescriptorFactory.HUE_RED;
+        }
+
+        // set all the markers a user has on their events
+        for (Habit habit : user.getHabits().getArrayList()) {
+            // to ensure we start at the last place in the list in case this call is for a friend
+            for (int i = habit.getEvents().size()-1; i >=0; i--) {
+                HabitEvent habitEvent = habit.getEvents().getHabitEvent(i);
+                if (habitEvent.getLocation() != null) {
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation())
+                            .draggable(false)
+                            .title(habit.getTitle())
+                            .visible(isFriend)
+                            .icon(BitmapDescriptorFactory.defaultMarker(bitMapColor))
+                            .snippet(sourceFormat.format(habitEvent.getEventDate())));
+                    markerMap.put(habitEvent.getLocation(), marker);
+                }
+                if (isFriend) {
+                    break;
+                }
+            }
+        }
+    }
 }

@@ -35,4 +35,8 @@ public class UserList {
         users.remove(user);
     }
 
+    public int size() {return users.size();}
+
+    public ArrayList<User> getArrayList() {return users;}
+
 }
