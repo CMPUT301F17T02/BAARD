@@ -6,15 +6,20 @@ package com.example.baard;
 
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -103,7 +108,57 @@ public class EditHabitActivity extends AppCompatActivity {
         // set the toggle buttons for the days of the week
         setToggleButtons();
 
-        getSupportActionBar().setTitle("Edit Habit");
+        setActionBarTitle("Edit Habit");
+        changeFont();
+    }
+
+    private void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        // Change font
+        TextView newHabit_title = (TextView) findViewById(R.id.newHabit_title);
+        TextView newHabit_reason = (TextView) findViewById(R.id.newHabit_reason);
+        TextView newHabit_startDate = (TextView) findViewById(R.id.newHabit_startDate);
+        TextView newHabit_daysOfWeek = (TextView) findViewById(R.id.newHabit_daysOfWeek);
+        newHabit_title.setTypeface(ralewayRegular);
+        newHabit_reason.setTypeface(ralewayRegular);
+        newHabit_startDate.setTypeface(ralewayRegular);
+        newHabit_daysOfWeek.setTypeface(ralewayRegular);
+        Button createButton = (Button) findViewById(R.id.save);
+        createButton.setTypeface(ralewayRegular);
+        editTextTitle = (EditText) findViewById(R.id.title);
+        editTextTitle.setTypeface(ralewayRegular);
+        editTextReason = (EditText) findViewById(R.id.reason);
+        editTextReason.setTypeface(ralewayRegular);
+        editTextStartDate = (EditText) findViewById(R.id.startDate);
+        editTextStartDate.setTypeface(ralewayRegular);
+
+        ArrayList<ToggleButton> toggles = new ArrayList<>();
+        toggles.add((ToggleButton) findViewById(R.id.sun));
+        toggles.add((ToggleButton) findViewById(R.id.mon));
+        toggles.add((ToggleButton) findViewById(R.id.tue));
+        toggles.add((ToggleButton) findViewById(R.id.wed));
+        toggles.add((ToggleButton) findViewById(R.id.thu));
+        toggles.add((ToggleButton) findViewById(R.id.fri));
+        toggles.add((ToggleButton) findViewById(R.id.sat));
+
+        for (ToggleButton toggle : toggles) {
+            toggle.setTypeface(ralewayRegular);
+        }
+    }
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
     }
 
     @Override

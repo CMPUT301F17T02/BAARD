@@ -9,6 +9,11 @@ import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
-public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ViewMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "ViewMapActivity";
 
@@ -57,6 +62,7 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_map);
 
+        setActionBarTitle(getString(R.string.title_activity_view_map));
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -70,6 +76,20 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
     }
 
     /**

@@ -10,6 +10,7 @@
         <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="android:windowBackground">@drawable/background</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
     </style>
 
     <style name="AppTheme.NoTitle">
@@ -22,9 +23,17 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="AppTheme.Translucent">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:overlapAnchor">false</item>
+    </style>
+
     <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
         <item name="android:elevation">2dp</item>
     </style>
 
