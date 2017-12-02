@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +37,9 @@ import java.util.List;
  * Created by randi on 23/11/17.
  */
 
+
+/** EVERY TIME I LOAD A FRIEND, IF THE FRIEND IS NULL, REMOVE FROM MAP **/
+
 public class FriendRequestsFragment extends Fragment {
 
 
@@ -43,7 +47,7 @@ public class FriendRequestsFragment extends Fragment {
     MyFriendsRequestAdapter adapter;
     private String username;
     private FileController fc;
-    ArrayList<User> allUserList = new ArrayList<>();
+//    ArrayList<User> allUserList = new ArrayList<>();
     private UserList getFriendRequestsList = new UserList();
     private User user;
 
@@ -123,13 +127,13 @@ public class FriendRequestsFragment extends Fragment {
             listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
         }
 
-        adapter = new MyFriendsRequestAdapter(this.getContext(), listDataHeader, listDataChild, allUserList, allUserList);
+        adapter = new MyFriendsRequestAdapter(this.getContext(), listDataHeader, listDataChild, getFriendRequestsList.getArrayList(), getFriendRequestsList.getArrayList());
 
         friendRequestsView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
     }
-    
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -171,39 +175,6 @@ public class FriendRequestsFragment extends Fragment {
             this.seenUsersList = seenUsersList;
         }
 
-
-//        @NonNull
-//        @Override
-//        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//            FriendRequestsFragment.ViewHolder mainViewHolder = null;
-//            if (convertView == null) {
-//                LayoutInflater inflater = LayoutInflater.from(getContext());
-//                convertView = inflater.inflate(layout, parent, false);
-//                final FriendRequestsFragment.ViewHolder viewHolder = new ViewHolder();
-//                viewHolder.expandableListView = (ExpandableListView) convertView.findViewById(R.id.friendRequestsView);
-//                viewHolder.acceptButton = (Button) convertView.findViewById(R.id.acceptFriendButton);
-//                viewHolder.declineButton = (Button) convertView.findViewById(R.id.declineFriendButton);
-//                viewHolder.acceptButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                    }
-//                });
-//
-//                viewHolder.declineButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                    }
-//                });
-//
-//                convertView.setTag(viewHolder);
-//            }
-//            mainViewHolder = (FriendRequestsFragment.ViewHolder) convertView.getTag();
-//            mainViewHolder.expandableListView.setText(getItem(position).getName());
-//
-//            return convertView;
-//        }
 
         @Override
         public int getGroupCount() {
@@ -269,14 +240,41 @@ public class FriendRequestsFragment extends Fragment {
             convertView.findViewById(R.id.acceptFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    User acceptPerson = seenUsersList.get(groupPosition);
+                    FileController fc = new FileController();
+                    allUsersList.remove(acceptPerson);
 
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+                    Gson gson = new Gson();
+                    String json = sharedPrefs.getString("username", "");
+                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+                    User user = fc.loadUser(_context, username);
+                    user.getReceivedRequests().delete(acceptPerson);
+                    fc.saveUser(_context, user);
+                    fc.acceptFriendRequest(getContext(), username, acceptPerson.getUsername());
+//                    Toast.makeText(this, "Declined Friend", Toast.LENGTH_SHORT).show();
+                    _listDataHeader.remove(groupPosition);
+                    notifyDataSetChanged();
                 }
             });
 
             convertView.findViewById(R.id.declineFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    User declinedPerson = seenUsersList.get(groupPosition);
+                    FileController fc = new FileController();
+                    allUsersList.remove(declinedPerson);
 
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+                    Gson gson = new Gson();
+                    String json = sharedPrefs.getString("username", "");
+                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+                    User user = fc.loadUser(_context, username);
+                    user.getReceivedRequests().delete(declinedPerson);
+                    fc.saveUser(_context, user);
+//                    Toast.makeText(this, "Declined Friend", Toast.LENGTH_SHORT).show();
+                    _listDataHeader.remove(groupPosition);
+                    notifyDataSetChanged();
                 }
             });
 

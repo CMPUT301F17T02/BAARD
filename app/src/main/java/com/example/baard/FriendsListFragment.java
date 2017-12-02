@@ -23,19 +23,24 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by randi on 23/11/17.
  */
+
+
+/** EVERY TIME I LOAD A FRIEND, IF THE FRIEND IS NULL, REMOVE FROM MAP **/
 
 public class FriendsListFragment extends Fragment {
 
     private ListView friendListView;
     private ArrayAdapter<User> adapter;
     //private String username;
-    //private FileController fc;
+//    private FileController fc;
     List<User> friendsList = new ArrayList<>();
     private User user;
+    Map<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
 
     private OnFragmentInteractionListener mListener;
 
