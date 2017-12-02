@@ -30,7 +30,8 @@ import java.util.Stack;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
-        CreateNewHabitEventFragment.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener {
+        CreateNewHabitEventFragment.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener,
+        HelpFragment.OnFragmentInteractionListener {
 
     private Stack<String> headerStack = new Stack<>();
     private String nextHeader;
@@ -137,11 +138,21 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 1);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
     }
 
     /**
@@ -183,6 +194,10 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_viewFriends) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_help) {
+            Toast.makeText(this, R.string.help, Toast.LENGTH_SHORT).show();
+            fragment = new HelpFragment();
+            nextHeader = getResources().getString(R.string.help);
         } else if (id == R.id.nav_logout) {
             // End this session and take users back to the login screen
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();

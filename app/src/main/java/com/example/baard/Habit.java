@@ -7,12 +7,17 @@ package com.example.baard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.zip.DataFormatException;
 
 import io.searchbox.annotations.JestId;
@@ -123,7 +128,7 @@ public class Habit {
      * @return
      */
     public Date getStartDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         try {
             return sdf.parse(startDate);
         } catch (Exception e) {
@@ -137,7 +142,7 @@ public class Habit {
      * @param startDate
      */
     public void setStartDate(Date startDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         this.startDate = sdf.format(startDate);
     }
 
@@ -166,6 +171,7 @@ public class Habit {
      */
     public String getFrequencyString() {
         String days = "";
+
         for (int i = 0; i < frequency.size(); i++) {
             // alternate string replacement
             //  StringBuilder day = new StringBuilder(frequency.get(i).toString());
@@ -208,6 +214,96 @@ public class Habit {
         String json = gson.toJson(this);
         sharedPrefsEditor.putString("currentlyViewingHabit", json);
         sharedPrefsEditor.commit();
+    }
+
+    /**
+     * Determines whether this habit is on a streak and returns the length in number of days
+     * @return Boolean true if streak is current
+     */
+    public int streak() {
+        if (events.size() == 0) {
+            return 0;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        Calendar calendar = Calendar.getInstance();
+        Calendar start = Calendar.getInstance();
+        start.setTime(getStartDate());
+        calendar.set(Calendar.DST_OFFSET, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.AM_PM, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int streak = 0;
+
+        // ensure the current date is checked over
+        Date date = events.getHabitEvent(events.size()-1).getEventDate();
+        String dateString = sdf.format(calendar.getTime().getTime()).toUpperCase();
+        Day dayEnum = Day.valueOf(dateString);
+        if (date.equals(calendar.getTime()) && frequency.contains(dayEnum)) {
+            streak++;
+        }
+
+        // while the calendar is not beyond the start date, calculate streak
+        while ( !calendar.equals(start) ) {
+            calendar.add(Calendar.DATE, -1);
+            // check if date is in frequency
+            dateString = sdf.format(calendar.getTime().getTime()).toUpperCase();
+            dayEnum = Day.valueOf(dateString);
+            if (frequency.contains(dayEnum)) {
+                boolean found = false;
+                // checking the most recent events first
+                for (int i = events.size()-1; i >= 0; i--) {
+                    date = events.getHabitEvent(i).getEventDate();
+                    // increase streak if event date and calendar date are aligned
+                    if (date.equals(calendar.getTime())) {
+                        streak++;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    // streak  was broken earlier than this point
+                    return streak;
+                }
+            }
+        }
+
+        return streak;
+    }
+
+    /**
+     * Determines if this habit has achieved a milestone of 5, 10, 25, 50, or 100 overall events.
+     * @return integer representing the last milestone achieved. Otherwise 0.
+     */
+    public int milestone() {
+        ArrayList<Integer> milestones = new ArrayList<>();
+        milestones.add(5);
+        milestones.add(10);
+        milestones.add(25);
+        milestones.add(50);
+        milestones.add(100);
+
+        // check for the most reasonable milestone
+        int toReturn = 0;
+        int count = events.size();
+        for (Integer m : milestones) {
+            if (count < m) {
+                return toReturn;
+            } else {
+                toReturn = m;
+            }
+        }
+        // For milestones greater than 100
+        while(true) {
+            if (count > toReturn) {
+                toReturn += 50;
+            } else {
+                return toReturn;
+            }
+        }
     }
 
     @Override

@@ -213,6 +213,13 @@ public class EditHabitEventActivity extends AppCompatActivity {
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
             comment = commentEditText.getText().toString();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            date = c.getTime();
             habitEvent.setEventDate(date);
             habitEvent.setComment(comment);
         } catch (DataFormatException d) {
@@ -252,7 +259,14 @@ public class EditHabitEventActivity extends AppCompatActivity {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
-        checkReadPermission();
+        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
+        if (checkReadPermission() == -1){
+            return;
+        }
+        getImage();
+    }
+
+    private void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -302,6 +316,11 @@ public class EditHabitEventActivity extends AppCompatActivity {
             String filePath = cursor.getString(columnIndex);
             cursor.close();
             Bitmap myBitmap = BitmapFactory.decodeFile(filePath);
+            if (filePath == null){
+                // error, they probably didnt use Photos
+                Toast.makeText(this, "Please select an image with the Photos application.", Toast.LENGTH_LONG).show();
+                return;
+            }
             File file = new File(filePath);
             if (file.length() > 65536){
                 Toast.makeText(this, "Image is too large.", Toast.LENGTH_LONG).show();
