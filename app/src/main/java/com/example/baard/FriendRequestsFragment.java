@@ -82,6 +82,7 @@ public class FriendRequestsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friend_requests, container, false);
         fc = new FileController();
 
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
@@ -101,7 +102,6 @@ public class FriendRequestsFragment extends Fragment {
 
         User user = fc.loadUser(getActivity().getApplicationContext(), username);
         //HabitList habitList = user.getHabits();
-        //getFriendRequestsList = user.getReceivedRequests();
         //getFriendRequestsList.getArrayList();
         List<String> listDataHeader = new ArrayList<>();
         HashMap<String, List<String>> listDataChild = new HashMap<>();
@@ -109,17 +109,17 @@ public class FriendRequestsFragment extends Fragment {
         child.add("");
 
 
-        for (int i = 0; i < 12; i++) {
-            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
-        }
+//        for (int i = 0; i < 12; i++) {
+//            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
+//        }
 
         getFriendRequestsList = user.getReceivedRequests();
         if (getFriendRequestsList != null) {
             System.out.println("User's received requests: " + getFriendRequestsList.getArrayList());
         }
 
-        for (int j = 0; j < 12; j++) {
-            listDataHeader.add(allUserList.get(j).getName());
+        for (int j = 0; j < getFriendRequestsList.getArrayList().size(); j++) {
+            listDataHeader.add(getFriendRequestsList.getArrayList().get(j).getName());
             listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
         }
 
@@ -129,31 +129,7 @@ public class FriendRequestsFragment extends Fragment {
 
         adapter.notifyDataSetChanged();
     }
-
-    /**
-     * Auto-generated method for fragment
-     * @param context The context of the application
-     */
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof FriendRequestsFragment.OnFragmentInteractionListener) {
-//            mListener = (FriendRequestsFragment.OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-    /**
-     * Auto-generated method for fragment
-     */
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
+    
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
