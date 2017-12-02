@@ -39,10 +39,11 @@ public class FindFriendsFragment extends Fragment {
     private String username;
     private User user;
     private FileController fc;
-    List<User> allUserList = new ArrayList<>();
+//    List<User> allUserList = new ArrayList<>();
     ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
     UserList allUsers = new UserList();
     private UserList friendList = new UserList();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

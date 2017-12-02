@@ -32,6 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by randi on 23/11/17.
@@ -49,6 +50,7 @@ public class FriendRequestsFragment extends Fragment {
     private FileController fc;
 //    ArrayList<User> allUserList = new ArrayList<>();
     private UserList getFriendRequestsList = new UserList();
+    private HashMap<String, String> getFriendRequestsMap = new HashMap<String, String>();
     private User user;
 
 
@@ -117,14 +119,16 @@ public class FriendRequestsFragment extends Fragment {
 //            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
 //        }
 
-        getFriendRequestsList = user.getReceivedRequests();
-        if (getFriendRequestsList != null) {
-            System.out.println("User's received requests: " + getFriendRequestsList.getArrayList());
-        }
+        getFriendRequestsMap = user.getReceivedRequests();
+        
 
-        for (int j = 0; j < getFriendRequestsList.getArrayList().size(); j++) {
-            listDataHeader.add(getFriendRequestsList.getArrayList().get(j).getName());
-            listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+        if (!getFriendRequestsMap.isEmpty()) {
+            System.out.println("User's received requests: " + getFriendRequestsMap);
+
+            for (int j = 0; j < getFriendRequestsList.size(); j++) {
+                listDataHeader.add(getFriendRequestsMap.);
+                listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+            }
         }
 
         adapter = new MyFriendsRequestAdapter(this.getContext(), listDataHeader, listDataChild, getFriendRequestsList.getArrayList(), getFriendRequestsList.getArrayList());
