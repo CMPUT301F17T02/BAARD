@@ -48,16 +48,14 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
     private SharedPreferences sharedPrefs;
     private Gson gson;
 
+    /**
+     * Set up the view map activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_map);
-
-
-//        if (savedInstanceState != null) {
-//            mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
-//            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
-//        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
@@ -73,16 +71,6 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
-
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        if (mMap != null) {
-//            outState.putParcelable(KEY_CAMERA_POSITION, mMap.getCameraPosition());
-//            outState.putParcelable(KEY_LOCATION, mLastKnownLocation);
-//            super.onSaveInstanceState(outState);
-//        }
-//    }
 
     /**
      * Manipulates the map once available.
@@ -114,7 +102,6 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
             for (Habit habit : user.getHabits().getArrayList()) {
                 setVisibleMarkers(habit.getEvents().getArrayList(), true);
             }
-
         }
 
         // set the markers for friends
