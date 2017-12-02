@@ -56,6 +56,7 @@ public class FindFriendsFragment extends Fragment {
 
         try {
             allUsers = getAllUsersTask.get();
+            allUsers.getArrayList().remove(user);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -130,7 +131,7 @@ public class FindFriendsFragment extends Fragment {
                             friendList.add(getItem(position));
                             System.out.println(friendList.getArrayList());
                             // set friends to user
-                            //user.setFriends(friendList);
+                            user.setReceivedRequests(friendList);
                         }
 
 
