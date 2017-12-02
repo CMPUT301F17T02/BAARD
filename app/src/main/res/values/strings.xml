@@ -22,6 +22,7 @@
     <string name="habit_history">Habit Event History</string>
     <string name="create_event">Create New Habit Event</string>
     <string name="logout">Logout</string>
+    <string name="help">Help</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -47,5 +48,15 @@
     <string name="save">Save</string>
     <string name="title_activity_view_friend">ViewFriend</string>
     <string name="friends_name">Name</string>
+
+    <string name="helpText"><h1><b><u>Welcome to your habit tracker!</u></b></h1>\n\n
+        <b>Interested in how milestones work?</b>\n
+        Once you reach 5, 10, 15, 25, 50, and 100 habit events, you will see a message in your
+        corresponding habit! (under "View") After you pass 100 habits, you will see a milestone
+        for every 50 more habit events that you complete.\n\n
+        <b>Interested in how streaks work?</b>\n
+        Once you complete your habit 5 times on your specified frequency, you can see your streak
+        calculated when you view your habit. Plus, if you forget to enter your habit event, a notification
+        will occur at 4pm that day as a reminder!\n\n</string>
 
 </resources>

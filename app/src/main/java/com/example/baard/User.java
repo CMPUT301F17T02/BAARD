@@ -4,7 +4,13 @@
 
 package com.example.baard;
 
+import android.support.annotation.NonNull;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 import io.searchbox.annotations.JestId;
 
@@ -16,12 +22,13 @@ public class User {
     private String name;
     private String username;
     private HabitList habits = new HabitList();
-    private transient UserList friends = new UserList();
-    private transient UserList receivedRequests = new UserList();
+//    private Map<String, Boolean> friends;
+//    private ArrayList<String> receivedRequests = new ArrayList<>();
+    private UserList friends = new UserList();
+    private UserList receivedRequests = new UserList();
 
     @JestId
     private String id;
-    // WOW factor TODO --> profile pictures
 
     public User(String name, String username, String id) {
         this.name = name;
@@ -60,6 +67,22 @@ public class User {
     public void setHabits(HabitList habits) {
         this.habits = habits;
     }
+
+//    public Map<String, Boolean> getFriends() {
+//        return friends;
+//    }
+//
+//    public void setFriends(Map<String, Boolean> friends) {
+//        this.friends = friends;
+//    }
+//
+//    public ArrayList<String> getReceivedRequests() {
+//        return receivedRequests;
+//    }
+//
+//    public void setReceivedRequests(ArrayList<String> receivedRequests) {
+//        this.receivedRequests = receivedRequests;
+//    }
 
     public UserList getFriends() {
         return friends;

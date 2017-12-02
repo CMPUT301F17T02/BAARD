@@ -30,7 +30,8 @@ import java.util.Stack;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
-        CreateNewHabitEventFragment.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener {
+        CreateNewHabitEventFragment.OnFragmentInteractionListener, DailyHabitsFragment.OnFragmentInteractionListener,
+        HelpFragment.OnFragmentInteractionListener {
 
     private Stack<String> headerStack = new Stack<>();
     private String nextHeader;
@@ -184,7 +185,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_viewFriends) {
             Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
             startActivity(intent);
-
+        } else if (id == R.id.nav_help) {
+            Toast.makeText(this, R.string.help, Toast.LENGTH_SHORT).show();
+            fragment = new HelpFragment();
+            nextHeader = getResources().getString(R.string.help);
         } else if (id == R.id.nav_logout) {
             // End this session and take users back to the login screen
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
