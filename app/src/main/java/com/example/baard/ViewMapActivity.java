@@ -5,35 +5,27 @@
 package com.example.baard;
 
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+import android.location.Location;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 
 public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -51,6 +43,7 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
+    private static final float DISTANCE = 5000f;
 
     private SharedPreferences sharedPrefs;
     private Gson gson;
@@ -113,13 +106,13 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
         try {
             // now make visible all markers that are filtered in habit history
             String json = sharedPrefs.getString("filteredHabitEvents", "");
-            HabitEventList filteredHabitEvents = gson.fromJson(json, new TypeToken<HabitEventList>() {}.getType());
-            setVisibleMarkers(filteredHabitEvents);
+            List<HabitEvent> filteredHabitEvents = gson.fromJson(json, new TypeToken<List<HabitEvent>>() {}.getType());
+            setVisibleMarkers(filteredHabitEvents, true);
         } catch (Exception e) {
             // in case there was no filter saved, just show them all
             Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
             for (Habit habit : user.getHabits().getArrayList()) {
-                setVisibleMarkers(habit.getEvents());
+                setVisibleMarkers(habit.getEvents().getArrayList(), true);
             }
 
         }
@@ -130,20 +123,26 @@ public class ViewMapActivity extends FragmentActivity implements OnMapReadyCallb
                 setMarkers(friend, true, friendMarkers);
             }
         }
-
-        // hide all markers if not within 5km
-
     }
 
     /**
      * Depending on the filter set by the user, make the appropriate markers visible for them
      * to see on the map.
      * @param events
+     * @param withDistance boolean to set whether or not distance should be calculated
      */
-    private void setVisibleMarkers(HabitEventList events) {
-        for (HabitEvent habitEvent : events.getArrayList()) {
-            if (myMarkers.get(habitEvent.getLocation()) != null) {
-                myMarkers.get(habitEvent.getLocation()).setVisible(true);
+    private void setVisibleMarkers(List<HabitEvent> events, Boolean withDistance) {
+        for (HabitEvent habitEvent : events) {
+            LatLng location = habitEvent.getLocation();
+            if (myMarkers.get(location) != null) {
+                float[] dist = {0f,0f,0f};
+                Location.distanceBetween(mDefaultLocation.latitude, mDefaultLocation.longitude,
+                        location.latitude, location.longitude, dist);
+                if (withDistance && (dist[0] <= DISTANCE)) {
+                    myMarkers.get(location).setVisible(true);
+                } else {
+                    myMarkers.get(location).setVisible(true);
+                }
             }
         }
 

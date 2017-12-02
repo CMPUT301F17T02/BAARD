@@ -4,27 +4,12 @@
 
 package com.example.baard;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
-import android.support.v4.content.ContextCompat;
-
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
-
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.IllegalFormatCodePointException;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
-
-import io.searchbox.annotations.JestId;
 
 /**
  * Created by biancaangotti on 2017-10-18.

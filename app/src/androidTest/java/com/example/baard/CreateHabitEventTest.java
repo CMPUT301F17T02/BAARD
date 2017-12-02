@@ -20,6 +20,8 @@ import org.junit.Test;
  * These tests assume that there is a Jogging Habit in the database with a start date of April 20, 2016.
  * Without this, some or all of these tests may fail.
  *
+ * Note that this class does not test the ability to add images, since solo/robotium cannot navigate Android system UI.
+ *
  * @author amckerna
  * @version 1.0
  */
@@ -38,11 +40,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
      * test username.
      * @throws InterruptedException
      */
-    @BeforeClass
-    public static void setUpDataAndLogIn(){
-
-    }
-
     @Override
     public void setUp() throws InterruptedException {
         //DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
