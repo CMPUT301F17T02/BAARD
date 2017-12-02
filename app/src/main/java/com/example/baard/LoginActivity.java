@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -209,9 +210,13 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             FileController fileController = new FileController();
-            User user = fileController.loadUser(getApplicationContext(), username);
-            if (user != null && user.getUsername().equals(username)) {
-                login(user);
+            if (!fileController.isNetworkAvailable(getApplicationContext())) {
+                User user = fileController.loadUser(getApplicationContext(), username);
+                if (user != null && user.getUsername().equals(username)) {
+                    login(user);
+                } else {
+                    Toast.makeText(this, "Network not available.", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 mAuthTask = new UserLoginTask(username);
                 mAuthTask.execute();
@@ -265,9 +270,14 @@ public class LoginActivity extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // kick off task to perform the user login attempt.
-            mAuthTask = new UserLoginTask(username,name);
-            mAuthTask.execute();
+            FileController fileController = new FileController();
+            if (!fileController.isNetworkAvailable(getApplicationContext())) {
+                Toast.makeText(this, "Network not available.", Toast.LENGTH_SHORT).show();
+            } else {
+                // kick off task to perform the user login attempt.
+                mAuthTask = new UserLoginTask(username, name);
+                mAuthTask.execute();
+            }
         }
     }
 
