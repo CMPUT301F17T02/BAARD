@@ -14,22 +14,34 @@
         android:id="@+id/username"
         android:layout_width="215dp"
         android:layout_height="36dp"
-        android:text="username"
+        android:text="@string/prompt_username"
         android:textSize="24sp"
         app:layout_constraintLeft_toRightOf="@+id/username_prompt"
         android:layout_marginLeft="16dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/username_prompt" />
 
+
+    <TextView
+        android:id="@+id/nameV"
+        android:layout_width="215dp"
+        android:layout_height="76dp"
+        android:text="@string/prompt_name"
+        android:textSize="24sp"
+        android:inputType="none"
+        app:layout_constraintLeft_toRightOf="@+id/username_prompt"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/name_prompt" />
+
     <EditText
         android:id="@+id/name"
         android:layout_width="218dp"
         android:layout_height="75dp"
-        android:text="name"
+        android:text="@string/prompt_name"
         android:textSize="24sp"
-        android:focusable="false"
         android:inputType="none"
+        android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@+id/username_prompt"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="6dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/name_prompt" />
 
     <TextView

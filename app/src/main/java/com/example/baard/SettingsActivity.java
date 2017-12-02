@@ -5,7 +5,6 @@
 package com.example.baard;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -27,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button editButton, saveButton;
     private EditText nameEdit;
     private AlertDialog dialog;
+    private TextView nameView;
 
     /**
      * Opens up the settings activity, allowing users to see their username and their full name.
@@ -47,12 +47,13 @@ public class SettingsActivity extends AppCompatActivity {
         fc = new FileController();
         user = fc.loadUser(getApplicationContext(), username);
 
-        TextView nameView = (TextView) findViewById(R.id.name);
         TextView userNameView = (TextView) findViewById(R.id.username);
+        nameView = (TextView) findViewById(R.id.nameV);
         nameEdit = (EditText) findViewById(R.id.name);
         editButton = (Button) findViewById(R.id.edit);
         saveButton = (Button) findViewById(R.id.save);
 
+        nameEdit.setText(user.getName());
         nameView.setText(user.getName());
         userNameView.setText(username);
 
@@ -105,7 +106,8 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void edit(View view) {
         // show editable fields and save button
-        nameEdit.setFocusable(true);
+        nameEdit.setVisibility(View.VISIBLE);
+        nameView.setVisibility(View.GONE);
         saveButton.setVisibility(View.VISIBLE);
         // hide edit Button
         editButton.setVisibility(View.INVISIBLE);
@@ -119,7 +121,9 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void save(View view) {
         // hide editable fields and save button
-        nameEdit.setFocusable(false);
+        nameEdit.setVisibility(View.GONE);
+        nameView.setText(nameEdit.getText().toString());
+        nameView.setVisibility(View.VISIBLE);
         saveButton.setVisibility(View.INVISIBLE);
         // show edit button
         editButton.setVisibility(View.VISIBLE);

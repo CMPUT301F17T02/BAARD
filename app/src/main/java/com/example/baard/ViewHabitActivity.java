@@ -109,7 +109,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         int milestone = habit.milestone();
 
         if (milestone > 0) {
-            milestoneTextView.setText("Milestone reached: "+Integer.toString(milestone)+" habit events completed!");
+            milestoneTextView.setText("Milestone reached: \n"+Integer.toString(milestone)+" habit events completed!");
             milestoneTextView.setVisibility(View.VISIBLE);
         } else {
             milestoneTextView.setVisibility(View.GONE);
@@ -118,7 +118,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         TextView streakTextView = (TextView) findViewById(R.id.streakTextView);
         int streak = habit.streak();
         if (streak > 4) {
-            streakTextView.setText("This habit is currently on a streak of "+Integer.toString(streak)+"!");
+            streakTextView.setText("Current Streak: "+Integer.toString(streak));
             streakTextView.setVisibility(View.VISIBLE);
         } else {
             streakTextView.setVisibility(View.GONE);
