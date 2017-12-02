@@ -34,8 +34,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private final List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private final HashMap<String, List<String>> _listDataChild;
-    private HabitList allHabitsList = null;
-    private HabitList seenHabitsList = null;
+    private final HabitList allHabitsList;
+    private final HabitList seenHabitsList;
 
     /**
      * Constructor for Expandable List Adapter
