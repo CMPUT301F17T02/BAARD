@@ -34,6 +34,13 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
+        <ListView
+            android:id="@+id/habit_scroller_listview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2.68"
+            tools:scrollbars="vertical"/>
+
 
     </LinearLayout>
 

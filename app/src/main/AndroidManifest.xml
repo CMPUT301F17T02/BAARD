@@ -90,14 +90,27 @@
         <activity
             android:name=".ViewFriendActivity"
             android:label="@string/title_activity_view_friend"
-            android:parentActivityName=".MainActivity"></activity>
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".ViewFriendHabitActivity"
+            android:label="ViewFriendHabit"
+            android:parentActivityName=".ViewFriendActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ViewFriendActivity" />
+        </activity>
         <receiver
-            android:name="com.example.baard.AlarmReceiver"
-            android:exported="true" >
+            android:name=".AlarmReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

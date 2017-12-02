@@ -31,6 +31,10 @@
     <string name="title_activity_view_map">View Map</string>
 
     <string name="habit_title">Habit Title</string>
+    <string name="most_recent_event">Most Recent Habit Event</string>
+    <string name="friend_comment">Comment</string>
+    <string name="friend_event_date">Habit Event Date</string>
+    <string name="friend_location_title">Location</string>
     <string name="reason">Reason</string>
     <string name="start_date">Start Date</string>
     <string name="frequency">Frequency</string>
