@@ -7,6 +7,7 @@ package com.example.baard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
 
@@ -231,17 +233,27 @@ public class Habit {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         int streak = 0;
-        Calendar today = (Calendar) calendar.clone();
-        Date date = null;
 
+        // ensure the current date is checked over
+        Date date = events.getHabitEvent(events.size()-1).getEventDate();
+        String dateString = sdf.format(calendar.getTime().getTime()).toUpperCase();
+        Day dayEnum = Day.valueOf(dateString);
+        if (date.equals(calendar.getTime()) && frequency.contains(dayEnum)) {
+            streak++;
+        }
+
+        // while the calendar is not beyond the start date, calculate streak
         while ( !calendar.equals(start) ) {
             calendar.add(Calendar.DATE, -1);
-            String dateString = sdf.format(calendar.getTime().getTime()).toUpperCase();
-            Day dayEnum = Day.valueOf(dateString);
+            // check if date is in frequency
+            dateString = sdf.format(calendar.getTime().getTime()).toUpperCase();
+            dayEnum = Day.valueOf(dateString);
             if (frequency.contains(dayEnum)) {
                 boolean found = false;
+                // checking the most recent events first
                 for (int i = events.size()-1; i >= 0; i--) {
                     date = events.getHabitEvent(i).getEventDate();
+                    // increase streak if event date and calendar date are aligned
                     if (date.equals(calendar.getTime())) {
                         streak++;
                         found = true;
@@ -249,9 +261,7 @@ public class Habit {
                     }
                 }
                 if (!found) {
-                    if (date.equals(today.getTime())) {
-                        streak++;
-                    }
+                    // streak  was broken earlier than this point
                     return streak;
                 }
             }
@@ -272,6 +282,7 @@ public class Habit {
         milestones.add(50);
         milestones.add(100);
 
+        // check for the most reasonable milestone
         int toReturn = 0;
         int count = events.size();
         for (Integer m : milestones) {
