@@ -88,7 +88,9 @@ public class DeleteHabitEventTest extends ActivityInstrumentationTestCase2<Login
         Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
         String habitName = spinner.getSelectedItem().toString();
         EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "25/12/2016");
+        solo.clickOnView(date);
+        solo.setDatePicker(0,2016,11,25);
+        solo.clickOnText("OK");
         String dateString = date.getText().toString();
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
@@ -98,6 +100,13 @@ public class DeleteHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.searchText(habitName);
         // now delete it
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
+        solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Habit Event History");
+        if (solo.searchText("December 25, 2016") == false)
+            assertTrue(true);
+        else
+            fail();
     }
 
 }
