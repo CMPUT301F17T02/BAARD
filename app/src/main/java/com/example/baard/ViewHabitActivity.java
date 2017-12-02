@@ -288,10 +288,10 @@ public class ViewHabitActivity extends AppCompatActivity {
             eventsList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            if (habitEventList.size()*100 < 300) {
-                eventsList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, habitEventList.size()*100));
+            if (habitEventList.size()*150 < 450) {
+                eventsList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, habitEventList.size()*150));
             } else {
-                eventsList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
+                eventsList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 450));
 
                 eventsList.setOnTouchListener(new View.OnTouchListener() {
                     // Setting on Touch Listener for handling the touch inside ScrollView

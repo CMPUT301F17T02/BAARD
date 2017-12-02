@@ -48,12 +48,12 @@ public class Habit {
         if (title.length() <= 20) {
             this.title = title;
         } else {
-            throw new DataFormatException();
+            throw new DataFormatException("Title over 20 characters.");
         }
         if (reason.length() <= 30) {
             this.reason = reason;
         } else {
-            throw new DataFormatException();
+            throw new DataFormatException("Reason over 30 characters.");
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         this.startDate = sdf.format(startDate);
