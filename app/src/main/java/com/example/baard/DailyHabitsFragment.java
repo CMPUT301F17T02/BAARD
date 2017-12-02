@@ -40,6 +40,8 @@ public class DailyHabitsFragment extends Fragment {
     private FileController fc;
     private String username;
     private ExpandableListView expandableListView;
+    private SharedPreferences sharedPrefs;
+    private Gson gson;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,8 +79,8 @@ public class DailyHabitsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_daily_habits, container, false);
         fc = new FileController();
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Gson gson = new Gson();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
@@ -94,37 +96,43 @@ public class DailyHabitsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        User user = fc.loadUser(getActivity().getApplicationContext(), username);
-        if (user == null) {
-            getActivity().finish();
-            return;
-        }
-        HabitList habitList = user.getHabits();
-
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
-        String today = sDF.format(date.getTime()).toUpperCase();
-        Day day = Day.valueOf(today);
-
-        List<String> listDataHeader = new ArrayList<>();
-        HashMap<String, List<String>> listDataChild = new HashMap<>();
-        HabitList dailyHabitList = new HabitList();
-        List<String> child = new ArrayList<>();
-        child.add("");
-        for (int i = 0; i< habitList.size(); i++) {
-            Habit h = habitList.getHabit(i);
-            ArrayList<Day> freq = h.getFrequency();
-            if (freq.contains(day)) {
-                dailyHabitList.add(h);
-                listDataHeader.add(h.getTitle());
-                listDataChild.put(listDataHeader.get(listDataHeader.size()-1), child);
+        String json = sharedPrefs.getString("username", "");
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        if (username != null) {
+            User user = fc.loadUser(getActivity().getApplicationContext(), username);
+            if (user == null) {
+                getActivity().finish();
+                return;
             }
+            HabitList habitList = user.getHabits();
+
+            Calendar calendar = Calendar.getInstance();
+            Date date = calendar.getTime();
+            SimpleDateFormat sDF = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+            String today = sDF.format(date.getTime()).toUpperCase();
+            Day day = Day.valueOf(today);
+
+            List<String> listDataHeader = new ArrayList<>();
+            HashMap<String, List<String>> listDataChild = new HashMap<>();
+            HabitList dailyHabitList = new HabitList();
+            List<String> child = new ArrayList<>();
+            child.add("");
+            for (int i = 0; i < habitList.size(); i++) {
+                Habit h = habitList.getHabit(i);
+                ArrayList<Day> freq = h.getFrequency();
+                if (freq.contains(day)) {
+                    dailyHabitList.add(h);
+                    listDataHeader.add(h.getTitle());
+                    listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+                }
+            }
+
+            ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitList, dailyHabitList);
+
+            expandableListView.setAdapter(listAdapter);
+        } else {
+            getActivity().finish();
         }
-
-        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild, habitList, dailyHabitList);
-
-        expandableListView.setAdapter(listAdapter);
     }
 
     /**

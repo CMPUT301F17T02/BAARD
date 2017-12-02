@@ -4,13 +4,13 @@
 
 package com.example.baard;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,6 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
     private User user;
     private Button editButton, saveButton;
     private EditText nameEdit;
+    private AlertDialog dialog;
     private TextView nameView;
 
     /**
@@ -54,10 +55,38 @@ public class SettingsActivity extends AppCompatActivity {
 
         nameEdit.setText(user.getName());
         nameView.setText(user.getName());
-
         userNameView.setText(username);
 
-        getSupportActionBar().setTitle("Settings");
+        // Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(R.string.dialog_message)
+                .setTitle(R.string.dialog_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (fc.deleteFile(getApplicationContext())) {
+                            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            sharedPrefs.edit().remove("username").apply();
+                            ElasticSearchController.DeleteUserTask deleteUserTask = new ElasticSearchController.DeleteUserTask();
+                            deleteUserTask.execute(user);
+                            setResult(RESULT_OK);
+                            Toast.makeText(SettingsActivity.this, "Account Deleted", Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(SettingsActivity.this, "Account could not be deleted", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        // Create the AlertDialog
+        dialog = builder.create();
+
+        getSupportActionBar().setTitle(R.string.settings);
     }
 
     /**
@@ -66,7 +95,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view
      */
     public void delete(View view) {
-        Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
+        dialog.show();
     }
 
     /**
@@ -101,6 +130,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         user.setName(nameEdit.getText().toString());
         fc.saveUser(getApplicationContext(), user);
+    }
+
+    /**
+     * Let main activity know not to close down
+     */
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 
 }
