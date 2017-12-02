@@ -186,6 +186,6 @@ public class HabitEvent implements Comparable<HabitEvent> {
             date = null;
         }
         DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-        return this.getHabit().getTitle() + "     " + formatter.format(date);
+        return this.getHabit().getTitle() + "\n" + formatter.format(date);
     }
 }
