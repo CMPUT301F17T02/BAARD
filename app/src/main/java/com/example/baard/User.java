@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,10 +23,10 @@ public class User {
     private String name;
     private String username;
     private HabitList habits = new HabitList();
-//    private Map<String, Boolean> friends;
-//    private ArrayList<String> receivedRequests = new ArrayList<>();
-    private UserList friends = new UserList();
-    private UserList receivedRequests = new UserList();
+    private HashMap<String, Boolean> friends = new HashMap<String, Boolean>();
+    private HashMap<String, String> receivedRequests = new HashMap<String, String>();
+    //private UserList friends = new UserList();
+    //private UserList receivedRequests = new UserList();
 
     @JestId
     private String id;
@@ -68,37 +69,37 @@ public class User {
         this.habits = habits;
     }
 
-//    public Map<String, Boolean> getFriends() {
-//        return friends;
-//    }
-//
-//    public void setFriends(Map<String, Boolean> friends) {
-//        this.friends = friends;
-//    }
-//
-//    public ArrayList<String> getReceivedRequests() {
-//        return receivedRequests;
-//    }
-//
-//    public void setReceivedRequests(ArrayList<String> receivedRequests) {
-//        this.receivedRequests = receivedRequests;
-//    }
-
-    public UserList getFriends() {
+    public HashMap<String, Boolean> getFriends() {
         return friends;
     }
 
-    public void setFriends(UserList friends) {
+    public void setFriends(HashMap<String, Boolean> friends) {
         this.friends = friends;
     }
 
-    public UserList getReceivedRequests() {
+    public HashMap<String, String> getReceivedRequests() {
         return receivedRequests;
     }
 
-    public void setReceivedRequests(UserList receivedRequests) {
+    public void setReceivedRequests(HashMap<String, String> receivedRequests) {
         this.receivedRequests = receivedRequests;
     }
+
+//    public UserList getFriends() {
+//        return friends;
+//    }
+//
+//    public void setFriends(UserList friends) {
+//        this.friends = friends;
+//    }
+//
+//    public UserList getReceivedRequests() {
+//        return receivedRequests;
+//    }
+//
+//    public void setReceivedRequests(UserList receivedRequests) {
+//        this.receivedRequests = receivedRequests;
+//    }
 
     @Override
     public String toString() {
