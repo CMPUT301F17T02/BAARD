@@ -61,4 +61,6 @@
         calculated when you view your habit. Plus, if you forget to enter your habit event, a notification
         will occur at 4pm that day as a reminder!\n\n</string>
 
+    <string name="no_network">Network not available</string>
+
 </resources>

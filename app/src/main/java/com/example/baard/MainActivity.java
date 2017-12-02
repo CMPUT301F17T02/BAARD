@@ -173,10 +173,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         TextView title = (TextView) findViewById(R.id.toolbar_title);
         headerStack.push(nextHeader);
-        Fragment fragment = new DailyHabitsFragment(); //TODO: Move this into the IF once other activities implmented
+        Fragment fragment = null;
+        FileController fileController = new FileController();
         // Send user to selected fragment
         if (id == R.id.nav_dailyHabits) {
             Toast.makeText(this, R.string.daily_habits, Toast.LENGTH_SHORT).show();
+            fragment = new DailyHabitsFragment();
             nextHeader = getResources().getString(R.string.daily_habits);
         }
         else if (id == R.id.nav_allHabits) {
@@ -196,9 +198,13 @@ public class MainActivity extends AppCompatActivity
             fragment = new CreateNewHabitEventFragment();
             nextHeader = getResources().getString(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
-            Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
-            startActivity(intent);
+            if (fileController.isNetworkAvailable(getApplicationContext())) {
+                Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_viewFriends) {
             Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_help) {
@@ -219,12 +225,14 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
-                .addToBackStack(null)
-                .commit();
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
+                    .addToBackStack(null)
+                    .commit();
 
-        title.setText(nextHeader);
+            title.setText(nextHeader);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
