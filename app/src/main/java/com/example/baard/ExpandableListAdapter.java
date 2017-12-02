@@ -24,12 +24,13 @@ import java.util.List;
 
 /**
  * Adapter for Expandable List Views in Daily Habits and All Habits Fragments of Main Activity
+ * Referenced and copied from https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
+ * @version 1.0
  * @see DailyHabitsFragment
  * @see AllHabitsFragment
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
-    // Referenced and copied from https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
-    private final Context _context;
+    public final Context _context;
     private final List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private final HashMap<String, List<String>> _listDataChild;
@@ -92,7 +93,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_item_expandable, null);
         }
 
-        convertView.findViewById(R.id.viewHabitButton).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.viewButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Habit h = seenHabitsList.getHabit(groupPosition);
@@ -103,7 +104,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             }
         });
 
-        convertView.findViewById(R.id.editHabitButton).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.editButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Habit h = seenHabitsList.getHabit(groupPosition);
@@ -114,16 +115,17 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             }
         });
 
-        convertView.findViewById(R.id.deleteHabitButton).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Habit h = seenHabitsList.getHabit(groupPosition);
                 FileController fc = new FileController();
+                Habit h = seenHabitsList.getHabit(groupPosition);
                 allHabitsList.delete(h);
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
                 Gson gson = new Gson();
                 String json = sharedPrefs.getString("username", "");
-                String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+                String username = gson.fromJson(json, new TypeToken<String>() {
+                }.getType());
                 User user = fc.loadUser(_context, username);
                 user.setHabits(allHabitsList);
                 fc.saveUser(_context, user);
