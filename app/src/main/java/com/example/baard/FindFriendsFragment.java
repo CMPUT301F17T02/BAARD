@@ -63,12 +63,12 @@ public class FindFriendsFragment extends Fragment {
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
 
-        //fc = new FileController();
+        fc = new FileController();
 
-//        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-//        Gson gson = new Gson();
-//        String json = sharedPrefs.getString("username", "");
-//        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("username", "");
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
@@ -85,7 +85,7 @@ public class FindFriendsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //user = fc.loadUser(getActivity().getApplicationContext(), username);
+        user = fc.loadUser(getActivity().getApplicationContext(), username);
 
         try {
             allUsers = getAllUsersTask.get();
@@ -129,9 +129,15 @@ public class FindFriendsFragment extends Fragment {
                         else {
                             viewHolder.button.setText("FOLLOWING");
                             friendList.add(getItem(position));
-                            System.out.println(friendList.getArrayList());
+                            System.out.println("Adding to list... " + friendList.getArrayList());
+
+                            for (int i = 0; i < friendList.size(); i++) {
+                                System.out.println("User to be added as a friend " + friendList.getArrayList().get(i).getUsername());
+                                Boolean test = fc.sendFriendRequest(getContext(), username, friendList.getArrayList().get(i).getUsername());
+                                if (test) { System.out.println("True: Sent to server"); }
+                            }
                             // set friends to user
-                            user.setReceivedRequests(friendList);
+
                         }
 
 

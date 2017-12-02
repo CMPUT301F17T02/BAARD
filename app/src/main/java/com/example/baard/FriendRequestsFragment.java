@@ -41,8 +41,8 @@ public class FriendRequestsFragment extends Fragment {
 
     private ExpandableListView friendRequestsView;
     MyFriendsRequestAdapter adapter;
-    //private String username;
-    //private FileController fc;
+    private String username;
+    private FileController fc;
     ArrayList<User> allUserList = new ArrayList<>();
     private UserList getFriendRequestsList = new UserList();
     private User user;
@@ -80,12 +80,12 @@ public class FriendRequestsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_requests, container, false);
-        //fc = new FileController();
+        fc = new FileController();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
-        //username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         friendRequestsView = view.findViewById(R.id.friendRequestsView);
 
@@ -99,7 +99,7 @@ public class FriendRequestsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //User user = fc.loadUser(getActivity().getApplicationContext(), username);
+        User user = fc.loadUser(getActivity().getApplicationContext(), username);
         //HabitList habitList = user.getHabits();
         //getFriendRequestsList = user.getReceivedRequests();
         //getFriendRequestsList.getArrayList();
@@ -107,8 +107,15 @@ public class FriendRequestsFragment extends Fragment {
         HashMap<String, List<String>> listDataChild = new HashMap<>();
         List<String> child = new ArrayList<>();
         child.add("");
+
+
         for (int i = 0; i < 12; i++) {
             allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
+        }
+
+        getFriendRequestsList = user.getReceivedRequests();
+        if (getFriendRequestsList != null) {
+            System.out.println("User's received requests: " + getFriendRequestsList.getArrayList());
         }
 
         for (int j = 0; j < 12; j++) {

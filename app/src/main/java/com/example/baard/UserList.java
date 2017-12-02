@@ -37,4 +37,9 @@ public class UserList {
 
     public ArrayList<User> getArrayList() { return users; }
 
+    public int size() {
+        return users.size();
+    }
+
+
 }
