@@ -43,7 +43,7 @@ public class FileController {
      * @param context The Application Context at the time of calling. Use getApplicationContext()
      * @return Boolean true if Network is available
      */
-    private boolean isNetworkAvailable(Context context) {
+    public boolean isNetworkAvailable(Context context) {
         // Taken from https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
         ConnectivityManager manager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -77,8 +77,12 @@ public class FileController {
         User fileUser = loadUserFromFile(context);
         if (isNetworkAvailable(context)) {
             User serverUser = loadUserFromServer(username);
-            fileUser.setReceivedRequests(serverUser.getReceivedRequests());
-            fileUser.setFriends(serverUser.getFriends());
+            if (fileUser != null) {
+                fileUser.setReceivedRequests(serverUser.getReceivedRequests());
+                fileUser.setFriends(serverUser.getFriends());
+            } else {
+                fileUser = serverUser;
+            }
             saveUser(context, fileUser);
         }
         return fileUser;
@@ -123,6 +127,16 @@ public class FileController {
         } catch (IOException e) {
             throw new RuntimeException();
         }
+    }
+
+
+    /**
+     * Deletes user file locally when account is deleted.
+     * @param context The Application Context at the time of calling. Use getApplicationContext()
+     * @return boolean true if successful
+     */
+    public boolean deleteFile(Context context) {
+        return context.deleteFile(FILENAME);
     }
 
     /**
