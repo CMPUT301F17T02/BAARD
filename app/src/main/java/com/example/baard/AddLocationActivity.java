@@ -222,6 +222,7 @@ public class AddLocationActivity extends AppCompatActivity
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            pinPosition = mMarker.getPosition();
                         }
                         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, mLocationCallback);
                     }
@@ -269,8 +270,7 @@ public class AddLocationActivity extends AppCompatActivity
      * @param view
      */
     public void cancel(View view) {
-        sharedPrefsEditor.remove("locationPosition");
-        sharedPrefsEditor.commit();
+        sharedPrefsEditor.remove("locationPosition").apply();
         finish();
     }
 
@@ -280,8 +280,8 @@ public class AddLocationActivity extends AppCompatActivity
      */
     public void save(View view) {
         String json = gson.toJson(pinPosition);
-        sharedPrefsEditor.putString("locationPosition", json);
-        sharedPrefsEditor.commit();
+        sharedPrefsEditor.putString("locationPosition", json).commit();
+//        sharedPrefsEditor.apply();
         finish();
     }
 }
