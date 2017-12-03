@@ -81,9 +81,6 @@ public class FindFriendsFragment extends Fragment {
         user = fc.loadUser(getActivity().getApplicationContext(), username);
         myFriends = user.getFriends();
 
-
-
-
         try {
             allUsers = getAllUsersTask.get();
 
@@ -120,7 +117,6 @@ public class FindFriendsFragment extends Fragment {
                 final ViewHolder viewHolder = new ViewHolder();
 
                 user = fc.loadUser(getActivity().getApplicationContext(), username);
-//                myFriends = user.getFriends();
 
                 acceptedFriendsList = getKeysByValue(myFriends, Boolean.TRUE);
                 pendingFriendsList = getKeysByValue(myFriends, Boolean.FALSE);
@@ -128,28 +124,13 @@ public class FindFriendsFragment extends Fragment {
                 viewHolder.title = (TextView) convertView.findViewById(R.id.addFriend);
                 viewHolder.button = (Button) convertView.findViewById(R.id.addFriendButton);
 
-
-
-
-
-
                 viewHolder.button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (viewHolder.button.getText() == "FOLLOWING") {
                             notifyDataSetChanged();
                         } else if (viewHolder.button.getText() == "PENDING") {
-
-//                            user = fc.loadUser(getContext(), username);
-//                            if (user.getFriends().get(getItem(position).getUsername())) {
-//                                viewHolder.button.setText("FOLLOWING");
-//                            }
-
-//                            if (!acceptedFriendsList.isEmpty()) {
-//                                for (int i = 0; i < acceptedFriendsList.size(); i++) {
-//                                    viewHolder.button.setText("FOLLOWING");
-//                                }
-//                            }
+                            notifyDataSetChanged();
                         }
                         else {
                             viewHolder.button.setText("PENDING");
