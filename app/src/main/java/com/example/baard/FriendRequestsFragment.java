@@ -248,7 +248,12 @@ public class FriendRequestsFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     String acceptPerson = seenUsersList.get(groupPosition);
+                    System.out.println("all users list before removing: " + allUsersList);
                     allUsersList.remove(acceptPerson);
+//                    getFriendRequestsList.remove(groupPosition);
+//                    seenUsersList.remove(acceptPerson);
+                    notifyDataSetChanged();
+                    System.out.println("all users list after removing: " + allUsersList);
 
                     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
                     Gson gson = new Gson();

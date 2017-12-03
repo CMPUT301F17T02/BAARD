@@ -43,8 +43,8 @@ public class FriendsListFragment extends Fragment {
     private String username;
     private FileController fc;
     ArrayList<String> friendsList = new ArrayList<>();
-    Map<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
-    Map<String, String> userMap = new HashMap<String, String>();
+    HashMap<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
+    HashMap<String, String> userMap = new HashMap<String, String>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -131,7 +131,22 @@ public class FriendsListFragment extends Fragment {
 
 
         myFriendsMap = user.getFriends();
+        System.out.println("friendsMap:" + myFriendsMap);
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
+        System.out.println("friendsList:" + friendsList);
+        for (int i=0; i<friendsList.size(); i++) {
+            User friend = fc.loadUserFromServer(friendsList.get(i));
+            System.out.println("username:" + friendsList.get(i) + ".");
+            if (friend == null) {
+                System.out.println("Got into if statement");
+                myFriendsMap.remove(friendsList.get(i).toString());
+                System.out.println("Map: " + myFriendsMap);
+                friendsList.remove(friendsList.get(i));
+                System.out.println("friendsList: " + friendsList);
+            }
+            user.setFriends(myFriendsMap);
+        }
+        fc.saveUser(getContext(), user);
 
         adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, friendsList);
         friendListView.setAdapter(adapter);
