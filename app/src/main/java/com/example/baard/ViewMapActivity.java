@@ -145,8 +145,10 @@ public class ViewMapActivity extends AppCompatActivity
         // set the markers for friends
         if (user.getFriends().size() > 0) {
             for (String friendStr : user.getFriends().keySet()) {
-                User friend = fileController.loadUserFromServer(friendStr);
-                setMarkers(friend, true, friendMarkers);
+                if (user.getFriends().get(friendStr)) {
+                    User friend = fileController.loadUserFromServer(friendStr);
+                    setMarkers(friend, true, friendMarkers);
+                }
             }
         }
 
