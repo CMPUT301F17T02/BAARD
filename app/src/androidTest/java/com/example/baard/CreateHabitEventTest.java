@@ -214,26 +214,4 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnText("View");
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
-
-    /**
-     * Create a HabitEvent before the start date of the Jogging Habit.
-     */
-//    @Test
-//    public void testCreatingHabitEventBeforeHabitStart(){
-//        //
-//        Spinner habitSpinner = (Spinner) solo.getView(R.id.habitSpinner);
-//        solo.clickOnView(habitSpinner);
-//        solo.clickOnText("Jogging");
-//        //Jogging has a start date of April 20, 2016
-//        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-//        //solo.enterText(date, "25/01/2016");
-//        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
-//        solo.setDatePicker(0,2016,01,25);
-//        solo.clickOnText("OK");
-//        EditText comment = (EditText) solo.getView(R.id.commentEditText);
-//        solo.enterText(comment, "test comment");
-//        solo.clickOnView(solo.getView(R.id.saveButton));
-//        solo.searchText("Date is before habit start date.");
-//    }
-
 }
