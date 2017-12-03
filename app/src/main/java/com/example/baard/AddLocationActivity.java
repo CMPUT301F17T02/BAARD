@@ -100,6 +100,7 @@ public class AddLocationActivity extends AppCompatActivity
                 .title("Habit Event Location")
                 .snippet("Is this the right location?")
                 .position(mDefaultLocation);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap = googleMap;
         pinPosition = mMarker.getPosition();
 

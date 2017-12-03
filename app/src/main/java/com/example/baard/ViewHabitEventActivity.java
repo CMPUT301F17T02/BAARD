@@ -10,11 +10,19 @@ import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,13 +36,14 @@ import java.util.Locale;
  * @author amckerna
  * @version 1.0
  */
-public class ViewHabitEventActivity extends AppCompatActivity {
+public class ViewHabitEventActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-
+    private static final float DEFAULT_ZOOM = 13.5f;
     private Habit habit;
     private HabitEvent habitEvent;
     private final FileController fileController = new FileController();
     private User user;
+    private GoogleMap mMap;
     /**
      * When created, sets the content of all of its fields to match the given HabitEvent.
      * @param savedInstanceState
@@ -50,7 +59,11 @@ public class ViewHabitEventActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_view_habit_event);
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         getSupportActionBar().setTitle("View Habit Event");
+        Log.d("ViewHabitEvent", "FLAG0");
     }
 
     @Override
@@ -86,6 +99,17 @@ public class ViewHabitEventActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(habitEvent.getLocation(), DEFAULT_ZOOM));
+        mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation()));
+    }
+
 
     @Override
      public boolean onOptionsItemSelected(MenuItem item) {
