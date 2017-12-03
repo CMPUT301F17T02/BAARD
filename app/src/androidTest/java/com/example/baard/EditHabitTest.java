@@ -95,6 +95,7 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         // Now need to click on a habit and test the viewing of the habit.
         ArrayList<TextView> list = solo.clickInList(0);
+        solo.clickOnButton("View");
         solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
@@ -116,16 +117,16 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         solo.clearEditText(0);
         solo.enterText(0, title);
-        Assert.assertTrue(solo.searchText(title));
+        assertTrue(solo.searchText(title));
 
         solo.clearEditText(1);
         solo.enterText(1, reason);
-        Assert.assertTrue(solo.searchText(reason));
+        assertTrue(solo.searchText(reason));
 
         solo.clickOnEditText(2);
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
-        Assert.assertTrue(solo.searchText(date));
+        assertTrue(solo.searchText(date));
 
         solo.clickOnText("Mon");
         solo.isToggleButtonChecked("Mon");
@@ -140,10 +141,12 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.getCurrentActivity();
 
         // ensure that the edits stuck
-        solo.scrollUp();
-        Assert.assertTrue(solo.searchText(title));
-        Assert.assertTrue(solo.searchText(reason));
-        Assert.assertTrue(solo.searchText("March 16, 2017"));
+        solo.clickOnActionBarHomeButton();
+        solo.clickOnText("Running");
+        solo.clickOnButton("View");
+        assertTrue(solo.searchText(title, 1, true, true));
+        assertTrue(solo.searchText(reason, 1, true, true));
+        assertTrue(solo.searchText("March 16, 2017", 1, true, true));
 
         // Go back to edit and change the habit back to what it previously was.
         solo.clickOnButton("Edit");
@@ -153,16 +156,16 @@ public class EditHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         solo.clearEditText(0);
         solo.enterText(0, "Jogging");
-        Assert.assertTrue(solo.searchText("Jogging"));
+        assertTrue(solo.searchText("Jogging"));
 
         solo.clearEditText(1);
         solo.enterText(1, "I like to jog");
-        Assert.assertTrue(solo.searchText("I like to jog"));
+        assertTrue(solo.searchText("I like to jog"));
 
         solo.clearEditText(2);
         solo.setDatePicker(0,2016,3,20);
         solo.clickOnText("OK");
-        Assert.assertTrue(solo.searchText("20/04/2016"));
+        assertTrue(solo.searchText("20/04/2016"));
 
         solo.clickOnButton("Save");
 

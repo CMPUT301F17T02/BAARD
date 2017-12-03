@@ -5,10 +5,15 @@
 package com.example.baard;
 
 
+import android.util.Log;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.zip.DataFormatException;
 
@@ -23,17 +28,26 @@ import static org.junit.Assert.*;
 public class HabitEventTests {
 
     ArrayList<Day> freq;
+    //Date date1 = new Date(2017/11/25);
+    SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
     Date date1;
     Habit habit;
     HabitEvent habitEvent;
+    private String eventDate;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private Calendar calendar = Calendar.getInstance();
 
     /**
      * This function is run at the beginning of each test. It sets up the Habit and HabitEvent required for each test.
      */
+    private Date createDate(String yyyymmdd) throws ParseException{
+        return format.parse(yyyymmdd);
+    }
     @Before
-    public void setUpTest() throws DataFormatException {
+    public void setUpTest() throws DataFormatException, ParseException {
+        date1 = format.parse("2017/11/25");
         freq = new ArrayList<Day>();
-        date1 = new Date();
+//        date1 = new Date();
         // constructor 1
         try {
             habit = new Habit("test","reason",date1,freq);
@@ -53,14 +67,14 @@ public class HabitEventTests {
             habitEvent = new HabitEvent(habit, date1, "testevent");
             // test that the values have been set
             assertEquals(habitEvent.getComment(), "testevent");
-            assertEquals(habitEvent.getEventDate(), date1);
+            assertEquals(habitEvent.getEventDate().toString(), date1.toString());
             assertEquals(habitEvent.getHabit(), habit);
             // constructor 2
-            Date date2 = new Date();
+            Date date2 = createDate("2017/12/01");
             HabitEvent habitEvent1 = new HabitEvent(habit, date2);
             // default comment should be empty string
             assertEquals(habitEvent1.getComment(), "");
-            assertEquals(habitEvent1.getEventDate(), date2);
+            assertEquals(habitEvent1.getEventDate().toString(), date2.toString());
             assertEquals(habitEvent1.getHabit(), habit);
         }catch(Exception e){
             fail("No exception should be thrown");
@@ -97,19 +111,29 @@ public class HabitEventTests {
      * Test the getEventDate functionality of the HabitEvent class
      */
     @Test
-    public void testGetDate(){
-        assertEquals(habitEvent.getEventDate(), date1);
+    public void testGetDate() throws ParseException {
+
+        //calendar.set(Calendar.YEAR, 2017);
+        //calendar.set(Calendar.MONTH, 11);
+        //calendar.set(Calendar.DAY_OF_MONTH, 25);
+        //calendar.set(Calendar.HOUR, 0);
+        //calendar.set(Calendar.MINUTE, 0);
+        //calendar.set(Calendar.SECOND, 0);
+        assertTrue(habitEvent.getEventDate().equals(createDate("2017/11/25")));
     }
     @Test
     /**
      * Test the setEventDate functionality of the HabitEvent class
      */
-    public void testSetDate(){
-        Date date2 = new Date();
+    public void testSetDate() throws ParseException{
+        Date wrongDate = createDate("2017/12/01");
+        Date rightDate = createDate("2017/11/30");
         try {
-            habitEvent.setEventDate(date2);
+            habitEvent.setEventDate(wrongDate);
+            assertFalse(habitEvent.getEventDate().equals(rightDate) );
             //assertNotEquals(habitEvent.getEventDate(), date1);
-            assertEquals(habitEvent.getEventDate(), date2);
+            habitEvent.setEventDate(rightDate);
+            assertTrue(habitEvent.getEventDate().equals(rightDate));
         }catch(Exception e){
             fail();
         }
