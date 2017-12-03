@@ -106,6 +106,7 @@ public class FriendsListFragment extends Fragment {
                 // Make the intent go to seeing the friend's habits and most recent habit event.
                 Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
                 intent.putExtra("position", i);
+                intent.putExtra("friendUsername", friendsList.get(i));
                 startActivity(intent);
             }
         });
