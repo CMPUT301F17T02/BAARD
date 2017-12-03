@@ -200,6 +200,7 @@ public class FileController {
             me.getReceivedRequests().remove(friend.getUsername());
             friend.getFriends().put(me.getUsername(), Boolean.TRUE);
             saveUserToServer(friend);
+            saveUserToServer(me);
             return true;
         } else {
             return false;
