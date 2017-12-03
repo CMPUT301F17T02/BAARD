@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -259,7 +260,7 @@ public class EditHabitActivity extends AppCompatActivity {
         }
         // set the minimum date if it was incorrectly chosen
         if (habit.getEvents().size() > 0) {
-            Date minDate = habit.getEvents().getHabitEvent(0).getEventDate();
+            Date minDate = habit.getEvents().getHabitEvent(habit.getEvents().size()-1).getEventDate();
             if (minDate.before(convertedStartDate)) {
                 editTextStartDate.setError("Day cannot start after first event");
                 Toast.makeText(this, "Day cannot start after first event", Toast.LENGTH_LONG).show();

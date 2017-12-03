@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +43,7 @@ public class AddLocationActivity extends AppCompatActivity
     private static final float DEFAULT_ZOOM = 14.0f;
     private GoogleMap mMap;
     private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
-    private LatLng pinPosition;
+    private LatLng pinPosition, mEditLocation;
     private Gson gson;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEditor;
@@ -57,11 +58,12 @@ public class AddLocationActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         try {
             LatLng myLocation = (LatLng) getIntent().getExtras().get("myLocation");
             if (myLocation != null) {
-                mDefaultLocation = myLocation;
+                mEditLocation = myLocation;
             }
         } catch (Exception e){}
 
@@ -109,7 +111,6 @@ public class AddLocationActivity extends AppCompatActivity
 
             @Override
             public void onMarkerDrag(Marker marker) {
-
             }
 
             @Override
@@ -203,6 +204,7 @@ public class AddLocationActivity extends AppCompatActivity
 
                 // Callback to handle new Location
                 mLocationCallback = new LocationCallback() {
+                    @SuppressWarnings("MissingPermission")
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         mMap.clear();
