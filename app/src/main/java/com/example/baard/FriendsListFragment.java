@@ -44,6 +44,7 @@ public class FriendsListFragment extends Fragment {
     private String username;
     private FileController fileController;
     private ArrayList<String> friendsList = new ArrayList<>();
+//    private ArrayList<String> friendsNamesList = new ArrayList<>();;
     private HashMap<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
     private HashMap<String, String> userMap = new HashMap<String, String>();
     private User user;
@@ -136,6 +137,8 @@ public class FriendsListFragment extends Fragment {
         ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
         for (String name : iterationList) {
             User friend = fileController.loadUserFromServer(name);
+            userMap.put(friend.getUsername(), friend.getName());
+
             if (friend == null) {
 //                  myFriendsMap.remove(username);
                 myFriendsMap.put(name, false);
@@ -144,10 +147,14 @@ public class FriendsListFragment extends Fragment {
 
         }
 
+        List<String> friendsNamesList = new ArrayList<String>(userMap.values());
+
+        System.out.println("List of names: " + friendsNamesList);
+
         user.setFriends(myFriendsMap);
         fileController.saveUser(getContext(), user);
 
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, friendsList);
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, friendsNamesList);
         friendListView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
