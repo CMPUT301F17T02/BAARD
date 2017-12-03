@@ -76,10 +76,12 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);
         if (solo.searchText("December 25, 2016") == true) {
             solo.clickOnText("December 25, 2016");
+            solo.clickOnText("View");
             solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
         }
         //solo.clickOnImageButton(0);
         // select create new habit event
+        solo.clickOnImageButton(0);
         solo.clickOnImageButton(0);
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
@@ -111,29 +113,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         // now delete it
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
-
-
-
-    /**
-     * Create a habit event with a date not in the format dd/mm/yyyy
-     */
-
-    // This test may no longer be valid since we are now using a DatePicker.
-
-    /**
-    @Test
-    public void testInvalidDateFormat(){
-        //select the first item in the spinner (note that this test will fail if there are no habits)
-        solo.pressSpinnerItem(0,0);
-        EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        solo.enterText(date, "December 25, 2017");
-        EditText comment = (EditText) solo.getView(R.id.commentEditText);
-        solo.enterText(comment, "test comment");
-        solo.clickOnView(solo.getView(R.id.saveButton));
-        solo.searchText("Invalid date entry:");
-    }
-
-    */
 
     /**
      * Create a HabitEvent with no date entered.
@@ -232,28 +211,7 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnText("Habit Event History");
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);
         solo.clickOnText("December 25, 2016");
+        solo.clickOnText("View");
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
-
-    /**
-     * Create a HabitEvent before the start date of the Jogging Habit.
-     */
-    @Test
-    public void testCreatingHabitEventBeforeHabitStart(){
-        //
-        Spinner habitSpinner = (Spinner) solo.getView(R.id.habitSpinner);
-        solo.clickOnView(habitSpinner);
-        solo.clickOnText("Jogging");
-        //Jogging has a start date of April 20, 2016
-        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        //solo.enterText(date, "25/01/2016");
-        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
-        solo.setDatePicker(0,2016,01,25);
-        solo.clickOnText("OK");
-        EditText comment = (EditText) solo.getView(R.id.commentEditText);
-        solo.enterText(comment, "test comment");
-        solo.clickOnView(solo.getView(R.id.saveButton));
-        solo.searchText("Date is before habit start date.");
-    }
-
 }
