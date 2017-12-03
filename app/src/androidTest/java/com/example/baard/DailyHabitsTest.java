@@ -29,6 +29,7 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
 
     private Solo solo;
     private SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+    private String todayDofW;
 
     /**
      * Constructor for the AllHabitsTest Class
@@ -73,9 +74,11 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
         solo.assertCurrentActivity("wrong acitivty", MainActivity.class);
         solo.waitForFragmentById(R.layout.fragment_daily_habits, 2000);
 
-        if (!solo.searchText("Cycling", 1, true, true)) {
-            Date today = new Date();
-            String todayDofW = sdf.format(today).substring(0, 2);
+        Date today = new Date();
+        todayDofW = sdf.format(today).substring(0, 3);
+
+        if (!solo.searchText("Cycling"+todayDofW, 1, true, true)) {
+
 
             solo.clickOnImage(0);
             solo.clickOnText("Create New Habit");
@@ -86,12 +89,12 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
             EditText title = (EditText) solo.getView(R.id.title);
             EditText reason = (EditText) solo.getView(R.id.reason);
 
-            solo.enterText(title, "Cycling");
+            solo.enterText(title, "Cycling"+todayDofW);
             solo.enterText(reason, "Exercise");
             solo.clickOnEditText(2);
             solo.setDatePicker(0, 2017, 2, 16);
             solo.clickOnText("OK");
-            solo.clickOnText(todayDofW);
+            solo.clickOnToggleButton(todayDofW);
             solo.clickOnButton("Create");
 
             // ensure the page moved to view for success & detail there
@@ -106,48 +109,60 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
         }
     }
 
+    /**
+     * Test that the user has a daily habit
+     */
     @Test
-    public void test1DailyHabitAdd() {
-        assertTrue(solo.searchText("Cycling", 1, true, true));
+    public void test1DailyHabitExists() {
+        assertTrue(solo.searchText("Cycling"+todayDofW, 1, true, true));
     }
 
+    /**
+     * Test that the user can access view habit from daily habits
+     */
     @Test
     public void test2ViewFromDaily() {
-        solo.clickOnText("Cycling");
+        solo.clickOnText("Cycling"+todayDofW);
         solo.clickOnButton("View");
 
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
-        assertTrue(solo.searchText("Cycling", 1, true, true));
+        assertTrue(solo.searchText("Cycling"+todayDofW, 1, true, true));
 
         solo.clickOnImage(0);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
     }
 
+    /**
+     * Test that the user can access edit habit from daily habits
+     */
     @Test
     public void test3EditFromDaily() {
-        solo.clickOnText("Cycling");
+        solo.clickOnText("Cycling"+todayDofW);
         solo.clickOnButton("Edit");
         solo.assertCurrentActivity("wrong activity", EditHabitActivity.class);
-        assertTrue(solo.searchText("Cycling", 1, true, true));
+        assertTrue(solo.searchText("Cycling"+todayDofW, 1, true, true));
 
         solo.clickOnImage(0);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
     }
 
+    /**
+     * Test that the user can delete a habit from daily habits
+     */
     @Test
     public void test4DeleteFromDaily() {
         // click on it to be deleted (for testing and so that this test can run again
         // as there cannot be two of the same habit in the database)
-        solo.clickOnText("Cycling");
+        solo.clickOnText("Cycling"+todayDofW);
         solo.clickOnButton("Delete");
 
-        assertFalse(solo.searchText("Cycling", 1, true, true));
+        assertFalse(solo.searchText("Cycling"+todayDofW, 1, true, true));
 
         solo.clickOnImage(0);
         solo.clickOnText("All Habits");
         solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
 
-        assertFalse(solo.searchText("Cycling", 1, true, true));
+        assertFalse(solo.searchText("Cycling"+todayDofW, 1, true, true));
     }
 
     /**
