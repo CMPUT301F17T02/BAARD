@@ -15,6 +15,8 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.util.HashMap;
+
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
@@ -68,8 +70,8 @@ public class ElasticSearchController {
             String source = "{\"name\": \"" + parameters[0] + "\"," +
                     "\"username\": \"" + parameters[1] + "\"," +
                     "\"habits\": {\"habits\": []}," +
-                    "\"friends\": {\"users\": []},"  +
-                    "\"receivedRequests\": {\"users\": []}}";
+                    "\"friends\": [],"  +
+                    "\"receivedRequests\": []}";
             Index index = new Index.Builder(source).index("cmput301f17t02").type("User").build();
 
             try {
@@ -191,20 +193,22 @@ public class ElasticSearchController {
 
                         // Need to extract Id separately because Jest does not seem to be working
                         String id = userInfo.get("_id").getAsString();
-
-                        // Need to extract UserList friends separately because the field is transient
-                        String friendsJSON = userInfoSource.get("friends").toString();
-                        UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
-
-                        // Need to extract UserList receivedRequests separately because the field is transient
-                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
-                        UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
+//
+//                        HashMap<String, Boolean> hm = new HashMap<>();
+//
+//                        // Need to extract UserList friends separately because the field is transient
+//                        String friendsJSON = userInfoSource.get("friends").toString();
+//                        HashMap<String, Boolean> friendsList = new Gson().fromJson(friendsJSON, hm.getClass());
+//
+//                        // Need to extract UserList receivedRequests separately because the field is transient
+//                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
+//                        HashMap<String, String> receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, hm.getClass());
 
                         user = new Gson().fromJson(userInfoSource, User.class);
 
                         user.setId(id);
-                        user.setFriends(friendsList);
-                        user.setReceivedRequests(receivedRequestsList);
+//                        user.setFriends(friendsList);
+//                        user.setReceivedRequests(receivedRequestsList);
 
                         Log.i("ESC.GetUserTask", "Unique user was found.");
                     } else {
@@ -264,19 +268,21 @@ public class ElasticSearchController {
                         // Need to extract Id separately because Jest does not seem to be working
                         String id = userInfo.get("_id").getAsString();
 
-                        // Need to extract UserList friends separately because the field is transient
-                        String friendsJSON = userInfoSource.get("friends").toString();
-                        UserList friendsList = new Gson().fromJson(friendsJSON, UserList.class);
-
-                        // Need to extract UserList receivedRequests separately because the field is transient
-                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
-                        UserList receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, UserList.class);
+//                        HashMap<String, Boolean> hm = new HashMap<>();
+//
+//                        // Need to extract UserList friends separately because the field is transient
+//                        String friendsJSON = userInfoSource.get("friends").toString();
+//                        HashMap<String, Boolean> friendsList = new Gson().fromJson(friendsJSON, hm.getClass());
+//
+//                        // Need to extract UserList receivedRequests separately because the field is transient
+//                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
+//                        HashMap<String, String> receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, hm.getClass());
 
                         User user = new Gson().fromJson(userInfoSource, User.class);
 
                         user.setId(id);
-                        user.setFriends(friendsList);
-                        user.setReceivedRequests(receivedRequestsList);
+//                        user.setFriends(friendsList);
+//                        user.setReceivedRequests(receivedRequestsList);
 
                         users.add(user);
                     }
