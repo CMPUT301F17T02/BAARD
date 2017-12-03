@@ -143,7 +143,7 @@ public class FileController {
      * Load the user from the server
      * @return User stored on server
      */
-    private User loadUserFromServer(String username) {
+    public User loadUserFromServer(String username) {
         ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
         getUserTask.execute(username);
         User user;

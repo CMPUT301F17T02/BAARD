@@ -41,6 +41,7 @@ import com.google.gson.reflect.TypeToken;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class ViewMapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
@@ -66,6 +67,7 @@ public class ViewMapActivity extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
     private GoogleApiClient mGoogleApiClient;
+    private FileController fileController;
 
 
     /**
@@ -86,8 +88,8 @@ public class ViewMapActivity extends AppCompatActivity
         String json = sharedPrefs.getString("username", "");
         String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
-        FileController fc = new FileController();
-        user = fc.loadUser(getApplicationContext(), username);
+        fileController = new FileController();
+        user = fileController.loadUser(getApplicationContext(), username);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -142,7 +144,8 @@ public class ViewMapActivity extends AppCompatActivity
 
         // set the markers for friends
         if (user.getFriends().size() > 0) {
-            for (User friend : user.getFriends().getArrayList()) {
+            for (String friendStr : user.getFriends().keySet()) {
+                User friend = fileController.loadUserFromServer(friendStr);
                 setMarkers(friend, true, friendMarkers);
             }
         }
