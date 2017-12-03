@@ -176,7 +176,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
 
     @Test
     public void enterEditFromEventHistory(){
-        
+
     }
 
 }

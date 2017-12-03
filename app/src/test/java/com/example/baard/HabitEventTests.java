@@ -7,6 +7,8 @@ package com.example.baard;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -163,6 +165,26 @@ public class HabitEventTests {
         }catch(Exception e){
             fail();
         }
+    }
+
+    @Test
+    public void testSetLocation(){
+        LatLng location = new LatLng(100,100);
+        LatLng location2 = new LatLng(200,200);
+        habitEvent.setLocation(location);
+        assertEquals(habitEvent.getLocation(), location);
+        assertNotEquals(habitEvent.getLocation(), location2);
+        habitEvent.setLocation(location2);
+        assertEquals(habitEvent.getLocation(), location2);
+        assertNotEquals(habitEvent.getLocation(), location);
+    }
+
+    @Test
+    public void testGetLocation(){
+        LatLng location = new LatLng(100,100);
+        habitEvent.setLocation(location);
+        LatLng gottenLocation = habitEvent.getLocation();
+        assertEquals(gottenLocation, location);
     }
 
 }
