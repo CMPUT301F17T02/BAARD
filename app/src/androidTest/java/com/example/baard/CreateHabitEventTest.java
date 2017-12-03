@@ -211,6 +211,10 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
 
+    /**
+     * Add a location to the habit event. Note that this test will fail if the application does not
+     * currently allow the application permission to access it's location.
+     */
     @Test
     public void testCreateHabitEventWithLocaton(){
         solo.pressSpinnerItem(0,0);

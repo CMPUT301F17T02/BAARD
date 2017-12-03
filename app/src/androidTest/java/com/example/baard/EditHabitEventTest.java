@@ -52,6 +52,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         }
         // sign the testing user in
@@ -69,10 +70,12 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);
         if (solo.searchText("December 25, 2016") == true) {
             solo.clickOnText("December 25, 2016");
+            solo.clickOnText("View");
             solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
         }
         //solo.clickOnImageButton(0);
         // select create new habit event
+        solo.clickOnImageButton(0);
         solo.clickOnImageButton(0);
         //create a habit event for editing
         solo.clickOnText("Create New Habit Event");
@@ -92,7 +95,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
 
     @Test
     public void testEditComment(){
-        solo.clickOnView(solo.getView(R.id.editButton));
+        solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "Edited comment");
         solo.clickOnView(solo.getView(R.id.saveChangesButton));
@@ -102,7 +105,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
 
     @Test
     public void testEditTooLongComment(){
-        solo.clickOnView(solo.getView(R.id.editButton));
+        solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "This comment is, similar to the comment used in other tests, much too long for a habit event. C'mon guys, what were you thinking???");
         solo.clickOnView(solo.getView(R.id.saveChangesButton));
@@ -112,6 +115,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
 
     @Test
     public void testEditDate(){
+        solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
         solo.clickOnView(solo.getView(R.id.dateEditText));
         solo.setDatePicker(0,2016,11,15);
         solo.clickOnText("OK");
@@ -124,6 +128,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
 
     @Test
     public void testEditFutureDate(){
+        solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
         solo.clickOnView(solo.getView(R.id.dateEditText));
         solo.setDatePicker(0,2018,11,25);
         solo.clickOnText("OK");
@@ -134,6 +139,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
 
     @Test
     public void testEditDateBeforeHabitStart(){
+        solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
         solo.clickOnView(solo.getView(R.id.dateEditText));
         solo.setDatePicker(0,2010,11,25);
         solo.clickOnText("OK");
@@ -162,7 +168,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.assertCurrentActivity("Should be in ViewHabitEventActivity",ViewHabitEventActivity.class);
         //now edit this habit event to Dec 25
-        solo.clickOnView(solo.getView(R.id.editButton));
+        solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
         solo.clickOnView(solo.getView(R.id.dateEditText));
         solo.setDatePicker(0,2016,11,25);
         solo.clickOnText("OK");
@@ -175,8 +181,14 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
     }
 
     @Test
-    public void enterEditFromEventHistory(){
-
+    public void testEnterEditFromHabitEventHistory(){
+        solo.goBack();
+        solo.clickOnImageButton(0);
+        //create a habit event for editing
+        solo.clickOnText("Habit Event History");
+        solo.clickOnText("December 25, 2016");
+        solo.clickOnText("Edit");
+        solo.assertCurrentActivity("Should be in EditHabitEventActivity", EditHabitEventActivity.class);
     }
 
 }
