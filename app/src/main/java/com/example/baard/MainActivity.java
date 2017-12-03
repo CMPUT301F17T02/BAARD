@@ -34,6 +34,22 @@ import java.io.File;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Implements the MainActivity for the app that is reached after logging in
+ * @see LoginActivity
+ * @see NavigationView
+ * @see CreateNewHabitFragment
+ * @see CreateNewHabitEventFragment
+ * @see AllHabitsFragment
+ * @see AllHabitEventsFragment
+ * @see DailyHabitsFragment
+ * @see HelpFragment
+ * @see ViewMapActivity
+ * @see ExploreFriends
+ * @author bangotti, anarten
+ * @since 1.0
+ * @version 2.2
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
         AllHabitsFragment.OnFragmentInteractionListener, AllHabitEventsFragment.OnFragmentInteractionListener,
