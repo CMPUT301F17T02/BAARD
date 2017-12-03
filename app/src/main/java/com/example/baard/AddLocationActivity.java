@@ -231,8 +231,8 @@ public class AddLocationActivity extends AppCompatActivity
                     mMap.addMarker(mMarker).setDraggable(true);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                     mMap.setMyLocationEnabled(false);
-                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationCallback, null);
                 }
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationCallback, null);
             } else {
                 Log.d("Add_Location", "Permission is not granted.");
                 mMap.addMarker(mMarker).setDraggable(true);
