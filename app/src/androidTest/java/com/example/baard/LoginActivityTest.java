@@ -102,6 +102,12 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.clickOnButton("Register");
         // Should not register because this username already exists
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
+
+        solo.getCurrentActivity().findViewById(R.layout.activity_main);
+        solo.clickOnActionBarItem(R.id.action_settings);
+        solo.clickOnText("Settings");
+        solo.clickOnButton("Delete");
+        solo.clickOnText("Delete");
     }
 
     /**
