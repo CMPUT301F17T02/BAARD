@@ -215,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null && user.getUsername().equals(username)) {
                     login(user);
                 } else {
-                    Toast.makeText(this, "Network not available.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
                 }
             } else {
                 mAuthTask = new UserLoginTask(username);
@@ -272,7 +272,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             FileController fileController = new FileController();
             if (!fileController.isNetworkAvailable(getApplicationContext())) {
-                Toast.makeText(this, "Network not available.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
             } else {
                 // kick off task to perform the user login attempt.
                 mAuthTask = new UserLoginTask(username, name);

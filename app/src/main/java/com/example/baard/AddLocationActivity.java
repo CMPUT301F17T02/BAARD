@@ -14,119 +14,65 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-
-public class ViewMapActivity extends AppCompatActivity
+public class AddLocationActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private GoogleMap mMap;
-    private HashMap<LatLng, Marker> myMarkers = new HashMap<>();
-    private HashMap<LatLng, Marker> friendMarkers = new HashMap<>();
-    private User user;
-
-    private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
-    private LatLng mCurrentLocation = mDefaultLocation;
-    private static final float DISTANCE = 5000f;
     private static final float DEFAULT_ZOOM = 14.0f;
-
-    private SharedPreferences sharedPrefs;
+    private GoogleMap mMap;
+    private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
+    private LatLng pinPosition, mEditLocation;
     private Gson gson;
-
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor sharedPrefsEditor;
     private Location mLastKnownLocation;
     private boolean mLocationPermissionGranted = false;
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
     private GoogleApiClient mGoogleApiClient;
-    private FileController fileController;
+    private MarkerOptions markerOptions;
+    private Marker mMarker;
 
-
-    /**
-     * Set up the view map activity
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_map);
+        setContentView(R.layout.activity_add_location);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setActionBarTitle(getString(R.string.title_activity_view_map));
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        try {
+            mEditLocation = (LatLng) getIntent().getExtras().get("myLocation");
+        } catch (Exception e) {
+        }
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         gson = new Gson();
-        String json = sharedPrefs.getString("username", "");
-        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPrefsEditor = sharedPrefs.edit();
 
-        fileController = new FileController();
-        user = fileController.loadUser(getApplicationContext(), username);
-
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
-
-    /**
-     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
-     */
-    private void setActionBarTitle(String str) {
-        String fontPath = "Raleway-Regular.ttf";
-
-        SpannableString s = new SpannableString(str);
-        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // Update the action bar title with the TypefaceSpan instance
-        getSupportActionBar().setTitle(s);
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        // set the camera to the default location with zoom enabled
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14.0f));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        // set markers for user
-        setMarkers(user, false, myMarkers);
-
-        buildGoogleApiClient();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -138,38 +84,52 @@ public class ViewMapActivity extends AppCompatActivity
         mGoogleApiClient.connect();
     }
 
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        if (mEditLocation != null) {
+            markerOptions = new MarkerOptions().position(mEditLocation);
+        } else {
+            markerOptions = new MarkerOptions().position(mDefaultLocation);
+        }
+        markerOptions.title("Habit Event Location").snippet("Is this the right location?");
+        pinPosition = markerOptions.getPosition();
+        mMarker = mMap.addMarker(markerOptions);
+        mMarker.setDraggable(true);
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                pinPosition = marker.getPosition();
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                pinPosition = marker.getPosition();
+            }
+        });
+
+        buildGoogleApiClient();
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
-
-        try {
-            // now make visible all markers that are filtered in habit history
-            String json = sharedPrefs.getString("filteredHabitEvents", "");
-            List<HabitEvent> filteredHabitEvents = gson.fromJson(json, new TypeToken<List<HabitEvent>>() {}.getType());
-            setVisibleMarkers(filteredHabitEvents, true, myMarkers);
-        } catch (Exception e) {
-            // in case there was no filter saved, just show them all
-            Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
-            for (Habit habit : user.getHabits().getArrayList()) {
-                setVisibleMarkers(habit.getEvents().getArrayList(), true, myMarkers);
-            }
-        }
-
-        // set the markers for friends
-        if (user.getFriends().size() > 0) {
-            for (String friendStr : user.getFriends().keySet()) {
-                if (user.getFriends().get(friendStr)) {
-                    User friend = fileController.loadUserFromServer(friendStr);
-                    setMarkers(friend, true, friendMarkers);
-                    for (Habit habit : friend.getHabits().getArrayList()) {
-                        setVisibleMarkers(habit.getEvents().getArrayList(), true, friendMarkers);
-                    }
-                }
-            }
-        }
-
     }
 
     @Override
@@ -178,12 +138,12 @@ public class ViewMapActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
+    private void getLocationPermission() {
     /*
      * Request location permission, so that we can get the location of the
      * device. The result of the permission request is handled by a callback,
      * onRequestPermissionsResult.
      */
-    private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -231,11 +191,11 @@ public class ViewMapActivity extends AppCompatActivity
         }
     }
 
+    private void getDeviceLocation() {
     /*
      * Get the best and most recent location of the device, which may be null in rare
      * cases when a location is not available.
      */
-    private void getDeviceLocation() {
         try {
             if (mLocationPermissionGranted) {
                 // Location Request to obtain location through GPS or network when  mLastKnownLocation is null
@@ -253,6 +213,10 @@ public class ViewMapActivity extends AppCompatActivity
                             mLastKnownLocation = location;
                         }
                         mMap.setMyLocationEnabled(true);
+                        if (mEditLocation == null) {
+                            mMarker.setPosition(new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude()));
+                        }
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -261,21 +225,25 @@ public class ViewMapActivity extends AppCompatActivity
                 };
                 // Get last known location
                 mLastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                if (mLastKnownLocation != null) {
-                    mCurrentLocation = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                if (mEditLocation != null) {
+                    mMarker.setPosition(mEditLocation);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mEditLocation, DEFAULT_ZOOM));
+                } else if (mLastKnownLocation != null) {
+                    mMarker.setPosition(new LatLng(mLastKnownLocation.getLatitude(),
+                            mLastKnownLocation.getLongitude()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLastKnownLocation.getLatitude(),
                                     mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                 } else {
                     Log.d("Add_Location", "Current location is null. Using defaults.");
-                    mCurrentLocation = mDefaultLocation;
+                    mMarker.setPosition(mDefaultLocation);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                     mMap.setMyLocationEnabled(false);
                 }
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationCallback, null);
             } else {
                 Log.d("Add_Location", "Permission is not granted.");
-                mCurrentLocation = mDefaultLocation;
+                mMarker.setPosition(mDefaultLocation);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
             }
         } catch(SecurityException e)  {
@@ -283,68 +251,26 @@ public class ViewMapActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * Generates all markers for the map.
-     * By specifying whether or not it is a friend, the color is set appropriately,
-     * as well as only showing the most recent habit event for the friend.
-     * @param user
-     * @param isFriend
-     * @param markerMap
-     */
-    private void setMarkers(User user, Boolean isFriend, HashMap<LatLng, Marker> markerMap) {
-        SimpleDateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Float bitMapColor;
-
-        if (isFriend) { //green for friend
-            bitMapColor = BitmapDescriptorFactory.HUE_BLUE;
-        } else { // red for user
-            bitMapColor = BitmapDescriptorFactory.HUE_RED;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.onBackPressed();
+                break;
         }
-
-        // set all the markers a user has on their events
-        for (Habit habit : user.getHabits().getArrayList()) {
-            // to ensure we start at the last place in the list in case this call is for a friend
-            for (int i = habit.getEvents().size()-1; i >=0; i--) {
-                HabitEvent habitEvent = habit.getEvents().getHabitEvent(i);
-                if (habitEvent.getLocation() != null) {
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation())
-                            .draggable(false)
-                            .title(habit.getTitle())
-                            .visible(isFriend)
-                            .icon(BitmapDescriptorFactory.defaultMarker(bitMapColor))
-                            .snippet(sourceFormat.format(habitEvent.getEventDate())));
-                    markerMap.put(habitEvent.getLocation(), marker);
-                }
-                if (isFriend) {
-                    break;
-                }
-            }
-        }
+        return true;
     }
 
+    public void cancel(View view) {
+        sharedPrefsEditor.remove("locationPosition");
+        sharedPrefsEditor.commit();
+        finish();
+    }
 
-    /**
-     * Depending on the filter set by the user, make the appropriate markers visible for them
-     * to see on the map.
-     * @param events
-     * @param withDistance boolean to set whether or not distance should be calculated
-     */
-    private void setVisibleMarkers(List<HabitEvent> events, Boolean withDistance, HashMap<LatLng, Marker> markers) {
-        for (HabitEvent habitEvent : events) {
-            LatLng location = habitEvent.getLocation();
-            if (markers.get(location) != null) {
-                float[] dist = {0f,0f,0f};
-                Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
-                        location.latitude, location.longitude, dist);
-                if (withDistance) {
-                    if (dist[0] <= DISTANCE) {
-                        markers.get(location).setVisible(true);
-                    }
-                } else {
-                    markers.get(location).setVisible(true);
-                }
-            }
-        }
-
+    public void save(View view) {
+        String json = gson.toJson(pinPosition);
+        sharedPrefsEditor.putString("locationPosition", json);
+        sharedPrefsEditor.commit();
+        finish();
     }
 }

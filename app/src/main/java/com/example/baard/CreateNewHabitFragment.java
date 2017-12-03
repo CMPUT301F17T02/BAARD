@@ -171,9 +171,10 @@ public class CreateNewHabitFragment extends Fragment {
         startDateText.setText("");
         setToggleButtons(getView());
         titleText.requestFocus();
+        frequency =  new ArrayList<>();
     }
 
-    public void changeFont(View myView) {
+    private void changeFont(View myView) {
         Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
 
         // Change font

@@ -13,6 +13,8 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +27,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.File;
 import java.util.Stack;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CreateNewHabitFragment.OnFragmentInteractionListener,
@@ -48,15 +55,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Functionality coming soon!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -73,18 +71,21 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
                 .addToBackStack(null)
                 .commit();
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
-        title.setText(R.string.daily_habits);
-
-        changeFont();
+        setActionBarTitle(getString(R.string.daily_habits));
     }
 
-    private void changeFont() {
-        // Set toolbar font
-        setTitle("");
-        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
-        title.setTypeface(ralewayRegular);
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
     }
 
     /**
@@ -100,10 +101,9 @@ public class MainActivity extends AppCompatActivity
             sharedPrefs.edit().remove("username").apply();
             finish();
         } else {
-            TextView title = (TextView) findViewById(R.id.toolbar_title);
             String name=headerStack.pop();
             System.out.println(name);
-            title.setText(name);
+            setActionBarTitle(name);
             super.onBackPressed();
         }
     }
@@ -166,12 +166,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
         headerStack.push(nextHeader);
-        Fragment fragment = new DailyHabitsFragment(); //TODO: Move this into the IF once other activities implmented
+        Fragment fragment = null;
+        FileController fileController = new FileController();
         // Send user to selected fragment
         if (id == R.id.nav_dailyHabits) {
             Toast.makeText(this, R.string.daily_habits, Toast.LENGTH_SHORT).show();
+            fragment = new DailyHabitsFragment();
             nextHeader = getResources().getString(R.string.daily_habits);
         }
         else if (id == R.id.nav_allHabits) {
@@ -191,7 +192,13 @@ public class MainActivity extends AppCompatActivity
             fragment = new CreateNewHabitEventFragment();
             nextHeader = getResources().getString(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            if (fileController.isNetworkAvailable(getApplicationContext())) {
+                Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_viewFriends) {
             Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
             startActivity(intent);
@@ -203,17 +210,23 @@ public class MainActivity extends AppCompatActivity
             // End this session and take users back to the login screen
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-            sharedPrefs.edit().remove("username").apply();
+            SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+//            sharedPrefs.edit().remove("username").apply();
+//            sharedPrefs.edit().remove("locationPosition").apply();
+//            sharedPrefs.edit().remove("filteredHabitEvents").apply();
+//            sharedPrefs.edit().remove("currentlyViewingHabit").apply();
+            sharedPrefsEditor.clear();
+            sharedPrefsEditor.commit();
             finish();
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
-                .addToBackStack(null)
-                .commit();
-
-        title.setText(nextHeader);
-
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
+                    .addToBackStack(null)
+                    .commit();
+            setActionBarTitle(nextHeader);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -161,9 +161,7 @@ public class ViewHabitEventActivity extends AppCompatActivity {
      * Invokes the EditHabitEventActivity
      */
     private void editHabitEvent(){
-        //call a new activity for editing this bizz
         Intent intent = new Intent(this, EditHabitEventActivity.class);
-        //TODO: PASS HABITEVENT TO VIEWHABITEVENTACTIVITY SOMEHOW
         intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
         habit.sendToSharedPreferences(getApplicationContext());
         startActivityForResult(intent,1);

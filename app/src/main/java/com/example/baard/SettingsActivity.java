@@ -67,7 +67,9 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         if (fc.deleteFile(getApplicationContext())) {
                             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            sharedPrefs.edit().remove("username").apply();
+                            SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+                            sharedPrefsEditor.clear();
+                            sharedPrefsEditor.commit();
                             ElasticSearchController.DeleteUserTask deleteUserTask = new ElasticSearchController.DeleteUserTask();
                             deleteUserTask.execute(user);
                             setResult(RESULT_OK);
