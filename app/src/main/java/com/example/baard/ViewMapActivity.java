@@ -80,7 +80,6 @@ public class ViewMapActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setActionBarTitle(getString(R.string.title_activity_view_map));
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         gson = new Gson();
@@ -177,6 +176,9 @@ public class ViewMapActivity extends AppCompatActivity
         buildGoogleApiClient();
     }
 
+    /**
+     * Handles building the Google API Client for maps
+     */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -317,7 +319,7 @@ public class ViewMapActivity extends AppCompatActivity
      * @param isFriend
      * @param markerMap
      */
-    private void setMarkers(User user, Boolean isFriend, HashMap<LatLng, Marker> markerMap) {
+    private void setMarkers(User user, boolean isFriend, HashMap<LatLng, Marker> markerMap) {
         SimpleDateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
         Float bitMapColor;
 
@@ -346,33 +348,6 @@ public class ViewMapActivity extends AppCompatActivity
                 }
                 if (isFriend) {
                     break;
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Depending on the filter set by the user, make the appropriate markers visible for them
-     * to see on the map.
-     * @param events
-     * @param withDistance boolean to set whether or not distance should be calculated
-     */
-    private void setVisibleMarkers(List<HabitEvent> events, Boolean withDistance, HashMap<LatLng, Marker> markers, boolean toggle) {
-        for (HabitEvent habitEvent : events) {
-            LatLng location = habitEvent.getLocation();
-            if (markers.get(location) != null) {
-                if (withDistance) {
-                    float[] dist = {0f,0f,0f};
-                    Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
-                            location.latitude, location.longitude, dist);
-                    if (dist[0] <= DISTANCE) {
-                        markers.get(location).setVisible(true);
-                    } else if (toggle) {
-                        markers.get(location).setVisible(false);
-                    }
-                } else {
-                    markers.get(location).setVisible(true);
                 }
             }
         }
@@ -415,4 +390,33 @@ public class ViewMapActivity extends AppCompatActivity
             }
         }
     }
+
+
+
+    /**
+     * Depending on the filter set by the user, make the appropriate markers visible for them
+     * to see on the map.
+     * @param events
+     * @param withDistance boolean to set whether or not distance should be calculated
+     */
+    private void setVisibleMarkers(List<HabitEvent> events, boolean withDistance, HashMap<LatLng, Marker> markers, boolean toggle) {
+        for (HabitEvent habitEvent : events) {
+            LatLng location = habitEvent.getLocation();
+            if (markers.get(location) != null) {
+                if (withDistance) {
+                    float[] dist = {0f,0f,0f};
+                    Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
+                            location.latitude, location.longitude, dist);
+                    if (dist[0] <= DISTANCE) {
+                        markers.get(location).setVisible(true);
+                    } else if (toggle) {
+                        markers.get(location).setVisible(false);
+                    }
+                } else {
+                    markers.get(location).setVisible(true);
+                }
+            }
+        }
+    }
+
 }
