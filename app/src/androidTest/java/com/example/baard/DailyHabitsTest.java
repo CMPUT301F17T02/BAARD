@@ -37,13 +37,12 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
         super(com.example.baard.LoginActivity.class);
     }
 
+    /**
+     * Setup function for InstrumentationTest Cases
+     */
     @Override
     public void setUp() {
         solo = new Solo(getInstrumentation(), getActivity());
-    }
-
-    @Test
-    public void test1DailyHabitAdd() {
         // log out if we are logged in for each test
         if (!(solo.searchButton("Register", true))) {
             solo.clickOnImage(0);
@@ -74,35 +73,41 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
         solo.assertCurrentActivity("wrong acitivty", MainActivity.class);
         solo.waitForFragmentById(R.layout.fragment_daily_habits, 2000);
 
-        Date today = new Date();
-        String todayDofW = sdf.format(today).substring(0,2);
+        if (!solo.searchText("Cycling", 1, true, true)) {
+            Date today = new Date();
+            String todayDofW = sdf.format(today).substring(0, 2);
 
-        solo.clickOnImage(0);
-        solo.clickOnText("Create New Habit");
-        solo.waitForFragmentById(R.layout.fragment_create_new_habit, 2000);
-        solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_create_new_habit);
+            solo.clickOnImage(0);
+            solo.clickOnText("Create New Habit");
+            solo.waitForFragmentById(R.layout.fragment_create_new_habit, 2000);
+            solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_create_new_habit);
 
-        // fill out the details for the habit
-        EditText title = (EditText) solo.getView(R.id.title);
-        EditText reason = (EditText) solo.getView(R.id.reason);
+            // fill out the details for the habit
+            EditText title = (EditText) solo.getView(R.id.title);
+            EditText reason = (EditText) solo.getView(R.id.reason);
 
-        solo.enterText(title, "Cycling");
-        solo.enterText(reason, "Exercise");
-        solo.clickOnEditText(2);
-        solo.setDatePicker(0,2017,2,16);
-        solo.clickOnText("OK");
-        solo.clickOnText(todayDofW);
-        solo.clickOnButton("Create");
+            solo.enterText(title, "Cycling");
+            solo.enterText(reason, "Exercise");
+            solo.clickOnEditText(2);
+            solo.setDatePicker(0, 2017, 2, 16);
+            solo.clickOnText("OK");
+            solo.clickOnText(todayDofW);
+            solo.clickOnButton("Create");
 
-        // ensure the page moved to view for success & detail there
-        solo.waitForActivity(ViewHabitActivity.class, 2000);
+            // ensure the page moved to view for success & detail there
+            solo.waitForActivity(ViewHabitActivity.class, 2000);
 
-        // go to main page and check it is in list
-        solo.clickOnImage(0);
-        solo.clickOnImage(0);
-        solo.clickOnText("Daily Habits");
+            // go to main page and check it is in list
+            solo.clickOnImage(0);
+            solo.clickOnImage(0);
+            solo.clickOnText("Daily Habits");
 
-        solo.waitForFragmentById(R.layout.fragment_daily_habits, 2000);
+            solo.waitForFragmentById(R.layout.fragment_daily_habits, 2000);
+        }
+    }
+
+    @Test
+    public void test1DailyHabitAdd() {
         assertTrue(solo.searchText("Cycling", 1, true, true));
     }
 
@@ -143,7 +148,13 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
         solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
 
         assertFalse(solo.searchText("Cycling", 1, true, true));
+    }
 
+    /**
+     * Tear down after every test is run
+     */
+    @Override
+    public void tearDown() {
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);

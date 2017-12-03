@@ -13,7 +13,6 @@ import com.robotium.solo.Solo;
 
 import org.junit.Test;
 
-
 /**
  * Implements testing for the All Habits Fragment of Main Activity
  * @see android.test.ActivityInstrumentationTestCase2
@@ -33,6 +32,7 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
 
     /**
      * Setup function for InstrumentationTest Cases
+     * Is run before every test case
      */
     @Override
     public void setUp() {
@@ -70,11 +70,18 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
     }
 
+    /**
+     * Test that the common habit exists
+     */
     @Test
     public void testAllHabitsExist() {
+        solo.assertCurrentActivity("wrong acitivty", MainActivity.class);
         assertTrue(solo.searchText("Jogging", 1, true, true));
     }
 
+    /**
+     * Test that the user can access view habit from all habits fragment
+     */
     @Test
     public void testViewFromAll() {
         solo.clickOnText("Jogging");
@@ -86,6 +93,9 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
     }
 
+    /**
+     * Test that the user can access edit habit from all habits fragment
+     */
     @Test
     public void testEditFromAll() {
         solo.clickOnText("Jogging");
@@ -97,6 +107,9 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
     }
 
+    /**
+     * Test that the user can delete a habit from all habits fragment
+     */
     @Test
     public void testDeleteFromAll() {
         solo.clickOnImage(0);
@@ -108,7 +121,7 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         EditText title = (EditText) solo.getView(R.id.title);
         EditText reason = (EditText) solo.getView(R.id.reason);
 
-        solo.enterText(title, "Swimming");
+        solo.enterText(title, "Cycling");
         solo.enterText(reason, "Exercise");
         solo.clickOnEditText(2);
         solo.setDatePicker(0,2017,2,16);
@@ -125,16 +138,19 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnText("All Habits");
 
         solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
-        assertTrue(solo.searchText("Swimming", 1, true, true));
+        assertTrue(solo.searchText("Cycling", 1, true, true));
 
         // click on it to be deleted (for testing and so that this test can run again
         // as there cannot be two of the same habit in the database)
-        solo.clickOnText("Swimming");
+        solo.clickOnText("Cycling");
         solo.clickOnButton("Delete");
 
-        assertFalse(solo.searchText("Swimming", 1, true, true));
+        assertFalse(solo.searchText("Cycling", 1, true, true));
     }
 
+    /**
+     * Tear down after every test is run
+     */
     @Override
     public void tearDown() {
         solo.clickOnImage(0);
