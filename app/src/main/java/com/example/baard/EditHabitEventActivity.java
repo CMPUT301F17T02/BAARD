@@ -20,15 +20,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -53,18 +56,25 @@ public class EditHabitEventActivity extends AppCompatActivity {
     private HabitEvent habitEvent;
     private static final int PICK_IMAGE = 1;
     private Bitmap image;
+    private LatLng locationPosition;
     private final FileController fileController = new FileController();
     private User user;
+    private SharedPreferences sharedPrefs;
+    private Gson gson;
+    private final DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private boolean locationExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        gson = new Gson();
+
         user = fileController.loadUser(getApplicationContext(), getUsername());
 
         // retrieve Habitevent identifier (date)
         String eventDateString = getIntent().getStringExtra("habitEventDate");
-        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
         String json = sharedPrefs.getString("currentlyViewingHabit", "");
         Habit loadHabit = gson.fromJson(json, new TypeToken<Habit>() {}.getType());
         // do this because we need to set it to the habit found in the user so that the changes are
@@ -92,9 +102,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
         TextView habitTitle = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
         habitTitle.setText(habit.getTitle());
 
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
-        dateEdit.setText(formatter.format(habitEvent.getEventDate()));
+        dateEdit.setText(sourceFormat.format(habitEvent.getEventDate()));
         final Calendar calendar = Calendar.getInstance();
         dateEdit.setFocusable(false);
         dateEdit.setOnClickListener(new View.OnClickListener() {
@@ -106,29 +115,24 @@ public class EditHabitEventActivity extends AppCompatActivity {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                        dateEdit.setText(sdf.format(calendar.getTime()));
+                        dateEdit.setText(sourceFormat.format(calendar.getTime()));
                     }
                 };
 
                 DatePickerDialog d = new DatePickerDialog(EditHabitEventActivity.this, listener, calendar.get(Calendar.YEAR)
                         , calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                d.getDatePicker().setMaxDate((new Date()).getTime());
-                d.getDatePicker().setMinDate(habit.getStartDate().getTime());
-                d.show();
+                if (habit.getStartDate().before(new Date())) {
+                    d.getDatePicker().setMaxDate((new Date()).getTime());
+                    d.getDatePicker().setMinDate(habit.getStartDate().getTime());
+                    d.show();
+                } else {
+                    Toast.makeText(EditHabitEventActivity.this, "Habit's start date is in the future, please choose another habit", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         EditText commentEdit = (EditText) findViewById(R.id.commentEditText);
         commentEdit.setText(habitEvent.getComment());
-
-        Button locationButton = (Button) findViewById(R.id.LocationButton);
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast.makeText(getApplicationContext(), "COMING SOON!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         Button imageButton = (Button) findViewById(R.id.selectImageButton);
         imageButton.setOnClickListener(new View.OnClickListener(){
@@ -138,15 +142,29 @@ public class EditHabitEventActivity extends AppCompatActivity {
             }
         });
 
-//        Button saveButton = (Button) findViewById(R.id.saveChangesButton);
-//        saveButton.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view){
-//                saveChanges();
-//            }
-//        });
+        if (habitEvent.getLocation() != null) {
+            locationExists = true;
+        }
 
         getSupportActionBar().setTitle("Edit Habit Event");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        String json = sharedPrefs.getString("locationPosition", "");
+        locationPosition = gson.fromJson(json, new TypeToken<LatLng>() {}.getType());
+        RadioButton radioButton = (RadioButton) findViewById(R.id.radioButton);
+        if (locationPosition != null) {
+            radioButton.setChecked(true);
+            radioButton.setText(R.string.yesLocation);
+        } else if (locationExists) {
+            radioButton.setChecked(true);
+            radioButton.setText(R.string.yesLocation);
+        } else {
+            radioButton.setChecked(false);
+            radioButton.setText(R.string.noLocation);
+        }
     }
 
     /**
@@ -154,8 +172,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
      * @return username
      */
     private String getUsername(){
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
     }
@@ -201,13 +217,25 @@ public class EditHabitEventActivity extends AppCompatActivity {
     }
 
     /**
+     * Loads add location so user can pick where the event occured
+     * @param view
+     */
+    public void addLocation(View view) {
+        Intent intent = new Intent(EditHabitEventActivity.this, AddLocationActivity.class);
+        if (habitEvent.getLocation() != null) {
+            intent.putExtra("myLocation", habitEvent.getLocation());
+        }
+        startActivity(intent);
+    }
+
+    /**
      * Save the changes made by the user to this HabitEvent. Checks for errors if the user entered invalid information.
      */
     public void saveChanges(View view) {
         Date date;
         String comment;
         boolean isValidHabitEvent = true;
-        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+
         EditText dateEditText = (EditText) findViewById(R.id.dateEditText);
         EditText commentEditText = (EditText) findViewById(R.id.commentEditText);
         try {
@@ -241,6 +269,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
             if (image != null) {
                 habitEvent.setBitmapString(SerializableImage.getStringFromBitmap(image));
             }
+            // location can be set to null if user chose to delete it
+            habitEvent.setLocation(locationPosition);
             // sort on change
             Collections.sort(habit.getEvents().getArrayList());
             fileController.saveUser(getApplicationContext(), user);
@@ -259,7 +289,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
-        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
         if (checkReadPermission() == -1){
             return;
         }

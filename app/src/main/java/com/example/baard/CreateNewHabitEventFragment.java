@@ -33,9 +33,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -74,6 +76,11 @@ public class CreateNewHabitEventFragment extends Fragment {
     private User user = null;
     private DateFormat sourceFormat;
     private EditText dateEditText;
+    private SharedPreferences sharedPrefs;
+    private Gson gson;
+    private LatLng locationPosition;
+//    private GoogleMap map;
+//    private MapView mapView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,10 +93,14 @@ public class CreateNewHabitEventFragment extends Fragment {
      * @return username
      */
     private String getUsername(){
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
+    }
+
+    private void clearLocation(){
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        sharedPrefsEditor.remove("locationPosition");
+        sharedPrefsEditor.commit();
     }
 
     /**
@@ -105,13 +116,19 @@ public class CreateNewHabitEventFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_create_new_habit_event, container, false);
 
+        // initialize shared preferences and clear location if it exists
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        gson = new Gson();
+        clearLocation();
+
         // get list of habits from user
         user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
-        habits = user.getHabits();
-
-        if (habits.size() < 1) {
-            Toast.makeText(getActivity(), "No habits for events. Please add habit first.", Toast.LENGTH_LONG).show();
+        try {
+            habits = user.getHabits();
+        } catch(Exception e) {
+            Toast.makeText(getActivity(), "Unknown error. Please try again.", Toast.LENGTH_LONG).show();
             getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+            getActivity().onBackPressed();
         }
 
         Spinner spinner = (Spinner) v.findViewById(R.id.habitSpinner);
@@ -123,7 +140,11 @@ public class CreateNewHabitEventFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(getActivity(), "COMING SOON!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), AddLocationActivity.class);
+                if (locationPosition != null) {
+                    intent.putExtra("myLocation", locationPosition);
+                }
+                startActivity(intent);
             }
         });
 
@@ -191,6 +212,25 @@ public class CreateNewHabitEventFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        String json = sharedPrefs.getString("locationPosition", "");
+        locationPosition = gson.fromJson(json, new TypeToken<LatLng>() {}.getType());
+        RadioButton radioButton = (RadioButton) getActivity().findViewById(R.id.radioButton);
+        if (locationPosition != null) {
+            radioButton.setChecked(true);
+            radioButton.setText(R.string.yesLocation);
+//            mapView.setVisibility(View.VISIBLE);
+//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(locationPosition, 15f));
+//            map.addMarker(new MarkerOptions().position(locationPosition));
+
+        } else {
+            radioButton.setChecked(false);
+            radioButton.setText(R.string.noLocation);
+//            mapView.setVisibility(View.INVISIBLE);
+        }
+    }
+
     public void onStart() {
         super.onStart();
         EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
@@ -200,7 +240,7 @@ public class CreateNewHabitEventFragment extends Fragment {
         } catch (HabitEvent.DateAlreadyExistsException e) {
             dateEditText.setText("");
             commentEditText.setText("");
-            //TODO: Clear Location from screen here
+            locationPosition = null;
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(null);
         } catch (ParseException | DataFormatException e) {
@@ -255,11 +295,16 @@ public class CreateNewHabitEventFragment extends Fragment {
             if (image != null){
                 habitEvent.setBitmapString(SerializableImage.getStringFromBitmap(image));
             }
+            if (locationPosition != null) {
+                habitEvent.setLocation(locationPosition);
+            }
             habit.getEvents().add(habitEvent);
             // sort on insert
             Collections.sort(habit.getEvents().getArrayList());
             fileController.saveUser(getActivity().getApplicationContext(), user);
             habit.sendToSharedPreferences(getActivity().getApplicationContext());
+
+            sharedPrefs.edit().remove("filteredHabitEvents").apply();
 
             //set up notification
             if (habit.streak() > 4) {
@@ -360,7 +405,6 @@ public class CreateNewHabitEventFragment extends Fragment {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
-        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
         if (checkReadPermission() == -1){
             return;
         }

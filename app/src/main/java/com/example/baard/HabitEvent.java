@@ -4,26 +4,12 @@
 
 package com.example.baard;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
-import android.support.v4.content.ContextCompat;
-
-import com.google.gson.Gson;
-
-import java.io.File;
+import com.google.android.gms.maps.model.LatLng;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.IllegalFormatCodePointException;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
-
-import io.searchbox.annotations.JestId;
 
 /**
  * Created by biancaangotti on 2017-10-18.
@@ -37,10 +23,9 @@ import io.searchbox.annotations.JestId;
 public class HabitEvent implements Comparable<HabitEvent> {
     private transient Habit habit;
     private String comment = "";
+    private LatLng location;
     private String eventDate;
-    // TODO location variable
     private String bitmapString;
-    //private SerializableImage image;
 
     /**
      * Constructor for HabitEvent without the comment.
@@ -167,6 +152,24 @@ public class HabitEvent implements Comparable<HabitEvent> {
     }
 
     /**
+     * Return location of habit event
+     *
+     * @return location
+     */
+    public LatLng getLocation() {
+        return location;
+    }
+
+    /**
+     * Set the optional location for a habit event based on user dropping pin
+     *
+     * @param location
+     */
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
+    /**
      * Compares HabitEvents to each other. Calling Collection.sort will sort them in descending order for display on AllHabitEventsFragment
      * @param habitEvent
      * @return
@@ -186,6 +189,6 @@ public class HabitEvent implements Comparable<HabitEvent> {
             date = null;
         }
         DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-        return this.getHabit().getTitle() + "     " + formatter.format(date);
+        return this.getHabit().getTitle() + "\n" + formatter.format(date);
     }
 }
