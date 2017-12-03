@@ -146,6 +146,8 @@ public class ViewMapActivity extends AppCompatActivity
                 setMarkers(friend, true, friendMarkers);
             }
         }
+
+        buildGoogleApiClient();
     }
 
     protected synchronized void buildGoogleApiClient() {
