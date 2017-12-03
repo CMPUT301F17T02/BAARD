@@ -41,10 +41,11 @@ public class FriendsListFragment extends Fragment {
     private ListView friendListView;
     private ArrayAdapter<String> adapter;
     private String username;
-    private FileController fc;
-    ArrayList<String> friendsList = new ArrayList<>();
-    Map<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
-    Map<String, String> userMap = new HashMap<String, String>();
+    private FileController fileController;
+    private ArrayList<String> friendsList = new ArrayList<>();
+    private HashMap<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
+    private HashMap<String, String> userMap = new HashMap<String, String>();
+    private User user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -90,7 +91,7 @@ public class FriendsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_friends, container, false);
-        fc = new FileController();
+        fileController = new FileController();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
@@ -104,7 +105,7 @@ public class FriendsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                User friend = fc.loadUserFromServer(friendsList.get(i));
+                User friend = fileController.loadUserFromServer(friendsList.get(i));
 
                 // Make the intent go to seeing the friend's habits and most recent habit event.
                 Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
@@ -126,12 +127,20 @@ public class FriendsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        User user = fc.loadUser(getActivity().getApplicationContext(), username);
-
-
+        user = fileController.loadUser(getActivity().getApplicationContext(), username);
 
         myFriendsMap = user.getFriends();
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
+        for (String username : friendsList) {
+            User friend = fileController.loadUserFromServer(username);
+            if (friend == null) {
+//                  myFriendsMap.remove(username);
+                myFriendsMap.put(username, false);
+                friendsList.remove(username);
+            }
+        }
+        user.setFriends(myFriendsMap);
+        fileController.saveUser(getContext(), user);
 
         adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, friendsList);
         friendListView.setAdapter(adapter);
