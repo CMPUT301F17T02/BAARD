@@ -164,14 +164,13 @@ public class CreateNewHabitFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        titleText.setText("");
-        reasonText.setText("");
-        startDateText.setText("");
-        setToggleButtons(getView());
-        titleText.requestFocus();
-        frequency =  new ArrayList<>();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            if (resultCode == getActivity().RESULT_OK ) {
+                getActivity().onBackPressed();
+            }
+        }
     }
 
     private void changeFont(View myView) {
@@ -261,7 +260,7 @@ public class CreateNewHabitFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                 intent.putExtra("position", habits.size()-1);
-                startActivity(intent);
+                startActivityForResult(intent, 2);
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
                 Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();

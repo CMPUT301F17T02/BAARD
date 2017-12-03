@@ -152,6 +152,13 @@ public class ViewHabitActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+        super.onBackPressed();
+    }
+
     /**
      *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
      */
@@ -174,6 +181,7 @@ public class ViewHabitActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_OK);
             finish();
             return true;
         }

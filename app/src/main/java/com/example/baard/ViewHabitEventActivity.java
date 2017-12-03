@@ -88,8 +88,16 @@ public class ViewHabitEventActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+        super.onBackPressed();
+    }
+
+    @Override
      public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_OK);
             finish();
             return true;
         }
