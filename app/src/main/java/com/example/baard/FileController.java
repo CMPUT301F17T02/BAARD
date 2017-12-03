@@ -161,7 +161,7 @@ public class FileController {
      * Save user to server
      * @param user The user to be saved
      */
-    private void saveUserToServer(User user) {
+    public void saveUserToServer(User user) {
         ElasticSearchController.UpdateUserTask updateUserTask = new ElasticSearchController.UpdateUserTask();
         updateUserTask.execute(user);
     }
@@ -199,6 +199,7 @@ public class FileController {
         if (friend != null) {
             me.getReceivedRequests().remove(friend.getUsername());
             friend.getFriends().put(me.getUsername(), Boolean.TRUE);
+            saveUserToServer(friend);
             return true;
         } else {
             return false;

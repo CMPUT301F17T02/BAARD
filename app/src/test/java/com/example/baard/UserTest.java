@@ -20,9 +20,13 @@ import java.util.zip.DataFormatException;
 public class UserTest extends TestCase {
 
     private User user;
+    HashMap<String, Boolean> userList = new HashMap<>();
+    HashMap<String, String> userMap = new HashMap<>();
 
     public void setUp() {
         user = new User("Daniel", "daniel.choi123", "1");
+        userList.put("username1", Boolean.TRUE);
+        userList.put("username2", Boolean.FALSE);
     }
 
     public void testGetName() {
@@ -73,6 +77,7 @@ public class UserTest extends TestCase {
     }
 
     public void testGetFriends() {
+
         HashMap<String, Boolean> friends = new HashMap<>();
         friends.put("johnSmith232", true);
         user.setFriends(friends);
