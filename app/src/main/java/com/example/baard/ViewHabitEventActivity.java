@@ -7,9 +7,12 @@ package com.example.baard;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,16 +62,18 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
 
         setContentView(R.layout.activity_view_habit_event);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        getSupportActionBar().setTitle("View Habit Event");
-        Log.d("ViewHabitEvent", "FLAG0");
+        setActionBarTitle("View Habit Event");
+        changeFont();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        // Create Map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
@@ -100,9 +105,41 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
+    public void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        TextView name = (TextView) findViewById(R.id.HabitName);
+        TextView date = (TextView) findViewById(R.id.HabitEventDate);
+        TextView comment = (TextView) findViewById(R.id.commentView);
+        TextView location = (TextView) findViewById(R.id.locationView);
+
+        name.setTypeface(ralewayRegular);
+        date.setTypeface(ralewayRegular);
+        comment.setTypeface(ralewayRegular);
+        location.setTypeface(ralewayRegular);
+    }
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
+    }
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d("ViewHabitEvent", "FLAG0");
         mMap = googleMap;
+        mMap.clear();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(false);
         mMap.getUiSettings().setScrollGesturesEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
