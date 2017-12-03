@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
                 .addToBackStack(null)
                 .commit();
+        navigationView.setCheckedItem(R.id.nav_dailyHabits);
         setActionBarTitle(getString(R.string.daily_habits));
     }
 
