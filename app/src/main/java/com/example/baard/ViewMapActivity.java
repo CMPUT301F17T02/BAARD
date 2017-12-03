@@ -132,7 +132,9 @@ public class ViewMapActivity extends AppCompatActivity
             for (String friendStr : user.getFriends().keySet()) {
                 if (user.getFriends().get(friendStr)) {
                     User friend = fileController.loadUserFromServer(friendStr);
-                    setMarkers(friend, true, friendMarkers);
+                    if (friend != null) {
+                        setMarkers(friend, true, friendMarkers);
+                    }
                 }
             }
         }
@@ -379,16 +381,18 @@ public class ViewMapActivity extends AppCompatActivity
      */
     private void setVisibilityOfMyFriends(boolean withDistance, boolean toggle) {
         // set the markers for friends
-        if (user.getFriends().size() > 0) {
+//        if (user.getFriends().size() > 0) {
             for (String friendStr : user.getFriends().keySet()) {
                 if (user.getFriends().get(friendStr)) { // they accepted to be my friend
                     User friend = fileController.loadUserFromServer(friendStr);
-                    for (Habit habit : friend.getHabits().getArrayList()) {
-                        setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, friendMarkers, toggle);
+                    if (friend != null) { // could grab properly from server
+                        for (Habit habit : friend.getHabits().getArrayList()) {
+                            setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, friendMarkers, toggle);
+                        }
                     }
                 }
             }
-        }
+//        }
     }
 
 

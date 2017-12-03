@@ -2,32 +2,13 @@
   ~ Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
   -->
 
-<!--<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:id="@+id/drawer_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:fitsSystemWindows="true">-->
-
-    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--xmlns:map="http://schemas.android.com/apk/res-auto"-->
-        <!--xmlns:tools="http://schemas.android.com/tools"-->
-        <!--android:id="@+id/map"-->
-        <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--tools:context="com.example.baard.ViewMapActivity" />-->
-
-<!--</android.support.v4.widget.DrawerLayout>-->
-
-
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewMapActivity">
+    tools:context=".ViewMapActivity"
+    android:fitsSystemWindows="true" >
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -39,7 +20,8 @@
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         map:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_editor_absoluteX="0dp"
+        android:fitsSystemWindows="true" >
 
     </FrameLayout>
 
@@ -52,10 +34,10 @@
         android:elevation="2dp"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
-        android:text="No Friends"
+        android:text="View Friends"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textOff="No Friends"
+        android:textOff="View Friends"
         android:textOn="View Friends"
         android:textSize="14sp"
         android:layout_marginLeft="8dp"
@@ -77,7 +59,7 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textOff="@string/_5km"
-        android:textOn="@string/_5kmLT"
+        android:textOn="@string/_5km"
         android:textSize="14sp"
         map:layout_constraintLeft_toRightOf="@+id/toggleFriend"
         android:layout_marginLeft="8dp"
@@ -96,6 +78,7 @@
         map:layout_constraintRight_toRightOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         map:layout_constraintVertical_bias="0.0"
-        tools:context="com.example.baard.ViewMapActivity" />
+        tools:context="com.example.baard.ViewMapActivity"
+        android:fitsSystemWindows="true" />
 
 </android.support.constraint.ConstraintLayout>
