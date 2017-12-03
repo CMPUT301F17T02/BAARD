@@ -67,7 +67,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/addLocationButton"
         app:layout_constraintRight_toRightOf="parent"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:clickable="false"/>
 
     <ImageView
         android:id="@+id/imageViewEditEvent"

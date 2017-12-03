@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +51,8 @@ public class AddLocationActivity extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
     private GoogleApiClient mGoogleApiClient;
-    private MarkerOptions mMarker;
+    private MarkerOptions markerOptions;
+    private Marker mMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +61,14 @@ public class AddLocationActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         try {
-            LatLng myLocation = (LatLng) getIntent().getExtras().get("myLocation");
-            if (myLocation != null) {
-                mEditLocation = myLocation;
-            }
-        } catch (Exception e){}
+            mEditLocation = (LatLng) getIntent().getExtras().get("myLocation");
+        } catch (Exception e) {
+        }
 
         gson = new Gson();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPrefsEditor = sharedPrefs.edit();
-
-
+        
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -96,12 +93,16 @@ public class AddLocationActivity extends AppCompatActivity
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMarker = new MarkerOptions()
-                .title("Habit Event Location")
-                .snippet("Is this the right location?")
-                .position(mDefaultLocation);
         mMap = googleMap;
-        pinPosition = mMarker.getPosition();
+        if (mEditLocation != null) {
+            markerOptions = new MarkerOptions().position(mEditLocation);
+        } else {
+            markerOptions = new MarkerOptions().position(mDefaultLocation);
+        }
+        markerOptions.title("Habit Event Location").snippet("Is this the right location?");
+        pinPosition = markerOptions.getPosition();
+        mMarker = mMap.addMarker(markerOptions);
+        mMarker.setDraggable(true);
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -194,7 +195,6 @@ public class AddLocationActivity extends AppCompatActivity
      * cases when a location is not available.
      */
         try {
-            mMap.clear();
             if (mLocationPermissionGranted) {
                 // Location Request to obtain location through GPS or network when  mLastKnownLocation is null
                 mLocationRequest = new LocationRequest()
@@ -207,13 +207,14 @@ public class AddLocationActivity extends AppCompatActivity
                     @SuppressWarnings("MissingPermission")
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
-                        mMap.clear();
                         for (Location location : locationResult.getLocations()) {
                             mLastKnownLocation = location;
                         }
                         mMap.setMyLocationEnabled(true);
-                        mMap.addMarker(mMarker.position(new LatLng(mLastKnownLocation.getLatitude(),
-                                mLastKnownLocation.getLongitude()))).setDraggable(true);
+                        if (mEditLocation == null) {
+                            mMarker.setPosition(new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude()));
+                        }
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -222,22 +223,25 @@ public class AddLocationActivity extends AppCompatActivity
                 };
                 // Get last known location
                 mLastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                if (mLastKnownLocation != null) {
-                    mMap.addMarker(mMarker.position(new LatLng(mLastKnownLocation.getLatitude(),
-                            mLastKnownLocation.getLongitude()))).setDraggable(true);
+                if (mEditLocation != null) {
+                    mMarker.setPosition(mEditLocation);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mEditLocation, DEFAULT_ZOOM));
+                } else if (mLastKnownLocation != null) {
+                    mMarker.setPosition(new LatLng(mLastKnownLocation.getLatitude(),
+                            mLastKnownLocation.getLongitude()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLastKnownLocation.getLatitude(),
                                     mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                 } else {
                     Log.d("Add_Location", "Current location is null. Using defaults.");
-                    mMap.addMarker(mMarker).setDraggable(true);
+                    mMarker.setPosition(mDefaultLocation);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                     mMap.setMyLocationEnabled(false);
                 }
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationCallback, null);
             } else {
                 Log.d("Add_Location", "Permission is not granted.");
-                mMap.addMarker(mMarker).setDraggable(true);
+                mMarker.setPosition(mDefaultLocation);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
             }
         } catch(SecurityException e)  {

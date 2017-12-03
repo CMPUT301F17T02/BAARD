@@ -135,12 +135,12 @@
         android:layout_width="140dp"
         android:layout_height="46dp"
         android:text="@string/noLocation"
-        app:layout_constraintBaseline_toBaselineOf="@+id/addLocationButton"
-        app:layout_constraintHorizontal_bias="0.054"
+        app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintLeft_toRightOf="@+id/addLocationButton"
         app:layout_constraintRight_toRightOf="parent"
         android:focusable="false"
-        android:clickable="false"/>
+        android:clickable="false"
+        app:layout_constraintBaseline_toBaselineOf="@+id/addLocationButton" />
 
     <!--<com.google.android.gms.maps.MapView-->
         <!--android:id="@+id/mapView"-->
