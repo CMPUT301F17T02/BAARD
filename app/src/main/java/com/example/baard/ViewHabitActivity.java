@@ -53,6 +53,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Activity to view a habit
+ * @see MainActivity
+ * @see Habit
+ * @see AllHabitsFragment
+ * @see DailyHabitsFragment
+ * @see AppCompatActivity
+ * @author rderbysh, minsoung
+ * @since 1.0
+ * @version 3.0
+ */
 public class ViewHabitActivity extends AppCompatActivity {
 
     private final DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
