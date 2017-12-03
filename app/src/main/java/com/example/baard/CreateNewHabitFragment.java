@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -248,10 +249,11 @@ public class CreateNewHabitFragment extends Fragment {
                 Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
                 habits.add(habit);
 
+                Collections.sort(habits.getArrayList());
                 fc.saveUser(getActivity().getApplicationContext(), user);
 
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                intent.putExtra("position", habits.size()-1);
+                intent.putExtra("position", habits.indexOf(habit));
                 startActivity(intent);
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
