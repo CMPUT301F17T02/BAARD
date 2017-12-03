@@ -56,14 +56,14 @@ public class FindFriendsFragment extends Fragment {
 
         getAllUsersTask.execute();
 
-        try {
-            allUsers = getAllUsersTask.get();
-
-            allUsers.getArrayList().remove(user);
-            allUsers.delete(user);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            allUsers = getAllUsersTask.get();
+//
+//            allUsers.getArrayList().remove(user);
+//            allUsers.delete(user);
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
         System.out.println("All Users: " + allUsers.getArrayList());
@@ -94,6 +94,10 @@ public class FindFriendsFragment extends Fragment {
 
         try {
             allUsers = getAllUsersTask.get();
+
+            getAllUsersTask.get().delete(user);
+//            allUsers.getArrayList().remove(user);
+//            allUsers.delete(user);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

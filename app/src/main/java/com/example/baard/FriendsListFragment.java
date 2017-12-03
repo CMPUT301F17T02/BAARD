@@ -44,6 +44,7 @@ public class FriendsListFragment extends Fragment {
     private FileController fc;
     ArrayList<String> friendsList = new ArrayList<>();
     Map<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
+    Map<String, String> userMap = new HashMap<String, String>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,10 +104,14 @@ public class FriendsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                User friend = fc.loadUserFromServer(friendsList.get(i));
+
                 // Make the intent go to seeing the friend's habits and most recent habit event.
                 Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
                 intent.putExtra("position", i);
                 intent.putExtra("friendUsername", friendsList.get(i));
+                intent.putExtra("friendName", friend.getName());
+
                 startActivity(intent);
             }
         });
@@ -122,6 +127,8 @@ public class FriendsListFragment extends Fragment {
         super.onResume();
 
         User user = fc.loadUser(getActivity().getApplicationContext(), username);
+
+
 
         myFriendsMap = user.getFriends();
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);

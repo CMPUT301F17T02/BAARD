@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.zip.DataFormatException;
 
 
@@ -19,9 +20,13 @@ import java.util.zip.DataFormatException;
 public class UserTest extends TestCase {
 
     private User user;
+    HashMap<String, Boolean> userList = new HashMap<>();
+    HashMap<String, String> userMap = new HashMap<>();
 
     public void setUp() {
         user = new User("Daniel", "daniel.choi123", "1");
+        userList.put("username1", Boolean.TRUE);
+        userList.put("username2", Boolean.FALSE);
     }
 
     public void testGetName() {
@@ -72,30 +77,30 @@ public class UserTest extends TestCase {
     }
 
     public void testGetFriends() {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
+//        UserList userList = new UserList();
+//        userList.add(new User("John", "johnSmith232", "2"));
         user.setFriends(userList);
-        assertEquals(userList, user.getFriends());
+        assertEquals("username1", user.getFriends());
     }
 
     public void testSetFriends() throws DataFormatException {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
+//        UserList userList = new UserList();
+//        userList.add(new User("John", "johnSmith232", "2"));
         user.setFriends(userList);
         assertEquals(userList, user.getFriends());
     }
 
     public void testGetReceivedRequests() {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
-        user.setReceivedRequests(userList);
+//        UserList userList = new UserList();
+//        userList.add(new User("John", "johnSmith232", "2"));
+        user.setReceivedRequests(userMap);
         assertEquals(userList, user.getReceivedRequests());
     }
 
     public void testSetReceivedRequests() {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
-        user.setReceivedRequests(userList);
+//        UserList userList = new UserList();
+//        userList.add(new User("John", "johnSmith232", "2"));
+        user.setReceivedRequests(userMap);
         assertEquals(userList, user.getReceivedRequests());
     }
 
