@@ -17,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -124,7 +126,38 @@ public class ViewMapActivity extends AppCompatActivity
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         // set markers for user
-        setMarkers(user, false, myMarkers);
+        setMarkers(user, true, myMarkers);
+
+        // set the markers for friends
+        if (user.getFriends().size() > 0) {
+            for (String friendStr : user.getFriends().keySet()) {
+                if (user.getFriends().get(friendStr)) {
+                    User friend = fileController.loadUserFromServer(friendStr);
+                    setMarkers(friend, true, friendMarkers);
+                }
+            }
+        }
+
+//        // set the distance toggle filter
+//        ToggleButton distanceToggle = findViewById(R.id.toggleDistance);
+//        distanceToggle.setChecked(true);
+//        distanceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                setVisibilityOfMyMarkers(isChecked);
+//                setVisibilityOfMyFriends(isChecked);
+//            }
+//        });
+
+        // set the friends toggle filter
+        ToggleButton friendsToggle = findViewById(R.id.toggleFriend);
+        friendsToggle.setChecked(true);
+        friendsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                for (LatLng location : friendMarkers.keySet()) {
+                    friendMarkers.get(location).setVisible(isChecked);
+                }
+            }
+        });
 
         buildGoogleApiClient();
     }
@@ -144,32 +177,9 @@ public class ViewMapActivity extends AppCompatActivity
         updateLocationUI();
         getDeviceLocation();
 
-        try {
-            // now make visible all markers that are filtered in habit history
-            String json = sharedPrefs.getString("filteredHabitEvents", "");
-            List<HabitEvent> filteredHabitEvents = gson.fromJson(json, new TypeToken<List<HabitEvent>>() {}.getType());
-            setVisibleMarkers(filteredHabitEvents, true, myMarkers);
-        } catch (Exception e) {
-            // in case there was no filter saved, just show them all
-            Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
-            for (Habit habit : user.getHabits().getArrayList()) {
-                setVisibleMarkers(habit.getEvents().getArrayList(), true, myMarkers);
-            }
-        }
+        setVisibilityOfMyMarkers(true);
 
-        // set the markers for friends
-        if (user.getFriends().size() > 0) {
-            for (String friendStr : user.getFriends().keySet()) {
-                if (user.getFriends().get(friendStr)) {
-                    User friend = fileController.loadUserFromServer(friendStr);
-                    setMarkers(friend, true, friendMarkers);
-                    for (Habit habit : friend.getHabits().getArrayList()) {
-                        setVisibleMarkers(habit.getEvents().getArrayList(), true, friendMarkers);
-                    }
-                }
-            }
-        }
-
+        setVisibilityOfMyFriends(true);
     }
 
     @Override
@@ -310,9 +320,12 @@ public class ViewMapActivity extends AppCompatActivity
                     Marker marker = mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation())
                             .draggable(false)
                             .title(habit.getTitle())
-                            .visible(isFriend)
+                            .visible(false)
                             .icon(BitmapDescriptorFactory.defaultMarker(bitMapColor))
                             .snippet(sourceFormat.format(habitEvent.getEventDate())));
+                    if (isFriend) {
+                        marker.setTitle(user.getName()+": "+habit.getTitle());
+                    }
                     markerMap.put(habitEvent.getLocation(), marker);
                 }
                 if (isFriend) {
@@ -345,6 +358,43 @@ public class ViewMapActivity extends AppCompatActivity
                 }
             }
         }
+    }
 
+
+    /**
+     * Sets the visibility of the user's markers with whether or not they want distance factored
+     * @param withDistance
+     */
+    private void setVisibilityOfMyMarkers(boolean withDistance) {
+        try {
+            // now make visible all markers that are filtered in habit history
+            String json = sharedPrefs.getString("filteredHabitEvents", "");
+            List<HabitEvent> filteredHabitEvents = gson.fromJson(json, new TypeToken<List<HabitEvent>>() {}.getType());
+            setVisibleMarkers(filteredHabitEvents, withDistance, myMarkers);
+        } catch (Exception e) {
+            // in case there was no filter saved, just show them all
+            Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
+            for (Habit habit : user.getHabits().getArrayList()) {
+                setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, myMarkers);
+            }
+        }
+    }
+
+    /**
+     * Sets the visibility of the user friends' marker with whether or not they want distance factored
+     * @param withDistance
+     */
+    private void setVisibilityOfMyFriends(boolean withDistance) {
+        // set the markers for friends
+        if (user.getFriends().size() > 0) {
+            for (String friendStr : user.getFriends().keySet()) {
+                if (user.getFriends().get(friendStr)) { // they accepted to be my friend
+                    User friend = fileController.loadUserFromServer(friendStr);
+                    for (Habit habit : friend.getHabits().getArrayList()) {
+                        setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, friendMarkers);
+                    }
+                }
+            }
+        }
     }
 }

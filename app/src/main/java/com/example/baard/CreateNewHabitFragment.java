@@ -58,6 +58,7 @@ public class CreateNewHabitFragment extends Fragment {
     private HashSet<String> habitNames = new HashSet<>();
     private FileController fc;
     private User user;
+    private ArrayList<ToggleButton> toggles = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -147,6 +148,15 @@ public class CreateNewHabitFragment extends Fragment {
             }
         });
 
+        // grab all toggle buttons
+        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
+        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
+        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
+        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
+        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
+        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
+
         // set the toggle buttons for the days of the week
         setToggleButtons(myView);
 
@@ -159,6 +169,7 @@ public class CreateNewHabitFragment extends Fragment {
         });
 
         changeFont(myView);
+
         // Inflate the layout for this fragment
         return myView;
     }
@@ -194,15 +205,6 @@ public class CreateNewHabitFragment extends Fragment {
         reasonText.setTypeface(ralewayRegular);
         startDateText = (EditText) myView.findViewById(R.id.startDate);
         startDateText.setTypeface(ralewayRegular);
-
-        ArrayList<ToggleButton> toggles = new ArrayList<>();
-        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
-        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
-        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
-        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
-        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
-        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
 
         for (ToggleButton toggle : toggles) {
             toggle.setTypeface(ralewayRegular);
@@ -274,15 +276,6 @@ public class CreateNewHabitFragment extends Fragment {
      * This thereby controls the frequency array to which habits should repeat on.
      */
     public void setToggleButtons(View myView) {
-        // store all buttons in order of days in the Day enum
-        ArrayList<ToggleButton> toggles = new ArrayList<>();
-        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
-        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
-        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
-        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
-        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
-        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
         // grab all possible enum values of Day
         final Day[] possibleValues  = Day.values();
 

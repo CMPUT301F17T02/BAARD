@@ -58,8 +58,6 @@ public class FindFriendsFragment extends Fragment {
 
         try {
             allUsers = getAllUsersTask.get();
-
-            allUsers.getArrayList().remove(user);
             allUsers.delete(user);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -94,6 +92,7 @@ public class FindFriendsFragment extends Fragment {
 
         try {
             allUsers = getAllUsersTask.get();
+            allUsers.delete(user);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
