@@ -18,7 +18,8 @@
         map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
-        map:layout_constraintVertical_bias="0.0">
+        map:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
 
     </FrameLayout>
 
@@ -28,11 +29,11 @@
         android:layout_height="wrap_content"
         android:onClick="cancel"
         android:text="@string/remove"
-        map:layout_constraintHorizontal_chainStyle="spread"
         android:layout_marginLeft="16dp"
         map:layout_constraintLeft_toLeftOf="parent"
         map:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp" />
 
     <Button
         android:id="@+id/save"
@@ -42,13 +43,14 @@
         android:text="@string/save"
         map:layout_constraintBaseline_toBaselineOf="@+id/cancel"
         map:layout_constraintLeft_toRightOf="@+id/cancel"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp" />
 
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical"
         map:layout_constraintBottom_toBottomOf="parent"

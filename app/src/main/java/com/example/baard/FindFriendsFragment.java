@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -41,14 +44,12 @@ public class FindFriendsFragment extends Fragment {
     private FileController fc;
     ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
     UserList allUsers = new UserList();
-    private UserList friendList = new UserList();
-
+    private HashMap<String, Boolean> myFriends;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_find_friends, container, false);
-
 
         getAllUsersTask.execute();
 
@@ -62,11 +63,6 @@ public class FindFriendsFragment extends Fragment {
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-
-        adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
-        findFriendsView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
 
         return rootView;
     }
@@ -83,16 +79,15 @@ public class FindFriendsFragment extends Fragment {
         try {
             allUsers = getAllUsersTask.get();
 
-//            getAllUsersTask.get().delete(user);
-//            allUsers.getArrayList().remove(user);
-//            allUsers.delete(user);
+            for (User aUser : allUsers.getArrayList()) {
+                if (user.getUsername().equals(aUser.getUsername())) {
+                    allUsers.delete(aUser);
+                    break;
+                }
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
-        System.out.println(allUsers.getArrayList());
-
-
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
 
@@ -119,23 +114,21 @@ public class FindFriendsFragment extends Fragment {
                 viewHolder.button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         if (viewHolder.button.getText() == "FOLLOWING") {
-                            System.out.println(friendList.getArrayList());
+                            // do nothing! they are my friend
+                        } else if (viewHolder.button.getText() == "PENDING") {
+//                            user = fc.loadUser(getContext(), username);
+//                            if (user.getFriends().get(getItem(position).getUsername())) {
+//                                viewHolder.button.setText("FOLLOWING");
+//                            }
                         }
                         else {
-                            viewHolder.button.setText("FOLLOWING");
-                            friendList.add(getItem(position));
-                            Boolean test = fc.sendFriendRequest(getContext(), username, getItem(position).getUsername());
+                            viewHolder.button.setText("PENDING");
+                            User friend = getItem(position);
+                            Boolean test = fc.sendFriendRequest(getContext(), username, friend.getUsername());
                             if (test) { System.out.println("True: Sent to server"); }
-                            System.out.println("Adding to list... " + friendList.getArrayList());
-
-                            // set friends to user
-
+                            user = fc.loadUser(getContext(), username);
                         }
-
-
-
                     }
                 });
                 convertView.setTag(viewHolder);

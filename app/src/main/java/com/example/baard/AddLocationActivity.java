@@ -75,6 +75,9 @@ public class AddLocationActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Handles building the Google API Client for maps
+     */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -138,12 +141,12 @@ public class AddLocationActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
-    private void getLocationPermission() {
     /*
      * Request location permission, so that we can get the location of the
      * device. The result of the permission request is handled by a callback,
      * onRequestPermissionsResult.
      */
+    private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -191,11 +194,11 @@ public class AddLocationActivity extends AppCompatActivity
         }
     }
 
-    private void getDeviceLocation() {
     /*
      * Get the best and most recent location of the device, which may be null in rare
      * cases when a location is not available.
      */
+    private void getDeviceLocation() {
         try {
             if (mLocationPermissionGranted) {
                 // Location Request to obtain location through GPS or network when  mLastKnownLocation is null
@@ -261,12 +264,20 @@ public class AddLocationActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Deletes location from habit event
+     * @param view
+     */
     public void cancel(View view) {
         sharedPrefsEditor.remove("locationPosition");
         sharedPrefsEditor.commit();
         finish();
     }
 
+    /**
+     * Adds a location to habit event
+     * @param view
+     */
     public void save(View view) {
         String json = gson.toJson(pinPosition);
         sharedPrefsEditor.putString("locationPosition", json);
