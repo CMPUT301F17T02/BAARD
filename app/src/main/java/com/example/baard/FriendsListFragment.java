@@ -134,12 +134,12 @@ public class FriendsListFragment extends Fragment {
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
 
         ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
-        for (String username : iterationList) {
-            User friend = fileController.loadUserFromServer(username);
+        for (String name : iterationList) {
+            User friend = fileController.loadUserFromServer(name);
             if (friend == null) {
 //                  myFriendsMap.remove(username);
-                myFriendsMap.put(username, false);
-                friendsList.remove(username);
+                myFriendsMap.put(name, false);
+                friendsList.remove(name);
             }
 
         }
