@@ -133,18 +133,18 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
 
     @Override
     public void tearDown() {
-//        solo.clickOnImage(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
 
         solo.finishOpenedActivities();
     }
