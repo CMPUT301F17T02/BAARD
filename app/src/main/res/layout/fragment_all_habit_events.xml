@@ -2,64 +2,52 @@
   ~ Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.baard.AllHabitEventsFragment">
 
-    <ListView
+    <LinearLayout
+        android:id="@+id/filterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp">
+
+        <Spinner
+            android:id="@+id/habitFilterSpinner"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/commentFilterEditText"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="Search comment"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/filterButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Filter" />
+
+    <ExpandableListView
         android:id="@+id/habitEventListView"
         android:layout_width="361dp"
         android:layout_height="441dp"
         android:layout_marginBottom="7dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterButton"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginRight="0dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_marginRight="0dp" />
 
-    <Spinner
-        android:id="@+id/habitFilterSpinner"
-        android:layout_width="221dp"
-        android:layout_height="43dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/commentFilterEditText"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/commentFilterEditText"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="0dp"
-        android:ems="10"
-        android:hint="Search comment"
-        android:inputType="textPersonName"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/habitFilterSpinner"
-        android:layout_marginLeft="8dp" />
-
-    <Button
-        android:id="@+id/filterButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Filter"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commentFilterEditText" />
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
