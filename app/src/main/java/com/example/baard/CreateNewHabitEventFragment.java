@@ -304,6 +304,8 @@ public class CreateNewHabitEventFragment extends Fragment {
             fileController.saveUser(getActivity().getApplicationContext(), user);
             habit.sendToSharedPreferences(getActivity().getApplicationContext());
 
+            sharedPrefs.edit().remove("filteredHabitEvents").apply();
+
             //set up notification
             if (habit.streak() > 4) {
 
