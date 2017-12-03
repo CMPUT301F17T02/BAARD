@@ -44,6 +44,8 @@ public class ViewFriendActivity extends AppCompatActivity {
         Gson gson = new Gson();
         //TODO: GRAB FRIEND USERNAME FROM FRIENDS MAP
         String json = sharedPrefs.getString("username", "");
+
+        //Getting user info of friend
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
         user = fileController.loadUser(getApplicationContext(), username);
 

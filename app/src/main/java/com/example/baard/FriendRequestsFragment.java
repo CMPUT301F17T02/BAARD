@@ -49,7 +49,7 @@ public class FriendRequestsFragment extends Fragment {
     private String username;
     private FileController fc;
 //    ArrayList<User> allUserList = new ArrayList<>();
-    private UserList getFriendRequestsList = new UserList();
+    private ArrayList<String> getFriendRequestsList = new ArrayList<>();
     private HashMap<String, String> getFriendRequestsMap = new HashMap<String, String>();
     private User user;
 
@@ -120,18 +120,19 @@ public class FriendRequestsFragment extends Fragment {
 //        }
 
         getFriendRequestsMap = user.getReceivedRequests();
-        
+
+        getFriendRequestsList.addAll(getFriendRequestsMap.keySet());
 
         if (!getFriendRequestsMap.isEmpty()) {
             System.out.println("User's received requests: " + getFriendRequestsMap);
 
             for (int j = 0; j < getFriendRequestsList.size(); j++) {
-                listDataHeader.add(getFriendRequestsMap.);
+                listDataHeader.add(getFriendRequestsMap.get(getFriendRequestsList.get(j)));
                 listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
             }
         }
 
-        adapter = new MyFriendsRequestAdapter(this.getContext(), listDataHeader, listDataChild, getFriendRequestsList.getArrayList(), getFriendRequestsList.getArrayList());
+        adapter = new MyFriendsRequestAdapter(this.getContext(), listDataHeader, listDataChild, getFriendRequestsList, getFriendRequestsList);
 
         friendRequestsView.setAdapter(adapter);
 
@@ -159,8 +160,8 @@ public class FriendRequestsFragment extends Fragment {
         private final List<String> _listDataHeader; // header titles
         // child data in format of header title, child title
         private final HashMap<String, List<String>> _listDataChild;
-        private final ArrayList<User> allUsersList;
-        private final ArrayList<User> seenUsersList;
+        private final ArrayList<String> allUsersList;
+        private final ArrayList<String> seenUsersList;
 
         /**
          * Constructor for Expandable List Adapter
@@ -171,7 +172,7 @@ public class FriendRequestsFragment extends Fragment {
          * @param seenUsersList List of Habits on the screen (Daily or All)
          */
         public MyFriendsRequestAdapter(Context context, List<String> listDataHeader,
-                                     HashMap<String, List<String>> listChildData, ArrayList<User> allUsersList, ArrayList<User> seenUsersList) {
+                                     HashMap<String, List<String>> listChildData, ArrayList<String> allUsersList, ArrayList<String> seenUsersList) {
             this._context = context;
             this._listDataHeader = listDataHeader;
             this._listDataChild = listChildData;
@@ -244,7 +245,7 @@ public class FriendRequestsFragment extends Fragment {
             convertView.findViewById(R.id.acceptFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    User acceptPerson = seenUsersList.get(groupPosition);
+                    String acceptPerson = seenUsersList.get(groupPosition);
                     FileController fc = new FileController();
                     allUsersList.remove(acceptPerson);
 
@@ -253,9 +254,9 @@ public class FriendRequestsFragment extends Fragment {
                     String json = sharedPrefs.getString("username", "");
                     String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
                     User user = fc.loadUser(_context, username);
-                    user.getReceivedRequests().delete(acceptPerson);
+                    user.getReceivedRequests().remove(acceptPerson);
                     fc.saveUser(_context, user);
-                    fc.acceptFriendRequest(getContext(), username, acceptPerson.getUsername());
+                    fc.acceptFriendRequest(getContext(), username, getFriendRequestsMap.get(acceptPerson));
 //                    Toast.makeText(this, "Declined Friend", Toast.LENGTH_SHORT).show();
                     _listDataHeader.remove(groupPosition);
                     notifyDataSetChanged();
@@ -265,7 +266,7 @@ public class FriendRequestsFragment extends Fragment {
             convertView.findViewById(R.id.declineFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    User declinedPerson = seenUsersList.get(groupPosition);
+                    String declinedPerson = seenUsersList.get(groupPosition);
                     FileController fc = new FileController();
                     allUsersList.remove(declinedPerson);
 
@@ -274,7 +275,7 @@ public class FriendRequestsFragment extends Fragment {
                     String json = sharedPrefs.getString("username", "");
                     String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
                     User user = fc.loadUser(_context, username);
-                    user.getReceivedRequests().delete(declinedPerson);
+                    user.getReceivedRequests().remove(declinedPerson);
                     fc.saveUser(_context, user);
 //                    Toast.makeText(this, "Declined Friend", Toast.LENGTH_SHORT).show();
                     _listDataHeader.remove(groupPosition);
