@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -32,7 +35,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
-public class AddLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class AddLocationActivity extends AppCompatActivity
+        implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 14.0f;
@@ -42,11 +48,11 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
     private Gson gson;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEditor;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
     private boolean mLocationPermissionGranted = false;
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +70,20 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPrefsEditor = sharedPrefs.edit();
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
     }
 
     /**
@@ -91,9 +105,7 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
         pinPosition = marker.getPosition();
 
-        getLocationPermission();
-        updateLocationUI();
-        getDeviceLocation();
+        buildGoogleApiClient();
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -111,7 +123,21 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
                 pinPosition = marker.getPosition();
             }
         });
+
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        getLocationPermission();
+        updateLocationUI();
+        getDeviceLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
     private void getLocationPermission() {
     /*
@@ -192,40 +218,23 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                        mFusedLocationProviderClient.removeLocationUpdates(mLocationCallback);
+                        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, mLocationCallback);
                     }
                 };
                 // Get last known location
-                Task locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        Log.d("Add_Location", "Running onComplete");
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = (Location) task.getResult();
-                            if (mLastKnownLocation != null) {
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude())).title("My Location"));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(mLastKnownLocation.getLatitude(),
-                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            } else {
-                                Log.d("Add_Location", "Current location is null. Using defaults.");
-                                Log.e("Add_Location", "Exception: %s", task.getException());
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                                mMap.setMyLocationEnabled(false);
-                                mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-                            }
-                        } else {
-                            Log.d("Add_Location", "Current location is null. Using defaults.");
-                            Log.e("Add_Location", "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.setMyLocationEnabled(false);
-                            mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-                        }
-                    }
-                });
+                mLastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if (mLastKnownLocation != null) {
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
+                            mLastKnownLocation.getLongitude())).title("My Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                } else {
+                    Log.d("Add_Location", "Current location is null. Using defaults.");
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                    mMap.setMyLocationEnabled(false);
+                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationCallback, null);
+                }
             } else {
                 Log.d("Add_Location", "Permission is not granted.");
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
