@@ -109,7 +109,7 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         EditText reason = (EditText) solo.getView(R.id.reason);
 
         solo.enterText(title, "Swimming");
-        solo.enterText(reason, "IExercise");
+        solo.enterText(reason, "Exercise");
         solo.clickOnEditText(2);
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
