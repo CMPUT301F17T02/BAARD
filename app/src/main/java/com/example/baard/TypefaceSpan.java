@@ -11,6 +11,7 @@ import android.text.style.MetricAffectingSpan;
 import android.util.LruCache;
 
 // Copied from stackoverflow
+// https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
 public class TypefaceSpan extends MetricAffectingSpan {
     /** An <code>LruCache</code> for previously loaded typefaces. */
     private static LruCache<String, Typeface> sTypefaceCache =
