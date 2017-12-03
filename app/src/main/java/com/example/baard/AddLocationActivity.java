@@ -4,27 +4,18 @@
 
 package com.example.baard;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -40,16 +31,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import static android.view.View.VISIBLE;
 
 public class AddLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 14.0f;
-    private static final int UPDATE_INTERVAL = 5000;
-    private static final int FASTEST_INTERVAL = 1000;
     private GoogleMap mMap;
     private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
     private LatLng pinPosition;
@@ -59,6 +45,8 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
     private boolean mLocationPermissionGranted = false;
+    private LocationRequest mLocationRequest;
+    private LocationCallback mLocationCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,32 +81,19 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //final MarkerOptions marker = new MarkerOptions()
-        //        .title("Habit Event Location")
-        //        .snippet("Is this the right location?")
-        //        .position(mDefaultLocation);
+        final MarkerOptions marker = new MarkerOptions()
+                .title("Habit Event Location")
+                .snippet("Is this the right location?")
+                .position(mDefaultLocation);
         mMap = googleMap;
 
-        //mMap.addMarker(marker).setDraggable(true);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-        //pinPosition = marker.getPosition();
+        mMap.addMarker(marker).setDraggable(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+        pinPosition = marker.getPosition();
 
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
-        //Log.d("Add_Location", "FLAG0");
-        //if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)  != -1){
-        //    mMap.setMyLocationEnabled(true);
-        //    mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        //}
-
-        //mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-        //    @Override
-        //    public boolean onMyLocationButtonClick() {
-        //        getDeviceLocation();
-        //        return true;
-        //    }
-        //}) ;
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -170,6 +145,7 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
             }
         }
         updateLocationUI();
+        getDeviceLocation();
     }
 
     private void updateLocationUI() {
@@ -196,11 +172,35 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
      * cases when a location is not available.
      */
         try {
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != -1) {
+            if (mLocationPermissionGranted) {
+                // Location Request to obtain location through GPS or network when  mLastKnownLocation is null
+                mLocationRequest = new LocationRequest()
+                        .setInterval(1000)
+                        .setFastestInterval(1000)
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                // Callback to handle new Location
+                mLocationCallback = new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        for (Location location : locationResult.getLocations()) {
+                            mLastKnownLocation = location;
+                        }
+                        mMap.setMyLocationEnabled(true);
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
+                                mLastKnownLocation.getLongitude())).title("My Location"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(mLastKnownLocation.getLatitude(),
+                                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                        mFusedLocationProviderClient.removeLocationUpdates(mLocationCallback);
+                    }
+                };
+                // Get last known location
                 Task locationResult = mFusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(this, new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
+                        Log.d("Add_Location", "Running onComplete");
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = (Location) task.getResult();
@@ -214,15 +214,21 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
                                 Log.d("Add_Location", "Current location is null. Using defaults.");
                                 Log.e("Add_Location", "Exception: %s", task.getException());
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                                mMap.setMyLocationEnabled(false);
+                                mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                             }
                         } else {
                             Log.d("Add_Location", "Current location is null. Using defaults.");
                             Log.e("Add_Location", "Exception: %s", task.getException());
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                            mMap.setMyLocationEnabled(false);
+                            mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                         }
                     }
                 });
+            } else {
+                Log.d("Add_Location", "Permission is not granted.");
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
             }
         } catch(SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
