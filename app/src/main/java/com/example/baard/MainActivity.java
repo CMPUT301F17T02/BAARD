@@ -201,7 +201,8 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_viewFriends) {
-            Toast.makeText(this, "COMING SOON!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
+            startActivity(intent);
         } else if (id == R.id.nav_help) {
             Toast.makeText(this, R.string.help, Toast.LENGTH_SHORT).show();
             fragment = new HelpFragment();

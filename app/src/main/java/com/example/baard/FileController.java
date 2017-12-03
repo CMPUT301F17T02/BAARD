@@ -143,7 +143,7 @@ public class FileController {
      * Load the user from the server
      * @return User stored on server
      */
-    private User loadUserFromServer(String username) {
+    public User loadUserFromServer(String username) {
         ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
         getUserTask.execute(username);
         User user;
@@ -175,7 +175,8 @@ public class FileController {
         User friend = loadUserFromServer(friendUsername);
         User me = loadUser(context, myUsername);
         if (friend != null) {
-            friend.getReceivedRequests().add(me);
+            friend.getReceivedRequests().put(me.getUsername(), me.getName());
+            me.getFriends().put(friend.getUsername(), Boolean.FALSE);
             saveUserToServer(friend);
             return true;
         } else {
@@ -194,8 +195,8 @@ public class FileController {
         User friend = loadUserFromServer(friendUsername);
         User me = loadUser(context, myUsername);
         if (friend != null) {
-            me.getReceivedRequests().delete(friend);
-            friend.getFriends().add(me);
+            me.getReceivedRequests().remove(friend.getUsername());
+            friend.getFriends().put(me.getUsername(), Boolean.TRUE);
             return true;
         } else {
             return false;

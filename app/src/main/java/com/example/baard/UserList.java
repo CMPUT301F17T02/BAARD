@@ -37,6 +37,6 @@ public class UserList {
 
     public int size() {return users.size();}
 
-    public ArrayList<User> getArrayList() {return users;}
+    public ArrayList<User> getArrayList() { return users; }
 
 }
