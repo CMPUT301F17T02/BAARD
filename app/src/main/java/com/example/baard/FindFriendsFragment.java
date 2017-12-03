@@ -65,6 +65,7 @@ public class FindFriendsFragment extends Fragment {
         }
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
+        System.out.println("All Users: " + allUsers.getArrayList());
 
         fc = new FileController();
 
