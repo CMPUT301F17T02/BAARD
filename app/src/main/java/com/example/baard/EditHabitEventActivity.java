@@ -254,7 +254,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
             commentEditText.setError("Comment is too long (20 char max).");
             isValidHabitEvent = false;
         } catch (IllegalArgumentException i) {
-            dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
+            dateEditText.setError("Invalid date entry");
             isValidHabitEvent = false;
         } catch (HabitEvent.DateAlreadyExistsException x){
             dateEditText.setError("A HabitEvent already exists on this date.");
