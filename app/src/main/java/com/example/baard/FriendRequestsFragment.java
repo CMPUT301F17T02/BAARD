@@ -246,7 +246,6 @@ public class FriendRequestsFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     String acceptPerson = seenUsersList.get(groupPosition);
-                    String key = null;
                     allUsersList.remove(acceptPerson);
 
                     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
@@ -275,6 +274,7 @@ public class FriendRequestsFragment extends Fragment {
                     String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
                     User user = fc.loadUser(_context, username);
                     user.getReceivedRequests().remove(declinedPerson);
+                    getFriendRequestsList.remove(declinedPerson);
                     fc.saveUser(_context, user);
 //                    Toast.makeText(this, "Declined Friend", Toast.LENGTH_SHORT).show();
                     _listDataHeader.remove(groupPosition);

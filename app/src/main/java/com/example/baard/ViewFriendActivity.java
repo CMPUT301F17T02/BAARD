@@ -25,7 +25,7 @@ import java.util.List;
 public class ViewFriendActivity extends AppCompatActivity {
 
     private int position;
-    private String friendName;
+    private String friendName, friendUsername;
     private String username;
     private FileController fileController;
     private User user;
@@ -43,7 +43,8 @@ public class ViewFriendActivity extends AppCompatActivity {
         // grab the index of the item in the list
         Bundle extras = getIntent().getExtras();
         position = extras.getInt("position");
-        friendName = extras.getString("friendUsername");
+        friendUsername = extras.getString("friendUsername");
+        friendName = extras.getString("friendName");
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
@@ -63,13 +64,13 @@ public class ViewFriendActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        User friend = fileController.loadUserFromServer(friendName);
+        User friend = fileController.loadUserFromServer(friendUsername);
 
         final List habitList = friend.getHabits().getArrayList();
 
         ListView listView = (ListView) findViewById(R.id.habit_scroller_listview);
         TextView title = (TextView) findViewById(R.id.friend_title);
-        title.setText(friend.getName());
+        title.setText(friendName);
 
         ArrayAdapter<Habit> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, habitList);
         listView.setAdapter(adapter);
