@@ -10,7 +10,11 @@ import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 import android.util.LruCache;
 
-// Copied from stackoverflow
+/**
+ * @author minsoung
+ * @since 2.0
+ * // Copied from stackoverflow
+ */
 public class TypefaceSpan extends MetricAffectingSpan {
     /** An <code>LruCache</code> for previously loaded typefaces. */
     private static LruCache<String, Typeface> sTypefaceCache =
