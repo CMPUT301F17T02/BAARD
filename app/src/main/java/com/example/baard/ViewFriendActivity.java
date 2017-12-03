@@ -64,7 +64,7 @@ public class ViewFriendActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        User friend = fileController.loadUserFromServer(friendUsername);
+        final User friend = fileController.loadUserFromServer(friendUsername);
 
         final List habitList = friend.getHabits().getArrayList();
 
@@ -80,6 +80,8 @@ public class ViewFriendActivity extends AppCompatActivity {
                 //tell the ViewRecordActivity which list item has been selected and start it
                 Intent intent = new Intent(getApplicationContext(), ViewFriendHabitActivity.class);
                 intent.putExtra("HabitPosition", i);
+                intent.putExtra("habitName", habitList.get(i).toString());
+                intent.putExtra("user", friend.getUsername());
                 startActivity(intent);
             }
         });

@@ -49,21 +49,9 @@ public class FindFriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_find_friends, container, false);
 
-//        for (int i = 0; i < 10; i++) {
-//            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
-//            System.out.println(allUserList.get(i).getName());
-//        }
 
         getAllUsersTask.execute();
 
-//        try {
-//            allUsers = getAllUsersTask.get();
-//
-//            allUsers.getArrayList().remove(user);
-//            allUsers.delete(user);
-//        } catch (InterruptedException | ExecutionException e) {
-//            e.printStackTrace();
-//        }
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
         System.out.println("All Users: " + allUsers.getArrayList());
@@ -95,7 +83,7 @@ public class FindFriendsFragment extends Fragment {
         try {
             allUsers = getAllUsersTask.get();
 
-            getAllUsersTask.get().delete(user);
+//            getAllUsersTask.get().delete(user);
 //            allUsers.getArrayList().remove(user);
 //            allUsers.delete(user);
         } catch (InterruptedException | ExecutionException e) {
