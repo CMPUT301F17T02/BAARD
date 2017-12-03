@@ -62,7 +62,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private Gson gson;
     private final DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-    private boolean setRadioButton;
+    private boolean locationExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +143,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
         });
 
         if (habitEvent.getLocation() != null) {
-            setRadioButton = true;
+            locationExists = true;
         }
 
         getSupportActionBar().setTitle("Edit Habit Event");
@@ -158,10 +158,9 @@ public class EditHabitEventActivity extends AppCompatActivity {
         if (locationPosition != null) {
             radioButton.setChecked(true);
             radioButton.setText(R.string.yesLocation);
-        } else if (setRadioButton) {
+        } else if (locationExists) {
             radioButton.setChecked(true);
             radioButton.setText(R.string.yesLocation);
-            setRadioButton = false;
         } else {
             radioButton.setChecked(false);
             radioButton.setText(R.string.noLocation);
@@ -290,7 +289,6 @@ public class EditHabitEventActivity extends AppCompatActivity {
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
-        //TODO: TEST IF WE NEED THE CHECKREADPERMISSION FUNCTION
         if (checkReadPermission() == -1){
             return;
         }

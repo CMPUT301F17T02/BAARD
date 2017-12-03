@@ -11,11 +11,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
@@ -41,7 +39,6 @@ import com.google.gson.reflect.TypeToken;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 public class ViewMapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
@@ -56,7 +53,7 @@ public class ViewMapActivity extends AppCompatActivity
 
     private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
     private LatLng mCurrentLocation = mDefaultLocation;
-    private static final float DISTANCE = 5f;
+    private static final float DISTANCE = 5000f;
     private static final float DEFAULT_ZOOM = 14.0f;
 
     private SharedPreferences sharedPrefs;
@@ -129,27 +126,6 @@ public class ViewMapActivity extends AppCompatActivity
         // set markers for user
         setMarkers(user, false, myMarkers);
 
-        try {
-            // now make visible all markers that are filtered in habit history
-            String json = sharedPrefs.getString("filteredHabitEvents", "");
-            List<HabitEvent> filteredHabitEvents = gson.fromJson(json, new TypeToken<List<HabitEvent>>() {}.getType());
-            setVisibleMarkers(filteredHabitEvents, true);
-        } catch (Exception e) {
-            // in case there was no filter saved, just show them all
-            Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
-            for (Habit habit : user.getHabits().getArrayList()) {
-                setVisibleMarkers(habit.getEvents().getArrayList(), true);
-            }
-        }
-
-        // set the markers for friends
-        if (user.getFriends().size() > 0) {
-            for (String friendStr : user.getFriends().keySet()) {
-                User friend = fileController.loadUserFromServer(friendStr);
-                setMarkers(friend, true, friendMarkers);
-            }
-        }
-
         buildGoogleApiClient();
     }
 
@@ -167,6 +143,33 @@ public class ViewMapActivity extends AppCompatActivity
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
+
+        try {
+            // now make visible all markers that are filtered in habit history
+            String json = sharedPrefs.getString("filteredHabitEvents", "");
+            List<HabitEvent> filteredHabitEvents = gson.fromJson(json, new TypeToken<List<HabitEvent>>() {}.getType());
+            setVisibleMarkers(filteredHabitEvents, true, myMarkers);
+        } catch (Exception e) {
+            // in case there was no filter saved, just show them all
+            Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
+            for (Habit habit : user.getHabits().getArrayList()) {
+                setVisibleMarkers(habit.getEvents().getArrayList(), true, myMarkers);
+            }
+        }
+
+        // set the markers for friends
+        if (user.getFriends().size() > 0) {
+            for (String friendStr : user.getFriends().keySet()) {
+                if (user.getFriends().get(friendStr)) {
+                    User friend = fileController.loadUserFromServer(friendStr);
+                    setMarkers(friend, true, friendMarkers);
+                    for (Habit habit : friend.getHabits().getArrayList()) {
+                        setVisibleMarkers(habit.getEvents().getArrayList(), true, friendMarkers);
+                    }
+                }
+            }
+        }
+
     }
 
     @Override
@@ -175,12 +178,12 @@ public class ViewMapActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
-    private void getLocationPermission() {
     /*
      * Request location permission, so that we can get the location of the
      * device. The result of the permission request is handled by a callback,
      * onRequestPermissionsResult.
      */
+    private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -228,11 +231,11 @@ public class ViewMapActivity extends AppCompatActivity
         }
     }
 
-    private void getDeviceLocation() {
     /*
      * Get the best and most recent location of the device, which may be null in rare
      * cases when a location is not available.
      */
+    private void getDeviceLocation() {
         try {
             if (mLocationPermissionGranted) {
                 // Location Request to obtain location through GPS or network when  mLastKnownLocation is null
@@ -281,31 +284,6 @@ public class ViewMapActivity extends AppCompatActivity
     }
 
     /**
-     * Depending on the filter set by the user, make the appropriate markers visible for them
-     * to see on the map.
-     * @param events
-     * @param withDistance boolean to set whether or not distance should be calculated
-     */
-    private void setVisibleMarkers(List<HabitEvent> events, Boolean withDistance) {
-        for (HabitEvent habitEvent : events) {
-            LatLng location = habitEvent.getLocation();
-            if (myMarkers.get(location) != null) {
-                float[] dist = {0f,0f,0f};
-                Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
-                        location.latitude, location.longitude, dist);
-                if (withDistance) {
-                    if (dist[0] <= DISTANCE) {
-                        myMarkers.get(location).setVisible(true);
-                    }
-                } else {
-                    myMarkers.get(location).setVisible(true);
-                }
-            }
-        }
-
-    }
-
-    /**
      * Generates all markers for the map.
      * By specifying whether or not it is a friend, the color is set appropriately,
      * as well as only showing the most recent habit event for the friend.
@@ -342,5 +320,31 @@ public class ViewMapActivity extends AppCompatActivity
                 }
             }
         }
+    }
+
+
+    /**
+     * Depending on the filter set by the user, make the appropriate markers visible for them
+     * to see on the map.
+     * @param events
+     * @param withDistance boolean to set whether or not distance should be calculated
+     */
+    private void setVisibleMarkers(List<HabitEvent> events, Boolean withDistance, HashMap<LatLng, Marker> markers) {
+        for (HabitEvent habitEvent : events) {
+            LatLng location = habitEvent.getLocation();
+            if (markers.get(location) != null) {
+                float[] dist = {0f,0f,0f};
+                Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
+                        location.latitude, location.longitude, dist);
+                if (withDistance) {
+                    if (dist[0] <= DISTANCE) {
+                        markers.get(location).setVisible(true);
+                    }
+                } else {
+                    markers.get(location).setVisible(true);
+                }
+            }
+        }
+
     }
 }
