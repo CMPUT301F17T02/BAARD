@@ -131,7 +131,9 @@ public class FriendsListFragment extends Fragment {
 
         myFriendsMap = user.getFriends();
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
-        for (String username : friendsList) {
+
+        ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
+        for (String username : iterationList) {
             User friend = fileController.loadUserFromServer(username);
             if (friend == null) {
 //                  myFriendsMap.remove(username);
