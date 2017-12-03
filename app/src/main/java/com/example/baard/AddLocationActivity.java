@@ -219,10 +219,10 @@ public class AddLocationActivity extends AppCompatActivity
                         if (mEditLocation == null) {
                             mMarker.setPosition(new LatLng(mLastKnownLocation.getLatitude(),
                                     mLastKnownLocation.getLongitude()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(mLastKnownLocation.getLatitude(),
+                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                         }
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, mLocationCallback);
                     }
                 };

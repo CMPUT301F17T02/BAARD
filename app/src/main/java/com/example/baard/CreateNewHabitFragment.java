@@ -174,17 +174,6 @@ public class CreateNewHabitFragment extends Fragment {
         return myView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        titleText.setText("");
-        reasonText.setText("");
-        startDateText.setText("");
-        setToggleButtons(getView());
-        titleText.requestFocus();
-        frequency =  new ArrayList<>();
-    }
-
     private void changeFont(View myView) {
         Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
 
