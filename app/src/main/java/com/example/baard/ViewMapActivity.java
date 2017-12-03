@@ -41,14 +41,9 @@ public class ViewMapActivity extends AppCompatActivity implements OnMapReadyCall
     private HashMap<LatLng, Marker> friendMarkers = new HashMap<>();
     private User user;
 
-    private boolean mLocationPermissionGranted;
     private LatLng mDefaultLocation = new LatLng(53.5444, -113.490);
     private LatLng mLastKnownLocation = new LatLng(53.5444, -113.490);
-    private Object mFusedLocationProviderClient;
-
-    private static final String KEY_CAMERA_POSITION = "camera_position";
-    private static final String KEY_LOCATION = "location";
-    private static final float DISTANCE = 5000f;
+    private static final float DISTANCE = 5f;
 
     private SharedPreferences sharedPrefs;
     private Gson gson;

@@ -59,6 +59,7 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
     private boolean mLocationPermissionGranted = false;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,32 +94,10 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //final MarkerOptions marker = new MarkerOptions()
-        //        .title("Habit Event Location")
-        //        .snippet("Is this the right location?")
-        //        .position(mDefaultLocation);
         mMap = googleMap;
-
-        //mMap.addMarker(marker).setDraggable(true);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-        //pinPosition = marker.getPosition();
-
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
-        //Log.d("Add_Location", "FLAG0");
-        //if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)  != -1){
-        //    mMap.setMyLocationEnabled(true);
-        //    mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        //}
-
-        //mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-        //    @Override
-        //    public boolean onMyLocationButtonClick() {
-        //        getDeviceLocation();
-        //        return true;
-        //    }
-        //}) ;
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -128,7 +107,6 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
 
             @Override
             public void onMarkerDrag(Marker marker) {
-
             }
 
             @Override
@@ -205,21 +183,40 @@ public class AddLocationActivity extends AppCompatActivity implements OnMapReady
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = (Location) task.getResult();
                             if (mLastKnownLocation != null) {
-                                mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude())).title("My Location"));
+                                marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
+                                        mLastKnownLocation.getLongitude()))
+                                        .title("My Location")
+                                        .snippet("Move the marker"));
+                                marker.setDraggable(true);
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                pinPosition = marker.getPosition();
                             } else {
                                 Log.d("Add_Location", "Current location is null. Using defaults.");
                                 Log.e("Add_Location", "Exception: %s", task.getException());
+                                String json = sharedPrefs.getString("locationPosition", "");
+                                LatLng locationPosition = gson.fromJson(json, new TypeToken<LatLng>() {}.getType());
+                                if (locationPosition != null) {
+                                    mDefaultLocation = locationPosition;
+                                }
+                                marker = mMap.addMarker(new MarkerOptions().position(mDefaultLocation)
+                                        .title("My Location")
+                                        .snippet("Move the marker"));
+                                marker.setDraggable(true);
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                                pinPosition = marker.getPosition();
                             }
                         } else {
                             Log.d("Add_Location", "Current location is null. Using defaults.");
                             Log.e("Add_Location", "Exception: %s", task.getException());
+                            marker = mMap.addMarker(new MarkerOptions().position(mDefaultLocation)
+                                    .title("My Location")
+                                    .snippet("Move the marker"));
+                            marker.setDraggable(true);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                            pinPosition = marker.getPosition();
                         }
                     }
                 });

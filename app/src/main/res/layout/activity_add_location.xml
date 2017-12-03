@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:onClick="cancel"
-        android:text="@string/cancel"
+        android:text="@string/remove"
         map:layout_constraintBottom_toBottomOf="@+id/frameLayout"
         map:layout_constraintHorizontal_chainStyle="spread"
         map:layout_constraintLeft_toLeftOf="parent"
