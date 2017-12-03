@@ -70,10 +70,16 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
     public void onStart() {
         super.onStart();
 
-        // Create Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        // Create Map
+        if (habitEvent.getLocation() != null) {
+            mapFragment.getView().setVisibility(View.VISIBLE);
+            mapFragment.getMapAsync(this);
+        } else {
+            mapFragment.getView().setVisibility(View.GONE);
+        }
 
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
