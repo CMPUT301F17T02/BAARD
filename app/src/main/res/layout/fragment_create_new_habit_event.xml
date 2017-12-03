@@ -139,7 +139,8 @@
         app:layout_constraintHorizontal_bias="0.054"
         app:layout_constraintLeft_toRightOf="@+id/addLocationButton"
         app:layout_constraintRight_toRightOf="parent"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:clickable="false"/>
 
     <!--<com.google.android.gms.maps.MapView-->
         <!--android:id="@+id/mapView"-->

@@ -121,13 +121,6 @@ public class CreateNewHabitEventFragment extends Fragment {
         gson = new Gson();
         clearLocation();
 
-        // set the map icon
-//        mapView = (MapView) v.findViewById(R.id.mapView);
-//        mapView.onCreate(savedInstanceState);
-//        if (mapView != null) {
-//            map = mapView.getMapAsync(getActivity());
-//        }
-
         // get list of habits from user
         user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
         try {
