@@ -126,7 +126,7 @@ public class ViewMapActivity extends AppCompatActivity
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         // set markers for user
-        setMarkers(user, true, myMarkers);
+        setMarkers(user, false, myMarkers);
 
         // set the markers for friends
         if (user.getFriends().size() > 0) {
@@ -138,23 +138,38 @@ public class ViewMapActivity extends AppCompatActivity
             }
         }
 
-//        // set the distance toggle filter
-//        ToggleButton distanceToggle = findViewById(R.id.toggleDistance);
-//        distanceToggle.setChecked(true);
-//        distanceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                setVisibilityOfMyMarkers(isChecked);
-//                setVisibilityOfMyFriends(isChecked);
-//            }
-//        });
-
+        // set the distance toggle filter
+        final ToggleButton distanceToggle = findViewById(R.id.toggleDistance);
+        distanceToggle.setChecked(true);
         // set the friends toggle filter
-        ToggleButton friendsToggle = findViewById(R.id.toggleFriend);
+        final ToggleButton friendsToggle = findViewById(R.id.toggleFriend);
         friendsToggle.setChecked(true);
+
+
+        distanceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                setVisibilityOfMyMarkers(isChecked, true);
+                if (friendsToggle.isChecked()) {
+                    setVisibilityOfMyFriends(isChecked, true);
+                }
+            }
+        });
+
         friendsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // turns all off or on
                 for (LatLng location : friendMarkers.keySet()) {
-                    friendMarkers.get(location).setVisible(isChecked);
+                    // ensure checked by distance
+                    if (distanceToggle.isChecked()) {
+                        float[] dist = {0f,0f,0f};
+                        Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
+                                location.latitude, location.longitude, dist);
+                        if (dist[0] <= DISTANCE) {
+                            friendMarkers.get(location).setVisible(isChecked);
+                        }
+                    } else {
+                        friendMarkers.get(location).setVisible(isChecked);
+                    }
                 }
             }
         });
@@ -176,10 +191,11 @@ public class ViewMapActivity extends AppCompatActivity
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
+        boolean withDistance = true;
+        boolean isToggle = false;
 
-        setVisibilityOfMyMarkers(true);
-
-        setVisibilityOfMyFriends(true);
+        setVisibilityOfMyMarkers(withDistance, isToggle);
+        setVisibilityOfMyFriends(withDistance, isToggle);
     }
 
     @Override
@@ -342,16 +358,18 @@ public class ViewMapActivity extends AppCompatActivity
      * @param events
      * @param withDistance boolean to set whether or not distance should be calculated
      */
-    private void setVisibleMarkers(List<HabitEvent> events, Boolean withDistance, HashMap<LatLng, Marker> markers) {
+    private void setVisibleMarkers(List<HabitEvent> events, Boolean withDistance, HashMap<LatLng, Marker> markers, boolean toggle) {
         for (HabitEvent habitEvent : events) {
             LatLng location = habitEvent.getLocation();
             if (markers.get(location) != null) {
-                float[] dist = {0f,0f,0f};
-                Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
-                        location.latitude, location.longitude, dist);
                 if (withDistance) {
+                    float[] dist = {0f,0f,0f};
+                    Location.distanceBetween(mCurrentLocation.latitude, mCurrentLocation.longitude,
+                            location.latitude, location.longitude, dist);
                     if (dist[0] <= DISTANCE) {
                         markers.get(location).setVisible(true);
+                    } else if (toggle) {
+                        markers.get(location).setVisible(false);
                     }
                 } else {
                     markers.get(location).setVisible(true);
@@ -365,17 +383,17 @@ public class ViewMapActivity extends AppCompatActivity
      * Sets the visibility of the user's markers with whether or not they want distance factored
      * @param withDistance
      */
-    private void setVisibilityOfMyMarkers(boolean withDistance) {
+    private void setVisibilityOfMyMarkers(boolean withDistance, boolean toggle) {
         try {
             // now make visible all markers that are filtered in habit history
             String json = sharedPrefs.getString("filteredHabitEvents", "");
             List<HabitEvent> filteredHabitEvents = gson.fromJson(json, new TypeToken<List<HabitEvent>>() {}.getType());
-            setVisibleMarkers(filteredHabitEvents, withDistance, myMarkers);
+            setVisibleMarkers(filteredHabitEvents, withDistance, myMarkers, toggle);
         } catch (Exception e) {
             // in case there was no filter saved, just show them all
             Toast.makeText(this, "NOTE: No Filter. Go to HABIT HISTORY!", Toast.LENGTH_LONG).show();
             for (Habit habit : user.getHabits().getArrayList()) {
-                setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, myMarkers);
+                setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, myMarkers, toggle);
             }
         }
     }
@@ -384,14 +402,14 @@ public class ViewMapActivity extends AppCompatActivity
      * Sets the visibility of the user friends' marker with whether or not they want distance factored
      * @param withDistance
      */
-    private void setVisibilityOfMyFriends(boolean withDistance) {
+    private void setVisibilityOfMyFriends(boolean withDistance, boolean toggle) {
         // set the markers for friends
         if (user.getFriends().size() > 0) {
             for (String friendStr : user.getFriends().keySet()) {
                 if (user.getFriends().get(friendStr)) { // they accepted to be my friend
                     User friend = fileController.loadUserFromServer(friendStr);
                     for (Habit habit : friend.getHabits().getArrayList()) {
-                        setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, friendMarkers);
+                        setVisibleMarkers(habit.getEvents().getArrayList(), withDistance, friendMarkers, toggle);
                     }
                 }
             }
