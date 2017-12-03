@@ -62,9 +62,8 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         solo.assertCurrentActivity("wrong acitivty", MainActivity.class);
         solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("All Habits");
+        solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
     }
 
     @Test
@@ -96,23 +95,56 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
 
     @Test
     public void testDeleteFromAll() {
-        //TODO
+        solo.clickOnImage(0);
+        solo.clickOnText("Create New Habit");
+        solo.waitForFragmentById(R.layout.fragment_create_new_habit, 2000);
+        solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_create_new_habit);
+
+        // fill out the details for the habit
+        EditText title = (EditText) solo.getView(R.id.title);
+        EditText reason = (EditText) solo.getView(R.id.reason);
+
+        solo.enterText(title, "Swimming");
+        solo.enterText(reason, "IExercise");
+        solo.clickOnEditText(2);
+        solo.setDatePicker(0,2017,2,16);
+        solo.clickOnText("OK");
+        solo.clickOnText("Mon");
+        solo.clickOnButton("Create");
+
+        // ensure the page moved to view for success & detail there
+        solo.waitForActivity(ViewHabitActivity.class, 2000);
+
+        // go to main page and check it is in list
+        solo.clickOnImage(0);
+        solo.clickOnImage(0);
+        solo.clickOnText("All Habits");
+
+        solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
+        assertTrue(solo.searchText("Swimming", 1, true, true));
+
+        // click on it to be deleted (for testing and so that this test can run again
+        // as there cannot be two of the same habit in the database)
+        solo.clickOnText("Swimming");
+        solo.clickOnButton("Delete");
+
+        assertFalse(solo.searchText("Swimming", 1, true, true));
     }
 
     @Override
     public void tearDown() {
-        solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+//        solo.clickOnImage(0);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
 
         solo.finishOpenedActivities();
     }
