@@ -219,6 +219,9 @@ public class ViewHabitActivity extends AppCompatActivity {
 
     }
 
+    private void createBarChart() {
+
+    }
 
     /**
      * Calculates and creates the line chart of events to be displayed
