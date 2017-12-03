@@ -126,13 +126,10 @@ public class FindFriendsFragment extends Fragment {
                         else {
                             viewHolder.button.setText("FOLLOWING");
                             friendList.add(getItem(position));
+                            Boolean test = fc.sendFriendRequest(getContext(), username, getItem(position).getUsername());
+                            if (test) { System.out.println("True: Sent to server"); }
                             System.out.println("Adding to list... " + friendList.getArrayList());
 
-                            for (int i = 0; i < friendList.size(); i++) {
-                                System.out.println("User to be added as a friend " + friendList.getArrayList().get(i).getUsername());
-                                Boolean test = fc.sendFriendRequest(getContext(), username, friendList.getArrayList().get(i).getUsername());
-                                if (test) { System.out.println("True: Sent to server"); }
-                            }
                             // set friends to user
 
                         }

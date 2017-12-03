@@ -121,7 +121,9 @@ public class FriendRequestsFragment extends Fragment {
 
         getFriendRequestsMap = user.getReceivedRequests();
 
-        getFriendRequestsList.addAll(getFriendRequestsMap.keySet());
+        if (!(getFriendRequestsList.size()>0)) {
+            getFriendRequestsList.addAll(getFriendRequestsMap.keySet());
+        }
 
         if (!getFriendRequestsMap.isEmpty()) {
             System.out.println("User's received requests: " + getFriendRequestsMap);
@@ -278,6 +280,7 @@ public class FriendRequestsFragment extends Fragment {
                     fc.saveUser(_context, user);
 //                    Toast.makeText(this, "Declined Friend", Toast.LENGTH_SHORT).show();
                     _listDataHeader.remove(groupPosition);
+//                    _listDataChild.remove(groupPosition);
                     notifyDataSetChanged();
                 }
             });
