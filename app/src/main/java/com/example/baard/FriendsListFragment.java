@@ -132,35 +132,14 @@ public class FriendsListFragment extends Fragment {
 
         myFriendsMap = user.getFriends();
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
-//        for (String username : friendsList) {
-//            User friend = fileController.loadUserFromServer(username);
-//            if (friend == null) {
-////                  myFriendsMap.remove(username);
-//                myFriendsMap.put(username, false);
-//                friendsList.remove(username);
-//            }
-//        }
 
-
-//        for (int i=0; i<friendsList.size(); i++) {
-//            User friend = fileController.loadUserFromServer(friendsList.get(i));
-//            if (friend == null) {
-//                myFriendsMap.remove(friendsList.get(i).toString());
-//                friendsList.remove(friendsList.get(i));
-//            }
-//            user.setFriends(myFriendsMap);
-//        }
-//        fileController.saveUser(getContext(), user);
-
-        Iterator<String> iter = friendsList.iterator();
-
-        while (iter.hasNext()) {
-            String str = iter.next();
-            User friend = fileController.loadUserFromServer(str);
+        ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
+        for (String username : iterationList) {
+            User friend = fileController.loadUserFromServer(username);
             if (friend == null) {
 //                  myFriendsMap.remove(username);
-                myFriendsMap.put(str, false);
-                friendsList.remove(str);
+                myFriendsMap.put(username, false);
+                friendsList.remove(username);
             }
 
         }

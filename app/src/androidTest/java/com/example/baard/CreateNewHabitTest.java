@@ -21,7 +21,6 @@ import com.robotium.solo.Solo;
 public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     private Solo solo;
-    private CreateNewHabitFragment fragment;
 
     /**
      * @throws DataFormatException
@@ -38,22 +37,8 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
     protected void setUp() throws Exception {
         // get instrumentation get all info from device writing on
         // get activity gets link to lonely twitter
-        Activity activity = getActivity();
-        fragment = new CreateNewHabitFragment();
-        solo = new Solo(getInstrumentation(), activity);
+        solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP","setUp()");
-    }
-
-    /**
-     * First creation test ensure that a habit is properly created.
-     * This ALSO tests delete so that create test can run properly next time.
-     * @assumption the user account has already been registered
-     * @author Randi
-     * @throws Exception
-     */
-    public void testCreate1AndDelete() throws Exception {
-
-        Activity activity = getActivity();
 
         // if already logged in, log out to ensure we are on TEST user
         if (!(solo.searchButton("Register", true))) {
@@ -80,6 +65,24 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
         // go to main activity
         solo.waitForActivity(MainActivity.class, 2000);
+    }
+
+    /**
+     * First creation test ensure that a habit is properly created.
+     * This ALSO tests delete so that create test can run properly next time.
+     * @assumption the user account has already been registered
+     * @author Randi
+     * @throws Exception
+     */
+    public void testCreate1AndDelete() throws Exception {
+
+        solo.clickOnImage(0);
+        solo.clickOnText("All Habits");
+
+        if (solo.searchText("Swimming", 1, true, true)) {
+            solo.clickOnText("Swimming");
+            solo.clickOnButton("Delete");
+        }
 
         // select create new habit
         solo.clickOnImage(0);
@@ -91,18 +94,18 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         EditText reason = (EditText) solo.getView(R.id.reason);
 
         solo.enterText(title, "Swimming");
-        Assert.assertTrue(solo.searchText("Swimming"));
+        assertTrue(solo.searchText("Swimming"));
 
         solo.enterText(reason, "I need to get fit");
-        Assert.assertTrue(solo.searchText("I need to get fit"));
+        assertTrue(solo.searchText("I need to get fit"));
 
         solo.clickOnEditText(2);
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
-        Assert.assertTrue(solo.searchText("16/03/2017"));
+        assertTrue(solo.searchText("16/03/2017"));
 
         solo.clickOnText("Mon");
-        Assert.assertTrue(solo.isToggleButtonChecked("Mon"));
+        assertTrue(solo.isToggleButtonChecked("Mon"));
 
         // create the habit
         solo.clickOnButton("Create");
@@ -116,9 +119,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         // go to main page and check it is in list
         solo.clickOnImage(0);
         solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("All Habits");
 
         solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
         assertTrue(solo.searchText("Swimming", true));
@@ -131,10 +132,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.waitForActivity(MainActivity.class, 2000);
 
         solo.clickOnImage(0);
-//        solo.clickOnText("All Habits");
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("All Habits");
 
         solo.getCurrentActivity().getFragmentManager().findFragmentById(R.layout.fragment_all_habits);
 
@@ -149,13 +147,7 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
      * @throws Exception
      */
     public void testCreate2Duplicate() throws Exception {
-
-        Activity activity = getActivity();
-
         // already logged in as previous test case
-
-        // go to main activity
-        solo.waitForActivity(MainActivity.class, 2000);
 
         // select create new habit
         solo.clickOnImage(0);
@@ -168,34 +160,32 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
         // should already be in database
         solo.enterText(title, "Jogging");
-        Assert.assertTrue(solo.searchText("Jogging"));
+        assertTrue(solo.searchText("Jogging"));
 
         solo.enterText(reason, "I need to get fit");
-        Assert.assertTrue(solo.searchText("I need to get fit"));
+        assertTrue(solo.searchText("I need to get fit"));
 
         solo.clickOnEditText(2);
         solo.setDatePicker(0,2017,2,16);
         solo.clickOnText("OK");
-        Assert.assertTrue(solo.searchText("16/03/2017"));
+        assertTrue(solo.searchText("16/03/2017"));
 
         solo.clickOnText("Mon");
-        Assert.assertTrue(solo.isToggleButtonChecked("Mon"));
+        assertTrue(solo.isToggleButtonChecked("Mon"));
 
         // create the habit
         solo.clickOnButton("Create");
 
         // ensure the page DID NOT move to view
-        Assert.assertTrue(solo.searchText("Create New Habit"));
-        Assert.assertTrue(solo.searchText("Jogging"));
+        solo.assertCurrentActivity("wrong activity", MainActivity.class);
+        assertTrue(solo.searchText("Create New Habit"));
+        assertTrue(solo.searchText("Jogging"));
         // ensure error text was set
         Assert.assertTrue(solo.searchText("Title of habit must be unique!"));
 
         // go to main page and check it is in list
         solo.clickOnImage(0);
-//        solo.clickOnText("All Habits");
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("All Habits");
 
         solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
 
@@ -211,13 +201,6 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
      * @throws Exception
      */
     public void testCreate3Blank() throws Exception {
-
-        Activity activity = getActivity();
-
-        // already logged in as previous test case
-
-        // go to main activity
-        solo.waitForActivity(MainActivity.class, 2000);
 
         // select create new habit
         solo.clickOnImage(0);
@@ -251,16 +234,6 @@ public class CreateNewHabitTest extends ActivityInstrumentationTestCase2<LoginAc
 
         solo.clickOnButton("Create");
         Assert.assertTrue(solo.searchText("Title of habit is required!"));
-
-        // don't fill out reason
-//        solo.enterText(title, "Running");
-//        solo.waitForDialogToClose(2000);
-//        Assert.assertTrue(solo.searchText("Running"));
-//
-//        solo.clearEditText(reason);
-//
-//        solo.clickOnButton("Create");
-//        Assert.assertTrue(solo.searchText("Reason of habit is required!"));
 
         // To log out
         solo.clickOnImage(0);

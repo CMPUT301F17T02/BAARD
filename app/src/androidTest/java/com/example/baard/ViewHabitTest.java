@@ -44,14 +44,6 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
         Activity activity = getActivity();
         solo = new Solo(getInstrumentation(), activity);
         Log.d("SETUP","setUp()");
-    }
-
-    /**
-     * First view test ensure that a habit is properly viewed from all habits screen.
-     * @throws Exception
-     */
-    public void testViewAllHabits() throws Exception {
-        Activity activity = getActivity();
 
         // if already logged in, log out
         if (!(solo.searchButton("Register", true))) {
@@ -82,9 +74,14 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         // Go to all habits
         solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("All Habits");
+    }
+
+    /**
+     * First view test ensure that a habit is properly viewed from all habits screen.
+     * @throws Exception
+     */
+    public void testViewAllHabits() throws Exception {
 
         // See what the first activity saved is
         TextView textFromList = solo.getText(1);
@@ -92,14 +89,11 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
 
         // Now need to click on a habit and test the viewing of the habit.
         ArrayList<TextView> list = solo.clickInList(0);
+        solo.clickOnButton("View");
         solo.waitForActivity(ViewHabitActivity.class, 2000);
         solo.assertCurrentActivity("wrong activity", ViewHabitActivity.class);
 
-        TextView viewHabitName = solo.getText(1);
-        Log.i("Clicked on: ", viewHabitName.toString());
-
         assertTrue(solo.searchText(textFromList.getText().toString()));
-        assertEquals(textFromList.getText(), viewHabitName.getText());
     }
 
     /**
@@ -107,9 +101,12 @@ public class ViewHabitTest extends ActivityInstrumentationTestCase2<LoginActivit
      * @throws Exception
      */
     public void testViewHabitFromCreate() throws Exception {
-        Activity activity = getActivity();
-
         // already logged in as previous test case
+
+        if (solo.searchText("Swimming", 1, true, true)) {
+            solo.clickOnText("Swimming");
+            solo.clickOnButton("Delete");
+        }
 
         solo.clickOnImage(0);
         solo.clickOnText("Create New Habit");
