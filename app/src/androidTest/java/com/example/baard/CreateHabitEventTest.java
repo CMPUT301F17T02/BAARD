@@ -30,7 +30,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     //note: these tests assume a Habit exists to create a HabitEvent for.
     private Solo solo;
     //private String dateInput;
-    private LoginActivity activity;
     public CreateHabitEventTest(){
         super(LoginActivity.class);
     }
@@ -44,7 +43,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     public void setUp() throws InterruptedException {
         //DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
         //dateInput = formatter.format(new Date());
-        activity = (LoginActivity) getActivity();
         solo = new Solo(getInstrumentation(), getActivity());
         // log out if we are logged in for each test
         if (!(solo.searchButton("Register", true))) {
@@ -74,13 +72,12 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnImageButton(0);
         solo.clickOnText("Habit Event History");
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);
-        if (solo.searchText("December 25, 2016") == true) {
+        if (solo.searchText("December 25, 2016")) {
             solo.clickOnText("December 25, 2016");
             solo.clickOnText("View");
             solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
         }
-        //solo.clickOnImageButton(0);
-        // select create new habit event
+
         solo.clickOnImageButton(0);
         solo.clickOnImageButton(0);
         solo.clickOnText("Create New Habit Event");
