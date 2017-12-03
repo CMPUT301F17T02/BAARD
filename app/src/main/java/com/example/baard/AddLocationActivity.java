@@ -68,7 +68,7 @@ public class AddLocationActivity extends AppCompatActivity
         gson = new Gson();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPrefsEditor = sharedPrefs.edit();
-        
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -94,6 +94,8 @@ public class AddLocationActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
         if (mEditLocation != null) {
             markerOptions = new MarkerOptions().position(mEditLocation);
         } else {
