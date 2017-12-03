@@ -52,16 +52,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         // view all habits -- front screen to view
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (headerStack.empty()) {
@@ -171,29 +171,23 @@ public class MainActivity extends AppCompatActivity
         FileController fileController = new FileController();
         // Send user to selected fragment
         if (id == R.id.nav_dailyHabits) {
-            Toast.makeText(this, R.string.daily_habits, Toast.LENGTH_SHORT).show();
             fragment = new DailyHabitsFragment();
             nextHeader = getResources().getString(R.string.daily_habits);
         }
         else if (id == R.id.nav_allHabits) {
-            Toast.makeText(this, R.string.all_habits, Toast.LENGTH_SHORT).show();
             fragment = new AllHabitsFragment();
             nextHeader = getResources().getString(R.string.all_habits);
         } else if (id == R.id.nav_newHabit) {
-            Toast.makeText(this, R.string.create_habit, Toast.LENGTH_SHORT).show();
             fragment = new CreateNewHabitFragment();
             nextHeader = getResources().getString(R.string.create_habit);
         } else if (id == R.id.nav_allHabitEvents) {
-            Toast.makeText(this, R.string.habit_history, Toast.LENGTH_SHORT).show();
             fragment = new AllHabitEventsFragment();
             nextHeader = getResources().getString(R.string.habit_history);
         } else if (id == R.id.nav_newHabitEvent) {
-            Toast.makeText(this, R.string.create_event, Toast.LENGTH_SHORT).show();
             fragment = new CreateNewHabitEventFragment();
             nextHeader = getResources().getString(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
             if (fileController.isNetworkAvailable(getApplicationContext())) {
-                Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
                 startActivity(intent);
             } else {
@@ -203,7 +197,6 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
             startActivity(intent);
         } else if (id == R.id.nav_help) {
-            Toast.makeText(this, R.string.help, Toast.LENGTH_SHORT).show();
             fragment = new HelpFragment();
             nextHeader = getResources().getString(R.string.help);
         } else if (id == R.id.nav_logout) {
@@ -211,10 +204,6 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
             SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
-//            sharedPrefs.edit().remove("username").apply();
-//            sharedPrefs.edit().remove("locationPosition").apply();
-//            sharedPrefs.edit().remove("filteredHabitEvents").apply();
-//            sharedPrefs.edit().remove("currentlyViewingHabit").apply();
             sharedPrefsEditor.clear();
             sharedPrefsEditor.commit();
             finish();
@@ -227,7 +216,7 @@ public class MainActivity extends AppCompatActivity
                     .commit();
             setActionBarTitle(nextHeader);
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
