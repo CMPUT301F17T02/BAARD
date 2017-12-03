@@ -19,7 +19,6 @@ import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -31,8 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
 public class AddLocationActivity extends AppCompatActivity
@@ -53,6 +50,7 @@ public class AddLocationActivity extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
     private GoogleApiClient mGoogleApiClient;
+    private MarkerOptions mMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,17 +93,12 @@ public class AddLocationActivity extends AppCompatActivity
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        final MarkerOptions marker = new MarkerOptions()
+        mMarker = new MarkerOptions()
                 .title("Habit Event Location")
                 .snippet("Is this the right location?")
                 .position(mDefaultLocation);
         mMap = googleMap;
-
-        mMap.addMarker(marker).setDraggable(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-        pinPosition = marker.getPosition();
-
-        buildGoogleApiClient();
+        pinPosition = mMarker.getPosition();
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -124,6 +117,7 @@ public class AddLocationActivity extends AppCompatActivity
             }
         });
 
+        buildGoogleApiClient();
     }
 
     @Override
@@ -209,12 +203,13 @@ public class AddLocationActivity extends AppCompatActivity
                 mLocationCallback = new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
+                        mMap.clear();
                         for (Location location : locationResult.getLocations()) {
                             mLastKnownLocation = location;
                         }
                         mMap.setMyLocationEnabled(true);
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
-                                mLastKnownLocation.getLongitude())).title("My Location"));
+                        mMap.addMarker(mMarker.position(new LatLng(mLastKnownLocation.getLatitude(),
+                                mLastKnownLocation.getLongitude()))).setDraggable(true);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -224,19 +219,21 @@ public class AddLocationActivity extends AppCompatActivity
                 // Get last known location
                 mLastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 if (mLastKnownLocation != null) {
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
-                            mLastKnownLocation.getLongitude())).title("My Location"));
+                    mMap.addMarker(mMarker.position(new LatLng(mLastKnownLocation.getLatitude(),
+                            mLastKnownLocation.getLongitude()))).setDraggable(true);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLastKnownLocation.getLatitude(),
                                     mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                 } else {
                     Log.d("Add_Location", "Current location is null. Using defaults.");
+                    mMap.addMarker(mMarker).setDraggable(true);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                     mMap.setMyLocationEnabled(false);
                     LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationCallback, null);
                 }
             } else {
                 Log.d("Add_Location", "Permission is not granted.");
+                mMap.addMarker(mMarker).setDraggable(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
             }
         } catch(SecurityException e)  {
