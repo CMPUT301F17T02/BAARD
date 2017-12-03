@@ -11,7 +11,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--          The WRITE_EXTERNAL_STORAGE permissions are to ensure images are saved and written correctly -->
+    <!-- The WRITE_EXTERNAL_STORAGE permissions are to ensure images are saved and written correctly -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -71,19 +71,46 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ViewHabitActivity" />
         </activity>
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".ExploreFriends"
+            android:label="@string/title_activity_explore_friends"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoTitle.Transulcent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.baard.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".ViewFriendActivity"
+            android:label="@string/title_activity_view_friend"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".ViewFriendHabitActivity"
+            android:label="ViewFriendHabit"
+            android:parentActivityName=".ViewFriendActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ViewFriendActivity" />
+        </activity>
         <receiver
-            android:name="com.example.baard.AlarmReceiver"
-            android:exported="true" >
+            android:name=".AlarmReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>
