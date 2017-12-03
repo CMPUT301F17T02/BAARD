@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import com.robotium.solo.Solo;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.theories.suppliers.TestedOn;
 
 
 /**
@@ -48,6 +49,7 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         if (!(solo.searchButton("Register", true))) {
             solo.clickOnImage(0);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
+            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
             solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -98,9 +100,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
         solo.setDatePicker(0,2016,11,25);
         solo.clickOnText("OK");
-        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        //solo.enterText(date, "25/12/2016");
-        //String dateString = date.getText().toString();
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
@@ -209,6 +208,28 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);
         solo.clickOnText("December 25, 2016");
         solo.clickOnText("View");
+        solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
+    }
+
+    @Test
+    public void testCreateHabitEventWithLocaton(){
+        solo.pressSpinnerItem(0,0);
+        Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
+        String habitName = spinner.getSelectedItem().toString();
+        solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
+        solo.setDatePicker(0,2016,11,25);
+        solo.clickOnText("OK");
+        EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        solo.enterText(comment, "test comment");
+        solo.clickOnView(solo.getView(R.id.addLocationButton));
+        solo.assertCurrentActivity("Should be in AddLocationActivity",AddLocationActivity.class);
+        solo.clickOnView(solo.getView(R.id.save));
+        solo.assertCurrentActivity("Should be back in CreateHabitEventFragment", MainActivity.class);
+        solo.clickOnView(solo.getView(R.id.saveButton));
+        solo.assertCurrentActivity("Should be in ViewHabitEventActivity",ViewHabitEventActivity.class);
+        solo.searchText("test comment");
+        solo.searchText(habitName);
+        // now delete it
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
 }
