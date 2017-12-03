@@ -44,8 +44,6 @@ public class EditHabitActivity extends AppCompatActivity {
     private EditText editTextTitle, editTextReason, editTextStartDate;
     private ArrayList<Day> frequency;
     private DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-    private int position;
-    private String username;
     private FileController fc;
     private User user;
     private Calendar calendar = Calendar.getInstance();
@@ -64,25 +62,25 @@ public class EditHabitActivity extends AppCompatActivity {
 
         // grab the index of the item in the list
         Bundle extras = getIntent().getExtras();
-        position = extras.getInt("position");
+        Integer position = extras.getInt("position");
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
-        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         // load required data
         user = fc.loadUser(getApplicationContext(), username);
         habit = user.getHabits().getHabit(position);
 
         // set all of the values for the habit to be edited
-        editTextTitle = (EditText) findViewById(R.id.title);
-        editTextReason = (EditText) findViewById(R.id.reason);
+        editTextTitle = findViewById(R.id.title);
+        editTextReason = findViewById(R.id.reason);
         editTextTitle.setText(habit.getTitle());
         editTextReason.setText(habit.getReason());
         frequency = habit.getFrequency();
 
         calendar.setTime(habit.getStartDate());
-        editTextStartDate = (EditText) findViewById(R.id.startDate);
+        editTextStartDate = findViewById(R.id.startDate);
         editTextStartDate.setText(formatter.format(habit.getStartDate()));
         editTextStartDate.setFocusable(false);
         editTextStartDate.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +92,7 @@ public class EditHabitActivity extends AppCompatActivity {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
                         editTextStartDate.setText(sdf.format(calendar.getTime()));
                     }
                 };
@@ -117,21 +115,21 @@ public class EditHabitActivity extends AppCompatActivity {
         Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
         // Change font
-        TextView newHabit_title = (TextView) findViewById(R.id.newHabit_title);
-        TextView newHabit_reason = (TextView) findViewById(R.id.newHabit_reason);
-        TextView newHabit_startDate = (TextView) findViewById(R.id.newHabit_startDate);
-        TextView newHabit_daysOfWeek = (TextView) findViewById(R.id.newHabit_daysOfWeek);
+        TextView newHabit_title = findViewById(R.id.newHabit_title);
+        TextView newHabit_reason = findViewById(R.id.newHabit_reason);
+        TextView newHabit_startDate = findViewById(R.id.newHabit_startDate);
+        TextView newHabit_daysOfWeek = findViewById(R.id.newHabit_daysOfWeek);
         newHabit_title.setTypeface(ralewayRegular);
         newHabit_reason.setTypeface(ralewayRegular);
         newHabit_startDate.setTypeface(ralewayRegular);
         newHabit_daysOfWeek.setTypeface(ralewayRegular);
-        Button createButton = (Button) findViewById(R.id.save);
+        Button createButton = findViewById(R.id.save);
         createButton.setTypeface(ralewayRegular);
-        editTextTitle = (EditText) findViewById(R.id.title);
+        editTextTitle = findViewById(R.id.title);
         editTextTitle.setTypeface(ralewayRegular);
-        editTextReason = (EditText) findViewById(R.id.reason);
+        editTextReason = findViewById(R.id.reason);
         editTextReason.setTypeface(ralewayRegular);
-        editTextStartDate = (EditText) findViewById(R.id.startDate);
+        editTextStartDate = findViewById(R.id.startDate);
         editTextStartDate.setTypeface(ralewayRegular);
 
         ArrayList<ToggleButton> toggles = new ArrayList<>();
