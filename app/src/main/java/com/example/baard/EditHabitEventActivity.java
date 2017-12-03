@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -20,6 +21,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +37,8 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -146,7 +151,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
             locationExists = true;
         }
 
-        getSupportActionBar().setTitle("Edit Habit Event");
+        setActionBarTitle("Edit Habit Event");
+        changeFont();
     }
 
     @Override
@@ -165,6 +171,40 @@ public class EditHabitEventActivity extends AppCompatActivity {
             radioButton.setChecked(false);
             radioButton.setText(R.string.noLocation);
         }
+    }
+
+    private void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        TextView habitName = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
+        TextView dateTextView = (TextView) findViewById(R.id.editHabitEventDate);
+        TextView commentTextView = (TextView) findViewById(R.id.editHabitEventComment);
+        TextView commentEditText = (EditText) findViewById(R.id.commentEditText);
+        Button selectImageButton = (Button) findViewById(R.id.selectImageButton);
+        Button addLocationButton = (Button) findViewById(R.id.addLocationButton);
+        Button saveChangesButton = (Button) findViewById(R.id.saveChangesButton);
+
+        habitName.setTypeface(ralewayRegular);
+        dateTextView.setTypeface(ralewayRegular);
+        commentTextView.setTypeface(ralewayRegular);
+        commentEditText.setTypeface(ralewayRegular);
+        selectImageButton.setTypeface(ralewayRegular);
+        addLocationButton.setTypeface(ralewayRegular);
+        saveChangesButton.setTypeface(ralewayRegular);
+    }
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
     }
 
     /**
