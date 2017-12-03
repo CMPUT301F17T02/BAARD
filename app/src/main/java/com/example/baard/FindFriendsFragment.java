@@ -39,7 +39,6 @@ public class FindFriendsFragment extends Fragment {
     private String username;
     private User user;
     private FileController fc;
-//    List<User> allUserList = new ArrayList<>();
     ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
     UserList allUsers = new UserList();
     private UserList friendList = new UserList();
@@ -59,12 +58,15 @@ public class FindFriendsFragment extends Fragment {
 
         try {
             allUsers = getAllUsersTask.get();
+
             allUsers.getArrayList().remove(user);
+            allUsers.delete(user);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
+        System.out.println("All Users: " + allUsers.getArrayList());
 
         fc = new FileController();
 
