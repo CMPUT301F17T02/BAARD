@@ -192,6 +192,7 @@ public class AddLocationActivity extends AppCompatActivity
      * cases when a location is not available.
      */
         try {
+            mMap.clear();
             if (mLocationPermissionGranted) {
                 // Location Request to obtain location through GPS or network when  mLastKnownLocation is null
                 mLocationRequest = new LocationRequest()
