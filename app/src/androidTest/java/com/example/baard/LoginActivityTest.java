@@ -15,8 +15,10 @@ import com.robotium.solo.Solo;
 import org.junit.Test;
 
 /**
- * Created by Adam on 11/11/2017.
  * Implements testing for the Login Activity
+ * @see android.test.ActivityInstrumentationTestCase2
+ * @see LoginActivity
+ * @author anarten
  */
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
