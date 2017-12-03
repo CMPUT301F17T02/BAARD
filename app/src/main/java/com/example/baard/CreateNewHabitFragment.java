@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
@@ -97,10 +98,10 @@ public class CreateNewHabitFragment extends Fragment {
     /**
      * Called when create habit activity is first created
      *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater The layout inflater
+     * @param container Container for the ViewGroup
+     * @param savedInstanceState Bundle of the saved State
+     * @return View of the fragment activity
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,10 +121,10 @@ public class CreateNewHabitFragment extends Fragment {
             habitNames.add(habits.getHabit(i).getTitle().toLowerCase());
         }
 
-        Button createButton = (Button) myView.findViewById(R.id.create);
-        titleText = (EditText) myView.findViewById(R.id.title);
-        reasonText = (EditText) myView.findViewById(R.id.reason);
-        startDateText = (EditText) myView.findViewById(R.id.startDate);
+        Button createButton = myView.findViewById(R.id.create);
+        titleText = myView.findViewById(R.id.title);
+        reasonText = myView.findViewById(R.id.reason);
+        startDateText = myView.findViewById(R.id.startDate);
         startDateText.setFocusable(false);
         startDateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +136,7 @@ public class CreateNewHabitFragment extends Fragment {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
                         startDateText.setText(sdf.format(calendar.getTime()));
                     }
                 };
@@ -177,21 +178,21 @@ public class CreateNewHabitFragment extends Fragment {
         Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
 
         // Change font
-        TextView newHabit_title = (TextView) myView.findViewById(R.id.newHabit_title);
-        TextView newHabit_reason = (TextView) myView.findViewById(R.id.newHabit_reason);
-        TextView newHabit_startDate = (TextView) myView.findViewById(R.id.newHabit_startDate);
-        TextView newHabit_daysOfWeek = (TextView) myView.findViewById(R.id.newHabit_daysOfWeek);
+        TextView newHabit_title = myView.findViewById(R.id.newHabit_title);
+        TextView newHabit_reason = myView.findViewById(R.id.newHabit_reason);
+        TextView newHabit_startDate = myView.findViewById(R.id.newHabit_startDate);
+        TextView newHabit_daysOfWeek = myView.findViewById(R.id.newHabit_daysOfWeek);
         newHabit_title.setTypeface(ralewayRegular);
         newHabit_reason.setTypeface(ralewayRegular);
         newHabit_startDate.setTypeface(ralewayRegular);
         newHabit_daysOfWeek.setTypeface(ralewayRegular);
-        Button createButton = (Button) myView.findViewById(R.id.create);
+        Button createButton = myView.findViewById(R.id.create);
         createButton.setTypeface(ralewayRegular);
-        titleText = (EditText) myView.findViewById(R.id.title);
+        titleText = myView.findViewById(R.id.title);
         titleText.setTypeface(ralewayRegular);
-        reasonText = (EditText) myView.findViewById(R.id.reason);
+        reasonText = myView.findViewById(R.id.reason);
         reasonText.setTypeface(ralewayRegular);
-        startDateText = (EditText) myView.findViewById(R.id.startDate);
+        startDateText = myView.findViewById(R.id.startDate);
         startDateText.setTypeface(ralewayRegular);
 
         ArrayList<ToggleButton> toggles = new ArrayList<>();
@@ -337,7 +338,7 @@ public class CreateNewHabitFragment extends Fragment {
      * @return
      */
     public Date convertDate(String stringDate) {
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         format.setLenient(false);
         Date date = null;
         try {
