@@ -15,92 +15,123 @@ import java.util.Set;
 
 import io.searchbox.annotations.JestId;
 
-/**
- * Created by biancaangotti on 2017-10-18.
- */
 
+/**
+ * Defines a user for the BAARD Habit Tracker
+ * @author bangotti, minsoung
+ * @since 1.0
+ * @version 3.0
+ * @see HabitList
+ */
 public class User {
     private String name;
     private String username;
     private HabitList habits = new HabitList();
-    private HashMap<String, Boolean> friends = new HashMap<String, Boolean>();
-    private HashMap<String, String> receivedRequests = new HashMap<String, String>();
-    //private UserList friends = new UserList();
-    //private UserList receivedRequests = new UserList();
+    private HashMap<String, Boolean> friends = new HashMap<>();
+    private HashMap<String, String> receivedRequests = new HashMap<>();
 
     @JestId
     private String id;
 
+    /**
+     * Constructor
+     * @param name User's name
+     * @param username User's unique username
+     * @param id User's unique Id for elastic search
+     */
     public User(String name, String username, String id) {
         this.name = name;
         this.username = username;
         this.id = id;
     }
 
+    /**
+     * @return User id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @param id new id
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * @return user name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @param name new name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * @return String username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @param username new String username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * @return Habit list of all habits
+     */
     public HabitList getHabits() {
         return habits;
     }
 
+    /**
+     * @param habits new Habit list
+     */
     public void setHabits(HabitList habits) {
         this.habits = habits;
     }
 
+    /**
+     * @return Hash map of User's friends
+     */
     public HashMap<String, Boolean> getFriends() {
         return friends;
     }
 
+    /**
+     * @param friends new Hash of friends
+     */
     public void setFriends(HashMap<String, Boolean> friends) {
         this.friends = friends;
     }
 
+    /**
+     * @return HashMap of received Requests for friends
+     */
     public HashMap<String, String> getReceivedRequests() {
         return receivedRequests;
     }
 
+    /**
+     * @param receivedRequests new Hash of received requests
+     */
     public void setReceivedRequests(HashMap<String, String> receivedRequests) {
         this.receivedRequests = receivedRequests;
     }
 
-//    public UserList getFriends() {
-//        return friends;
-//    }
-//
-//    public void setFriends(UserList friends) {
-//        this.friends = friends;
-//    }
-//
-//    public UserList getReceivedRequests() {
-//        return receivedRequests;
-//    }
-//
-//    public void setReceivedRequests(UserList receivedRequests) {
-//        this.receivedRequests = receivedRequests;
-//    }
-
+    /**
+     * @return String representation of user
+     */
     @Override
     public String toString() {
         return "Name: " + name + "\nUsername: " + username + "\n";

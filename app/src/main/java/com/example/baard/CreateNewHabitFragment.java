@@ -34,8 +34,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
@@ -58,6 +60,7 @@ public class CreateNewHabitFragment extends Fragment {
     private HashSet<String> habitNames = new HashSet<>();
     private FileController fc;
     private User user;
+    private ArrayList<ToggleButton> toggles = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -97,10 +100,10 @@ public class CreateNewHabitFragment extends Fragment {
     /**
      * Called when create habit activity is first created
      *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater The layout inflater
+     * @param container Container for the ViewGroup
+     * @param savedInstanceState Bundle of the saved State
+     * @return View of the fragment activity
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,10 +123,10 @@ public class CreateNewHabitFragment extends Fragment {
             habitNames.add(habits.getHabit(i).getTitle().toLowerCase());
         }
 
-        Button createButton = (Button) myView.findViewById(R.id.create);
-        titleText = (EditText) myView.findViewById(R.id.title);
-        reasonText = (EditText) myView.findViewById(R.id.reason);
-        startDateText = (EditText) myView.findViewById(R.id.startDate);
+        Button createButton = myView.findViewById(R.id.create);
+        titleText = myView.findViewById(R.id.title);
+        reasonText = myView.findViewById(R.id.reason);
+        startDateText = myView.findViewById(R.id.startDate);
         startDateText.setFocusable(false);
         startDateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +138,7 @@ public class CreateNewHabitFragment extends Fragment {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
                         startDateText.setText(sdf.format(calendar.getTime()));
                     }
                 };
@@ -146,6 +149,15 @@ public class CreateNewHabitFragment extends Fragment {
                 d.show();
             }
         });
+
+        // grab all toggle buttons
+        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
+        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
+        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
+        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
+        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
+        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
 
         // set the toggle buttons for the days of the week
         setToggleButtons(myView);
@@ -159,50 +171,41 @@ public class CreateNewHabitFragment extends Fragment {
         });
 
         changeFont(myView);
+
         // Inflate the layout for this fragment
         return myView;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        titleText.setText("");
-        reasonText.setText("");
-        startDateText.setText("");
-        setToggleButtons(getView());
-        titleText.requestFocus();
-        frequency =  new ArrayList<>();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            if (resultCode == getActivity().RESULT_OK ) {
+                getActivity().onBackPressed();
+            }
+        }
     }
 
     private void changeFont(View myView) {
         Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
 
         // Change font
-        TextView newHabit_title = (TextView) myView.findViewById(R.id.newHabit_title);
-        TextView newHabit_reason = (TextView) myView.findViewById(R.id.newHabit_reason);
-        TextView newHabit_startDate = (TextView) myView.findViewById(R.id.newHabit_startDate);
-        TextView newHabit_daysOfWeek = (TextView) myView.findViewById(R.id.newHabit_daysOfWeek);
+        TextView newHabit_title = myView.findViewById(R.id.newHabit_title);
+        TextView newHabit_reason = myView.findViewById(R.id.newHabit_reason);
+        TextView newHabit_startDate = myView.findViewById(R.id.newHabit_startDate);
+        TextView newHabit_daysOfWeek = myView.findViewById(R.id.newHabit_daysOfWeek);
         newHabit_title.setTypeface(ralewayRegular);
         newHabit_reason.setTypeface(ralewayRegular);
         newHabit_startDate.setTypeface(ralewayRegular);
         newHabit_daysOfWeek.setTypeface(ralewayRegular);
-        Button createButton = (Button) myView.findViewById(R.id.create);
+        Button createButton = myView.findViewById(R.id.create);
         createButton.setTypeface(ralewayRegular);
-        titleText = (EditText) myView.findViewById(R.id.title);
+        titleText = myView.findViewById(R.id.title);
         titleText.setTypeface(ralewayRegular);
-        reasonText = (EditText) myView.findViewById(R.id.reason);
+        reasonText = myView.findViewById(R.id.reason);
         reasonText.setTypeface(ralewayRegular);
-        startDateText = (EditText) myView.findViewById(R.id.startDate);
+        startDateText = myView.findViewById(R.id.startDate);
         startDateText.setTypeface(ralewayRegular);
-
-        ArrayList<ToggleButton> toggles = new ArrayList<>();
-        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
-        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
-        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
-        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
-        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
-        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
 
         for (ToggleButton toggle : toggles) {
             toggle.setTypeface(ralewayRegular);
@@ -257,11 +260,12 @@ public class CreateNewHabitFragment extends Fragment {
                 Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
                 habits.add(habit);
 
+                Collections.sort(habits.getArrayList());
                 fc.saveUser(getActivity().getApplicationContext(), user);
 
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                intent.putExtra("position", habits.size()-1);
-                startActivity(intent);
+                intent.putExtra("position", habits.indexOf(habit));
+                startActivityForResult(intent, 2);
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
                 Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();
@@ -274,15 +278,6 @@ public class CreateNewHabitFragment extends Fragment {
      * This thereby controls the frequency array to which habits should repeat on.
      */
     public void setToggleButtons(View myView) {
-        // store all buttons in order of days in the Day enum
-        ArrayList<ToggleButton> toggles = new ArrayList<>();
-        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
-        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
-        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
-        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
-        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
-        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
         // grab all possible enum values of Day
         final Day[] possibleValues  = Day.values();
 
@@ -338,7 +333,7 @@ public class CreateNewHabitFragment extends Fragment {
      * @return
      */
     public Date convertDate(String stringDate) {
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         format.setLenient(false);
         Date date = null;
         try {

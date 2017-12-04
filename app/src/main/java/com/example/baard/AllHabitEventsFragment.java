@@ -51,12 +51,11 @@ import java.util.zip.DataFormatException;
 public class AllHabitEventsFragment extends Fragment {
 
     private ExpandableListView expandableEventListView;
-    private List<Habit> habitList;
     private List<HabitEvent> habitEventList = new ArrayList<HabitEvent>();
     private final FileController fileController = new FileController();
-    Habit noneHabit;
-    Spinner habitSpinner;
-    EditText commentFilter;
+    private Habit noneHabit;
+    private Spinner habitSpinner;
+    private EditText commentFilter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,25 +69,6 @@ public class AllHabitEventsFragment extends Fragment {
         String json = sharedPrefs.getString("username", "");
         return gson.fromJson(json, new TypeToken<String>() {}.getType());
     }
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment AllHabitEventsFragment.
-     */
-    public static AllHabitEventsFragment newInstance() {
-        AllHabitEventsFragment fragment = new AllHabitEventsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
 
     /**
      * Creates the view when the fragment is started. Sets the onItemClickListener for each habitevent displayed.
@@ -101,11 +81,10 @@ public class AllHabitEventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_habit_events, container, false);
 
-
         User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
         createHabitEventList();
 
-        habitList = user.getHabits().getArrayList();
+        List<Habit> habitList = user.getHabits().getArrayList();
         try {
             noneHabit = new Habit("None", "", new Date(), new ArrayList<Day>());
             habitList.add(0,noneHabit);

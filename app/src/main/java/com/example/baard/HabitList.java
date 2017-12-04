@@ -7,44 +7,79 @@ package com.example.baard;
 import java.util.ArrayList;
 
 /**
- * Created by biancaangotti on 2017-10-20.
+ * List of Habits that a user has
+ * @see Habit
+ * @see User
+ * @since 1.0
+ * @version 1.1
+ * @author rderbysh, bangotti
  */
-
 public class HabitList {
 
     private ArrayList<Habit> habits = new ArrayList<Habit>();
 
+    /**
+     * Constructor
+     */
     public HabitList(){
 
     }
 
+    /**
+     * @param index index in list
+     * @return Habit found
+     */
     public Habit getHabit(int index){
         return habits.get(index);
     }
 
+    /**
+     * @param habit Habit to find
+     * @return Habit found
+     */
     public Habit getHabit(Habit habit){
         int find = habits.indexOf(habit);
         return habits.get(find);
     }
 
+    /**
+     * @param habit Habit to search
+     * @return boolean true if found
+     */
     public boolean hasHabit(Habit habit){
         return habits.contains(habit);
     }
 
+    /**
+     * @param habit Habit to find
+     * @return Index in list
+     */
     public int indexOf(Habit habit) {
         return habits.indexOf(habit);
     }
 
+    /**
+     * @param habit Habit to add
+     */
     public void add(Habit habit) {
         habits.add(habit);
     }
 
+    /**
+     * @param habit Habit to delete
+     */
     public void delete(Habit habit) {
         habits.remove(habit);
     }
 
+    /**
+     * @return arrayList representation of HabitList
+     */
     public ArrayList<Habit> getArrayList() {return habits;}
 
+    /**
+     * @return Integer size of list
+     */
     public int size() {
         return habits.size();
     }
