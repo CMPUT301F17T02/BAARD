@@ -4,7 +4,6 @@
 
 package com.example.baard;
 
-import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -12,6 +11,8 @@ import android.widget.EditText;
 
 import org.junit.Assert;
 import java.util.zip.DataFormatException;
+
+import com.example.baard.Habits.ViewHabitActivity;
 import com.robotium.solo.Solo;
 
 /**

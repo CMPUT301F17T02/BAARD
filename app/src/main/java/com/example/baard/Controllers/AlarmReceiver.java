@@ -2,7 +2,7 @@
  * Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
  */
 
-package com.example.baard;
+package com.example.baard.Controllers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.example.baard.HabitEvents.CreateNewHabitEventFragment;
+import com.example.baard.MainActivity;
+import com.example.baard.R;
 
 
 /**

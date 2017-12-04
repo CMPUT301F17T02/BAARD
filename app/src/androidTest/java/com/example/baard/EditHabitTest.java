@@ -11,10 +11,9 @@ import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.baard.Habits.EditHabitActivity;
+import com.example.baard.Habits.ViewHabitActivity;
 import com.robotium.solo.Solo;
-import static org.junit.Assert.*;
-
-import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;

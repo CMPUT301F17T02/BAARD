@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        tools:context="com.example.baard.ViewHabitActivity"
+        tools:context="com.example.baard.Habits.ViewHabitActivity"
         android:id="@+id/view_habit_scroller"
         android:fillViewport="true">
 

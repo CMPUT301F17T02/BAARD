@@ -10,6 +10,9 @@ import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.Spinner;
 import org.junit.Test;
+
+import com.example.baard.HabitEvents.EditHabitEventActivity;
+import com.example.baard.HabitEvents.ViewHabitEventActivity;
 import com.robotium.solo.Solo;
 
 /**

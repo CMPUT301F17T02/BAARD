@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.baard.AllHabitsFragment">
+    tools:context="com.example.baard.Habits.AllHabitsFragment">
 
     <ExpandableListView
         android:id="@+id/habitListView"

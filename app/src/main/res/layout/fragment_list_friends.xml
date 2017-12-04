@@ -10,7 +10,7 @@
     android:paddingBottom="50dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    tools:context="com.example.baard.ExploreFriends">
+    tools:context="com.example.baard.Friends.ExploreFriends">
 
     <ListView
         android:id="@+id/friendListView"

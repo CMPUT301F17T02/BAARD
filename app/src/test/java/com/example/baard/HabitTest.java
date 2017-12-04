@@ -4,9 +4,12 @@
 
 package com.example.baard;
 
-import android.test.ActivityInstrumentationTestCase2;
+import com.example.baard.Entities.Day;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitEvent;
+import com.example.baard.Entities.HabitEventList;
+import com.example.baard.Entities.HabitList;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
