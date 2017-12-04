@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -144,7 +143,8 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        EditText commentEdit = findViewById(R.id.commentEditText);
+        EditText commentEdit = (EditText) findViewById(R.id.EditCommentEditText);
+
         commentEdit.setText(habitEvent.getComment());
 
         Button imageButton = findViewById(R.id.selectImageButton);
@@ -303,11 +303,11 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         String comment;
         boolean isValidHabitEvent = true;
 
-        EditText dateEditText = findViewById(R.id.dateEditText);
-        EditText commentEditText = findViewById(R.id.commentEditText);
+        EditText dateEditText = (EditText) findViewById(R.id.dateEditText);
+        EditText EditCommentEditText = (EditText) findViewById(R.id.EditCommentEditText);
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
-            comment = commentEditText.getText().toString();
+            comment = EditCommentEditText.getText().toString();
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             c.set(Calendar.HOUR_OF_DAY, 0);
@@ -318,10 +318,10 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
             habitEvent.setEventDate(date);
             habitEvent.setComment(comment);
         } catch (DataFormatException d) {
-            commentEditText.setError("Comment is too long (20 char max).");
+            EditCommentEditText.setError("Comment is too long (20 char max).");
             isValidHabitEvent = false;
         } catch (IllegalArgumentException i) {
-            dateEditText.setError("Date is before habit start date. (" + habit.getStartDate().toString() + ")");
+            dateEditText.setError("Invalid date entry");
             isValidHabitEvent = false;
         } catch (HabitEvent.DateAlreadyExistsException x){
             dateEditText.setError("A HabitEvent already exists on this date.");
