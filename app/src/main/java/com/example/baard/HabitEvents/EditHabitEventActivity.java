@@ -171,6 +171,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         changeFont();
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -227,7 +228,6 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("ViewHabitEvent", "FLAG0");
         mMap = googleMap;
         mMap.clear();
         mMap.getUiSettings().setZoomControlsEnabled(true);
