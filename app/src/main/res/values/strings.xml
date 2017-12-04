@@ -74,7 +74,9 @@
         will occur at 4pm that day as a reminder!\n\n</string>
 
     <string name="no_network">Network not available</string>
-    <string name="_5km"><![CDATA[>5km]]></string>
-    <string name="_5kmLT"><![CDATA[<5km]]></string>
+    <string name="_5km"><![CDATA[<5km]]></string>
+    <string name="explore_friends">Explore Friends</string>
+    <string name="view">View</string>
+    <string name="account">Account</string>
 
 </resources>
