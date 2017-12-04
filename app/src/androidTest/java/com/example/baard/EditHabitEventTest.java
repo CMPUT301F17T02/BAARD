@@ -159,8 +159,10 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         // (Dec 25, 2016)
         //solo.goBack();
         solo.clickOnImageButton(0);
-        //solo.clickOnImageButton(0);
+        solo.waitForText("Habit Event History");
+        solo.clickOnImageButton(0);
         //create a habit event for editing
+        solo.waitForText("Create New Habit Event");
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         solo.pressSpinnerItem(0,0);
@@ -191,12 +193,10 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
     public void testEditLocation() throws InterruptedException{
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
         solo.clickOnButton("Location");
-        Thread.sleep(5000);
-        //solo.waitForActivity(AddLocationActivity.class, 10);
-        //solo.clickOnView(solo.getView(R.id.addLocationButton));
-        //solo.assertCurrentActivity("Should be in AddLocationActivity",AddLocationActivity.class);
+        solo.waitForView(R.id.save);
         solo.clickOnView(solo.getView(R.id.save));
         solo.assertCurrentActivity("Should be back in EditHabitEventFragment", EditHabitEventActivity.class);
+        solo.waitForView(R.id.saveChangesButton);
         solo.clickOnView(solo.getView(R.id.saveChangesButton));
         solo.assertCurrentActivity("Should be in View Habit Event Activity", ViewHabitEventActivity.class);
         solo.searchText("Location Added");
@@ -205,9 +205,11 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
     @Test
     public void testEnterEditFromHabitEventHistory(){
         solo.goBack();
-        solo.clickOnImageButton(0);
+        solo.waitForText("Habit Event History");
+        //solo.clickOnImageButton(0);
         //create a habit event for editing
-        solo.clickOnText("Habit Event History");
+        //solo.clickOnText("Habit Event History");
+        //solo.waitForText("December 25, 2016");
         solo.clickOnText("December 25, 2016");
         solo.clickOnText("Edit");
         solo.assertCurrentActivity("Should be in EditHabitEventActivity", EditHabitEventActivity.class);

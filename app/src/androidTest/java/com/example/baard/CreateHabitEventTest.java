@@ -217,7 +217,7 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
      * currently allow the application permission to access it's location.
      */
     @Test
-    public void testCreateHabitEventWithLocaton(){
+    public void testCreateHabitEventWithLocation(){
         solo.pressSpinnerItem(0,0);
         Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
         String habitName = spinner.getSelectedItem().toString();
@@ -228,8 +228,10 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.addLocationButton));
         solo.assertCurrentActivity("Should be in AddLocationActivity",AddLocationActivity.class);
+        solo.waitForView(R.id.save);
         solo.clickOnView(solo.getView(R.id.save));
         solo.assertCurrentActivity("Should be back in CreateHabitEventFragment", MainActivity.class);
+        solo.waitForView(R.id.saveButton);
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.assertCurrentActivity("Should be in ViewHabitEventActivity",ViewHabitEventActivity.class);
         solo.searchText("test comment");
