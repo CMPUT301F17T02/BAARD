@@ -22,10 +22,13 @@ import java.util.zip.DataFormatException;
 
 import io.searchbox.annotations.JestId;
 
-/**
- * Created by biancaangotti on 2017-10-18.
- */
 
+/**
+ * Class representing a habit
+ * @since 1.0
+ * @version 2.0
+ * @author anarten, bangotti, rderbysh
+ */
 public class Habit implements Comparable<Habit> {
     private String title, reason;
     private String startDate;
@@ -38,11 +41,11 @@ public class Habit implements Comparable<Habit> {
     /**
      * Constructor for Habit
      *
-     * @param title
-     * @param reason
-     * @param startDate
-     * @param frequency
-     * @throws DataFormatException
+     * @param title Habit title
+     * @param reason Habit reason
+     * @param startDate Habit Start Date
+     * @param frequency Habit Frequency
+     * @throws DataFormatException for invalid input
      */
     public Habit(String title, String reason, Date startDate, ArrayList<Day> frequency) throws DataFormatException {
         if (title.length() <= 20) {
@@ -55,7 +58,7 @@ public class Habit implements Comparable<Habit> {
         } else {
             throw new DataFormatException("Reason over 30 characters.");
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         this.startDate = sdf.format(startDate);
         this.frequency = frequency;
     }
@@ -79,7 +82,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Returns title for habit
      *
-     * @return
+     * @return String for title
      */
     public String getTitle() {
         return title;
@@ -88,8 +91,8 @@ public class Habit implements Comparable<Habit> {
     /**
      * Sets title for habit; if over character limit, returns exception
      *
-     * @param title
-     * @throws DataFormatException
+     * @param title new Habit title
+     * @throws DataFormatException on invalid input
      */
     public void setTitle(String title) throws DataFormatException {
         if (title.length() <= 20) {
@@ -102,7 +105,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Returns reason for habit
      *
-     * @return
+     * @return String for reason
      */
     public String getReason() {
         return reason;
@@ -111,8 +114,8 @@ public class Habit implements Comparable<Habit> {
     /**
      * Sets reason for habit; if over character limit, returns exception
      *
-     * @param reason
-     * @throws DataFormatException
+     * @param reason new Reson String
+     * @throws DataFormatException for invalid input
      */
     public void setReason(String reason) throws DataFormatException {
         if (reason.length() <= 30) {
@@ -125,7 +128,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Returns date for habit
      *
-     * @return
+     * @return Date for habit
      */
     public Date getStartDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
@@ -139,7 +142,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Sets date for habit
      *
-     * @param startDate
+     * @param startDate new StartDate
      */
     public void setStartDate(Date startDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
@@ -149,7 +152,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Returns frequency for habit
      *
-     * @return
+     * @return Habit Frequency
      */
     public ArrayList<Day> getFrequency() {
         return frequency;
@@ -158,7 +161,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Sets frequency for habit
      *
-     * @param frequency
+     * @param frequency new Habit frequency
      */
     public void setFrequency(ArrayList<Day> frequency) {
         this.frequency = frequency;
@@ -167,7 +170,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Returns frequency for habit in the form of a string
      *
-     * @return
+     * @return String for frequency of Habit
      */
     public String getFrequencyString() {
         String days = "";
@@ -186,7 +189,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Returns habit events for habit
      *
-     * @return
+     * @return Events for this habit
      */
     public HabitEventList getEvents() {
         return events;
@@ -195,7 +198,7 @@ public class Habit implements Comparable<Habit> {
     /**
      * Sets entire list of habit events for habit
      *
-     * @param events
+     * @param events new events for this habit
      */
     public void setEvents(HabitEventList events) {
         this.events = events;
@@ -317,6 +320,9 @@ public class Habit implements Comparable<Habit> {
         return this.getTitle().toLowerCase().compareTo(habit.getTitle().toLowerCase());
     }
 
+    /**
+     * @return String representation of Habit
+     */
     @Override
     public String toString() {
         return title;

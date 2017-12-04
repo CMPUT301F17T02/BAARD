@@ -8,24 +8,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by biancaangotti on 2017-10-20.
- */
-
-/**
  * A class designed to hold a list of HabitEvents.
  * @author amckerna
  * @version 1.0
  */
 public class HabitEventList {
 
-    private ArrayList<HabitEvent> events = new ArrayList<HabitEvent>();
+    private ArrayList<HabitEvent> events = new ArrayList<>();
 
     public HabitEventList(){}
 
     /**
      * Return the HabitEvent at the specified index
-     * @param index
-     * @return
+     * @param index position in list
+     * @return Habit event found
      */
     public HabitEvent getHabitEvent(int index){
         return events.get(index);
@@ -33,8 +29,8 @@ public class HabitEventList {
 
     /**
      * Return the HabitEvent matching the given object.
-     * @param habitEvent
-     * @return
+     * @param habitEvent event to get
+     * @return Habit Event found
      */
     public HabitEvent getHabitEvent(HabitEvent habitEvent){
         int find = events.indexOf(habitEvent);
@@ -43,7 +39,7 @@ public class HabitEventList {
 
     /**
      * Check whether a given HabitEvent is within the list.
-     * @param event
+     * @param event event to find
      * @return boolean representing whether the HabitEvent is within the list
      */
     public boolean hasHabitEvent(HabitEvent event){
@@ -52,7 +48,7 @@ public class HabitEventList {
 
     /**
      * add a given HabitEvent to the list.
-     * @param event
+     * @param event event to add
      */
     public void add(HabitEvent event) {
         events.add(event);
@@ -60,7 +56,7 @@ public class HabitEventList {
 
     /**
      * remove a specified HabitEvent from the list.
-     * @param event
+     * @param event event to delete
      */
     public void delete(HabitEvent event) {
         events.remove(event);
@@ -68,7 +64,7 @@ public class HabitEventList {
 
     /**
      * return an ArrayList representing the HabitEventList
-     * @return
+     * @return ArrayList representing HabitEventList
      */
     public ArrayList<HabitEvent> getArrayList(){
         return events;
@@ -76,7 +72,7 @@ public class HabitEventList {
 
     /**
      * return the number of elements of the list as an int.
-     * @return
+     * @return size of HabitEventList (number of events)
      */
     public int size(){ return events.size(); }
 

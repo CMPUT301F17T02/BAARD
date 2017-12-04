@@ -354,7 +354,7 @@ public class CreateNewHabitEventFragment extends Fragment {
             // go to view habitevent activity
             Intent intent = new Intent(getActivity(), ViewHabitEventActivity.class);
             intent.putExtra("habitEventDate",habitEvent.getEventDate().toString());
-            startActivity(intent);
+            startActivityForResult(intent, 3);
         }
     }
 
@@ -459,6 +459,13 @@ public class CreateNewHabitEventFragment extends Fragment {
             image = myBitmap;
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 3) {
+            if (resultCode == getActivity().RESULT_OK ) {
+                getActivity().onBackPressed();
+            }
         }
     }
 
