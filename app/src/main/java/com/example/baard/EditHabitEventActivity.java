@@ -13,14 +13,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -131,7 +129,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
             }
         });
 
-        EditText commentEdit = (EditText) findViewById(R.id.commentEditText);
+        EditText commentEdit = (EditText) findViewById(R.id.EditCommentEditText);
         commentEdit.setText(habitEvent.getComment());
 
         Button imageButton = (Button) findViewById(R.id.selectImageButton);
@@ -237,10 +235,10 @@ public class EditHabitEventActivity extends AppCompatActivity {
         boolean isValidHabitEvent = true;
 
         EditText dateEditText = (EditText) findViewById(R.id.dateEditText);
-        EditText commentEditText = (EditText) findViewById(R.id.commentEditText);
+        EditText EditCommentEditText = (EditText) findViewById(R.id.EditCommentEditText);
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
-            comment = commentEditText.getText().toString();
+            comment = EditCommentEditText.getText().toString();
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             c.set(Calendar.HOUR_OF_DAY, 0);
@@ -251,7 +249,7 @@ public class EditHabitEventActivity extends AppCompatActivity {
             habitEvent.setEventDate(date);
             habitEvent.setComment(comment);
         } catch (DataFormatException d) {
-            commentEditText.setError("Comment is too long (20 char max).");
+            EditCommentEditText.setError("Comment is too long (20 char max).");
             isValidHabitEvent = false;
         } catch (IllegalArgumentException i) {
             dateEditText.setError("Invalid date entry");

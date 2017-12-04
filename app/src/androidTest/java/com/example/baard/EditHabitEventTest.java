@@ -96,7 +96,8 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
     @Test
     public void testEditComment(){
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
-        EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        EditText comment = (EditText) solo.getView(R.id.EditCommentEditText);
+        solo.clearEditText(comment);
         solo.enterText(comment, "Edited comment");
         solo.clickOnView(solo.getView(R.id.saveChangesButton));
         solo.assertCurrentActivity("Should be in View Habit Event Activity", ViewHabitEventActivity.class);
@@ -106,7 +107,8 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
     @Test
     public void testEditTooLongComment(){
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
-        EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        EditText comment = (EditText) solo.getView(R.id.EditCommentEditText);
+        solo.clearEditText(comment);
         solo.enterText(comment, "This comment is, similar to the comment used in other tests, much too long for a habit event. C'mon guys, what were you thinking???");
         solo.clickOnView(solo.getView(R.id.saveChangesButton));
         solo.searchText("Comment is too long (20 char max).");
@@ -152,8 +154,9 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
     public void testEditDateToSameDateAsAnotherEvent(){
         // create another habit, then edit it to the same date as the one created at the start of every test
         // (Dec 25, 2016)
-        solo.goBack();
+        //solo.goBack();
         solo.clickOnImageButton(0);
+        //solo.clickOnImageButton(0);
         //create a habit event for editing
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
@@ -164,6 +167,7 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.setDatePicker(0,2016,11,15);
         solo.clickOnText("OK");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
+        solo.clearEditText(comment);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.assertCurrentActivity("Should be in ViewHabitEventActivity",ViewHabitEventActivity.class);
@@ -177,7 +181,22 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.assertCurrentActivity("Should still be in editHabitEventActivity", EditHabitEventActivity.class);
         //now go back and delete the Dec 15 habit event
         solo.goBack();
-        solo.clickOnView(solo.getView(R.id.deleteButton));
+        solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
+    }
+
+    @Test
+    public void testEditLocation() throws InterruptedException{
+        solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
+        solo.clickOnButton("Location");
+        Thread.sleep(5000);
+        //solo.waitForActivity(AddLocationActivity.class, 10);
+        //solo.clickOnView(solo.getView(R.id.addLocationButton));
+        //solo.assertCurrentActivity("Should be in AddLocationActivity",AddLocationActivity.class);
+        solo.clickOnView(solo.getView(R.id.save));
+        solo.assertCurrentActivity("Should be back in EditHabitEventFragment", EditHabitEventActivity.class);
+        solo.clickOnView(solo.getView(R.id.saveChangesButton));
+        solo.assertCurrentActivity("Should be in View Habit Event Activity", ViewHabitEventActivity.class);
+        solo.searchText("Location Added");
     }
 
     @Test

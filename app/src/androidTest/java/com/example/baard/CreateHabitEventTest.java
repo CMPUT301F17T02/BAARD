@@ -10,9 +10,8 @@ import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.Spinner;
 import com.robotium.solo.Solo;
-import org.junit.BeforeClass;
+
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 
 
 /**
