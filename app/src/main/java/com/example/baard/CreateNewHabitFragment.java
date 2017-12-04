@@ -265,7 +265,7 @@ public class CreateNewHabitFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
                 intent.putExtra("position", habits.indexOf(habit));
-                startActivity(intent, 2);
+                startActivityForResult(intent, 2);
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
                 Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();
