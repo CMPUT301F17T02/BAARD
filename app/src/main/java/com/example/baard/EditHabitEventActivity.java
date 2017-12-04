@@ -192,7 +192,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         TextView habitName = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
         TextView dateTextView = (TextView) findViewById(R.id.editHabitEventDate);
         TextView commentTextView = (TextView) findViewById(R.id.editHabitEventComment);
-        TextView commentEditText = (EditText) findViewById(R.id.commentEditText);
+        TextView commentEditText = (EditText) findViewById(R.id.EditCommentEditText);
         Button selectImageButton = (Button) findViewById(R.id.selectImageButton);
         Button addLocationButton = (Button) findViewById(R.id.addLocationButton);
         Button saveChangesButton = (Button) findViewById(R.id.saveChangesButton);
