@@ -5,6 +5,7 @@
 package com.example.baard;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -23,15 +24,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -95,6 +103,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         setActionBarTitle("View Habit");
+        changeFont();
     }
 
     /**
@@ -120,6 +129,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         frequencyView.setText(habit.getFrequencyString());
 
         createPieChart();
+        createBarChart();
         createLineChart();
         listHabitEvents();
 
@@ -228,21 +238,26 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the Pie chart of events to be displayed
      */
     private void createPieChart() {
-        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, new Date(Long.MIN_VALUE), new Date());
+        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit);
 
         // Create Pie Chart
         PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
-        pieChart.setHoleRadius(0);
+        pieChart.getLegend().setEnabled(false);
+        pieChart.setHoleRadius(1);
         pieChart.setTransparentCircleRadius(0);
         pieChart.setMaxHighlightDistance(0);
         pieChart.setDragDecelerationFrictionCoef(0.9f);
         pieChart.getDescription().setEnabled(false);
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
-        yValues.add(new PieEntry(habitCompletionData.completed, "Completed"));
-        yValues.add(new PieEntry(habitCompletionData.notCompleted, "Not Completed"));
+        if (habitCompletionData.completed > 0) {
+            yValues.add(new PieEntry(habitCompletionData.completed, "Completed On Time"));
+        }
+        if (habitCompletionData.total - habitCompletionData.completed > 0) {
+            yValues.add(new PieEntry(habitCompletionData.total - habitCompletionData.completed, "Not Completed on Time"));
+        }
 
-        PieDataSet dataSet = new PieDataSet(yValues, "# of Habits");
+        PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setSliceSpace(3f);
         dataSet.setValueFormatter(new IValueFormatter() {
@@ -255,7 +270,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         PieData data = new PieData(dataSet);
         pieChart.setEntryLabelColor(Color.DKGRAY);
         pieChart.setData(data);
-        if (habitCompletionData.notCompleted == 0 && habitCompletionData.completed == 0) {
+        Log.d("HabitStat", String.valueOf(habitCompletionData.total));
+        if (habitCompletionData.total == 0) {
             pieChart.setVisibility(View.GONE);
         } else {
           pieChart.setData(data);
@@ -263,6 +279,65 @@ public class ViewHabitActivity extends AppCompatActivity {
 
     }
 
+    private void createBarChart() {
+        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit);
+
+        // Crate Bar Chart
+        HorizontalBarChart barChart = (HorizontalBarChart) findViewById(R.id.habit_barChart);
+        barChart.setScaleEnabled(false);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getXAxis().setDrawAxisLine(true);
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        barChart.getAxisLeft().setAxisMinimum(0f);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getDescription().setEnabled(false);
+
+        ArrayList<BarEntry> entries1 = new ArrayList<BarEntry>();
+        ArrayList<BarEntry> entries2 = new ArrayList<BarEntry>();
+        ArrayList<BarEntry> entries3 = new ArrayList<BarEntry>();
+        entries1.add(new BarEntry(0f, habitCompletionData.total));
+        entries2.add(new BarEntry(1f, habitCompletionData.late));
+        entries3.add(new BarEntry(2f, habitCompletionData.completed));
+
+        BarDataSet dataSet1 = new BarDataSet(entries1, "Total to be completed");
+        BarDataSet dataSet2 = new BarDataSet(entries2, "Late");
+        BarDataSet dataSet3 = new BarDataSet(entries3, "Completed on time");
+        IValueFormatter formatter1 = new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return "" + ((int)value);
+            }
+        };
+        dataSet1.setValueFormatter(formatter1);
+        dataSet2.setValueFormatter(formatter1);
+        dataSet3.setValueFormatter(formatter1);
+        dataSet1.setColors(ColorTemplate.MATERIAL_COLORS[1]);
+        dataSet2.setColors(ColorTemplate.MATERIAL_COLORS[2]);
+        dataSet3.setColors(ColorTemplate.MATERIAL_COLORS[0]);
+
+        BarData data = new BarData();
+        data.addDataSet(dataSet1);
+        data.addDataSet(dataSet2);
+        data.addDataSet(dataSet3);
+
+        if (habitCompletionData.total == 0) {
+            barChart.setVisibility(View.GONE);
+        } else {
+            barChart.setData(data);
+        }
+        barChart.setFitBars(true);
+        barChart.getXAxis().setLabelCount(3);
+        barChart.getLegend().setEnabled(true);
+
+        IAxisValueFormatter formatter2 = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return "";
+            }
+        };
+
+        barChart.getXAxis().setValueFormatter(formatter2);
+    }
 
     /**
      * Calculates and creates the line chart of events to be displayed
@@ -276,22 +351,26 @@ public class ViewHabitActivity extends AppCompatActivity {
         lineChart.setScaleEnabled(false);
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.getXAxis().setDrawGridLines(false);
-        lineChart.getAxisLeft().setDrawGridLines(false);
-        lineChart.getAxisRight().setDrawGridLines(false);
+        lineChart.getAxisLeft().setDrawGridLines(true);
         lineChart.getDescription().setEnabled(false);
         lineChart.getAxisRight().setEnabled(false);
+        lineChart.getLegend().setEnabled(false);
 
         ArrayList<Entry> yValues = new ArrayList<>();
         for (HabitStatistics.HabitCompletionVsTimeData data : habitCompletionVsTimesData) {
             yValues.add(new Entry(data.time, data.habitCompletion));
         }
 
-        LineDataSet set1 = new LineDataSet(yValues, "DataSet");
-
-        set1.setColor(Color.BLACK);
+        LineDataSet set1 = new LineDataSet(yValues, "Habits Completed On Time");
+        set1.setDrawValues(false);
+        set1.setCircleColor(Color.rgb(0, 153, 76));
+        set1.setMode(LineDataSet.Mode.LINEAR);
+        set1.setColor(Color.rgb(0, 153, 76));
         set1.setLineWidth(1f);
         set1.setValueTextSize(10f);
         set1.setValueTextColor(Color.BLACK);
+        set1.setFillColor(Color.rgb(0, 153, 76));
+        set1.setDrawFilled(true);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
@@ -304,24 +383,27 @@ public class ViewHabitActivity extends AppCompatActivity {
             lineChart.setVisibility(View.GONE);
         }
 
-        lineChart.getXAxis().setValueFormatter(new MyAxisValueFormatter());
-        lineChart.getXAxis().setGranularity(1f);
-    }
 
-    /**
-     * Formats the scale of the x axis for the line chart
-     */
-    private class MyAxisValueFormatter implements IAxisValueFormatter {
-
-        @Override
-        public String getFormattedValue(float value, AxisBase axis) {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd",Locale.ENGLISH);
-            Calendar calendar = Calendar.getInstance();
-//            Log.d("LineChart", Float.toString(value));
-            calendar.setTimeInMillis((long)value);
-
-            return sdf.format(calendar.getTime());
+        if (habitCompletionVsTimesData.size() < 5) {
+            lineChart.getXAxis().setLabelCount(habitCompletionVsTimesData.size(), true);
+        } else {
+            lineChart.getXAxis().setLabelCount(5, true);
         }
+        //lineChart.getXAxis().setAxisMinimum(habitCompletionVsTimesData.get(0).time - 1000000);
+        //lineChart.getXAxis().setAxisMaximum(habitCompletionVsTimesData.get(habitCompletionVsTimesData.size() - 1).time + 1000000);
+
+        IAxisValueFormatter formatter = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd",Locale.ENGLISH);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((long)value);
+
+                return sdf.format(calendar.getTime());
+            }
+        };
+
+        lineChart.getXAxis().setValueFormatter(formatter);
     }
 
     private void listHabitEvents() {
@@ -333,7 +415,8 @@ public class ViewHabitActivity extends AppCompatActivity {
                 e.setHabit(habit);
             }
 
-            ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, habitEventList);
+            //ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, habitEventList);
+            ListAdapter adapter = new ListAdapter(this, R.layout.listview_habit, habitEventList);
 
             eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -350,24 +433,52 @@ public class ViewHabitActivity extends AppCompatActivity {
             eventsList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            if (habitEventList.size()*150 < 450) {
-                eventsList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, habitEventList.size()*150));
-            } else {
-                eventsList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 450));
+            //eventsList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 450));
 
-                eventsList.setOnTouchListener(new View.OnTouchListener() {
-                    // Setting on Touch Listener for handling the touch inside ScrollView
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        // Disallow the touch request for parent scroll on touch of child view
-                        view.getParent().requestDisallowInterceptTouchEvent(true);
-                        return false;
-                    }
-                });
-            }
+            eventsList.setOnTouchListener(new View.OnTouchListener() {
+                // Setting on Touch Listener for handling the touch inside ScrollView
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    // Disallow the touch request for parent scroll on touch of child view
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                    return false;
+                }
+            });
         } else {
             eventsList.setVisibility(View.GONE);
             findViewById(R.id.no_events_textView).setVisibility(View.VISIBLE);
+        }
+    }
+
+    // Copied from https://stackoverflow.com/questions/8166497/custom-adapter-for-list-view
+    public class ListAdapter extends ArrayAdapter<HabitEvent> {
+        public ListAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+        }
+
+        public ListAdapter(Context context, int resource, List<HabitEvent> items) {
+            super(context, resource, items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            HabitEvent habitEvent = getItem(position);
+            Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+            if (convertView == null) {
+                LayoutInflater vi;
+                vi = LayoutInflater.from(getContext());
+                convertView = vi.inflate(R.layout.listview_habit, null);
+            }
+
+            if (habitEvent != null) {
+                TextView date = convertView.findViewById(R.id.date);
+                date.setTypeface(ralewayRegular);
+                DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+                date.setText(formatter.format(habitEvent.getEventDate()));
+            }
+
+            return convertView;
         }
     }
 }
