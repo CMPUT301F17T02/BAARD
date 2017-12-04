@@ -27,10 +27,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -50,6 +56,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -108,6 +115,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         frequencyView.setText(habit.getFrequencyString());
 
         createPieChart();
+        createBarChart();
         createLineChart();
         listHabitEvents();
 
@@ -184,21 +192,26 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the Pie chart of events to be displayed
      */
     private void createPieChart() {
-        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, new Date(Long.MIN_VALUE), new Date());
+        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit);
 
         // Create Pie Chart
         PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
-        pieChart.setHoleRadius(0);
+        pieChart.getLegend().setEnabled(false);
+        pieChart.setHoleRadius(1);
         pieChart.setTransparentCircleRadius(0);
         pieChart.setMaxHighlightDistance(0);
         pieChart.setDragDecelerationFrictionCoef(0.9f);
         pieChart.getDescription().setEnabled(false);
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
-        yValues.add(new PieEntry(habitCompletionData.completed, "Completed"));
-        yValues.add(new PieEntry(habitCompletionData.notCompleted, "Not Completed"));
+        if (habitCompletionData.completed > 0) {
+            yValues.add(new PieEntry(habitCompletionData.completed, "Completed On Time"));
+        }
+        if (habitCompletionData.total - habitCompletionData.completed > 0) {
+            yValues.add(new PieEntry(habitCompletionData.total - habitCompletionData.completed, "Not Completed"));
+        }
 
-        PieDataSet dataSet = new PieDataSet(yValues, "# of Habits");
+        PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setSliceSpace(3f);
         dataSet.setValueFormatter(new IValueFormatter() {
@@ -211,7 +224,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         PieData data = new PieData(dataSet);
         pieChart.setEntryLabelColor(Color.DKGRAY);
         pieChart.setData(data);
-        if (habitCompletionData.notCompleted == 0 && habitCompletionData.completed == 0) {
+        Log.d("HabitStat", String.valueOf(habitCompletionData.total));
+        if (habitCompletionData.total == 0) {
             pieChart.setVisibility(View.GONE);
         } else {
           pieChart.setData(data);
@@ -220,7 +234,57 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     private void createBarChart() {
+        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit);
 
+        // Crate Bar Chart
+        HorizontalBarChart barChart = (HorizontalBarChart) findViewById(R.id.habit_barChart);
+        barChart.setScaleEnabled(false);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getXAxis().setDrawAxisLine(true);
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        barChart.getAxisLeft().setAxisMinimum(0f);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getDescription().setEnabled(false);
+
+        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+        entries.add(new BarEntry(0f, habitCompletionData.total));
+        entries.add(new BarEntry(1f, habitCompletionData.late));
+        entries.add(new BarEntry(2f, habitCompletionData.completed));
+
+        BarDataSet dataSet = new BarDataSet(entries, "dataSet");
+        dataSet.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return "" + ((int)value);
+            }
+        });
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+
+        BarData data = new BarData(dataSet);
+
+        if (habitCompletionData.total == 0) {
+            barChart.setVisibility(View.GONE);
+        } else {
+            barChart.setData(data);
+        }
+        barChart.setFitBars(true);
+        barChart.getXAxis().setLabelCount(3);
+        barChart.getLegend().setEnabled(false);
+
+        final ArrayList<String> labels = new ArrayList<String>();
+        labels.add("Total");
+        labels.add("Late");
+        labels.add("Completed");
+
+        IAxisValueFormatter formatter = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                Log.d("TAG", String.valueOf((int)value));
+                return labels.get((int)value);
+            }
+        };
+
+        barChart.getXAxis().setValueFormatter(formatter);
     }
 
     /**
@@ -235,22 +299,26 @@ public class ViewHabitActivity extends AppCompatActivity {
         lineChart.setScaleEnabled(false);
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.getXAxis().setDrawGridLines(false);
-        lineChart.getAxisLeft().setDrawGridLines(false);
-        lineChart.getAxisRight().setDrawGridLines(false);
+        lineChart.getAxisLeft().setDrawGridLines(true);
         lineChart.getDescription().setEnabled(false);
         lineChart.getAxisRight().setEnabled(false);
+        lineChart.getLegend().setEnabled(false);
 
         ArrayList<Entry> yValues = new ArrayList<>();
         for (HabitStatistics.HabitCompletionVsTimeData data : habitCompletionVsTimesData) {
             yValues.add(new Entry(data.time, data.habitCompletion));
         }
 
-        LineDataSet set1 = new LineDataSet(yValues, "DataSet");
-
-        set1.setColor(Color.BLACK);
+        LineDataSet set1 = new LineDataSet(yValues, "Habits Completed On Time");
+        set1.setDrawValues(false);
+        set1.setCircleColor(Color.rgb(0, 153, 76));
+        set1.setMode(LineDataSet.Mode.LINEAR);
+        set1.setColor(Color.rgb(0, 153, 76));
         set1.setLineWidth(1f);
         set1.setValueTextSize(10f);
         set1.setValueTextColor(Color.BLACK);
+        set1.setFillColor(Color.rgb(0, 153, 76));
+        set1.setDrawFilled(true);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
@@ -263,24 +331,27 @@ public class ViewHabitActivity extends AppCompatActivity {
             lineChart.setVisibility(View.GONE);
         }
 
-        lineChart.getXAxis().setValueFormatter(new MyAxisValueFormatter());
-        lineChart.getXAxis().setGranularity(1f);
-    }
 
-    /**
-     * Formats the scale of the x axis for the line chart
-     */
-    private class MyAxisValueFormatter implements IAxisValueFormatter {
-
-        @Override
-        public String getFormattedValue(float value, AxisBase axis) {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd",Locale.ENGLISH);
-            Calendar calendar = Calendar.getInstance();
-//            Log.d("LineChart", Float.toString(value));
-            calendar.setTimeInMillis((long)value);
-
-            return sdf.format(calendar.getTime());
+        if (habitCompletionVsTimesData.size() < 5) {
+            lineChart.getXAxis().setLabelCount(habitCompletionVsTimesData.size(), true);
+        } else {
+            lineChart.getXAxis().setLabelCount(5, true);
         }
+        //lineChart.getXAxis().setAxisMinimum(habitCompletionVsTimesData.get(0).time - 1000000);
+        //lineChart.getXAxis().setAxisMaximum(habitCompletionVsTimesData.get(habitCompletionVsTimesData.size() - 1).time + 1000000);
+
+        IAxisValueFormatter formatter = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd",Locale.ENGLISH);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((long)value);
+
+                return sdf.format(calendar.getTime());
+            }
+        };
+
+        lineChart.getXAxis().setValueFormatter(formatter);
     }
 
     private void listHabitEvents() {

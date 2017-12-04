@@ -25,22 +25,22 @@ public class HabitStatistics {
     /**
      * Calculates the completion of a habit based on the start and end dates, events and frequency
      * @param habit
-     * @param startDate
-     * @param endDate
      * @return
      */
-    public HabitCompletionData calcHabitCompletion(Habit habit, Date startDate, Date endDate) {
+    public HabitCompletionData calcHabitCompletion(Habit habit) {
         HabitEventList habitEventList = habit.getEvents();
         HashSet<Integer> frequency = new HashSet<Integer>();
-
-        int completed = 0;
-        int notCompleted = 0;
+        Date startDate = habit.getStartDate();
+        Date endDate = new Date();
 
         for (Day day : habit.getFrequency()) {
             frequency.add(day.getValue());
         }
 
-        System.out.println(habitEventList.size());
+        int completed = 0;
+        int late = 0;
+        int total = getDaysOfWeekBetweenDates(startDate, endDate, frequency);
+
         for (int i = 0; i < habitEventList.size(); i++) {
             HabitEvent habitEvent = habitEventList.getHabitEvent(i);
             if (startDate.compareTo(habitEvent.getEventDate()) <= 0 && endDate.compareTo(habitEvent.getEventDate()) >= 0) {
@@ -49,12 +49,35 @@ public class HabitStatistics {
                 if (frequency.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
                     completed++;
                 } else {
-                    notCompleted++;
+                    late++;
                 }
             }
         }
 
-        return new HabitCompletionData(completed, notCompleted);
+        return new HabitCompletionData(completed, late, total);
+    }
+
+    private int getDaysOfWeekBetweenDates(Date startDate, Date endDate, HashSet<Integer> daysOfWeek) {
+        int days = 0;
+
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+
+        if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
+            startCal = endCal;
+        }
+
+        do {
+            if (daysOfWeek.contains(startCal.get(Calendar.DAY_OF_WEEK))) {
+                days++;
+            }
+            startCal.add(Calendar.DAY_OF_MONTH, 1);
+        } while (startCal.getTimeInMillis() <= endCal.getTimeInMillis());
+
+        return days;
     }
 
     /**
@@ -113,11 +136,13 @@ public class HabitStatistics {
      */
     public class HabitCompletionData {
         public final int completed;
-        public final int notCompleted;
+        public final int late;
+        public final int total;
 
-        public HabitCompletionData(int completed, int notCompleted) {
+        public HabitCompletionData(int completed, int late, int total) {
             this.completed = completed;
-            this.notCompleted = notCompleted;
+            this.late = late;
+            this.total = total;
         }
     }
 
