@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,21 +31,15 @@ import java.util.List;
  */
 
 
-/** EVERY TIME I LOAD A FRIEND, IF THE FRIEND IS NULL, REMOVE FROM MAP **/
-
 public class FriendRequestsFragment extends Fragment {
-
 
     private ExpandableListView friendRequestsView;
     MyFriendsRequestAdapter adapter;
     private String username;
     private FileController fileController;
-//    ArrayList<String> allUserList = new ArrayList<>();
     private ArrayList<String> getFriendRequestsList = new ArrayList<>();
-    // True if you have a request, false otherwise
     private HashMap<String, Boolean> getFriendRequestsMap = new HashMap<String, Boolean>();
     private User user;
-    // Hashmap <username, name>
     private HashMap<String, String> userMap = new HashMap<String, String>();
     ArrayList<String> fullFriendRequestsList = new ArrayList<String>();
 
@@ -62,7 +55,7 @@ public class FriendRequestsFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment AllHabitsFragment.
+     * @return A new instance of fragment FriendRequestsFragment.
      */
     public static FriendRequestsFragment newInstance() {
         FriendRequestsFragment fragment = new FriendRequestsFragment();
@@ -85,7 +78,6 @@ public class FriendRequestsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friend_requests, container, false);
         fileController = new FileController();
 
-
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
@@ -97,33 +89,26 @@ public class FriendRequestsFragment extends Fragment {
     }
 
     /**
-     * Called when AllHabitsFragment activity is opened up and called again.
+     * Called when FriendRequestsFragment activity is opened up and called again.
      */
     @Override
     public void onResume() {
         super.onResume();
 
-        User user = fileController.loadUser(getActivity().getApplicationContext(), username);
+        user = fileController.loadUser(getActivity().getApplicationContext(), username);
 
         List<String> listDataHeader = new ArrayList<>();
         HashMap<String, List<String>> listDataChild = new HashMap<>();
         List<String> child = new ArrayList<>();
         child.add("");
 
-        // Hashmap <username, name>
         userMap = user.getAllUsers();
-
-        // Hashmap <username, boolean>. True if have a request, false otherwise.
         getFriendRequestsMap = user.getReceivedRequests();
         System.out.println("getFriendRequestsMap: " + getFriendRequestsMap);
 
         if (!(getFriendRequestsList.size()>0)) {
-            System.out.println("Adding to List...");
-            // All usernames, no matter if they are friends or friend requests
             fullFriendRequestsList.addAll(getFriendRequestsMap.keySet());
-//            System.out.println("fullFriendRequestsList: " + fullFriendRequestsList);
             for (int i=0; i<getFriendRequestsMap.size();i++) {
-//                System.out.println("getFriendRequestsMap.get(i) ==  true??: " + getFriendRequestsMap.get(i));
                 if (getFriendRequestsMap.get(fullFriendRequestsList.get(i)) == Boolean.TRUE) {
                     getFriendRequestsList.add(fullFriendRequestsList.get(i));
                     System.out.println("getFriendRequestsList: " + getFriendRequestsList);
@@ -133,7 +118,6 @@ public class FriendRequestsFragment extends Fragment {
 
         if (!getFriendRequestsMap.isEmpty()) {
             System.out.println("User's received requests: " + getFriendRequestsList);
-
             for (int j = 0; j < getFriendRequestsList.size(); j++) {
                 listDataHeader.add(userMap.get(getFriendRequestsList.get(j)));
                 listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
@@ -253,30 +237,23 @@ public class FriendRequestsFragment extends Fragment {
             convertView.findViewById(R.id.acceptFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
-                    String json = sharedPrefs.getString("username", "");
-                    Gson gson = new Gson();
-                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-                    User user = fileController.loadUser(_context, username);
+//                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+//                    String json = sharedPrefs.getString("username", "");
+//                    Gson gson = new Gson();
+//                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+//                    User user = fileController.loadUser(_context, username);
 
-                    // Get username of person who was accepted
                     String acceptPerson = seenUsersList.get(groupPosition);
                     allUsersList.remove(acceptPerson);
                     getFriendRequestsList.remove(acceptPerson);
                     getFriendRequestsMap.put(acceptPerson, Boolean.FALSE);
                     user.getReceivedRequests().put(acceptPerson, Boolean.FALSE);
 
-                    System.out.println("all users list after removing: " + allUsersList);
-                    System.out.println("getFriedRequestsList after removing: " + getFriendRequestsList);
-                    System.out.println("getFriendRequestsMap after removing: " + getFriendRequestsMap);
+//                    Boolean test = fileController.acceptFriendRequest(getContext(), user.getUsername(), acceptPerson);
+//                    if (test) { System.out.println("Saved to server"); }
+//                    else { System.out.println("Failed"); }
 
-                    System.out.println("Friend's username: " + acceptPerson);
-
-                    Boolean test = fileController.acceptFriendRequest(getContext(), user.getUsername(), acceptPerson);
-                    if (test) { System.out.println("Saved to server"); }
-                    else { System.out.println("Failed"); }
-
-                    fileController.saveUser(_context, user);
+//                    fileController.saveUser(_context, user);
                     _listDataHeader.remove(groupPosition);
                     notifyDataSetChanged();
                 }
@@ -285,25 +262,26 @@ public class FriendRequestsFragment extends Fragment {
             convertView.findViewById(R.id.declineFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
-                    Gson gson = new Gson();
-                    String json = sharedPrefs.getString("username", "");
-                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+//                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+//                    Gson gson = new Gson();
+//                    String json = sharedPrefs.getString("username", "");
+//                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
-                    // Get username of person who was accepted
                     String declinedPerson = seenUsersList.get(groupPosition);
                     allUsersList.remove(declinedPerson);
                     getFriendRequestsList.remove(declinedPerson);
                     getFriendRequestsMap.put(declinedPerson, Boolean.FALSE);
 
-                    User user = fileController.loadUser(_context, username);
+//                    User user = fileController.loadUser(_context, username);
                     user.getReceivedRequests().put(declinedPerson, Boolean.FALSE);
-                    fileController.saveUser(_context, user);
+//                    fileController.saveUser(_context, user);
 
                     _listDataHeader.remove(groupPosition);
                     notifyDataSetChanged();
                 }
             });
+
+            fileController.saveUser(_context, user);
 
             return convertView;
         }

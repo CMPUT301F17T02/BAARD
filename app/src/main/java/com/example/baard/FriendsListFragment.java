@@ -35,23 +35,17 @@ import java.util.Set;
  */
 
 
-/** EVERY TIME I LOAD A FRIEND, IF THE FRIEND IS NULL, REMOVE FROM MAP **/
-
 public class FriendsListFragment extends Fragment {
 
     private ListView friendListView;
     private ArrayAdapter<String> adapter;
     private String username;
     private FileController fileController;
-    // List of usernames of your friends
     private ArrayList<String> friendsList = new ArrayList<>();
 //    private ArrayList<String> friendsNamesList = new ArrayList<>();;
     private User user;
-    // If you have friends. True if friend, False if pending
     private HashMap<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
-    // Hashmap <username, name>
     private HashMap<String, String> userMap = new HashMap<String, String>();
-    // If request to be friends, return true.
     private HashMap<String, Boolean> requestedFriendsMap = new HashMap<>();
 
 
@@ -66,7 +60,7 @@ public class FriendsListFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment AllHabitsFragment.
+     * @return A new instance of fragment FriendsListFragment.
      */
     public static FriendsListFragment newInstance() {
         FriendsListFragment fragment = new FriendsListFragment();
@@ -88,7 +82,7 @@ public class FriendsListFragment extends Fragment {
     }
 
     /**
-     * Sets the on item click listener such that habits in the list can be accessed by
+     * Sets the on item click listener such that friends/users in the list can be accessed by
      * the view screen.
      *
      * @param inflater
@@ -100,6 +94,7 @@ public class FriendsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_friends, container, false);
         fileController = new FileController();
+        user = fileController.loadUser(getActivity().getApplicationContext(), username);
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
@@ -107,19 +102,17 @@ public class FriendsListFragment extends Fragment {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         friendListView = (ListView) view.findViewById(R.id.friendListView);
+        userMap = user.getAllUsers();
 
         // set the listener so that if you click a user in the list, you can view it
         friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                User friend = fileController.loadUserFromServer(friendsList.get(i));
-
-                // Make the intent go to seeing the friend's habits and most recent habit event.
                 Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
                 intent.putExtra("position", i);
                 intent.putExtra("friendUsername", friendsList.get(i));
-                intent.putExtra("friendName", friend.getName());
+                intent.putExtra("friendName", userMap.get(friendsList.get(i)));
 
                 startActivity(intent);
             }
@@ -135,21 +128,12 @@ public class FriendsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        user = fileController.loadUser(getActivity().getApplicationContext(), username);
-
-        // Get all users in hashmap
-        userMap = user.getAllUsers();
-        // True if friend, False if pending.
         myFriendsMap = user.getFriends();
-        // Get all friends' usernames
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
 
-        // Make a clone of the list, and edit the clone list
         ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
         for (String name : iterationList) {
             User friend = fileController.loadUserFromServer(name);
-
-//            userMap.put(friend.getUsername(), friend.getName());
 
             if (friend == null) {
                 myFriendsMap.put(name, false);
@@ -158,7 +142,6 @@ public class FriendsListFragment extends Fragment {
 
         }
 
-        //Get the names of all of your friends
         List<String> usernamesList = new ArrayList<String>(userMap.values());
 
         System.out.println("List of names: " + friendsList);
@@ -177,7 +160,6 @@ public class FriendsListFragment extends Fragment {
 
         adapter.notifyDataSetChanged();
     }
-
 
     /**
      * Auto-generated method for fragment
