@@ -104,17 +104,28 @@ public class FriendsListFragment extends Fragment {
         friendListView = (ListView) view.findViewById(R.id.friendListView);
         userMap = user.getAllUsers();
 
-        // set the listener so that if you click a user in the list, you can view it
         friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String friendUsername = friendsList.get(i);
+                User friend = fileController.loadUserFromServer(friendUsername);
 
-                Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
-                intent.putExtra("position", i);
-                intent.putExtra("friendUsername", friendsList.get(i));
-                intent.putExtra("friendName", userMap.get(friendsList.get(i)));
+                if (friend == null) {
+                    myFriendsMap.put(friendUsername, false);
+                    friendsList.remove(friendUsername);
 
-                startActivity(intent);
+                    user.setFriends(myFriendsMap);
+                    fileController.saveUser(getContext(), user);
+
+                } else {
+
+                    Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
+                    intent.putExtra("position", i);
+                    intent.putExtra("friendUsername", friendsList.get(i));
+                    intent.putExtra("friendName", userMap.get(friendsList.get(i)));
+
+                    startActivity(intent);
+                }
             }
         });
 
@@ -131,16 +142,16 @@ public class FriendsListFragment extends Fragment {
         myFriendsMap = user.getFriends();
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
 
-        ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
-        for (String name : iterationList) {
-            User friend = fileController.loadUserFromServer(name);
-
-            if (friend == null) {
-                myFriendsMap.put(name, false);
-                friendsList.remove(name);
-            }
-
-        }
+//        ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
+//        for (String name : iterationList) {
+//            User friend = fileController.loadUserFromServer(name);
+//
+//            if (friend == null) {
+//                myFriendsMap.put(name, false);
+//                friendsList.remove(name);
+//            }
+//
+//        }
 
         List<String> usernamesList = new ArrayList<String>(userMap.values());
 
@@ -151,9 +162,6 @@ public class FriendsListFragment extends Fragment {
                 friendsNamesList.add(userMap.get(iter));
             }
         }
-
-        user.setFriends(myFriendsMap);
-        fileController.saveUser(getContext(), user);
 
         Collections.sort(friendsNamesList);
 
