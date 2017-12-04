@@ -131,10 +131,12 @@ public class ViewHabitActivity extends AppCompatActivity {
         startDateView.setText(formatter.format(habit.getStartDate()));
         frequencyView.setText(habit.getFrequencyString());
 
-        createPieChart();
-        createBarChart();
-        createLineChart();
-        listHabitEvents();
+        if (habit.getStartDate().before(new Date())) {
+            createPieChart();
+            createBarChart();
+            createLineChart();
+            listHabitEvents();
+        }
 
         TextView milestoneTextView = findViewById(R.id.milestoneTextView);
         int milestone = habit.milestone();
