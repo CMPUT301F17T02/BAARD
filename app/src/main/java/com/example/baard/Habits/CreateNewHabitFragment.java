@@ -2,7 +2,7 @@
  * Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
  */
 
-package com.example.baard;
+package com.example.baard.Habits;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -24,10 +24,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.baard.Controllers.FileController;
+import com.example.baard.Entities.Day;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitList;
+import com.example.baard.Entities.User;
+import com.example.baard.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,7 +42,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
 

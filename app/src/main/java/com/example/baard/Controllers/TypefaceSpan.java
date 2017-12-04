@@ -2,7 +2,7 @@
  * Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
  */
 
-package com.example.baard;import android.content.Context;
+package com.example.baard.Controllers;import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.Spannable;

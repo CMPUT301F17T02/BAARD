@@ -21,6 +21,11 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.baard.Controllers.FileController;
+import com.example.baard.Controllers.TypefaceSpan;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitEvent;
+import com.example.baard.Entities.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;

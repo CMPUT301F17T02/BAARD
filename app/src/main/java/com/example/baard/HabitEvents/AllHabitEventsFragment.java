@@ -2,7 +2,7 @@
  * Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
  */
 
-package com.example.baard;
+package com.example.baard.HabitEvents;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,29 +11,31 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.example.baard.Controllers.ExpandableListAdapter;
+import com.example.baard.Controllers.FileController;
+import com.example.baard.Entities.Day;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitEvent;
+import com.example.baard.Entities.User;
+import com.example.baard.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 /**
  * A simple {@link Fragment} subclass.

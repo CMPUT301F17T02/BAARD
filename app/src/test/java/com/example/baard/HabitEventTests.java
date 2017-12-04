@@ -5,8 +5,9 @@
 package com.example.baard;
 
 
-import android.util.Log;
-
+import com.example.baard.Entities.Day;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitEvent;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;

@@ -2,7 +2,7 @@
  * Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
  */
 
-package com.example.baard;
+package com.example.baard.HabitEvents;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -29,10 +29,17 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.baard.AddLocationActivity;
+import com.example.baard.Controllers.FileController;
+import com.example.baard.Controllers.SerializableImage;
+import com.example.baard.Controllers.TypefaceSpan;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitEvent;
+import com.example.baard.Entities.User;
+import com.example.baard.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,8 +48,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.DateFormat;

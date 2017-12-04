@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:padding="15dp"
     android:orientation="vertical"
-    tools:context="com.example.baard.EditHabitEventActivity">
+    tools:context="com.example.baard.HabitEvents.EditHabitEventActivity">
 
     <android.support.constraint.ConstraintLayout
         android:background="@color/white"

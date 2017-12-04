@@ -18,7 +18,7 @@
         android:layout_weight="8"
         android:background="@color/white"
         android:elevation="3dp"
-        tools:context="com.example.baard.ViewHabitEventActivity">
+        tools:context="com.example.baard.HabitEvents.ViewHabitEventActivity">
 
         <LinearLayout
             android:id="@+id/linearLayout3"

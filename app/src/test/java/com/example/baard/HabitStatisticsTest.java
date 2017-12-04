@@ -4,6 +4,11 @@
 
 package com.example.baard;
 
+import com.example.baard.Entities.Day;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitEvent;
+import com.example.baard.Habits.HabitStatistics;
+
 import junit.framework.TestCase;
 
 import java.text.SimpleDateFormat;

@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import com.example.baard.Habits.DailyHabitsFragment;
+import com.example.baard.Habits.EditHabitActivity;
+import com.example.baard.Habits.ViewHabitActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.Test;
