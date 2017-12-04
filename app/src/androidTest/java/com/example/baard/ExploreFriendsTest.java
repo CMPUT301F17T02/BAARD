@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import com.example.baard.Friends.ExploreFriends;
 import com.robotium.solo.Solo;
 
 import java.text.SimpleDateFormat;
@@ -66,14 +67,23 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
     }
 
-    public void testFriendsList() {
+    public void testExploreFriends() {
 
         solo.clickOnImage(0);
-        solo.clickOnText("Explore Friends");
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+//        solo.clickOnText("EXPLORE FRIENDS");
 
         solo.assertCurrentActivity("wrong acitivty", ExploreFriends.class);
         solo.waitForFragmentById(R.layout.fragment_list_friends, 2000);
 
+        assertTrue(solo.searchText("My Friends"));
+        assertTrue(solo.searchText("Find Friends"));
+        assertTrue(solo.searchText("Friend Requests"));
 
     }
 }
