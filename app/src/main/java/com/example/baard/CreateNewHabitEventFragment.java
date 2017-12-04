@@ -35,11 +35,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -53,6 +62,7 @@ import java.util.Locale;
 import java.util.zip.DataFormatException;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.baard.R.id.view;
 
 
 /**
@@ -65,11 +75,13 @@ import static android.app.Activity.RESULT_OK;
  * @version 1.0
  * This fragment is used for when creating a new HabitEvent.
  */
-public class CreateNewHabitEventFragment extends Fragment {
+public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyCallback {
     private static final int PICK_IMAGE = 1;
     private final FileController fileController = new FileController();
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private static final LatLng DEFAULT_LOCATION = new LatLng(53.5444, -113.490);
+    private static final float DEFAULT_ZOOM = 13.5f;
     private Habit habit = null;
     private HabitList habits;
     private Bitmap image;
@@ -79,8 +91,8 @@ public class CreateNewHabitEventFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private Gson gson;
     private LatLng locationPosition;
-//    private GoogleMap map;
-//    private MapView mapView;
+    private GoogleMap mMap;
+    private MapView mapView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -212,23 +224,34 @@ public class CreateNewHabitEventFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View v, Bundle savedInstanceState) {
+        mapView = (MapView) v.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.clear();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        if (locationPosition != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationPosition, DEFAULT_ZOOM));
+            mMap.addMarker(new MarkerOptions().position(locationPosition));
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, DEFAULT_ZOOM));
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         String json = sharedPrefs.getString("locationPosition", "");
         locationPosition = gson.fromJson(json, new TypeToken<LatLng>() {}.getType());
-        RadioButton radioButton = (RadioButton) getActivity().findViewById(R.id.radioButton);
-        if (locationPosition != null) {
-            radioButton.setChecked(true);
-            radioButton.setText(R.string.yesLocation);
-//            mapView.setVisibility(View.VISIBLE);
-//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(locationPosition, 15f));
-//            map.addMarker(new MarkerOptions().position(locationPosition));
-
-        } else {
-            radioButton.setChecked(false);
-            radioButton.setText(R.string.noLocation);
-//            mapView.setVisibility(View.INVISIBLE);
-        }
+        mapView.getMapAsync(this);
     }
 
     public void onStart() {
@@ -247,6 +270,10 @@ public class CreateNewHabitEventFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private void changeFont() {
+    }
+
 
     /**
      * Method called when save button is pressed. Creates a new HabitEvent and adds it to the
