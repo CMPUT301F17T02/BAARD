@@ -50,6 +50,7 @@ public class FriendRequestsFragment extends Fragment {
     private User user;
     // Hashmap <username, name>
     private HashMap<String, String> userMap = new HashMap<String, String>();
+    ArrayList<String> fullFriendRequestsList = new ArrayList<String>();
 
 
     private FriendRequestsFragment.OnFragmentInteractionListener mListener;
@@ -116,13 +117,24 @@ public class FriendRequestsFragment extends Fragment {
 
         // Hashmap <username, boolean>. True if have a request, false otherwise.
         getFriendRequestsMap = user.getReceivedRequests();
+        System.out.println("getFriendRequestsMap: " + getFriendRequestsMap);
 
         if (!(getFriendRequestsList.size()>0)) {
-            getFriendRequestsList.addAll(getFriendRequestsMap.keySet());
+            System.out.println("Adding to List...");
+            // All usernames, no matter if they are friends or friend requests
+            fullFriendRequestsList.addAll(getFriendRequestsMap.keySet());
+//            System.out.println("fullFriendRequestsList: " + fullFriendRequestsList);
+            for (int i=0; i<getFriendRequestsMap.size();i++) {
+//                System.out.println("getFriendRequestsMap.get(i) ==  true??: " + getFriendRequestsMap.get(i));
+                if (getFriendRequestsMap.get(fullFriendRequestsList.get(i)) == Boolean.TRUE) {
+                    getFriendRequestsList.add(fullFriendRequestsList.get(i));
+                    System.out.println("getFriendRequestsList: " + getFriendRequestsList);
+                }
+            }
         }
 
         if (!getFriendRequestsMap.isEmpty()) {
-            System.out.println("User's received requests: " + getFriendRequestsMap);
+            System.out.println("User's received requests: " + getFriendRequestsList);
 
             for (int j = 0; j < getFriendRequestsList.size(); j++) {
                 listDataHeader.add(userMap.get(getFriendRequestsList.get(j)));
@@ -247,20 +259,24 @@ public class FriendRequestsFragment extends Fragment {
                     String json = sharedPrefs.getString("username", "");
                     Gson gson = new Gson();
                     String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+                    User user = fileController.loadUser(_context, username);
 
-
+                    // Get username of person who was accepted
                     String acceptPerson = seenUsersList.get(groupPosition);
                     allUsersList.remove(acceptPerson);
                     getFriendRequestsList.remove(acceptPerson);
-//                    getFriendRequestsMap.remove(acceptPerson);
+                    getFriendRequestsMap.put(acceptPerson, Boolean.FALSE);
 
-//                    System.out.println("all users list after removing: " + allUsersList);
-//                    System.out.println("getFriedRequestsList after removing: " + allUsersList);
-//                    System.out.println("getFriendRequestsMap after removing: " + getFriendRequestsMap);
-                    User user = fileController.loadUser(_context, username);
+                    System.out.println("all users list after removing: " + allUsersList);
+                    System.out.println("getFriedRequestsList after removing: " + getFriendRequestsList);
+                    System.out.println("getFriendRequestsMap after removing: " + getFriendRequestsMap);
+
                     System.out.println("Friend's username: " + acceptPerson);
+
                     Boolean test = fileController.acceptFriendRequest(getContext(), user.getUsername(), acceptPerson);
                     if (test) { System.out.println("Saved to server"); }
+                    else { System.out.println("Failed"); }
+
                     fileController.saveUser(_context, user);
                     _listDataHeader.remove(groupPosition);
                     notifyDataSetChanged();
@@ -275,12 +291,14 @@ public class FriendRequestsFragment extends Fragment {
                     String json = sharedPrefs.getString("username", "");
                     String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
+                    // Get username of person who was accepted
                     String declinedPerson = seenUsersList.get(groupPosition);
                     allUsersList.remove(declinedPerson);
+                    getFriendRequestsList.remove(declinedPerson);
+                    getFriendRequestsMap.put(declinedPerson, Boolean.FALSE);
 
                     User user = fileController.loadUser(_context, username);
-                    user.getReceivedRequests().remove(declinedPerson);
-                    getFriendRequestsList.remove(declinedPerson);
+                    user.getReceivedRequests().put(declinedPerson, Boolean.FALSE);
                     fileController.saveUser(_context, user);
 
                     _listDataHeader.remove(groupPosition);

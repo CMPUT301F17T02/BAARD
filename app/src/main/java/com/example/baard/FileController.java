@@ -198,7 +198,7 @@ public class FileController {
         User me = loadUser(context, myUsername);
         if (friend != null) {
             System.out.println("Before removing: " + me.getReceivedRequests());
-            me.getReceivedRequests().put(friendUsername, Boolean.TRUE);
+            me.getReceivedRequests().put(friendUsername, Boolean.FALSE);
             System.out.println("After removing: " + me.getReceivedRequests());
             friend.getFriends().put(me.getUsername(), Boolean.TRUE);
             saveUserToServer(friend);

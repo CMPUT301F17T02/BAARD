@@ -159,9 +159,15 @@ public class FriendsListFragment extends Fragment {
         }
 
         //Get the names of all of your friends
-        List<String> friendsNamesList = new ArrayList<String>(userMap.values());
+        List<String> usernamesList = new ArrayList<String>(userMap.values());
 
-        System.out.println("List of names: " + friendsNamesList);
+        System.out.println("List of names: " + friendsList);
+        ArrayList<String> friendsNamesList = new ArrayList<String>();
+        for (String iter: friendsList) {
+            if (userMap.containsKey(iter)) {
+                friendsNamesList.add(userMap.get(iter));
+            }
+        }
 
         user.setFriends(myFriendsMap);
         fileController.saveUser(getContext(), user);

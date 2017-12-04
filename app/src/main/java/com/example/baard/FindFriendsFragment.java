@@ -141,6 +141,7 @@ public class FindFriendsFragment extends Fragment {
                         else {
                             viewHolder.button.setText("PENDING");
                             User friend = getItem(position);
+                            System.out.println("Got friend: " + friend);
                             Boolean test = fileController.sendFriendRequest(getContext(), username, friend.getUsername());
                             if (test) { System.out.println("True: Sent to server"); }
                             user = fileController.loadUser(getContext(), username);
