@@ -34,7 +34,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -54,10 +59,11 @@ import java.util.zip.DataFormatException;
  * @author amckerna
  * @version 1.0
  */
-public class EditHabitEventActivity extends AppCompatActivity {
+public class EditHabitEventActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private Habit habit;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private static final float DEFAULT_ZOOM = 13.5f;
     private HabitEvent habitEvent;
     private static final int PICK_IMAGE = 1;
     private Bitmap image;
@@ -68,6 +74,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
     private Gson gson;
     private final DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private boolean locationExists;
+    private GoogleMap mMap;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +155,9 @@ public class EditHabitEventActivity extends AppCompatActivity {
             }
         });
 
+        sharedPrefs.edit().remove("locationPosition").apply();
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
         if (habitEvent.getLocation() != null) {
             locationExists = true;
         }
@@ -158,18 +169,21 @@ public class EditHabitEventActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
         String json = sharedPrefs.getString("locationPosition", "");
         locationPosition = gson.fromJson(json, new TypeToken<LatLng>() {}.getType());
-        RadioButton radioButton = (RadioButton) findViewById(R.id.radioButton);
-        if (locationPosition != null) {
-            radioButton.setChecked(true);
-            radioButton.setText(R.string.yesLocation);
-        } else if (locationExists) {
-            radioButton.setChecked(true);
-            radioButton.setText(R.string.yesLocation);
+
+        if (locationExists) {
+            locationExists = false;
+            locationPosition = habitEvent.getLocation();
+            mapFragment.getView().setVisibility(View.VISIBLE);
+            mapFragment.getMapAsync(this);
+        }
+        else if (locationPosition != null) {
+            mapFragment.getView().setVisibility(View.VISIBLE);
+            mapFragment.getMapAsync(this);
         } else {
-            radioButton.setChecked(false);
-            radioButton.setText(R.string.noLocation);
+            mapFragment.getView().setVisibility(View.GONE);
         }
     }
 
@@ -206,6 +220,20 @@ public class EditHabitEventActivity extends AppCompatActivity {
         // Update the action bar title with the TypefaceSpan instance
         getSupportActionBar().setTitle(s);
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d("ViewHabitEvent", "FLAG0");
+        mMap = googleMap;
+        mMap.clear();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationPosition, DEFAULT_ZOOM));
+        mMap.addMarker(new MarkerOptions().position(locationPosition));
+    }
+
 
     /**
      * returns the username of the user stored in SharedPreferences
@@ -262,8 +290,8 @@ public class EditHabitEventActivity extends AppCompatActivity {
      */
     public void addLocation(View view) {
         Intent intent = new Intent(EditHabitEventActivity.this, AddLocationActivity.class);
-        if (habitEvent.getLocation() != null) {
-            intent.putExtra("myLocation", habitEvent.getLocation());
+        if (locationPosition != null) {
+            intent.putExtra("myLocation", locationPosition);
         }
         startActivity(intent);
     }

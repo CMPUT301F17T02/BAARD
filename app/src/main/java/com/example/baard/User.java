@@ -25,8 +25,6 @@ public class User {
     private HabitList habits = new HabitList();
     private HashMap<String, Boolean> friends = new HashMap<String, Boolean>();
     private HashMap<String, String> receivedRequests = new HashMap<String, String>();
-    //private UserList friends = new UserList();
-    //private UserList receivedRequests = new UserList();
 
     @JestId
     private String id;
@@ -84,22 +82,6 @@ public class User {
     public void setReceivedRequests(HashMap<String, String> receivedRequests) {
         this.receivedRequests = receivedRequests;
     }
-
-//    public UserList getFriends() {
-//        return friends;
-//    }
-//
-//    public void setFriends(UserList friends) {
-//        this.friends = friends;
-//    }
-//
-//    public UserList getReceivedRequests() {
-//        return receivedRequests;
-//    }
-//
-//    public void setReceivedRequests(UserList receivedRequests) {
-//        this.receivedRequests = receivedRequests;
-//    }
 
     @Override
     public String toString() {

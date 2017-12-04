@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -39,32 +42,20 @@ public class FindFriendsFragment extends Fragment {
     private String username;
     private User user;
     private FileController fc;
-//    List<User> allUserList = new ArrayList<>();
     ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
     UserList allUsers = new UserList();
-    private UserList friendList = new UserList();
-
+    private HashMap<String, Boolean> myFriends;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_find_friends, container, false);
 
-//        for (int i = 0; i < 10; i++) {
-//            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
-//            System.out.println(allUserList.get(i).getName());
-//        }
-
         getAllUsersTask.execute();
 
-        try {
-            allUsers = getAllUsersTask.get();
-            allUsers.getArrayList().remove(user);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
+        System.out.println("All Users: " + allUsers.getArrayList());
 
         fc = new FileController();
 
@@ -72,11 +63,6 @@ public class FindFriendsFragment extends Fragment {
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-
-        adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
-        findFriendsView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
 
         return rootView;
     }
@@ -92,13 +78,15 @@ public class FindFriendsFragment extends Fragment {
 
         try {
             allUsers = getAllUsersTask.get();
+            for (User aUser : allUsers.getArrayList()) {
+                if (user.getUsername().equals(aUser.getUsername())) {
+                    allUsers.delete(aUser);
+                    break;
+                }
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
-        System.out.println(allUsers.getArrayList());
-
-
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
 
@@ -125,26 +113,21 @@ public class FindFriendsFragment extends Fragment {
                 viewHolder.button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         if (viewHolder.button.getText() == "FOLLOWING") {
-                            System.out.println(friendList.getArrayList());
+                            // do nothing! they are my friend
+                        } else if (viewHolder.button.getText() == "PENDING") {
+//                            user = fc.loadUser(getContext(), username);
+//                            if (user.getFriends().get(getItem(position).getUsername())) {
+//                                viewHolder.button.setText("FOLLOWING");
+//                            }
                         }
                         else {
-                            viewHolder.button.setText("FOLLOWING");
-                            friendList.add(getItem(position));
-                            System.out.println("Adding to list... " + friendList.getArrayList());
-
-                            for (int i = 0; i < friendList.size(); i++) {
-                                System.out.println("User to be added as a friend " + friendList.getArrayList().get(i).getUsername());
-                                Boolean test = fc.sendFriendRequest(getContext(), username, friendList.getArrayList().get(i).getUsername());
-                                if (test) { System.out.println("True: Sent to server"); }
-                            }
-                            // set friends to user
-
+                            viewHolder.button.setText("PENDING");
+                            User friend = getItem(position);
+                            Boolean test = fc.sendFriendRequest(getContext(), username, friend.getUsername());
+                            if (test) { System.out.println("True: Sent to server"); }
+                            user = fc.loadUser(getContext(), username);
                         }
-
-
-
                     }
                 });
                 convertView.setTag(viewHolder);

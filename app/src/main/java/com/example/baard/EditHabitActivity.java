@@ -216,6 +216,7 @@ public class EditHabitActivity extends AppCompatActivity {
      * Function that saves the new list into the file & online
      */
     private void commitEdits() {
+        Collections.sort(user.getHabits().getArrayList());
         fc.saveUser(getApplicationContext(), user);
     }
 

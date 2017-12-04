@@ -117,14 +117,14 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         TextView name = (TextView) findViewById(R.id.HabitName);
         TextView date = (TextView) findViewById(R.id.HabitEventDate);
         TextView comment = (TextView) findViewById(R.id.commentView);
-        TextView location = (TextView) findViewById(R.id.locationView);
+//        TextView location = (TextView) findViewById(R.id.locationView);
         Button editHabitEventButton = (Button) findViewById(R.id.EditHabitEventButton);
         Button deleteHabitEventButton = (Button) findViewById(R.id.DeleteHabitEventButton);
 
         name.setTypeface(ralewayRegular);
         date.setTypeface(ralewayRegular);
         comment.setTypeface(ralewayRegular);
-        location.setTypeface(ralewayRegular);
+//        location.setTypeface(ralewayRegular);
         editHabitEventButton.setTypeface(ralewayRegular);
         deleteHabitEventButton.setTypeface(ralewayRegular);
     }

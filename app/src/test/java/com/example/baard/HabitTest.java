@@ -11,6 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.zip.DataFormatException;
 
@@ -73,6 +74,14 @@ public class HabitTest {
 
     @Test
     public void testGetStartDate() throws DataFormatException {
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        startDate = c.getTime();
+
         try {
             Habit habit = new Habit("Test Title", "Reason", startDate, array);
             Date test_startDate = habit.getStartDate();
@@ -84,7 +93,23 @@ public class HabitTest {
 
     @Test
     public void testSetStartDate() throws DataFormatException {
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(startDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        startDate = c.getTime();
+
         Date newStartDate = new Date();
+        c.setTime(newStartDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        newStartDate = c.getTime();
+
         Habit habit = new Habit("Test Title", "Reason", startDate, array);
         habit.setStartDate(newStartDate);
         assertEquals(habit.getStartDate(), newStartDate);

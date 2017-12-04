@@ -194,15 +194,20 @@ public class MainActivity extends AppCompatActivity
             nextHeader = getResources().getString(R.string.create_event);
         } else if (id == R.id.nav_viewMap) {
             if (fileController.isNetworkAvailable(getApplicationContext())) {
-                Toast.makeText(this, "View Map!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.title_activity_view_map, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ViewMapActivity.class);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_viewFriends) {
-            Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
-            startActivity(intent);
+            if (fileController.isNetworkAvailable(getApplicationContext())) {
+                Toast.makeText(this, R.string.title_activity_explore_friends, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_help) {
             Toast.makeText(this, R.string.help, Toast.LENGTH_SHORT).show();
             fragment = new HelpFragment();
