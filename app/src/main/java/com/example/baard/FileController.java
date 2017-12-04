@@ -177,7 +177,7 @@ public class FileController {
         User friend = loadUserFromServer(friendUsername);
         User me = loadUser(context, myUsername);
         if (friend != null) {
-            friend.getReceivedRequests().put(me.getUsername(), me.getName());
+            friend.getReceivedRequests().put(me.getUsername(), Boolean.TRUE);
             me.getFriends().put(friend.getUsername(), Boolean.FALSE);
             saveUserToServer(friend);
             return true;
@@ -197,10 +197,12 @@ public class FileController {
         User friend = loadUserFromServer(friendUsername);
         User me = loadUser(context, myUsername);
         if (friend != null) {
-            me.getReceivedRequests().remove(friend.getUsername());
+            System.out.println("Before removing: " + me.getReceivedRequests());
+            me.getReceivedRequests().put(friendUsername, Boolean.TRUE);
+            System.out.println("After removing: " + me.getReceivedRequests());
             friend.getFriends().put(me.getUsername(), Boolean.TRUE);
             saveUserToServer(friend);
-            saveUserToServer(me);
+            saveUser(context, me);
             return true;
         } else {
             return false;

@@ -42,11 +42,15 @@ public class FindFriendsFragment extends Fragment {
     private MyFriendsListAdapter adapter;
     private String username;
     private User user;
-    private FileController fc;
+    private FileController fileController;
     ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
     UserList allUsers = new UserList();
+    // If you have friends. True if friend, False if pending
     private HashMap<String, Boolean> myFriends;
+    // Hashmap <username, name>
     private HashMap<String, String> userMap = new HashMap<String, String>();
+    // If request to be friends, return true.
+    private HashMap<String, Boolean> requestedFriendsMap = new HashMap<>();
 
     ArrayList<String> acceptedFriendsList, pendingFriendsList;
 
@@ -59,9 +63,7 @@ public class FindFriendsFragment extends Fragment {
 
         findFriendsView = (ListView) rootView.findViewById(R.id.findFriendsView);
 
-        System.out.println("All Users: " + allUsers.getArrayList());
-
-        fc = new FileController();
+        fileController = new FileController();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
@@ -78,13 +80,17 @@ public class FindFriendsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        user = fc.loadUser(getActivity().getApplicationContext(), username);
+        user = fileController.loadUser(getActivity().getApplicationContext(), username);
+
+        // Hashmap, True if friend, False if pending
         myFriends = user.getFriends();
 
         try {
+            // UserList of users
             allUsers = getAllUsersTask.get();
 
             for (User aUser : allUsers.getArrayList()) {
+                // hashmap<username, name> of all users.
                 userMap.put(aUser.getUsername(), aUser.getName());
                 if (user.getUsername().equals(aUser.getUsername())) {
                     allUsers.delete(aUser);
@@ -116,7 +122,7 @@ public class FindFriendsFragment extends Fragment {
                 convertView = inflater.inflate(layout, parent, false);
                 final ViewHolder viewHolder = new ViewHolder();
 
-                user = fc.loadUser(getActivity().getApplicationContext(), username);
+                user = fileController.loadUser(getActivity().getApplicationContext(), username);
 
                 acceptedFriendsList = getKeysByValue(myFriends, Boolean.TRUE);
                 pendingFriendsList = getKeysByValue(myFriends, Boolean.FALSE);
@@ -135,9 +141,9 @@ public class FindFriendsFragment extends Fragment {
                         else {
                             viewHolder.button.setText("PENDING");
                             User friend = getItem(position);
-                            Boolean test = fc.sendFriendRequest(getContext(), username, friend.getUsername());
+                            Boolean test = fileController.sendFriendRequest(getContext(), username, friend.getUsername());
                             if (test) { System.out.println("True: Sent to server"); }
-                            user = fc.loadUser(getContext(), username);
+                            user = fileController.loadUser(getContext(), username);
                             notifyDataSetChanged();
                         }
                     }
@@ -183,7 +189,7 @@ public class FindFriendsFragment extends Fragment {
             return;
 
         Button followingButton = (Button) v.findViewById(R.id.addFriendButton);
-        followingButton.setText("FOLLOWING!");
+        followingButton.setText("FOLLOWING");
     }
 
     public static <T, V> ArrayList<T> getKeysByValue(Map<T, V> map, V value) {

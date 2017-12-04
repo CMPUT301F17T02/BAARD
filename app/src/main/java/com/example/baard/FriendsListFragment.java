@@ -102,7 +102,7 @@ public class FriendsListFragment extends Fragment {
 
         friendListView = (ListView) view.findViewById(R.id.friendListView);
 
-        // set the listener so that if you click a habit in the list, you can view it
+        // set the listener so that if you click a user in the list, you can view it
         friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

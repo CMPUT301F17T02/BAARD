@@ -48,10 +48,11 @@ public class FriendRequestsFragment extends Fragment {
     MyFriendsRequestAdapter adapter;
     private String username;
     private FileController fileController;
-//    ArrayList<User> allUserList = new ArrayList<>();
+//    ArrayList<String> allUserList = new ArrayList<>();
     private ArrayList<String> getFriendRequestsList = new ArrayList<>();
-    private HashMap<String, String> getFriendRequestsMap = new HashMap<String, String>();
+    private HashMap<String, Boolean> getFriendRequestsMap = new HashMap<String, Boolean>();
     private User user;
+    private HashMap<String, String> allUsers = new HashMap<String, String>();
 
 
     private FriendRequestsFragment.OnFragmentInteractionListener mListener;
@@ -114,11 +115,10 @@ public class FriendRequestsFragment extends Fragment {
         List<String> child = new ArrayList<>();
         child.add("");
 
+        // Hashmap <username, name>
+        allUsers = user.getAllUsers();
 
-//        for (int i = 0; i < 12; i++) {
-//            allUserList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
-//        }
-
+        // Hashmap <username, boolean>
         getFriendRequestsMap = user.getReceivedRequests();
 
         if (!(getFriendRequestsList.size()>0)) {
@@ -129,7 +129,7 @@ public class FriendRequestsFragment extends Fragment {
             System.out.println("User's received requests: " + getFriendRequestsMap);
 
             for (int j = 0; j < getFriendRequestsList.size(); j++) {
-                listDataHeader.add(getFriendRequestsMap.get(getFriendRequestsList.get(j)));
+                listDataHeader.add(allUsers.get(getFriendRequestsList.get(j)));
                 listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
             }
         }
