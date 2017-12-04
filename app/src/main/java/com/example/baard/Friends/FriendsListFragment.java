@@ -107,25 +107,12 @@ public class FriendsListFragment extends Fragment {
         friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String friendUsername = friendsList.get(i);
-                User friend = fileController.loadUserFromServer(friendUsername);
-
-                if (friend == null) {
-                    myFriendsMap.put(friendUsername, false);
-                    friendsList.remove(friendUsername);
-
-                    user.setFriends(myFriendsMap);
-                    fileController.saveUser(getContext(), user);
-
-                } else {
-
                     Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
                     intent.putExtra("position", i);
                     intent.putExtra("friendUsername", friendsList.get(i));
                     intent.putExtra("friendName", userMap.get(friendsList.get(i)));
 
                     startActivity(intent);
-                }
             }
         });
 
@@ -133,7 +120,7 @@ public class FriendsListFragment extends Fragment {
     }
 
     /**
-     * Called when AllHabitsFragment activity is opened up and called again.
+     * Called when FriendsListFragment activity is opened up and called again.
      */
     @Override
     public void onResume() {
@@ -141,17 +128,6 @@ public class FriendsListFragment extends Fragment {
 
         myFriendsMap = user.getFriends();
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
-
-//        ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
-//        for (String name : iterationList) {
-//            User friend = fileController.loadUserFromServer(name);
-//
-//            if (friend == null) {
-//                myFriendsMap.put(name, false);
-//                friendsList.remove(name);
-//            }
-//
-//        }
 
         List<String> usernamesList = new ArrayList<String>(userMap.values());
 

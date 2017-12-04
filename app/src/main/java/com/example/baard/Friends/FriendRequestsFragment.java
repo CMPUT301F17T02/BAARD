@@ -121,8 +121,11 @@ public class FriendRequestsFragment extends Fragment {
         if (!getFriendRequestsMap.isEmpty()) {
             System.out.println("User's received requests: " + getFriendRequestsList);
             for (int j = 0; j < getFriendRequestsList.size(); j++) {
-                listDataHeader.add(userMap.get(getFriendRequestsList.get(j)));
-                listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+                String name = userMap.get(getFriendRequestsList.get(j));
+                if (name != null) {
+                    listDataHeader.add(name);
+                    listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
+                }
             }
         }
 
@@ -239,11 +242,6 @@ public class FriendRequestsFragment extends Fragment {
             convertView.findViewById(R.id.acceptFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
-//                    String json = sharedPrefs.getString("username", "");
-//                    Gson gson = new Gson();
-//                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-//                    User user = fileController.loadUser(_context, username);
 
                     String acceptPerson = seenUsersList.get(groupPosition);
                     allUsersList.remove(acceptPerson);
@@ -264,17 +262,12 @@ public class FriendRequestsFragment extends Fragment {
             convertView.findViewById(R.id.declineFriendButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
-//                    Gson gson = new Gson();
-//                    String json = sharedPrefs.getString("username", "");
-//                    String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
                     String declinedPerson = seenUsersList.get(groupPosition);
                     allUsersList.remove(declinedPerson);
                     getFriendRequestsList.remove(declinedPerson);
                     getFriendRequestsMap.put(declinedPerson, Boolean.FALSE);
 
-//                    User user = fileController.loadUser(_context, username);
                     user.getReceivedRequests().put(declinedPerson, Boolean.FALSE);
                     fileController.saveUser(_context, user);
 
@@ -282,8 +275,6 @@ public class FriendRequestsFragment extends Fragment {
                     notifyDataSetChanged();
                 }
             });
-
-//            fileController.saveUser(_context, user);
 
             return convertView;
         }
