@@ -24,10 +24,16 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
-/**
- * Created by biancaangotti on 2017-11-05.
- */
 
+/**
+ * Implements communication tasks with the elastic search server
+ * http://cmput301.softwareprocess.es:8080/cmput301f17t02/
+ *
+ * @see FileController
+ * @author minsoung
+ * @since 1.0
+ * @version 3.0
+ */
 public class ElasticSearchController {
 
     private static JestDroidClient client;
@@ -42,8 +48,8 @@ public class ElasticSearchController {
          * Checks for username in database, if it does not find one, it returns a new user.
          * Adds user into database.
          *
-         * @param parameters
-         * @return
+         * @param parameters String of the user's username
+         * @return the User instance created
          */
         @Override
         protected  User doInBackground(String... parameters) {
@@ -110,8 +116,7 @@ public class ElasticSearchController {
         /**
          * Finds the user in the database, and then stores the updated version of itself.
          *
-         * @param users
-         * @return
+         * @param users The user to be updated (only one)
          */
         @Override
         protected Void doInBackground(User... users) {
@@ -157,9 +162,9 @@ public class ElasticSearchController {
          * Finds the user in the database based on the username string, and then
          * returns the user.
          *
-         * @param parameters
-         * @return
-         * @throws RuntimeExecutionException
+         * @param parameters String of the user's username requested
+         * @return User instance or null if not found
+         * @throws RuntimeExecutionException upon failed communication
          */
         @Override
         protected User doInBackground(String... parameters) {
@@ -191,24 +196,12 @@ public class ElasticSearchController {
                         JsonObject userInfo = hits.getAsJsonArray("hits").get(0).getAsJsonObject();
                         JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
 
-                        // Need to extract Id separately because Jest does not seem to be working
+                        // Need to extract Id separately because Jest
                         String id = userInfo.get("_id").getAsString();
-//
-//                        HashMap<String, Boolean> hm = new HashMap<>();
-//
-//                        // Need to extract UserList friends separately because the field is transient
-//                        String friendsJSON = userInfoSource.get("friends").toString();
-//                        HashMap<String, Boolean> friendsList = new Gson().fromJson(friendsJSON, hm.getClass());
-//
-//                        // Need to extract UserList receivedRequests separately because the field is transient
-//                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
-//                        HashMap<String, String> receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, hm.getClass());
 
                         user = new Gson().fromJson(userInfoSource, User.class);
 
                         user.setId(id);
-//                        user.setFriends(friendsList);
-//                        user.setReceivedRequests(receivedRequestsList);
 
                         Log.i("ESC.GetUserTask", "Unique user was found.");
                     } else {
@@ -265,24 +258,12 @@ public class ElasticSearchController {
                         JsonObject userInfo = hits.getAsJsonArray("hits").get(i).getAsJsonObject();
                         JsonObject userInfoSource = userInfo.get("_source").getAsJsonObject();
 
-                        // Need to extract Id separately because Jest does not seem to be working
+                        // Need to extract Id separately because Jest
                         String id = userInfo.get("_id").getAsString();
-
-//                        HashMap<String, Boolean> hm = new HashMap<>();
-//
-//                        // Need to extract UserList friends separately because the field is transient
-//                        String friendsJSON = userInfoSource.get("friends").toString();
-//                        HashMap<String, Boolean> friendsList = new Gson().fromJson(friendsJSON, hm.getClass());
-//
-//                        // Need to extract UserList receivedRequests separately because the field is transient
-//                        String receivedRequestsJSON = userInfoSource.get("receivedRequests").toString();
-//                        HashMap<String, String> receivedRequestsList = new Gson().fromJson(receivedRequestsJSON, hm.getClass());
 
                         User user = new Gson().fromJson(userInfoSource, User.class);
 
                         user.setId(id);
-//                        user.setFriends(friendsList);
-//                        user.setReceivedRequests(receivedRequestsList);
 
                         users.add(user);
                     }
@@ -298,7 +279,13 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * Async Task to delete a user from the database
+     */
     public static class DeleteUserTask extends AsyncTask<User, Void, Void> {
+        /**
+         * @param users the User instance to be deleted from database
+         */
         protected Void doInBackground(User... users) {
             verifySettings();
 
@@ -325,7 +312,7 @@ public class ElasticSearchController {
 
     /**
      * Checks if the client is connected to the server with the right configuration.
-     * @note Generated from the CMPUT 301 labs
+     * Generated from the CMPUT 301 labs
      */
     public static void verifySettings() {
         if (client == null) {

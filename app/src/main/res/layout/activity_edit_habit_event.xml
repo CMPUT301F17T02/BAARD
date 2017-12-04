@@ -79,7 +79,7 @@
                 android:text="Comment" />
 
             <EditText
-                android:id="@+id/commentEditText"
+                android:id="@+id/EditCommentEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"

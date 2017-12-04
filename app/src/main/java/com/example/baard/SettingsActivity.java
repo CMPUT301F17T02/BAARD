@@ -19,6 +19,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Settings for the user's account activity
+ * @see MainActivity
+ * @see ElasticSearchController
+ * @see FileController
+ * @author bangotti
+ * @since 2.0
+ * @version 1.1
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     private FileController fc;

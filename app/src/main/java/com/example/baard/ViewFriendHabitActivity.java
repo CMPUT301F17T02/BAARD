@@ -27,7 +27,7 @@ public class ViewFriendHabitActivity extends AppCompatActivity {
     User user;
     HabitList habitList;
     Habit habit;
-    String username;
+    String username, habitName, pulledUsername;
     int position;
     FileController fc;
     @Override
@@ -40,6 +40,9 @@ public class ViewFriendHabitActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         position = extras.getInt("HabitPosition");
+        habitName = extras.getString("habitName");
+        pulledUsername = extras.getString("user");
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
@@ -53,7 +56,8 @@ public class ViewFriendHabitActivity extends AppCompatActivity {
         // load required data
         //TODO: SET USER TO FRIEND SELECTED
         user = fc.loadUser(getApplicationContext(), username);
-        habitList = user.getHabits();
+        User friendUser = fc.loadUserFromServer(pulledUsername);
+        habitList = friendUser.getHabits();
         habit = habitList.getHabit(position);
 
         // set all of the values for the habit to be viewed
