@@ -4,6 +4,8 @@
 
 package com.example.baard.Entities;
 
+import android.support.annotation.NonNull;
+
 import com.example.baard.Controllers.ElasticSearchController;
 
 import java.util.HashMap;
@@ -19,12 +21,13 @@ import io.searchbox.annotations.JestId;
  * @version 3.0
  * @see HabitList
  */
-public class User {
+public class User implements Comparable<User> {
     private String name;
     private String username;
     private HabitList habits = new HabitList();
     private HashMap<String, Boolean> friends = new HashMap<String, Boolean>();
     private HashMap<String, Boolean> receivedRequests = new HashMap<String, Boolean>();
+
   
     @JestId
     private String id;
@@ -117,23 +120,6 @@ public class User {
     public HashMap<String, Boolean> getReceivedRequests() {
         return receivedRequests;
     }
-
-    public HashMap<String, String> getAllUsers() {
-        HashMap<String, String> userMap = new HashMap<String, String>();
-        ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
-        getAllUsersTask.execute();
-        UserList allUsers;
-
-        try {
-            allUsers = getAllUsersTask.get();
-            for (User aUser : allUsers.getArrayList()) {
-                userMap.put(aUser.getUsername(), aUser.getName());
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return userMap;
-    }
   
     /**
      * @param receivedRequests new Hash of received requests
@@ -150,4 +136,13 @@ public class User {
         return "Name: " + name + "\nUsername: " + username + "\n";
     }
 
+    /* Compares Users to each other. Calling Collection.sort will sort them in ascending
+     * order for display anywhere
+     * @param user
+     * @return
+     */
+    @Override
+    public int compareTo(@NonNull User user) {
+        return this.getName().toLowerCase().compareTo(user.getName().toLowerCase());
+    }
 }
