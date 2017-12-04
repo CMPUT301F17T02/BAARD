@@ -309,6 +309,7 @@ public class Habit implements Comparable<Habit> {
         }
     }
 
+    /**
      * Compares Habits to each other. Calling Collection.sort will sort them in ascending
      * order for display anywhere
      * @param habit
