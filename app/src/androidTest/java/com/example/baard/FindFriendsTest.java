@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import com.example.baard.Friends.ExploreFriends;
 import com.robotium.solo.Solo;
 
 import java.text.SimpleDateFormat;

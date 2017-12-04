@@ -24,6 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +154,8 @@ public class FriendsListFragment extends Fragment {
 
         user.setFriends(myFriendsMap);
         fileController.saveUser(getContext(), user);
+
+        Collections.sort(friendsNamesList);
 
         adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, friendsNamesList);
         friendListView.setAdapter(adapter);

@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -96,6 +97,9 @@ public class FindFriendsFragment extends Fragment {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        Collections.sort(allUsers.getArrayList());
+
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
 
