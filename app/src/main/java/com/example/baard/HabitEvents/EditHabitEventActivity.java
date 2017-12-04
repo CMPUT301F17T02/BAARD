@@ -67,6 +67,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
 
     private Habit habit;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private static final LatLng DEFAULT_LOCATION = new LatLng(53.5444, -113.490);
     private static final float DEFAULT_ZOOM = 13.5f;
     private HabitEvent habitEvent;
     private static final int PICK_IMAGE = 1;
@@ -181,15 +182,8 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         if (locationExists) {
             locationExists = false;
             locationPosition = habitEvent.getLocation();
-            mapFragment.getView().setVisibility(View.VISIBLE);
-            mapFragment.getMapAsync(this);
         }
-        else if (locationPosition != null) {
-            mapFragment.getView().setVisibility(View.VISIBLE);
-            mapFragment.getMapAsync(this);
-        } else {
-            mapFragment.getView().setVisibility(View.GONE);
-        }
+        mapFragment.getMapAsync(this);
     }
 
     private void changeFont() {
@@ -234,8 +228,13 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         mMap.getUiSettings().setZoomGesturesEnabled(false);
         mMap.getUiSettings().setScrollGesturesEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationPosition, DEFAULT_ZOOM));
-        mMap.addMarker(new MarkerOptions().position(locationPosition));
+
+        if (locationPosition != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationPosition, DEFAULT_ZOOM));
+            mMap.addMarker(new MarkerOptions().position(locationPosition));
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, DEFAULT_ZOOM));
+        }
     }
 
 
