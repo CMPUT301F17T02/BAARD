@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.relativelayout_for_fragment, fragment, fragment.getTag())
                 .addToBackStack(null)
                 .commit();
+        navigationView.setCheckedItem(R.id.nav_dailyHabits);
         setActionBarTitle(getString(R.string.daily_habits));
     }
 
@@ -210,8 +211,13 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_viewFriends) {
-            Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
-            startActivity(intent);
+            if (fileController.isNetworkAvailable(getApplicationContext())) {
+                Toast.makeText(this, R.string.title_activity_explore_friends, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_help) {
             fragment = new HelpFragment();
             nextHeader = getResources().getString(R.string.help);

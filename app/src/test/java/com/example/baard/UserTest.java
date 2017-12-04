@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.zip.DataFormatException;
 
 
@@ -19,9 +20,13 @@ import java.util.zip.DataFormatException;
 public class UserTest extends TestCase {
 
     private User user;
+    HashMap<String, Boolean> userList = new HashMap<>();
+    HashMap<String, String> userMap = new HashMap<>();
 
     public void setUp() {
         user = new User("Daniel", "daniel.choi123", "1");
+        userList.put("username1", Boolean.TRUE);
+        userList.put("username2", Boolean.FALSE);
     }
 
     public void testGetName() {
@@ -72,31 +77,32 @@ public class UserTest extends TestCase {
     }
 
     public void testGetFriends() {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
-        user.setFriends(userList);
-        assertEquals(userList, user.getFriends());
+
+        HashMap<String, Boolean> friends = new HashMap<>();
+        friends.put("johnSmith232", true);
+        user.setFriends(friends);
+        assertEquals(friends, user.getFriends());
     }
 
     public void testSetFriends() throws DataFormatException {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
-        user.setFriends(userList);
-        assertEquals(userList, user.getFriends());
+        HashMap<String, Boolean> friends = new HashMap<>();
+        friends.put("johnSmith232", true);
+        user.setFriends(friends);
+        assertEquals(friends, user.getFriends());
     }
 
     public void testGetReceivedRequests() {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
-        user.setReceivedRequests(userList);
-        assertEquals(userList, user.getReceivedRequests());
+        HashMap<String, String> requests = new HashMap<>();
+        requests.put("johnSmith232", "John");
+        user.setReceivedRequests(requests);
+        assertEquals(requests, user.getReceivedRequests());
     }
 
     public void testSetReceivedRequests() {
-        UserList userList = new UserList();
-        userList.add(new User("John", "johnSmith232", "2"));
-        user.setReceivedRequests(userList);
-        assertEquals(userList, user.getReceivedRequests());
+        HashMap<String, String> requests = new HashMap<>();
+        requests.put("johnSmith232", "John");
+        user.setReceivedRequests(requests);
+        assertEquals(requests, user.getReceivedRequests());
     }
 
     public void testGetId() {

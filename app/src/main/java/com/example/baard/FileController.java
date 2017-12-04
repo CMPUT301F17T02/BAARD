@@ -77,13 +77,15 @@ public class FileController {
         User fileUser = loadUserFromFile(context);
         if (isNetworkAvailable(context)) {
             User serverUser = loadUserFromServer(username);
-            if (fileUser != null) {
-                fileUser.setReceivedRequests(serverUser.getReceivedRequests());
-                fileUser.setFriends(serverUser.getFriends());
-            } else {
-                fileUser = serverUser;
+            if (serverUser != null) {
+                if (fileUser != null) {
+                    fileUser.setReceivedRequests(serverUser.getReceivedRequests());
+                    fileUser.setFriends(serverUser.getFriends());
+                } else {
+                    fileUser = serverUser;
+                }
+                saveUser(context, fileUser);
             }
-            saveUser(context, fileUser);
         }
         return fileUser;
     }
@@ -159,7 +161,7 @@ public class FileController {
      * Save user to server
      * @param user The user to be saved
      */
-    private void saveUserToServer(User user) {
+    public void saveUserToServer(User user) {
         ElasticSearchController.UpdateUserTask updateUserTask = new ElasticSearchController.UpdateUserTask();
         updateUserTask.execute(user);
     }
@@ -197,6 +199,7 @@ public class FileController {
         if (friend != null) {
             me.getReceivedRequests().remove(friend.getUsername());
             friend.getFriends().put(me.getUsername(), Boolean.TRUE);
+            saveUserToServer(friend);
             return true;
         } else {
             return false;

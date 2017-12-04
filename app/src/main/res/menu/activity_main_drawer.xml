@@ -6,48 +6,61 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_dailyHabits"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/daily_habits" />
-        <item
-            android:id="@+id/nav_allHabits"
-            android:icon="@drawable/ic_dashboard_black_24dp"
-            android:title="@string/all_habits" />
-        <item
-            android:id="@+id/nav_newHabit"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/create_habit" />
-        <item
-            android:id="@+id/nav_allHabitEvents"
-            android:icon="@drawable/ic_dashboard_black_24dp"
-            android:title="@string/habit_history" />
-        <item
-            android:id="@+id/nav_newHabitEvent"
-            android:icon="@drawable/ic_notifications_black_24dp"
-            android:title="@string/create_event" />
-        <item
-            android:id="@+id/nav_viewMap"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/title_activity_view_map" />
-        <item
-            android:id="@+id/nav_viewFriends"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Explore Friends" />
-    </group>
-
-    <item android:title="Personal">
+    <item android:title="View">
         <menu>
-            <item
-                android:id="@+id/nav_help"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="@string/help" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/logout" />
+            <group android:id="@+id/group1"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_dailyHabits"
+                    android:icon="@drawable/ic_home_black_24dp"
+                    android:title="@string/daily_habits" />
+                <item
+                    android:id="@+id/nav_allHabits"
+                    android:icon="@drawable/ic_dashboard_black_24dp"
+                    android:title="@string/all_habits" />
+                <item
+                    android:id="@+id/nav_allHabitEvents"
+                    android:icon="@drawable/ic_dashboard_black_24dp"
+                    android:title="@string/habit_history" />
+                <item
+                    android:id="@+id/nav_viewMap"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/title_activity_view_map" />
+                <item
+                    android:id="@+id/nav_viewFriends"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="Explore Friends" />
+            </group>
         </menu>
     </item>
-
+    <item android:title="Create">
+        <menu>
+            <group android:id="@+id/group2"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_newHabit"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/create_habit" />
+                <item
+                    android:id="@+id/nav_newHabitEvent"
+                    android:icon="@drawable/ic_notifications_black_24dp"
+                    android:title="@string/create_event" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Account">
+        <menu>
+            <group android:id="@+id/group3"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_help"
+                    android:icon="@drawable/ic_menu_manage"
+                    android:title="@string/help" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="@string/logout" />
+            </group>
+        </menu>
+    </item>
 </menu>

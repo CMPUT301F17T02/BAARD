@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
@@ -59,6 +60,7 @@ public class CreateNewHabitFragment extends Fragment {
     private HashSet<String> habitNames = new HashSet<>();
     private FileController fc;
     private User user;
+    private ArrayList<ToggleButton> toggles = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -148,6 +150,15 @@ public class CreateNewHabitFragment extends Fragment {
             }
         });
 
+        // grab all toggle buttons
+        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
+        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
+        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
+        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
+        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
+        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
+        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
+
         // set the toggle buttons for the days of the week
         setToggleButtons(myView);
 
@@ -160,6 +171,7 @@ public class CreateNewHabitFragment extends Fragment {
         });
 
         changeFont(myView);
+
         // Inflate the layout for this fragment
         return myView;
     }
@@ -194,15 +206,6 @@ public class CreateNewHabitFragment extends Fragment {
         reasonText.setTypeface(ralewayRegular);
         startDateText = myView.findViewById(R.id.startDate);
         startDateText.setTypeface(ralewayRegular);
-
-        ArrayList<ToggleButton> toggles = new ArrayList<>();
-        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
-        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
-        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
-        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
-        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
-        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
 
         for (ToggleButton toggle : toggles) {
             toggle.setTypeface(ralewayRegular);
@@ -257,11 +260,12 @@ public class CreateNewHabitFragment extends Fragment {
                 Habit habit = new Habit(title_text, reason, convertedStartDate, frequency);
                 habits.add(habit);
 
+                Collections.sort(habits.getArrayList());
                 fc.saveUser(getActivity().getApplicationContext(), user);
 
                 Intent intent = new Intent(getActivity(), ViewHabitActivity.class);
-                intent.putExtra("position", habits.size()-1);
-                startActivityForResult(intent, 2);
+                intent.putExtra("position", habits.indexOf(habit));
+                startActivity(intent, 2);
             } catch (DataFormatException errMsg) {
                 // occurs when title or reason are above their character limits
                 Toast.makeText(getActivity(), errMsg.getMessage(), Toast.LENGTH_SHORT).show();
@@ -274,15 +278,6 @@ public class CreateNewHabitFragment extends Fragment {
      * This thereby controls the frequency array to which habits should repeat on.
      */
     public void setToggleButtons(View myView) {
-        // store all buttons in order of days in the Day enum
-        ArrayList<ToggleButton> toggles = new ArrayList<>();
-        toggles.add((ToggleButton) myView.findViewById(R.id.sun));
-        toggles.add((ToggleButton) myView.findViewById(R.id.mon));
-        toggles.add((ToggleButton) myView.findViewById(R.id.tue));
-        toggles.add((ToggleButton) myView.findViewById(R.id.wed));
-        toggles.add((ToggleButton) myView.findViewById(R.id.thu));
-        toggles.add((ToggleButton) myView.findViewById(R.id.fri));
-        toggles.add((ToggleButton) myView.findViewById(R.id.sat));
         // grab all possible enum values of Day
         final Day[] possibleValues  = Day.values();
 

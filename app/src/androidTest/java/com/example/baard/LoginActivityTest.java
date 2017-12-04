@@ -102,7 +102,6 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
         solo.enterText((EditText) solo.getView(R.id.name), "Test Name");
         solo.clickOnButton("Register");
-        // Should not register because this username already exists
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
     }
 

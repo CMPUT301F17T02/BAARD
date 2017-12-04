@@ -29,7 +29,7 @@ import io.searchbox.annotations.JestId;
  * @version 2.0
  * @author anarten, bangotti, rderbysh
  */
-public class Habit {
+public class Habit implements Comparable<Habit> {
     private String title, reason;
     private String startDate;
     private ArrayList<Day> frequency;
@@ -307,6 +307,16 @@ public class Habit {
                 return toReturn;
             }
         }
+    }
+
+     * Compares Habits to each other. Calling Collection.sort will sort them in ascending
+     * order for display anywhere
+     * @param habit
+     * @return
+     */
+    @Override
+    public int compareTo(Habit habit){
+        return this.getTitle().toLowerCase().compareTo(habit.getTitle().toLowerCase());
     }
 
     /**

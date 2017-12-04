@@ -7,14 +7,25 @@ package com.example.baard;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -32,13 +43,14 @@ import java.util.Locale;
  * @see AllHabitEventsFragment
  * @since 1.0
  */
-public class ViewHabitEventActivity extends AppCompatActivity {
+public class ViewHabitEventActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-
+    private static final float DEFAULT_ZOOM = 13.5f;
     private Habit habit;
     private HabitEvent habitEvent;
     private final FileController fileController = new FileController();
     private User user;
+    private GoogleMap mMap;
     /**
      * When created, sets the content of all of its fields to match the given HabitEvent.
      * @param savedInstanceState saved state of the application
@@ -54,14 +66,26 @@ public class ViewHabitEventActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_view_habit_event);
 
-        getSupportActionBar().setTitle("View Habit Event");
+        setActionBarTitle("View Habit Event");
+        changeFont();
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        TextView name = findViewById(R.id.HabitName);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+
+        // Create Map
+        if (habitEvent.getLocation() != null) {
+            mapFragment.getView().setVisibility(View.VISIBLE);
+            mapFragment.getMapAsync(this);
+        } else {
+            mapFragment.getView().setVisibility(View.GONE);
+        }
+
+        TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
         TextView date = findViewById(R.id.HabitEventDate);
         DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
@@ -90,6 +114,53 @@ public class ViewHabitEventActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        TextView name = (TextView) findViewById(R.id.HabitName);
+        TextView date = (TextView) findViewById(R.id.HabitEventDate);
+        TextView comment = (TextView) findViewById(R.id.commentView);
+//        TextView location = (TextView) findViewById(R.id.locationView);
+        Button editHabitEventButton = (Button) findViewById(R.id.EditHabitEventButton);
+        Button deleteHabitEventButton = (Button) findViewById(R.id.DeleteHabitEventButton);
+
+        name.setTypeface(ralewayRegular);
+        date.setTypeface(ralewayRegular);
+        comment.setTypeface(ralewayRegular);
+//        location.setTypeface(ralewayRegular);
+        editHabitEventButton.setTypeface(ralewayRegular);
+        deleteHabitEventButton.setTypeface(ralewayRegular);
+    }
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d("ViewHabitEvent", "FLAG0");
+        mMap = googleMap;
+        mMap.clear();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(habitEvent.getLocation(), DEFAULT_ZOOM));
+        mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation()));
+    }
+
 
     @Override
     public void onBackPressed() {

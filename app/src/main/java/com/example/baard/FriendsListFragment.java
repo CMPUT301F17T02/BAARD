@@ -19,11 +19,15 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by randi on 23/11/17.
@@ -35,12 +39,13 @@ import java.util.Map;
 public class FriendsListFragment extends Fragment {
 
     private ListView friendListView;
-    private ArrayAdapter<User> adapter;
-    //private String username;
-//    private FileController fc;
-    List<User> friendsList = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    private String username;
+    private FileController fileController;
+    private ArrayList<String> friendsList = new ArrayList<>();
+    private HashMap<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
+    private HashMap<String, String> userMap = new HashMap<String, String>();
     private User user;
-    Map<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,12 +91,12 @@ public class FriendsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_friends, container, false);
-        //fc = new FileController();
+        fileController = new FileController();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
         String json = sharedPrefs.getString("username", "");
-        //username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         friendListView = (ListView) view.findViewById(R.id.friendListView);
 
@@ -100,9 +105,14 @@ public class FriendsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                User friend = fileController.loadUserFromServer(friendsList.get(i));
+
                 // Make the intent go to seeing the friend's habits and most recent habit event.
                 Intent intent = new Intent(getActivity(), ViewFriendActivity.class);
                 intent.putExtra("position", i);
+                intent.putExtra("friendUsername", friendsList.get(i));
+                intent.putExtra("friendName", friend.getName());
+
                 startActivity(intent);
             }
         });
@@ -117,16 +127,24 @@ public class FriendsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //User user = fc.loadUser(getActivity().getApplicationContext(), username);
-        //HabitList habitList = user.getHabits();
+        user = fileController.loadUser(getActivity().getApplicationContext(), username);
 
-//        friendsList = user.getFriends();
+        myFriendsMap = user.getFriends();
+        friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
 
-        for (int i = 0; i < 12; i++) {
-            friendsList.add(new User(Integer.toString(i), Integer.toString(i), Integer.toString(i)));
+        ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
+        for (String name : iterationList) {
+            User friend = fileController.loadUserFromServer(name);
+            if (friend == null) {
+//                  myFriendsMap.remove(username);
+                myFriendsMap.put(name, false);
+                friendsList.remove(name);
+            }
         }
+        user.setFriends(myFriendsMap);
+        fileController.saveUser(getContext(), user);
 
-        adapter = new ArrayAdapter<User>(getActivity(), R.layout.list_item, friendsList);
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, friendsList);
         friendListView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
@@ -158,5 +176,15 @@ public class FriendsListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public static <T, V> ArrayList<T> getKeysByValue(Map<T, V> map, V value) {
+        ArrayList<T> keys = new ArrayList<>();
+        for (Map.Entry<T, V> entry : map.entrySet()) {
+            if (value.equals(entry.getValue())) {
+                keys.add(entry.getKey());
+            }
+        }
+        return keys;
     }
 }

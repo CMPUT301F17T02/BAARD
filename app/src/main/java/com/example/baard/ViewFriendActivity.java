@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,6 +25,7 @@ import java.util.List;
 public class ViewFriendActivity extends AppCompatActivity {
 
     private int position;
+    private String friendName, friendUsername;
     private String username;
     private FileController fileController;
     private User user;
@@ -37,9 +39,13 @@ public class ViewFriendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_friend);
         fileController = new FileController();
+
         // grab the index of the item in the list
         Bundle extras = getIntent().getExtras();
         position = extras.getInt("position");
+        friendUsername = extras.getString("friendUsername");
+        friendName = extras.getString("friendName");
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
         //TODO: GRAB FRIEND USERNAME FROM FRIENDS MAP
@@ -57,8 +63,15 @@ public class ViewFriendActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        final List habitList = user.getHabits().getArrayList();
+
+        User friend = fileController.loadUserFromServer(friendUsername);
+
+        final List habitList = friend.getHabits().getArrayList();
+
         ListView listView = (ListView) findViewById(R.id.habit_scroller_listview);
+        TextView title = (TextView) findViewById(R.id.friend_title);
+        title.setText(friendName);
+
         ArrayAdapter<Habit> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, habitList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
