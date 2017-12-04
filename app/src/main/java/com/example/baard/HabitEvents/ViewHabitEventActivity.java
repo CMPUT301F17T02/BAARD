@@ -150,7 +150,10 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         getSupportActionBar().setTitle(s);
     }
 
-
+    /**
+     * Sets Google Map callback. If location exists put marker on map.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("ViewHabitEvent", "FLAG0");

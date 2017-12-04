@@ -112,6 +112,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_edit_habit_event);
 
+        // if image is in Habit Event, set the text to remove mode
         ImageView image = findViewById(R.id.imageViewEditEvent);
             if (habitEvent.getBitmapString() != null) {
                 image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
@@ -222,6 +223,10 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         getSupportActionBar().setTitle(s);
     }
 
+    /**
+     * Sets Google Map callback. If location exists put marker on map.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -359,6 +364,9 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
     /**
      * Method called when the select image button is pressed. Lets the user select an image to be added to the
      * habit event. Calls startActivityForResult to handle their selection.
+     *
+     * If a user has already added an image, this button removes that image, and then resets to allow the user to add
+     * an image again. The text of the button is updated accordingly.
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
@@ -376,6 +384,9 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * Called when the user selects an image. Gets an image from the file system.
+     */
     private void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
@@ -438,6 +449,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
             }
             image = myBitmap;
             Button selButton = findViewById(R.id.selectImageButton);
+            // set text to say Remove for the next button press
             selButton.setText("Remove Image");
             ImageView imageView = findViewById(R.id.imageViewEditEvent);
             imageView.setImageURI(selectedImage);
