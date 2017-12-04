@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -64,7 +65,7 @@ public class ViewFriendActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        User friend = fileController.loadUserFromServer(friendUsername);
+        final User friend = fileController.loadUserFromServer(friendUsername);
 
         final List habitList = friend.getHabits().getArrayList();
 
@@ -77,10 +78,17 @@ public class ViewFriendActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //tell the ViewRecordActivity which list item has been selected and start it
-                Intent intent = new Intent(getApplicationContext(), ViewFriendHabitActivity.class);
-                intent.putExtra("HabitPosition", i);
-                startActivity(intent);
+
+                if (friend.getHabits().getHabit(i).getEvents().size() == 0) {
+                    Toast.makeText(getApplicationContext(), "No habit events to view", Toast.LENGTH_SHORT).show();
+                } else {
+                    //tell the ViewRecordActivity which list item has been selected and start it
+                    Intent intent = new Intent(getApplicationContext(), ViewFriendHabitActivity.class);
+                    intent.putExtra("HabitPosition", i);
+                    intent.putExtra("habitName", habitList.get(i).toString());
+                    intent.putExtra("user", friend.getUsername());
+                    startActivity(intent);
+                }
             }
         });
 

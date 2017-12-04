@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import io.searchbox.annotations.JestId;
 
@@ -27,9 +28,9 @@ public class User {
     private String name;
     private String username;
     private HabitList habits = new HabitList();
-    private HashMap<String, Boolean> friends = new HashMap<>();
-    private HashMap<String, String> receivedRequests = new HashMap<>();
-
+    private HashMap<String, Boolean> friends = new HashMap<String, Boolean>();
+    private HashMap<String, Boolean> receivedRequests = new HashMap<String, Boolean>();
+  
     @JestId
     private String id;
 
@@ -118,14 +119,31 @@ public class User {
     /**
      * @return HashMap of received Requests for friends
      */
-    public HashMap<String, String> getReceivedRequests() {
+    public HashMap<String, Boolean> getReceivedRequests() {
         return receivedRequests;
     }
 
+    public HashMap<String, String> getAllUsers() {
+        HashMap<String, String> userMap = new HashMap<String, String>();
+        ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
+        getAllUsersTask.execute();
+        UserList allUsers;
+
+        try {
+            allUsers = getAllUsersTask.get();
+            for (User aUser : allUsers.getArrayList()) {
+                userMap.put(aUser.getUsername(), aUser.getName());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return userMap;
+    }
+  
     /**
      * @param receivedRequests new Hash of received requests
      */
-    public void setReceivedRequests(HashMap<String, String> receivedRequests) {
+    public void setReceivedRequests(HashMap<String, Boolean> receivedRequests) {
         this.receivedRequests = receivedRequests;
     }
 

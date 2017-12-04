@@ -21,7 +21,7 @@ public class UserTest extends TestCase {
 
     private User user;
     HashMap<String, Boolean> userList = new HashMap<>();
-    HashMap<String, String> userMap = new HashMap<>();
+    HashMap<String, Boolean> userMap = new HashMap<>();
 
     public void setUp() {
         user = new User("Daniel", "daniel.choi123", "1");
@@ -92,15 +92,15 @@ public class UserTest extends TestCase {
     }
 
     public void testGetReceivedRequests() {
-        HashMap<String, String> requests = new HashMap<>();
-        requests.put("johnSmith232", "John");
+        HashMap<String, Boolean> requests = new HashMap<>();
+        requests.put("johnSmith232", Boolean.TRUE);
         user.setReceivedRequests(requests);
         assertEquals(requests, user.getReceivedRequests());
     }
 
     public void testSetReceivedRequests() {
-        HashMap<String, String> requests = new HashMap<>();
-        requests.put("johnSmith232", "John");
+        HashMap<String, Boolean> requests = new HashMap<>();
+        requests.put("johnSmith232", Boolean.TRUE);
         user.setReceivedRequests(requests);
         assertEquals(requests, user.getReceivedRequests());
     }
