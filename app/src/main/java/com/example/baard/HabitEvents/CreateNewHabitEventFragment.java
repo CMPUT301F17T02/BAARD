@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -237,6 +238,7 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+        changeFont();
     }
 
     @Override
@@ -281,6 +283,23 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
     }
 
     private void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
+
+        TextView habitEventDateTextView = getActivity().findViewById(R.id.HabitEventDateTextView);
+        TextView habitEventCommentTextView = getActivity().findViewById(R.id.HabitEventCommentTextView);
+        EditText habitEventDateEditText = getActivity().findViewById(R.id.HabitEventDateEditText);
+        EditText habitEventCommentEditText = getActivity().findViewById(R.id.commentEditText);
+        Button attachImageButton = getActivity().findViewById(R.id.attachImageButton);
+        Button addLocationButton = getActivity().findViewById(R.id.addLocationButton);
+        Button saveButton = getActivity().findViewById(R.id.saveButton);
+
+        habitEventDateTextView.setTypeface(ralewayRegular);
+        habitEventCommentTextView.setTypeface(ralewayRegular);
+        habitEventDateEditText.setTypeface(ralewayRegular);
+        habitEventCommentEditText.setTypeface(ralewayRegular);
+        attachImageButton.setTypeface(ralewayRegular);
+        addLocationButton.setTypeface(ralewayRegular);
+        saveButton.setTypeface(ralewayRegular);
     }
 
 
