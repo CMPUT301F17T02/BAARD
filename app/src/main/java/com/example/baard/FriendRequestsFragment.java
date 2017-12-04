@@ -266,6 +266,7 @@ public class FriendRequestsFragment extends Fragment {
                     allUsersList.remove(acceptPerson);
                     getFriendRequestsList.remove(acceptPerson);
                     getFriendRequestsMap.put(acceptPerson, Boolean.FALSE);
+                    user.getReceivedRequests().put(acceptPerson, Boolean.FALSE);
 
                     System.out.println("all users list after removing: " + allUsersList);
                     System.out.println("getFriedRequestsList after removing: " + getFriendRequestsList);
