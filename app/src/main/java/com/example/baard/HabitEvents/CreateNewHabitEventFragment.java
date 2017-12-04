@@ -241,6 +241,10 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         changeFont();
     }
 
+    /**
+     * Sets Google Map callback. If location exists put marker on map.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -457,6 +461,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
     /**
      * Method called when the select image button is pressed. Lets the user select an image to be added to the
      * habit event. Calls startActivityForResult to handle their selection.
+     *
+     * If a user has already added an image, this button removes that image, and then resets to allow the user to add
+     * an image again. The text of the button is updated accordingly.
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
@@ -521,6 +528,7 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
             }
             image = myBitmap;
             Button imageSel = (Button) getActivity().findViewById(R.id.attachImageButton);
+            // set the button text to Remove Image for the next button press
             imageSel.setText("Remove Image");
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
