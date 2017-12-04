@@ -6,9 +6,12 @@ package com.example.baard.Friends;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.baard.Controllers.FileController;
+import com.example.baard.Controllers.TypefaceSpan;
 import com.example.baard.Entities.Habit;
 import com.example.baard.Entities.User;
 import com.example.baard.R;
@@ -29,11 +33,8 @@ import java.util.List;
 
 public class ViewFriendActivity extends AppCompatActivity {
 
-    private int position;
     private String friendName, friendUsername;
-    private String username;
     private FileController fileController;
-    private User user;
 
     /**
      * This create method sets the text based on habit retrieved
@@ -47,19 +48,11 @@ public class ViewFriendActivity extends AppCompatActivity {
 
         // grab the index of the item in the list
         Bundle extras = getIntent().getExtras();
-        position = extras.getInt("position");
         friendUsername = extras.getString("friendUsername");
         friendName = extras.getString("friendName");
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
-        //TODO: GRAB FRIEND USERNAME FROM FRIENDS MAP
-        String json = sharedPrefs.getString("username", "");
-
-        //Getting user info of friend
-        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
-        user = fileController.loadUser(getApplicationContext(), username);
-
+        setActionBarTitle("View Friend");
+        changeFont();
     }
 
     /**
@@ -89,8 +82,7 @@ public class ViewFriendActivity extends AppCompatActivity {
                     //tell the ViewRecordActivity which list item has been selected and start it
                     Intent intent = new Intent(getApplicationContext(), ViewFriendHabitActivity.class);
                     intent.putExtra("HabitPosition", i);
-                    intent.putExtra("habitName", habitList.get(i).toString());
-                    intent.putExtra("user", friend.getUsername());
+                    intent.putExtra("FriendUsername", friend.getUsername());
                     startActivity(intent);
                 }
             }
@@ -111,4 +103,32 @@ public class ViewFriendActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
+    }
+
+    /**
+     * Changes and aligns all font on screen
+     */
+    private void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        TextView titleText = findViewById(R.id.friend_title);
+
+        titleText.setTypeface(ralewayRegular);
+    }
+
 }

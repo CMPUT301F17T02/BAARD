@@ -140,7 +140,6 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         TextView milestoneTextView = findViewById(R.id.milestoneTextView);
         int milestone = habit.milestone();
-
         if (milestone > 0) {
             milestoneTextView.setText("Milestone reached: \n"+Integer.toString(milestone)+" habit events completed!");
             milestoneTextView.setVisibility(View.VISIBLE);

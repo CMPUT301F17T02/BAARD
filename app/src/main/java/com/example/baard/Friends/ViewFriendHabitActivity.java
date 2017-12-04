@@ -4,37 +4,49 @@
 
 package com.example.baard.Friends;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.baard.Controllers.FileController;
 import com.example.baard.Controllers.SerializableImage;
+import com.example.baard.Controllers.TypefaceSpan;
 import com.example.baard.Entities.Habit;
 import com.example.baard.Entities.HabitEvent;
 import com.example.baard.Entities.HabitList;
 import com.example.baard.Entities.User;
 import com.example.baard.R;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class ViewFriendHabitActivity extends AppCompatActivity {
+import static android.view.View.VISIBLE;
+
+public class ViewFriendHabitActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private final DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-    User user;
-    HabitList habitList;
-    Habit habit;
-    String username, habitName, pulledUsername;
-    int position;
-    FileController fc;
+    private HabitList habitList;
+    private Habit habit;
+    private HabitEvent habitEvent;
+    private String friendUsername;
+    private int position;
+    private FileController fc;
+
+    private static final float DEFAULT_ZOOM = 13.5f;
+    private GoogleMap mMap;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +57,10 @@ public class ViewFriendHabitActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         position = extras.getInt("HabitPosition");
-        habitName = extras.getString("habitName");
-        pulledUsername = extras.getString("user");
+        friendUsername = extras.getString("FriendUsername");
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
-        String json = sharedPrefs.getString("username", "");
-        username = gson.fromJson(json, new TypeToken<String>() {}.getType());
+        setActionBarTitle("View Habit");
+        changeFont();
     }
 
     @Override
@@ -59,9 +68,7 @@ public class ViewFriendHabitActivity extends AppCompatActivity {
         super.onStart();
 
         // load required data
-        //TODO: SET USER TO FRIEND SELECTED
-        user = fc.loadUser(getApplicationContext(), username);
-        User friendUser = fc.loadUserFromServer(pulledUsername);
+        User friendUser = fc.loadUserFromServer(friendUsername);
         habitList = friendUser.getHabits();
         habit = habitList.getHabit(position);
 
@@ -75,39 +82,113 @@ public class ViewFriendHabitActivity extends AppCompatActivity {
         startDateView.setText(formatter.format(habit.getStartDate()));
         frequencyView.setText(habit.getFrequencyString());
 
-        TextView milestoneTextView = (TextView) findViewById(R.id.milestoneTextView_friend);
+        TextView milestoneTextView = findViewById(R.id.milestoneTextView);
         int milestone = habit.milestone();
-
         if (milestone > 0) {
-            milestoneTextView.setText("Milestone reached: "+Integer.toString(milestone)+" habit events completed!");
-            milestoneTextView.setVisibility(View.VISIBLE);
+            milestoneTextView.setText("Milestone reached: \n"+Integer.toString(milestone)+" habit events completed!");
+            milestoneTextView.setVisibility(VISIBLE);
         } else {
             milestoneTextView.setVisibility(View.GONE);
         }
 
-        TextView streakTextView = (TextView) findViewById(R.id.streakTextView_friend);
+        TextView streakTextView = findViewById(R.id.streakTextView);
         int streak = habit.streak();
         if (streak > 4) {
-            streakTextView.setText("This habit is currently on a streak of "+Integer.toString(streak)+"!");
-            streakTextView.setVisibility(View.VISIBLE);
+            streakTextView.setText("Current Streak: "+Integer.toString(streak));
+            streakTextView.setVisibility(VISIBLE);
         } else {
             streakTextView.setVisibility(View.GONE);
         }
 
-        getSupportActionBar().setTitle("View Habit");
-        HabitEvent habitEvent = habit.getEvents().getHabitEvent(0);
+        habitEvent = habit.getEvents().getHabitEvent(0);
 
-        TextView date = (TextView) findViewById(R.id.eventStartDate_friend);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        
+        // Create Map
+        if (habitEvent.getLocation() != null) {
+            mapFragment.getView().setVisibility(VISIBLE);
+            mapFragment.getMapAsync(this);
+        } else {
+            mapFragment.getView().setVisibility(View.GONE);
+        }
+
+        TextView date = (TextView) findViewById(R.id.eventDate_friend);
         DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
         date.setText(formatter.format(habitEvent.getEventDate()));
         TextView comment = (TextView) findViewById(R.id.comment_friend);
         comment.setText(habitEvent.getComment());
         ImageView image = (ImageView) findViewById(R.id.friendEventImage);
         // set image if there is one
-        //Bitmap bmp = habitEvent.getImage().getBitmap();
         if (habitEvent.getBitmapString() != null) {
+            image.setVisibility(VISIBLE);
             image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
         }
+    }
 
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
+    }
+
+
+    /**
+     * Changes and aligns all font on screen
+     */
+    private void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        TextView titleText = findViewById(R.id.title_friend);
+        TextView reasonText = findViewById(R.id.textViewReason);
+        TextView startDateText = findViewById(R.id.textViewStartDate);
+        TextView freqText = findViewById(R.id.textViewFreq);
+        TextView reason = findViewById(R.id.reason_friend);
+        TextView startDate = findViewById(R.id.startDate_friend);
+        TextView frequency = findViewById(R.id.frequency_friend);
+        TextView streakText = findViewById(R.id.streakTextView);
+        TextView milestoneText = findViewById(R.id.milestoneTextView);
+        TextView eventDate = findViewById(R.id.eventDate_friend);
+        TextView eventDateText = findViewById(R.id.textViewEventDate_friend);
+        TextView comment = findViewById(R.id.comment_friend);
+        TextView commentText = findViewById(R.id.textViewComment_friend);
+
+        titleText.setTypeface(ralewayRegular);
+        reasonText.setTypeface(ralewayRegular);
+        startDateText.setTypeface(ralewayRegular);
+        freqText.setTypeface(ralewayRegular);
+        reason.setTypeface(ralewayRegular);
+        startDate.setTypeface(ralewayRegular);
+        frequency.setTypeface(ralewayRegular);
+        streakText.setTypeface(ralewayRegular);
+        milestoneText.setTypeface(ralewayRegular);
+        eventDate.setTypeface(ralewayRegular);
+        eventDateText.setTypeface(ralewayRegular);
+        comment.setTypeface(ralewayRegular);
+        commentText.setTypeface(ralewayRegular);
+    }
+
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d("ViewHabitEvent", "FLAG0");
+        mMap = googleMap;
+        mMap.clear();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(habitEvent.getLocation(), DEFAULT_ZOOM));
+        mMap.addMarker(new MarkerOptions().position(habitEvent.getLocation()));
     }
 }
