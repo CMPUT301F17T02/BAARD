@@ -16,9 +16,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.baard.Controllers.ElasticSearchController;
+import com.example.baard.Controllers.FileController;
+import com.example.baard.Entities.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Settings for the user's account activity
+ * @see MainActivity
+ * @see ElasticSearchController
+ * @see FileController
+ * @author bangotti
+ * @since 2.0
+ * @version 1.1
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     private FileController fc;

@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:padding="15dp"
     android:orientation="vertical"
-    tools:context="com.example.baard.EditHabitEventActivity">
+    tools:context="com.example.baard.HabitEvents.EditHabitEventActivity">
 
     <android.support.constraint.ConstraintLayout
         android:background="@color/white"
@@ -79,7 +79,7 @@
                 android:text="Comment" />
 
             <EditText
-                android:id="@+id/commentEditText"
+                android:id="@+id/EditCommentEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"

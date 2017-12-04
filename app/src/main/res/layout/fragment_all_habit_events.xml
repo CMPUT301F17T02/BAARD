@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.baard.AllHabitEventsFragment">
+    tools:context="com.example.baard.HabitEvents.AllHabitEventsFragment">
 
     <LinearLayout
         android:id="@+id/filterLayout"
