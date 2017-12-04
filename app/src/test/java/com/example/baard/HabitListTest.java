@@ -4,13 +4,13 @@
 
 package com.example.baard;
 
-import android.test.ActivityInstrumentationTestCase2;
+import com.example.baard.Entities.Day;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitList;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.zip.DataFormatException;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

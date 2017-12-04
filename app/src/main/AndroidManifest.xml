@@ -61,7 +61,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".ViewHabitActivity"
+            android:name=".Habits.ViewHabitActivity"
             android:theme="@style/AppTheme.Translucent"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -69,18 +69,18 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".ViewHabitEventActivity"
+            android:name=".HabitEvents.ViewHabitEventActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".EditHabitEventActivity"
-            android:parentActivityName=".ViewHabitEventActivity" />
+            android:name=".HabitEvents.EditHabitEventActivity"
+            android:parentActivityName=".HabitEvents.ViewHabitEventActivity" />
         <activity
-            android:name=".EditHabitActivity"
+            android:name=".Habits.EditHabitActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:parentActivityName=".ViewHabitActivity">
+            android:parentActivityName=".Habits.ViewHabitActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ViewHabitActivity" />
+                android:value=".Habits.ViewHabitActivity" />
         </activity>
         <activity
             android:name=".AddLocationActivity"
@@ -91,7 +91,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".ExploreFriends"
+            android:name=".Friends.ExploreFriends"
             android:label="@string/title_activity_explore_friends"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoTitle.Transulcent">
@@ -107,7 +107,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".ViewFriendActivity"
+            android:name=".Friends.ViewFriendActivity"
             android:label="@string/title_activity_view_friend"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
@@ -115,15 +115,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ViewFriendHabitActivity"
+        <activity android:name=".Friends.ViewFriendHabitActivity"
             android:label="ViewFriendHabit"
-            android:parentActivityName=".ViewFriendActivity">
+            android:parentActivityName=".Friends.ViewFriendActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ViewFriendActivity" />
+                android:value=".Friends.ViewFriendActivity" />
         </activity>
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".Controllers.AlarmReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY" />

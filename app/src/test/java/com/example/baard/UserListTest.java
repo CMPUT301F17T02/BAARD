@@ -5,6 +5,9 @@
 package com.example.baard;
 
 
+import com.example.baard.Entities.User;
+import com.example.baard.Entities.UserList;
+
 import junit.framework.TestCase;
 
 /**

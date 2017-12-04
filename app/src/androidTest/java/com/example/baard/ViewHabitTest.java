@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.baard.Habits.ViewHabitActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.Assert;

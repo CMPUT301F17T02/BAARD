@@ -5,6 +5,11 @@
 package com.example.baard;
 
 
+import com.example.baard.Entities.Day;
+import com.example.baard.Entities.Habit;
+import com.example.baard.Entities.HabitList;
+import com.example.baard.Entities.User;
+
 import junit.framework.TestCase;
 
 import java.util.ArrayList;

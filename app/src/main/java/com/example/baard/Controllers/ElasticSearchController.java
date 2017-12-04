@@ -1,12 +1,14 @@
 /*
-* Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
-*/
+ * Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
+ */
 
-package com.example.baard;
+package com.example.baard.Controllers;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.baard.Entities.User;
+import com.example.baard.Entities.UserList;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -14,8 +16,6 @@ import com.google.gson.JsonObject;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
-
-import java.util.HashMap;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;

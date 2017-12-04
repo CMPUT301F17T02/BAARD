@@ -25,6 +25,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.baard.Controllers.ElasticSearchController;
+import com.example.baard.Controllers.FileController;
+import com.example.baard.Entities.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
