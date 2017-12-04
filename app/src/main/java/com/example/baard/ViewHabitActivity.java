@@ -8,6 +8,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -161,6 +162,30 @@ public class ViewHabitActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void changeFont() {
+        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+
+        TextView titleText = findViewById(R.id.title);
+        TextView reasonText = findViewById(R.id.textViewReason);
+        TextView startDateText = findViewById(R.id.textViewStartDate);
+        TextView freqText = findViewById(R.id.textViewFreq);
+        TextView reason = findViewById(R.id.reason);
+        TextView startDate = findViewById(R.id.startDate);
+        TextView frequency = findViewById(R.id.frequency);
+        TextView streakText = findViewById(R.id.streakTextView);
+        TextView milestoneText = findViewById(R.id.milestoneTextView);
+
+        titleText.setTypeface(ralewayRegular);
+        reasonText.setTypeface(ralewayRegular);
+        startDateText.setTypeface(ralewayRegular);
+        freqText.setTypeface(ralewayRegular);
+        reason.setTypeface(ralewayRegular);
+        startDate.setTypeface(ralewayRegular);
+        frequency.setTypeface(ralewayRegular);
+        streakText.setTypeface(ralewayRegular);
+        milestoneText.setTypeface(ralewayRegular);
     }
 
     @Override
