@@ -196,8 +196,9 @@ public class ViewHabitActivity extends AppCompatActivity {
         frequency.setTypeface(ralewayRegular);
         streakText.setTypeface(ralewayRegular);
         milestoneText.setTypeface(ralewayRegular);
+    }
 
-  @Override
+    @Override
     public void onBackPressed() {
         setResult(RESULT_OK);
         finish();
