@@ -444,7 +444,15 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         if (checkReadPermission() == -1){
             return;
         }
-        getImage();
+        if (image == null) {
+            getImage();
+        }else{
+            Button imageSel = (Button) getActivity().findViewById(R.id.attachImageButton);
+            image = null;
+            imageSel.setText("Add Image");
+            ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+            imageView.setImageBitmap(image);
+        }
     }
 
     private void getImage(){
@@ -493,6 +501,8 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
                 return;
             }
             image = myBitmap;
+            Button imageSel = (Button) getActivity().findViewById(R.id.attachImageButton);
+            imageSel.setText("Remove Image");
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
         }
