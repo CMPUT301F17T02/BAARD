@@ -251,11 +251,11 @@ public class FriendRequestsFragment extends Fragment {
                     getFriendRequestsMap.put(acceptPerson, Boolean.FALSE);
                     user.getReceivedRequests().put(acceptPerson, Boolean.FALSE);
 
-//                    Boolean test = fileController.acceptFriendRequest(getContext(), user.getUsername(), acceptPerson);
-//                    if (test) { System.out.println("Saved to server"); }
-//                    else { System.out.println("Failed"); }
+                    Boolean test = fileController.acceptFriendRequest(getContext(), user.getUsername(), acceptPerson);
+                    if (test) { System.out.println("Saved to server"); }
+                    else { System.out.println("Failed"); }
 
-//                    fileController.saveUser(_context, user);
+                    fileController.saveUser(_context, user);
                     _listDataHeader.remove(groupPosition);
                     notifyDataSetChanged();
                 }
@@ -276,14 +276,14 @@ public class FriendRequestsFragment extends Fragment {
 
 //                    User user = fileController.loadUser(_context, username);
                     user.getReceivedRequests().put(declinedPerson, Boolean.FALSE);
-//                    fileController.saveUser(_context, user);
+                    fileController.saveUser(_context, user);
 
                     _listDataHeader.remove(groupPosition);
                     notifyDataSetChanged();
                 }
             });
 
-            fileController.saveUser(_context, user);
+//            fileController.saveUser(_context, user);
 
             return convertView;
         }
