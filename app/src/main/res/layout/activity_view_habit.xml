@@ -28,6 +28,7 @@
             <android.support.constraint.ConstraintLayout
                 android:background="@color/white"
                 android:layout_width="match_parent"
+                android:paddingBottom="8dp"
                 android:elevation="4dp"
                 android:layout_height="wrap_content">
 
@@ -140,7 +141,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="8dp"></com.github.mikephil.charting.charts.LineChart>
+                    android:layout_marginBottom="0dp"></com.github.mikephil.charting.charts.LineChart>
 
                 <LinearLayout
                     android:id="@+id/linearLayout4"
@@ -157,6 +158,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="4"
                         android:orientation="vertical">
 
@@ -220,7 +222,7 @@
                     <LinearLayout
                         android:id="@+id/view_layout"
                         android:layout_width="0dp"
-                        android:layout_height="225dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:orientation="vertical"
                         app:layout_constraintLeft_toLeftOf="parent"
