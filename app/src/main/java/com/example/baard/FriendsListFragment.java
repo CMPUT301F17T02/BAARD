@@ -43,11 +43,17 @@ public class FriendsListFragment extends Fragment {
     private ArrayAdapter<String> adapter;
     private String username;
     private FileController fileController;
+    // List of usernames of your friends
     private ArrayList<String> friendsList = new ArrayList<>();
 //    private ArrayList<String> friendsNamesList = new ArrayList<>();;
-    private HashMap<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
-    private HashMap<String, String> userMap = new HashMap<String, String>();
     private User user;
+    // If you have friends. True if friend, False if pending
+    private HashMap<String, Boolean> myFriendsMap = new HashMap<String, Boolean>();
+    // Hashmap <username, name>
+    private HashMap<String, String> userMap = new HashMap<String, String>();
+    // If request to be friends, return true.
+    private HashMap<String, Boolean> requestedFriendsMap = new HashMap<>();
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -131,22 +137,28 @@ public class FriendsListFragment extends Fragment {
 
         user = fileController.loadUser(getActivity().getApplicationContext(), username);
 
+        // Get all users in hashmap
+        userMap = user.getAllUsers();
+        // True if friend, False if pending.
         myFriendsMap = user.getFriends();
+        // Get all friends' usernames
         friendsList = getKeysByValue(myFriendsMap, Boolean.TRUE);
 
+        // Make a clone of the list, and edit the clone list
         ArrayList<String> iterationList = (ArrayList<String>) friendsList.clone();
         for (String name : iterationList) {
             User friend = fileController.loadUserFromServer(name);
-            userMap.put(friend.getUsername(), friend.getName());
+
+//            userMap.put(friend.getUsername(), friend.getName());
 
             if (friend == null) {
-//                  myFriendsMap.remove(username);
                 myFriendsMap.put(name, false);
                 friendsList.remove(name);
             }
 
         }
 
+        //Get the names of all of your friends
         List<String> friendsNamesList = new ArrayList<String>(userMap.values());
 
         System.out.println("List of names: " + friendsNamesList);

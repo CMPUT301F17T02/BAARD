@@ -5,15 +5,11 @@
 package com.example.baard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +28,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by randi on 23/11/17.
@@ -50,9 +45,11 @@ public class FriendRequestsFragment extends Fragment {
     private FileController fileController;
 //    ArrayList<String> allUserList = new ArrayList<>();
     private ArrayList<String> getFriendRequestsList = new ArrayList<>();
+    // True if you have a request, false otherwise
     private HashMap<String, Boolean> getFriendRequestsMap = new HashMap<String, Boolean>();
     private User user;
-    private HashMap<String, String> allUsers = new HashMap<String, String>();
+    // Hashmap <username, name>
+    private HashMap<String, String> userMap = new HashMap<String, String>();
 
 
     private FriendRequestsFragment.OnFragmentInteractionListener mListener;
@@ -108,17 +105,16 @@ public class FriendRequestsFragment extends Fragment {
         super.onResume();
 
         User user = fileController.loadUser(getActivity().getApplicationContext(), username);
-        //HabitList habitList = user.getHabits();
-        //getFriendRequestsList.getArrayList();
+
         List<String> listDataHeader = new ArrayList<>();
         HashMap<String, List<String>> listDataChild = new HashMap<>();
         List<String> child = new ArrayList<>();
         child.add("");
 
         // Hashmap <username, name>
-        allUsers = user.getAllUsers();
+        userMap = user.getAllUsers();
 
-        // Hashmap <username, boolean>
+        // Hashmap <username, boolean>. True if have a request, false otherwise.
         getFriendRequestsMap = user.getReceivedRequests();
 
         if (!(getFriendRequestsList.size()>0)) {
@@ -129,7 +125,7 @@ public class FriendRequestsFragment extends Fragment {
             System.out.println("User's received requests: " + getFriendRequestsMap);
 
             for (int j = 0; j < getFriendRequestsList.size(); j++) {
-                listDataHeader.add(allUsers.get(getFriendRequestsList.get(j)));
+                listDataHeader.add(userMap.get(getFriendRequestsList.get(j)));
                 listDataChild.put(listDataHeader.get(listDataHeader.size() - 1), child);
             }
         }
