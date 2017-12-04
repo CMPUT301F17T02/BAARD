@@ -335,7 +335,6 @@ public class ViewHabitActivity extends AppCompatActivity {
         lineChart.getAxisLeft().setDrawGridLines(true);
         lineChart.getDescription().setEnabled(false);
         lineChart.getAxisRight().setEnabled(false);
-        lineChart.getLegend().setEnabled(false);
 
         ArrayList<Entry> yValues = new ArrayList<>();
         for (HabitStatistics.HabitCompletionVsTimeData data : habitCompletionVsTimesData) {
