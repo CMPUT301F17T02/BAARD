@@ -50,7 +50,6 @@ public class FindFriendsFragment extends Fragment {
     UserList allUsers = new UserList();
     private HashMap<String, Boolean> myFriends;
     private HashMap<String, String> userMap = new HashMap<String, String>();
-//    private HashMap<String, Boolean> requestedFriendsMap = new HashMap<>();
 
     ArrayList<String> acceptedFriendsList, pendingFriendsList;
 
@@ -121,9 +120,7 @@ public class FindFriendsFragment extends Fragment {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout, parent, false);
                 final ViewHolder viewHolder = new ViewHolder();
-
-//                user = fileController.loadUser(getActivity().getApplicationContext(), username);
-
+                
                 acceptedFriendsList = getKeysByValue(myFriends, Boolean.TRUE);
                 pendingFriendsList = getKeysByValue(myFriends, Boolean.FALSE);
 

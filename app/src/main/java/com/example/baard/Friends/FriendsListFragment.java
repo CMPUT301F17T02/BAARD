@@ -117,7 +117,7 @@ public class FriendsListFragment extends Fragment {
     }
 
     /**
-     * Called when AllHabitsFragment activity is opened up and called again.
+     * Called when FriendsListFragment activity is opened up and called again.
      */
     @Override
     public void onResume() {
