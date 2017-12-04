@@ -21,7 +21,6 @@ import java.util.Date;
  */
 
 public class HabitStatisticsTest extends TestCase {
-
     private Habit habit;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -134,5 +133,4 @@ public class HabitStatisticsTest extends TestCase {
 
         assertEquals(0, habitCompletionVsTimeDatas.size());
     }
-
 }
