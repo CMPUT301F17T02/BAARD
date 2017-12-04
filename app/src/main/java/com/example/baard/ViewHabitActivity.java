@@ -62,6 +62,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Activity to view a habit
+ * @see MainActivity
+ * @see Habit
+ * @see AllHabitsFragment
+ * @see DailyHabitsFragment
+ * @see AppCompatActivity
+ * @author rderbysh, minsoung
+ * @since 1.0
+ * @version 3.0
+ */
 public class ViewHabitActivity extends AppCompatActivity {
 
     private final DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
@@ -108,10 +119,10 @@ public class ViewHabitActivity extends AppCompatActivity {
         habit = habitList.getHabit(position);
 
         // set all of the values for the habit to be viewed
-        TextView titleView = (TextView) findViewById(R.id.title);
-        TextView reasonView = (TextView) findViewById(R.id.reason);
-        TextView startDateView = (TextView) findViewById(R.id.startDate);
-        TextView frequencyView = (TextView) findViewById(R.id.frequency);
+        TextView titleView = findViewById(R.id.title);
+        TextView reasonView = findViewById(R.id.reason);
+        TextView startDateView = findViewById(R.id.startDate);
+        TextView frequencyView = findViewById(R.id.frequency);
         titleView.setText(habit.getTitle());
         reasonView.setText(habit.getReason());
         startDateView.setText(formatter.format(habit.getStartDate()));
@@ -122,7 +133,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         createLineChart();
         listHabitEvents();
 
-        TextView milestoneTextView = (TextView) findViewById(R.id.milestoneTextView);
+        TextView milestoneTextView = findViewById(R.id.milestoneTextView);
         int milestone = habit.milestone();
 
         if (milestone > 0) {
@@ -132,7 +143,7 @@ public class ViewHabitActivity extends AppCompatActivity {
             milestoneTextView.setVisibility(View.GONE);
         }
 
-        TextView streakTextView = (TextView) findViewById(R.id.streakTextView);
+        TextView streakTextView = findViewById(R.id.streakTextView);
         int streak = habit.streak();
         if (streak > 4) {
             streakTextView.setText("Current Streak: "+Integer.toString(streak));
@@ -141,8 +152,8 @@ public class ViewHabitActivity extends AppCompatActivity {
             streakTextView.setVisibility(View.GONE);
         }
 
-        Button edit = (Button) findViewById(R.id.edit);
-        Button delete = (Button) findViewById(R.id.delete);
+        Button edit = findViewById(R.id.edit);
+        Button delete = findViewById(R.id.delete);
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +196,12 @@ public class ViewHabitActivity extends AppCompatActivity {
         frequency.setTypeface(ralewayRegular);
         streakText.setTypeface(ralewayRegular);
         milestoneText.setTypeface(ralewayRegular);
+
+  @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+        super.onBackPressed();
     }
 
     /**
@@ -209,6 +226,7 @@ public class ViewHabitActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_OK);
             finish();
             return true;
         }
@@ -388,7 +406,7 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     private void listHabitEvents() {
-        ListView eventsList = (ListView) findViewById(R.id.habit_events_scroller_ListView);
+        ListView eventsList = findViewById(R.id.habit_events_scroller_ListView);
         final List<HabitEvent> habitEventList = habit.getEvents().getArrayList();
 
         if (habitEventList.size() > 0) {

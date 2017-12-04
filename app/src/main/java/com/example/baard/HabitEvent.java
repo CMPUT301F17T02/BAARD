@@ -12,10 +12,6 @@ import java.util.Locale;
 import java.util.zip.DataFormatException;
 
 /**
- * Created by biancaangotti on 2017-10-18.
- */
-
-/**
  * A HabitEvent that records the user performing an instance of a habit.
  * @author amckerna
  * @version 1.0
@@ -42,7 +38,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
             throw new IllegalArgumentException();
         }
         // TODO: make sure the habit doesnt have any habitevents with this date
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         this.eventDate = sdf.format(eventDate);
     }
 
@@ -70,7 +66,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
             if (events.getEventDate().equals(eventDate))
                 throw new DateAlreadyExistsException();
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         this.eventDate = sdf.format(eventDate);
     }
 
@@ -109,7 +105,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
 
     /**
      * setter for comment
-     * @param comment
+     * @param comment new comment
      * @throws DataFormatException throws if comment is more than 20 chars long
      */
     public void setComment(String comment) throws DataFormatException {
@@ -120,7 +116,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
     }
 
     public Date getEventDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         try {
             return sdf.parse(eventDate);
         } catch (Exception e) {
@@ -130,7 +126,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
 
     /**
      * setter for event date
-     * @param eventDate
+     * @param eventDate new event date
      * @throws IllegalArgumentException throws if event date is before habit start date
      * @throws DateAlreadyExistsException throws if there is a habit event with this date already associated with this habit
      */
@@ -147,7 +143,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
             if (events.getEventDate().equals(eventDate))
                 throw new DateAlreadyExistsException();
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         this.eventDate = sdf.format(eventDate);
     }
 
@@ -163,7 +159,7 @@ public class HabitEvent implements Comparable<HabitEvent> {
     /**
      * Set the optional location for a habit event based on user dropping pin
      *
-     * @param location
+     * @param location new location
      */
     public void setLocation(LatLng location) {
         this.location = location;
@@ -171,18 +167,21 @@ public class HabitEvent implements Comparable<HabitEvent> {
 
     /**
      * Compares HabitEvents to each other. Calling Collection.sort will sort them in descending order for display on AllHabitEventsFragment
-     * @param habitEvent
-     * @return
+     * @param habitEvent other event to compare
+     * @return integer of comparison
      */
     @Override
     public int compareTo(HabitEvent habitEvent){
         return this.getEventDate().compareTo(habitEvent.getEventDate()) * -1;
     }
 
+    /**
+     * @return String representation of HabitEvent
+     */
     @Override
     public String toString(){
         Date date;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         try {
             date = sdf.parse(eventDate);
         } catch (Exception e) {

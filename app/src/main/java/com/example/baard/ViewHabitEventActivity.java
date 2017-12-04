@@ -37,7 +37,11 @@ import java.util.Locale;
 /**
  * Activity called when user selects a HabitEvent when viewing all HabitEvents
  * @author amckerna
- * @version 1.0
+ * @version 2.0
+ * @see AppCompatActivity
+ * @see HabitEvent
+ * @see AllHabitEventsFragment
+ * @since 1.0
  */
 public class ViewHabitEventActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -49,7 +53,7 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
     private GoogleMap mMap;
     /**
      * When created, sets the content of all of its fields to match the given HabitEvent.
-     * @param savedInstanceState
+     * @param savedInstanceState saved state of the application
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,26 +87,26 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
 
         TextView name = (TextView) findViewById(R.id.HabitName);
         name.setText(habitEvent.getHabit().getTitle());
-        TextView date = (TextView) findViewById(R.id.HabitEventDate);
+        TextView date = findViewById(R.id.HabitEventDate);
         DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
         date.setText(formatter.format(habitEvent.getEventDate()));
-        TextView comment = (TextView) findViewById(R.id.commentView);
+        TextView comment = findViewById(R.id.commentView);
         comment.setText(habitEvent.getComment());
-        ImageView image = (ImageView) findViewById(R.id.ImageView);
+        ImageView image = findViewById(R.id.ImageView);
         // set image if there is one
         //Bitmap bmp = habitEvent.getImage().getBitmap();
         if (habitEvent.getBitmapString() != null) {
             image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
         }
         //set onClick listeners for the edit/delete buttons
-        Button deleteButton = (Button) findViewById(R.id.DeleteHabitEventButton);
+        Button deleteButton = findViewById(R.id.DeleteHabitEventButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 deleteHabitEvent();
             }
         });
-        Button editButton = (Button) findViewById(R.id.EditHabitEventButton);
+        Button editButton = findViewById(R.id.EditHabitEventButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -159,8 +163,16 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
 
 
     @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+        super.onBackPressed();
+    }
+
+    @Override
      public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_OK);
             finish();
             return true;
         }
