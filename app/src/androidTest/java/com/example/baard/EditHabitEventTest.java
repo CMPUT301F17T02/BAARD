@@ -17,7 +17,13 @@ import com.robotium.solo.Solo;
 
 /**
  * A class for testing the ability to edit existing habit events.
- * Note that this class does not test the ability to edit images, since solo/robotium cannot navigate Android system UI.
+ *
+ * Note that this class does not test the ability to edit images, since solo/robotium cannot navigate
+ * Android system UI.
+ *
+ * These tests assume that there is a Jogging Habit in the database with a start date of April 20, 2016.
+ * Without this, some or all of these tests may fail.
+ *
  * @author amckerna
  * @version 1.0
  */
@@ -25,8 +31,6 @@ import com.robotium.solo.Solo;
 public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginActivity>{
 
     private Solo solo;
-    //private String dateInput;
-    private LoginActivity activity;
     public EditHabitEventTest(){
         super(LoginActivity.class);
     }
@@ -38,9 +42,6 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
      */
     @Override
     public void setUp() throws InterruptedException {
-        //DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-        //dateInput = formatter.format(new Date());
-        activity = (LoginActivity) getActivity();
         solo = new Solo(getInstrumentation(), getActivity());
         // log out if we are logged in for each test
         if (!(solo.searchButton("Register", true))) {
@@ -76,7 +77,6 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
             solo.clickOnText("View");
             solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
         }
-        //solo.clickOnImageButton(0);
         // select create new habit event
         solo.clickOnImageButton(0);
         solo.clickOnImageButton(0);
@@ -84,8 +84,6 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         solo.pressSpinnerItem(0,0);
-        Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
-        String habitName = spinner.getSelectedItem().toString();
         solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
         solo.setDatePicker(0,2016,11,25);
         solo.clickOnText("OK");
@@ -96,6 +94,9 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         Log.d("SETUP","setUp()");
     }
 
+    /**
+     * Edit the comment of an existing Habit Event.
+     */
     @Test
     public void testEditComment(){
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
@@ -107,6 +108,9 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.searchText("Edited comment");
     }
 
+    /**
+     * Edit the comment of an existing Habit Event to exceed the character limit.
+     */
     @Test
     public void testEditTooLongComment(){
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
@@ -118,6 +122,9 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.assertCurrentActivity("Should still be in edit habit event activity", EditHabitEventActivity.class);
     }
 
+    /**
+     * Edit the date of a Habit Event.
+     */
     @Test
     public void testEditDate(){
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
@@ -131,6 +138,9 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
 
+    /**
+     * Edit the date of a Habit Event to a date in the future.
+     */
     @Test
     public void testEditFutureDate(){
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
@@ -142,6 +152,9 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.assertCurrentActivity("Should still be in editHabitEventActivity", EditHabitEventActivity.class);
     }
 
+    /**
+     * Edit the date of a Habit Event to be before the start of the Habit it is a part of.
+     */
     @Test
     public void testEditDateBeforeHabitStart(){
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
@@ -153,11 +166,13 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.assertCurrentActivity("Should still be in editHabitEventActivity", EditHabitEventActivity.class);
     }
 
+    /**
+     * Create a Habit Event, and edit it to have the same date as another existing Habit Event.
+     */
     @Test
     public void testEditDateToSameDateAsAnotherEvent(){
         // create another habit, then edit it to the same date as the one created at the start of every test
         // (Dec 25, 2016)
-        //solo.goBack();
         solo.clickOnImageButton(0);
         solo.waitForText("Habit Event History");
         solo.clickOnImageButton(0);
@@ -166,8 +181,6 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnText("Create New Habit Event");
         solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         solo.pressSpinnerItem(0,0);
-        Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
-        String habitName = spinner.getSelectedItem().toString();
         solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
         solo.setDatePicker(0,2016,11,15);
         solo.clickOnText("OK");
@@ -189,6 +202,10 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnView(solo.getView(R.id.DeleteHabitEventButton));
     }
 
+    /**
+     * Edit the location of an existing Habit Event.
+     * @throws InterruptedException
+     */
     @Test
     public void testEditLocation() throws InterruptedException{
         solo.clickOnView(solo.getView(R.id.EditHabitEventButton));
@@ -202,14 +219,14 @@ public class EditHabitEventTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.searchText("Location Added");
     }
 
+    /**
+     * Enter the Edit screen of a Habit Event from the Habit Event History screen, rather than the View
+     * Habit Event screen.
+     */
     @Test
     public void testEnterEditFromHabitEventHistory(){
         solo.goBack();
         solo.waitForText("Habit Event History");
-        //solo.clickOnImageButton(0);
-        //create a habit event for editing
-        //solo.clickOnText("Habit Event History");
-        //solo.waitForText("December 25, 2016");
         solo.clickOnText("December 25, 2016");
         solo.clickOnText("Edit");
         solo.assertCurrentActivity("Should be in EditHabitEventActivity", EditHabitEventActivity.class);
