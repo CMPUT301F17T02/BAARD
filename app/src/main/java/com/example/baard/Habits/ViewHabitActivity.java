@@ -189,6 +189,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         TextView frequency = findViewById(R.id.frequency);
         TextView streakText = findViewById(R.id.streakTextView);
         TextView milestoneText = findViewById(R.id.milestoneTextView);
+        Button edit = findViewById(R.id.edit);
+        Button delete = findViewById(R.id.delete);
 
         titleText.setTypeface(ralewayRegular);
         reasonText.setTypeface(ralewayRegular);
@@ -199,6 +201,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         frequency.setTypeface(ralewayRegular);
         streakText.setTypeface(ralewayRegular);
         milestoneText.setTypeface(ralewayRegular);
+        edit.setTypeface(ralewayRegular);
+        delete.setTypeface(ralewayRegular);
     }
 
     @Override
@@ -241,7 +245,7 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the Pie chart of events to be displayed
      */
     private void createPieChart() {
-        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit);
+        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, habit.getStartDate(), new Date());
 
         // Create Pie Chart
         PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
@@ -283,7 +287,7 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     private void createBarChart() {
-        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit);
+        HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, habit.getStartDate(), new Date());
 
         // Crate Bar Chart
         HorizontalBarChart barChart = (HorizontalBarChart) findViewById(R.id.habit_barChart);
