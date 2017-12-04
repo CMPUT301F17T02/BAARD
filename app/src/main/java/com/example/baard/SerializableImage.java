@@ -15,25 +15,27 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * Created by chrygore on 27/11/17.
+ * Serializes images
+ * @author amckerna
+ * @since 2.0
+ * @version 1.0
  */
-
 public class SerializableImage {
 
-    //private transient Bitmap currentImage;
-
-    //private String bitmapString;
-
-    //public void setBitmap(Bitmap image){ this.currentImage = image; }
-
-    //public Bitmap getBitmap(){ return this.currentImage; }
-
+    /**
+     * @param bitmapString String representation of Bitmap
+     * @return Bitmap representation of String
+     */
     public static Bitmap getBitmapFromString(String bitmapString){
             byte[] decodedString = Base64.decode(bitmapString, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             return decodedByte;
     }
 
+    /**
+     * @param bitmapPicture Bitmap representation of picture
+     * @return String of Bitmap
+     */
     public static String getStringFromBitmap(Bitmap bitmapPicture) {
         final int COMPRESSION_QUALITY = 100;
         String encodedImage;

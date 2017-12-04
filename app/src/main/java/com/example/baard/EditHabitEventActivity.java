@@ -107,15 +107,15 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_edit_habit_event);
 
-        ImageView image = (ImageView) findViewById(R.id.imageViewEditEvent);
+        ImageView image = findViewById(R.id.imageViewEditEvent);
             if (habitEvent.getBitmapString() != null) {
                 image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
             }
 
-        TextView habitTitle = (TextView) findViewById(R.id.habitTitleTextViewEditEvent);
+        TextView habitTitle = findViewById(R.id.habitTitleTextViewEditEvent);
         habitTitle.setText(habit.getTitle());
 
-        final EditText dateEdit = (EditText) findViewById(R.id.dateEditText);
+        final EditText dateEdit = findViewById(R.id.dateEditText);
         dateEdit.setText(sourceFormat.format(habitEvent.getEventDate()));
         final Calendar calendar = Calendar.getInstance();
         dateEdit.setFocusable(false);
@@ -144,10 +144,10 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        EditText commentEdit = (EditText) findViewById(R.id.commentEditText);
+        EditText commentEdit = findViewById(R.id.commentEditText);
         commentEdit.setText(habitEvent.getComment());
 
-        Button imageButton = (Button) findViewById(R.id.selectImageButton);
+        Button imageButton = findViewById(R.id.selectImageButton);
         imageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -172,7 +172,6 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
 
         String json = sharedPrefs.getString("locationPosition", "");
         locationPosition = gson.fromJson(json, new TypeToken<LatLng>() {}.getType());
-
         if (locationExists) {
             locationExists = false;
             locationPosition = habitEvent.getLocation();
@@ -304,8 +303,8 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         String comment;
         boolean isValidHabitEvent = true;
 
-        EditText dateEditText = (EditText) findViewById(R.id.dateEditText);
-        EditText commentEditText = (EditText) findViewById(R.id.commentEditText);
+        EditText dateEditText = findViewById(R.id.dateEditText);
+        EditText commentEditText = findViewById(R.id.commentEditText);
         try {
             date = sourceFormat.parse(dateEditText.getText().toString());
             comment = commentEditText.getText().toString();
@@ -424,7 +423,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
                 return;
             }
             image = myBitmap;
-            ImageView imageView = (ImageView) findViewById(R.id.imageViewEditEvent);
+            ImageView imageView = findViewById(R.id.imageViewEditEvent);
             imageView.setImageURI(selectedImage);
         }
     }
