@@ -51,7 +51,8 @@ public class HabitStatisticsTest extends TestCase {
         habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, startDate, endDate);
 
         assertEquals(5, habitCompletionData.completed);
-        assertEquals(1, habitCompletionData.notCompleted);
+        assertEquals(1, habitCompletionData.late);
+        assertEquals(5, habitCompletionData.total);
     }
 
     public void testCalcHabitCompletionOneOutFromStart() {
@@ -64,7 +65,8 @@ public class HabitStatisticsTest extends TestCase {
         habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, startDate, endDate);
 
         assertEquals(4, habitCompletionData.completed);
-        assertEquals(1, habitCompletionData.notCompleted);
+        assertEquals(1, habitCompletionData.late);
+        assertEquals(4, habitCompletionData.total);
     }
 
     public void testCalcHabitCompletionOneOutFromEnd() {
@@ -77,7 +79,8 @@ public class HabitStatisticsTest extends TestCase {
         habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, startDate, endDate);
 
         assertEquals(4, habitCompletionData.completed);
-        assertEquals(0, habitCompletionData.notCompleted);
+        assertEquals(0, habitCompletionData.late);
+        assertEquals(4, habitCompletionData.total);
     }
 
     public void testCalcHabitCompletionNone() {
@@ -90,7 +93,8 @@ public class HabitStatisticsTest extends TestCase {
         habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, startDate, endDate);
 
         assertEquals(0, habitCompletionData.completed);
-        assertEquals(0, habitCompletionData.notCompleted);
+        assertEquals(0, habitCompletionData.late);
+        assertEquals(3, habitCompletionData.total);
     }
 
     public void testGetHabitCompletionVsTime() {

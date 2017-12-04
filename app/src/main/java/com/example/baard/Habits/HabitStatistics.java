@@ -27,11 +27,9 @@ public class HabitStatistics {
      * @param habit
      * @return
      */
-    public HabitCompletionData calcHabitCompletion(Habit habit) {
+    public HabitCompletionData calcHabitCompletion(Habit habit, Date startDate, Date endDate) {
         HabitEventList habitEventList = habit.getEvents();
         HashSet<Integer> frequency = new HashSet<Integer>();
-        Date startDate = habit.getStartDate();
-        Date endDate = new Date();
 
         for (Day day : habit.getFrequency()) {
             frequency.add(day.getValue());
@@ -150,8 +148,8 @@ public class HabitStatistics {
      * Class to define the habit completion versus time
      */
     public class HabitCompletionVsTimeData {
-        long time;
-        int habitCompletion;
+        public final long time;
+        public final int habitCompletion;
 
         public HabitCompletionVsTimeData(long time, int habitCompletion) {
             this.time = time;
