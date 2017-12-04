@@ -114,6 +114,8 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         ImageView image = findViewById(R.id.imageViewEditEvent);
             if (habitEvent.getBitmapString() != null) {
                 image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
+                Button imageSel = findViewById(R.id.selectImageButton);
+                imageSel.setText("Remove Image");
             }
 
         TextView habitTitle = findViewById(R.id.habitTitleTextViewEditEvent);
@@ -364,7 +366,15 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         if (checkReadPermission() == -1){
             return;
         }
-        getImage();
+        if (image == null) {
+            getImage();
+        }else{
+            Button imageSel = (Button) findViewById(R.id.selectImageButton);
+            image = null;
+            imageSel.setText("Add Image");
+            ImageView imageView = (ImageView) findViewById(R.id.imageViewEditEvent);
+            imageView.setImageBitmap(image);
+        }
     }
 
     private void getImage(){
@@ -428,6 +438,8 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
                 return;
             }
             image = myBitmap;
+            Button selButton = findViewById(R.id.selectImageButton);
+            selButton.setText("Remove Image");
             ImageView imageView = findViewById(R.id.imageViewEditEvent);
             imageView.setImageURI(selectedImage);
         }
