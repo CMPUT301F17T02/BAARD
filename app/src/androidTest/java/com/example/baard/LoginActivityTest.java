@@ -14,6 +14,8 @@ import com.robotium.solo.Solo;
 
 import org.junit.Test;
 
+import java.util.Date;
+
 /**
  * Implements testing for the Login Activity
  * @see android.test.ActivityInstrumentationTestCase2
@@ -96,7 +98,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.clickOnButton("Register");
         assertTrue(solo.waitForText("This field is required", 2, 1000));
 
-        solo.enterText((EditText) solo.getView(R.id.username), "test_username");
+        String username = new Date().toString().substring(11,19).replace(":",".");
+
+        solo.enterText((EditText) solo.getView(R.id.username), username);
         solo.clickOnButton("Register");
         assertTrue(solo.waitForText("This field is required", 1, 1000));
 
@@ -104,17 +108,6 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.clickOnButton("Register");
         solo.waitForActivity(MainActivity.class, 3000);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
-
-        solo.sendKey(Solo.MENU);
-        solo.sendKey(KeyEvent.KEYCODE_MENU);
-        solo.clickOnMenuItem("Settings");
-
-        solo.assertCurrentActivity("wrong_activity",  SettingsActivity.class);
-        solo.clickOnButton("Delete");
-        solo.waitForDialogToOpen(2000);
-        solo.clickOnButton("Delete");
-
-        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
     }
 
     /**
