@@ -81,7 +81,7 @@ import static com.example.baard.R.id.view;
  * {@link CreateNewHabitEventFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  *
- * @author amckerna
+ * @author amckerna, bangotti, minsoung
  * @version 1.0
  * This fragment is used for when creating a new HabitEvent.
  */
@@ -238,9 +238,12 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
-        changeFont();
     }
 
+    /**
+     * Sets Google Map callback. If location exists put marker on map.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -257,6 +260,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         }
     }
 
+    /**
+     * Grabs the location position if it was passed from add location activity
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -265,6 +271,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         mapView.getMapAsync(this);
     }
 
+    /**
+     * Reset on start if the habit event already exists
+     */
     public void onStart() {
         super.onStart();
         EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
@@ -282,6 +291,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         }
     }
 
+    /**
+     * Changes and aligns all font on screen
+     */
     private void changeFont() {
         Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
 
@@ -457,6 +469,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
     /**
      * Method called when the select image button is pressed. Lets the user select an image to be added to the
      * habit event. Calls startActivityForResult to handle their selection.
+     *
+     * If a user has already added an image, this button removes that image, and then resets to allow the user to add
+     * an image again. The text of the button is updated accordingly.
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
@@ -521,6 +536,7 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
             }
             image = myBitmap;
             Button imageSel = (Button) getActivity().findViewById(R.id.attachImageButton);
+            // set the button text to Remove Image for the next button press
             imageSel.setText("Remove Image");
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);

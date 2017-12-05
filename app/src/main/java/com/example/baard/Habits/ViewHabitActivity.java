@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -65,6 +67,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Activity to view a habit
  * @see MainActivity
@@ -106,7 +110,6 @@ public class ViewHabitActivity extends AppCompatActivity {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         setActionBarTitle("View Habit");
-        changeFont();
     }
 
     /**
@@ -136,6 +139,13 @@ public class ViewHabitActivity extends AppCompatActivity {
             createBarChart();
             createLineChart();
             listHabitEvents();
+        } else {
+            PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
+            HorizontalBarChart barChart = (HorizontalBarChart) findViewById(R.id.habit_barChart);
+            ListView eventsList = findViewById(R.id.habit_events_scroller_ListView);
+            pieChart.setVisibility(View.GONE);
+            barChart.setVisibility(View.GONE);
+            eventsList.setVisibility(View.GONE);
         }
 
         TextView milestoneTextView = findViewById(R.id.milestoneTextView);
@@ -178,6 +188,11 @@ public class ViewHabitActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     private void changeFont() {
         Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
@@ -185,6 +200,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         TextView reasonText = findViewById(R.id.textViewReason);
         TextView startDateText = findViewById(R.id.textViewStartDate);
         TextView freqText = findViewById(R.id.textViewFreq);
+        TextView noEventsText = findViewById(R.id.no_events_textView);
         TextView reason = findViewById(R.id.reason);
         TextView startDate = findViewById(R.id.startDate);
         TextView frequency = findViewById(R.id.frequency);
@@ -197,6 +213,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         reasonText.setTypeface(ralewayRegular);
         startDateText.setTypeface(ralewayRegular);
         freqText.setTypeface(ralewayRegular);
+        noEventsText.setTypeface(ralewayRegular);
         reason.setTypeface(ralewayRegular);
         startDate.setTypeface(ralewayRegular);
         frequency.setTypeface(ralewayRegular);
@@ -246,6 +263,7 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the Pie chart of events to be displayed
      */
     private void createPieChart() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, habit.getStartDate(), new Date());
 
         // Create Pie Chart
@@ -282,12 +300,14 @@ public class ViewHabitActivity extends AppCompatActivity {
         if (habitCompletionData.total == 0) {
             pieChart.setVisibility(View.GONE);
         } else {
-          pieChart.setData(data);
+            constraintLayout.setPadding(constraintLayout.getPaddingLeft(), constraintLayout.getPaddingTop(), constraintLayout.getPaddingRight(), 12);
+            pieChart.setData(data);
         }
 
     }
 
     private void createBarChart() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, habit.getStartDate(), new Date());
 
         // Crate Bar Chart
@@ -307,8 +327,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         entries2.add(new BarEntry(1f, habitCompletionData.late));
         entries3.add(new BarEntry(2f, habitCompletionData.completed));
 
-        BarDataSet dataSet1 = new BarDataSet(entries1, "Total to be completed");
-        BarDataSet dataSet2 = new BarDataSet(entries2, "Late");
+        BarDataSet dataSet1 = new BarDataSet(entries1, "Total to be completed on time");
+        BarDataSet dataSet2 = new BarDataSet(entries2, "Not completed on time");
         BarDataSet dataSet3 = new BarDataSet(entries3, "Completed on time");
         IValueFormatter formatter1 = new IValueFormatter() {
             @Override
@@ -331,11 +351,13 @@ public class ViewHabitActivity extends AppCompatActivity {
         if (habitCompletionData.total == 0) {
             barChart.setVisibility(View.GONE);
         } else {
+            constraintLayout.setPadding(constraintLayout.getPaddingLeft(), constraintLayout.getPaddingTop(), constraintLayout.getPaddingRight(), 12);
             barChart.setData(data);
         }
         barChart.setFitBars(true);
         barChart.getXAxis().setLabelCount(3);
         barChart.getLegend().setEnabled(true);
+        barChart.getLegend().setWordWrapEnabled(true);
 
         IAxisValueFormatter formatter2 = new IAxisValueFormatter() {
             @Override
@@ -351,6 +373,8 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the line chart of events to be displayed
      */
     private void createLineChart() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
+
         final ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionVsTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
 
         // Create Line Chart
@@ -386,6 +410,7 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         if (habitCompletionVsTimesData.size() > 0) {
             lineChart.setData(data);
+            constraintLayout.setPadding(constraintLayout.getPaddingLeft(), constraintLayout.getPaddingTop(), constraintLayout.getPaddingRight(), 12);
         } else {
             lineChart.setVisibility(View.GONE);
         }
@@ -470,7 +495,6 @@ public class ViewHabitActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             HabitEvent habitEvent = getItem(position);
-            Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
             if (convertView == null) {
                 LayoutInflater vi;
@@ -480,7 +504,6 @@ public class ViewHabitActivity extends AppCompatActivity {
 
             if (habitEvent != null) {
                 TextView date = convertView.findViewById(R.id.date);
-                date.setTypeface(ralewayRegular);
                 DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
                 date.setText(formatter.format(habitEvent.getEventDate()));
             }

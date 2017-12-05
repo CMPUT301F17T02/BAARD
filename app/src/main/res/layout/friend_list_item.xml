@@ -3,24 +3,27 @@
   ~ Copyright (c) 2017. Team CMPUT301F17T02, CMPUT301, University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under terms and conditions of the Code of Students Behaviour at University of Alberta.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="15dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
     android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/addFriend"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/addFriendButton"
+        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginLeft="240dp"
         android:text="Follow" />
 
-</RelativeLayout>
+</LinearLayout>

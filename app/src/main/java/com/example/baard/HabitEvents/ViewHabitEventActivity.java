@@ -4,6 +4,7 @@
 
 package com.example.baard.HabitEvents;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -38,10 +39,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 /**
  * Activity called when user selects a HabitEvent when viewing all HabitEvents
- * @author amckerna
+ * @author amckerna, bangotti, minsoung
  * @version 2.0
  * @see AppCompatActivity
  * @see HabitEvent
@@ -72,7 +75,11 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.activity_view_habit_event);
 
         setActionBarTitle("View Habit Event");
-        changeFont();
+    }
+
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -150,7 +157,10 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         getSupportActionBar().setTitle(s);
     }
 
-
+    /**
+     * Sets Google Map callback. If location exists put marker on map.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("ViewHabitEvent", "FLAG0");

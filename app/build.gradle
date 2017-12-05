@@ -46,5 +46,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.jjoe64:graphview:4.2.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
     testCompile 'junit:junit:4.12'
 }

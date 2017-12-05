@@ -104,9 +104,7 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
             solo.waitForActivity(ViewHabitActivity.class, 2000);
 
             // go to main page and check it is in list
-            solo.clickOnImage(0);
-            solo.clickOnImage(0);
-            solo.clickOnText("Daily Habits");
+            solo.clickOnActionBarHomeButton();
 
             solo.waitForFragmentById(R.layout.fragment_daily_habits, 2000);
         }
@@ -158,8 +156,6 @@ public class DailyHabitsTest extends ActivityInstrumentationTestCase2 {
         // as there cannot be two of the same habit in the database)
         solo.clickOnText("Cycling"+todayDofW);
         solo.clickOnButton("Delete");
-
-        assertFalse(solo.searchText("Cycling"+todayDofW, 1, true, true));
 
         solo.clickOnImage(0);
         solo.clickOnText("All Habits");

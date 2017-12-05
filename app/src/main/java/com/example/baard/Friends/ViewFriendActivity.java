@@ -4,11 +4,10 @@
 
 package com.example.baard.Friends;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -25,12 +24,18 @@ import com.example.baard.Controllers.TypefaceSpan;
 import com.example.baard.Entities.Habit;
 import com.example.baard.Entities.User;
 import com.example.baard.R;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+/**
+ * When the user selects one of their friends, this view will pop up, enabling them to choose
+ * which of their friend's habits they wish to view in greater detail.
+ * @see FileController
+ * @author bangotti, rderbysh
+ * @since 1.0
+ */
 public class ViewFriendActivity extends AppCompatActivity {
 
     private String friendName, friendUsername;
@@ -104,7 +109,10 @@ public class ViewFriendActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     /**
      *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title

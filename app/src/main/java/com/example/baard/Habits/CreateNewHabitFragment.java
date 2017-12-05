@@ -52,6 +52,8 @@ import java.util.zip.DataFormatException;
  * to handle interaction events.
  * Use the {@link CreateNewHabitFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * @author bangotti, rderbysh
  */
 public class CreateNewHabitFragment extends Fragment {
 
@@ -172,8 +174,6 @@ public class CreateNewHabitFragment extends Fragment {
                 createHabit();
             }
         });
-
-        changeFont(myView);
 
         // Inflate the layout for this fragment
         return myView;

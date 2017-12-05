@@ -34,15 +34,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DailyHabitsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DailyHabitsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Shows the habits whose frequency is on this current day. The user can then view, edit or
+ * delete this habit.
  * @see MainActivity
+ * @author anarten
+ * @note based on setup from all habits fragment
  */
 public class DailyHabitsFragment extends Fragment {
     private FileController fc;
@@ -93,9 +93,21 @@ public class DailyHabitsFragment extends Fragment {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         expandableListView = view.findViewById(R.id.dailyHabitsListView);
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            int previousGroup = -1;
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (groupPosition != previousGroup) {
+                    expandableListView.collapseGroup(previousGroup);
+                }
+                previousGroup = groupPosition;
+            }
+        });
 
         return view;
     }
+
 
     /**
      * Called when DailyHabitsFragment fragment is opened up and called again.
