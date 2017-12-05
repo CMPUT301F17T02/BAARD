@@ -24,7 +24,7 @@
                     android:title="@string/habit_history" />
                 <item
                     android:id="@+id/nav_viewMap"
-                    android:icon="@drawable/ic_menu_slideshow"
+                    android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/title_activity_view_map" />
                 <item
                     android:id="@+id/nav_viewFriends"
@@ -39,7 +39,7 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_newHabit"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_menu_slideshow"
                     android:title="@string/create_habit" />
                 <item
                     android:id="@+id/nav_newHabitEvent"
