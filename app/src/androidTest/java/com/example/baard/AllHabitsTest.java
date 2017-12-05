@@ -136,9 +136,7 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.waitForActivity(ViewHabitActivity.class, 2000);
 
         // go to main page and check it is in list
-        solo.clickOnImage(0);
-        solo.clickOnImage(0);
-        solo.clickOnText("All Habits");
+        solo.clickOnActionBarHomeButton();
 
         solo.waitForFragmentById(R.layout.fragment_all_habits, 2000);
         assertTrue(solo.searchText("Cycling", 1, true, true));
@@ -148,7 +146,6 @@ public class AllHabitsTest extends ActivityInstrumentationTestCase2<LoginActivit
         solo.clickOnText("Cycling");
         solo.clickOnButton("Delete");
 
-        assertFalse(solo.searchText("Cycling", 1, true, true));
     }
 
     /**
