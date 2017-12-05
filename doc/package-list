@@ -1,1 +1,6 @@
 com.example.baard
+com.example.baard.Controllers
+com.example.baard.Entities
+com.example.baard.Friends
+com.example.baard.HabitEvents
+com.example.baard.Habits
