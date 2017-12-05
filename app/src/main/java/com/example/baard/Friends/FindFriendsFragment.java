@@ -33,12 +33,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-/** EVERY TIME I LOAD A FRIEND, IF THE FRIEND IS NULL, REMOVE FROM MAP **/
-
+/**
+ * Finds all users in the database and displays them for the user to choose who to follow
+ * @see ElasticSearchController
+ * @see FileController
+ * @author rderbysh
+ * @since 1.0
+ */
 public class FindFriendsFragment extends Fragment {
 
     private ListView findFriendsView;
@@ -46,17 +52,20 @@ public class FindFriendsFragment extends Fragment {
     private String username;
     private User user;
     private FileController fileController;
-    ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
-    UserList allUsers = new UserList();
-    // If you have friends. True if friend, False if pending
+    private ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
+    private UserList allUsers = new UserList();
     private HashMap<String, Boolean> myFriends;
-    // Hashmap <username, name>
     private HashMap<String, String> userMap = new HashMap<String, String>();
-    // If request to be friends, return true.
-    private HashMap<String, Boolean> requestedFriendsMap = new HashMap<>();
 
-    ArrayList<String> acceptedFriendsList, pendingFriendsList;
+    private ArrayList<String> acceptedFriendsList, pendingFriendsList;
 
+    /**
+     * Sets up the find friends view
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,15 +94,12 @@ public class FindFriendsFragment extends Fragment {
 
         user = fileController.loadUser(getActivity().getApplicationContext(), username);
 
-        // Hashmap, True if friend, False if pending
         myFriends = user.getFriends();
 
         try {
-            // UserList of users
             allUsers = getAllUsersTask.get();
 
             for (User aUser : allUsers.getArrayList()) {
-                // hashmap<username, name> of all users.
                 userMap.put(aUser.getUsername(), aUser.getName());
                 if (user.getUsername().equals(aUser.getUsername())) {
                     allUsers.delete(aUser);
@@ -103,12 +109,19 @@ public class FindFriendsFragment extends Fragment {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        Collections.sort(allUsers.getArrayList());
+
         adapter = new MyFriendsListAdapter(this.getContext(), R.layout.friend_list_item, allUsers);
         findFriendsView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * List adapter for displaying the changing buttons depending on the state on which a user
+     * is following another user. (Follow, Pending, Following)
+     */
     private class MyFriendsListAdapter extends ArrayAdapter<User> {
         private int layout;
         public MyFriendsListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull UserList objects) {
@@ -124,9 +137,7 @@ public class FindFriendsFragment extends Fragment {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout, parent, false);
                 final ViewHolder viewHolder = new ViewHolder();
-
-                user = fileController.loadUser(getActivity().getApplicationContext(), username);
-
+                
                 acceptedFriendsList = getKeysByValue(myFriends, Boolean.TRUE);
                 pendingFriendsList = getKeysByValue(myFriends, Boolean.FALSE);
 

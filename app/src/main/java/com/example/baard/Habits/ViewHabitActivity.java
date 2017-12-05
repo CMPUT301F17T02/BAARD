@@ -132,14 +132,22 @@ public class ViewHabitActivity extends AppCompatActivity {
         startDateView.setText(formatter.format(habit.getStartDate()));
         frequencyView.setText(habit.getFrequencyString());
 
-        createPieChart();
-        createBarChart();
-        createLineChart();
-        listHabitEvents();
+        if (habit.getStartDate().before(new Date())) {
+            createPieChart();
+            createBarChart();
+            createLineChart();
+            listHabitEvents();
+        } else {
+            PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
+            HorizontalBarChart barChart = (HorizontalBarChart) findViewById(R.id.habit_barChart);
+            ListView eventsList = findViewById(R.id.habit_events_scroller_ListView);
+            pieChart.setVisibility(View.GONE);
+            barChart.setVisibility(View.GONE);
+            eventsList.setVisibility(View.GONE);
+        }
 
         TextView milestoneTextView = findViewById(R.id.milestoneTextView);
         int milestone = habit.milestone();
-
         if (milestone > 0) {
             milestoneTextView.setText("Milestone reached: \n"+Integer.toString(milestone)+" habit events completed!");
             milestoneTextView.setVisibility(View.VISIBLE);

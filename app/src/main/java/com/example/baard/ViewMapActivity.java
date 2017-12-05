@@ -47,6 +47,19 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Display a map of a user's habit events. By default, the events are within a 5km radius of the
+ * current location, along with the location of the user's friend's most recent habit event.
+ *
+ * @see MainActivity
+ * @see FileController
+ * @author bangotti, minsoung
+ * @note If the habit history filter is set, this filter will appear on the map.
+ * @note The user can toggle viewing friend's habit event markers
+ * @note The user can toggle viewing habit events within 5km from their current location
+ * @since 2.0
+ * @version 1.1
+ */
 public class ViewMapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -195,6 +208,10 @@ public class ViewMapActivity extends AppCompatActivity
         mGoogleApiClient.connect();
     }
 
+    /**
+     * Set the visibility of markers once the connection is established
+     * @param bundle
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         getLocationPermission();
@@ -213,7 +230,7 @@ public class ViewMapActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
-    /*
+    /**
      * Request location permission, so that we can get the location of the
      * device. The result of the permission request is handled by a callback,
      * onRequestPermissionsResult.
@@ -248,6 +265,10 @@ public class ViewMapActivity extends AppCompatActivity
         getDeviceLocation();
     }
 
+    /**
+     * Updates the location ui in the map with whether or not permission is granted for viewing
+     * a user's location.
+     */
     private void updateLocationUI() {
         if (mMap == null) {
             return;

@@ -41,7 +41,7 @@ import java.util.Locale;
 
 /**
  * Activity called when user selects a HabitEvent when viewing all HabitEvents
- * @author amckerna
+ * @author amckerna, bangotti, minsoung
  * @version 2.0
  * @see AppCompatActivity
  * @see HabitEvent
@@ -125,14 +125,12 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         TextView name = (TextView) findViewById(R.id.HabitName);
         TextView date = (TextView) findViewById(R.id.HabitEventDate);
         TextView comment = (TextView) findViewById(R.id.commentView);
-//        TextView location = (TextView) findViewById(R.id.locationView);
         Button editHabitEventButton = (Button) findViewById(R.id.EditHabitEventButton);
         Button deleteHabitEventButton = (Button) findViewById(R.id.DeleteHabitEventButton);
 
         name.setTypeface(ralewayRegular);
         date.setTypeface(ralewayRegular);
         comment.setTypeface(ralewayRegular);
-//        location.setTypeface(ralewayRegular);
         editHabitEventButton.setTypeface(ralewayRegular);
         deleteHabitEventButton.setTypeface(ralewayRegular);
     }
@@ -151,7 +149,10 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         getSupportActionBar().setTitle(s);
     }
 
-
+    /**
+     * Sets Google Map callback. If location exists put marker on map.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("ViewHabitEvent", "FLAG0");

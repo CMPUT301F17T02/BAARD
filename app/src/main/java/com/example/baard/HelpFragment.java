@@ -19,6 +19,9 @@ import android.widget.TextView;
  * Activities that contain this fragment must implement the
  * {@link HelpFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
+ *
+ * Provides help text for the user to understand how milestones work
+ * @author bangotti
  */
 public class HelpFragment extends Fragment {
 

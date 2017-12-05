@@ -31,7 +31,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
 
     //note: these tests assume a Habit exists to create a HabitEvent for.
     private Solo solo;
-    //private String dateInput;
     public CreateHabitEventTest(){
         super(LoginActivity.class);
     }
@@ -43,8 +42,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
      */
     @Override
     public void setUp() throws InterruptedException {
-        //DateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-        //dateInput = formatter.format(new Date());
         solo = new Solo(getInstrumentation(), getActivity());
         // log out if we are logged in for each test
         if (!(solo.searchButton("Register", true))) {
@@ -64,7 +61,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         }
         // sign the testing user in
         solo.assertCurrentActivity("Should be in LoginActivity.",LoginActivity.class);
-        //solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
         solo.enterText(username, "Andrew.M");
@@ -118,8 +114,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     public void testNoDateEntry(){
         //select the first item in the spinner (note that this test will fail if there are no habits)
         solo.pressSpinnerItem(0,0);
-        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        //solo.enterText(date, "");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
@@ -133,8 +127,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     public void testCommentTooLong(){
         //select the first item in the spinner (note that this test will fail if there are no habits)
         solo.pressSpinnerItem(0,0);
-        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        //solo.enterText(date, "25/12/2012");
         solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
         solo.setDatePicker(0,2016,11,25);
         solo.clickOnText("OK");
@@ -150,8 +142,6 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
     @Test
     public void testCreateHabitEventBeforeHabitStart(){
         solo.pressSpinnerItem(0,0);
-        Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
-        String habitName = spinner.getSelectedItem().toString();
         solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
         solo.setDatePicker(0,2010,11,25);
         solo.clickOnText("OK");
@@ -174,15 +164,12 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(solo.getView(R.id.HabitEventDateEditText));
         solo.setDatePicker(0,2016,11,25);
         solo.clickOnText("OK");
-        //EditText date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        //solo.enterText(date, "25/12/2016");
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.assertCurrentActivity("Now viewing HabitEvent after creation",ViewHabitEventActivity.class);
         solo.searchText("test comment");
         solo.searchText(habitName);
-        //solo.sendKey(KeyEvent.KEYCODE_BACK);
         KeyEvent kdown = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
         solo.sendKey(kdown.getKeyCode());
         solo.clickOnImageButton(0);
@@ -196,14 +183,11 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
 
         solo.setDatePicker(0,2016,11,25);
         solo.clickOnText("OK");
-        //date = (EditText) solo.getView(R.id.HabitEventDateEditText);
-        //solo.enterText(date, "25/12/2016");
         comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.searchText("A HabitEvent already exists on this date.");
         //now delete it for the sake of other tests
-        //solo.sendKey(KeyEvent.KEYCODE_BACK);
         solo.clickOnImageButton(0);
         solo.clickOnText("Habit Event History");
         solo.waitForFragmentById(R.layout.fragment_all_habit_events);
@@ -217,7 +201,7 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
      * currently allow the application permission to access it's location.
      */
     @Test
-    public void testCreateHabitEventWithLocaton(){
+    public void testCreateHabitEventWithLocation(){
         solo.pressSpinnerItem(0,0);
         Spinner spinner = (Spinner) solo.getView(R.id.habitSpinner);
         String habitName = spinner.getSelectedItem().toString();
@@ -228,8 +212,10 @@ public class CreateHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.addLocationButton));
         solo.assertCurrentActivity("Should be in AddLocationActivity",AddLocationActivity.class);
+        solo.waitForView(R.id.save);
         solo.clickOnView(solo.getView(R.id.save));
         solo.assertCurrentActivity("Should be back in CreateHabitEventFragment", MainActivity.class);
+        solo.waitForView(R.id.saveButton);
         solo.clickOnView(solo.getView(R.id.saveButton));
         solo.assertCurrentActivity("Should be in ViewHabitEventActivity",ViewHabitEventActivity.class);
         solo.searchText("test comment");

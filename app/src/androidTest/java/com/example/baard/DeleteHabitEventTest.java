@@ -20,7 +20,8 @@ import org.junit.Test;
 /**
  * Class for testing the ability to delete habit events.
  *
- * Requires that there is at least one Habit currently present. Otherwise, the tests within may fail.
+ * These tests assume that there is a Jogging Habit in the database with a start date of April 20, 2016.
+ * Without this, some or all of these tests may fail.
  *
  * @author amckerna
  * @version 1.0
@@ -56,7 +57,6 @@ public class DeleteHabitEventTest extends ActivityInstrumentationTestCase2<Login
         }
         // sign the testing user in
         solo.assertCurrentActivity("Should be in LoginActivity.",LoginActivity.class);
-        //solo.waitForFragmentById(R.layout.fragment_create_new_habit_event);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
         solo.enterText(username, "Andrew.M");
@@ -92,7 +92,6 @@ public class DeleteHabitEventTest extends ActivityInstrumentationTestCase2<Login
         solo.clickOnView(date);
         solo.setDatePicker(0,2016,11,25);
         solo.clickOnText("OK");
-        String dateString = date.getText().toString();
         EditText comment = (EditText) solo.getView(R.id.commentEditText);
         solo.enterText(comment, "test comment");
         solo.clickOnView(solo.getView(R.id.saveButton));

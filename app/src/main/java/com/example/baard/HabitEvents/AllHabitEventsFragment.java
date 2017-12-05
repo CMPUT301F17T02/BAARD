@@ -65,6 +65,10 @@ public class AllHabitEventsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Get the username of the logged in user from SharedPreferences
+     * @return string representing username
+     */
     private String getUsername(){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         Gson gson = new Gson();
@@ -126,6 +130,10 @@ public class AllHabitEventsFragment extends Fragment {
         }
     }
 
+    /**
+     * Send the currently displayed list of Habit Events to SharedPreferences. This is used by the map
+     * to filter the events seen on the map.
+     */
     public void sendHabitEventsToSharedPreferences(){
         SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(this.getContext());
         SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
@@ -135,6 +143,9 @@ public class AllHabitEventsFragment extends Fragment {
         sharedPrefsEditor.commit();
     }
 
+    /**
+     * Filter and display Habit Events based on the user's given parameters.
+     */
     public void filterHabitEvents(){
         createHabitEventList();
         Habit selected = (Habit) habitSpinner.getSelectedItem();
@@ -166,6 +177,9 @@ public class AllHabitEventsFragment extends Fragment {
         sendHabitEventsToSharedPreferences();
     }
 
+    /**
+     * Set the habitEventList to all Habit Events in all of the users Habits.
+     */
     public void createHabitEventList(){
         User user = fileController.loadUser(getActivity().getApplicationContext(), getUsername());
         habitEventList.clear();
@@ -179,7 +193,7 @@ public class AllHabitEventsFragment extends Fragment {
     }
 
     /**
-     * this onResume has been overrided to update the data set of all HabitEvents being viewed, in case one has been
+     * This onResume has been overrided to update the data set of all HabitEvents being viewed, in case one has been
      * deleted since the user was on this screen last.
      */
     @Override

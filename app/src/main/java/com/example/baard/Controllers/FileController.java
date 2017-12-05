@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.example.baard.Entities.User;
+import com.example.baard.Entities.UserList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -20,12 +21,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Controls JSON Serialization and Elastic Searches for loading and saving users
  * @see ElasticSearchController
- * @author anarten
+ * @author anarten, rderbysh
  * @since 1.0
  * @version 1.1
  */
@@ -208,5 +210,26 @@ public class FileController {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Grabs all users from elastic search in a format of username to name hashmap for easy grabbing.
+     * @return userMap
+     */
+    public HashMap<String, String> getAllUsers() {
+        HashMap<String, String> userMap = new HashMap<String, String>();
+        ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
+        getAllUsersTask.execute();
+        UserList allUsers;
+
+        try {
+            allUsers = getAllUsersTask.get();
+            for (User aUser : allUsers.getArrayList()) {
+                userMap.put(aUser.getUsername(), aUser.getName());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return userMap;
     }
 }
