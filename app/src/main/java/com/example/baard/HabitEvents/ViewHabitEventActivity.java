@@ -72,7 +72,6 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.activity_view_habit_event);
 
         setActionBarTitle("View Habit Event");
-        changeFont();
     }
 
     @Override

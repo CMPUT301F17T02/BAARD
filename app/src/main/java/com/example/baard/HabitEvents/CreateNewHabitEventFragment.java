@@ -238,7 +238,6 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
-        changeFont();
     }
 
     @Override

@@ -28,7 +28,6 @@
             <android.support.constraint.ConstraintLayout
                 android:background="@color/white"
                 android:layout_width="match_parent"
-                android:paddingBottom="8dp"
                 android:elevation="4dp"
                 android:layout_height="wrap_content">
 
@@ -108,9 +107,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp">
-
-                </com.github.mikephil.charting.charts.PieChart>
+                    android:layout_marginEnd="15dp"/>
 
                 <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:id="@+id/habit_barChart"
@@ -124,7 +121,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                    android:layout_marginEnd="15dp"/>
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/habit_lineChart"
@@ -140,8 +137,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="0dp"></com.github.mikephil.charting.charts.LineChart>
+                    android:layout_marginEnd="15dp"/>
 
                 <LinearLayout
                     android:id="@+id/linearLayout4"
@@ -225,6 +221,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:orientation="vertical"
+                        android:gravity="center"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent">
 
@@ -241,7 +238,7 @@
                             android:gravity="center_horizontal"
                             android:text="@string/no_events"
                             android:textColor="@android:color/black"
-                            android:textSize="24sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:visibility="gone" />
 

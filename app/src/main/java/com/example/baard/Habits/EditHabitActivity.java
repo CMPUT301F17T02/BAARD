@@ -111,7 +111,6 @@ public class EditHabitActivity extends AppCompatActivity {
         setToggleButtons();
 
         setActionBarTitle("Edit Habit");
-        changeFont();
     }
 
     private void changeFont() {

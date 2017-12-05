@@ -168,7 +168,6 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         }
 
         setActionBarTitle("Edit Habit Event");
-        changeFont();
     }
 
 

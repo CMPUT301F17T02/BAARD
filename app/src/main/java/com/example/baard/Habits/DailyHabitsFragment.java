@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,6 +98,7 @@ public class DailyHabitsFragment extends Fragment {
 
         return view;
     }
+
 
     /**
      * Called when DailyHabitsFragment fragment is opened up and called again.

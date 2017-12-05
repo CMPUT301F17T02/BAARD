@@ -65,6 +65,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Activity to view a habit
  * @see MainActivity
@@ -106,7 +108,6 @@ public class ViewHabitActivity extends AppCompatActivity {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         setActionBarTitle("View Habit");
-        changeFont();
     }
 
     /**
@@ -177,6 +178,11 @@ public class ViewHabitActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     private void changeFont() {
         Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
@@ -184,6 +190,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         TextView reasonText = findViewById(R.id.textViewReason);
         TextView startDateText = findViewById(R.id.textViewStartDate);
         TextView freqText = findViewById(R.id.textViewFreq);
+        TextView noEventsText = findViewById(R.id.no_events_textView);
         TextView reason = findViewById(R.id.reason);
         TextView startDate = findViewById(R.id.startDate);
         TextView frequency = findViewById(R.id.frequency);
@@ -196,6 +203,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         reasonText.setTypeface(ralewayRegular);
         startDateText.setTypeface(ralewayRegular);
         freqText.setTypeface(ralewayRegular);
+        noEventsText.setTypeface(ralewayRegular);
         reason.setTypeface(ralewayRegular);
         startDate.setTypeface(ralewayRegular);
         frequency.setTypeface(ralewayRegular);
@@ -469,7 +477,6 @@ public class ViewHabitActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             HabitEvent habitEvent = getItem(position);
-            Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
             if (convertView == null) {
                 LayoutInflater vi;
@@ -479,7 +486,6 @@ public class ViewHabitActivity extends AppCompatActivity {
 
             if (habitEvent != null) {
                 TextView date = convertView.findViewById(R.id.date);
-                date.setTypeface(ralewayRegular);
                 DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
                 date.setText(formatter.format(habitEvent.getEventDate()));
             }
