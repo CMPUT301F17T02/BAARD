@@ -118,7 +118,7 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.waitForActivity(LoginActivity.class);
         EditText username1 = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username1);
-        solo.enterText(username1, "1cooldude");
+        solo.enterText(username1, "friendTest");
 
         solo.clickOnButton("Sign in");
 
@@ -127,12 +127,12 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.clickOnText("Friend Requests");
         solo.waitForFragmentById(R.layout.fragment_friend_requests, 2000);
 
-        assertTrue(solo.searchText("friendTest", 1, true, true));
+        assertTrue(solo.searchText("1cooldude", 1, true, true));
 
-        solo.clickOnText("friendTest");
+        solo.clickOnText("1cooldude");
         solo.clickOnButton("Decline");
 
-        assertFalse(solo.searchText("friendTest", 1, true, true));
+        assertFalse(solo.searchText("1cooldude", 1, true, true));
     }
 
     private void logOut() {
