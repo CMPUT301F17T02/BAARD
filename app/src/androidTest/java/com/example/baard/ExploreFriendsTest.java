@@ -96,10 +96,6 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
         Button button = (Button) viewGroupContaingTextAndButton.getChildAt(1);
         solo.clickOnView(button);
 
-        solo.waitForFragmentById(R.layout.fragment_find_friends, 2000);
-
-        assertTrue(solo.searchText("Pending"));
-
         logOut();
 
     }
