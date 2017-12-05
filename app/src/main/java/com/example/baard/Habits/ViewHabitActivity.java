@@ -193,36 +193,6 @@ public class ViewHabitActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    private void changeFont() {
-        Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
-
-        TextView titleText = findViewById(R.id.title);
-        TextView reasonText = findViewById(R.id.textViewReason);
-        TextView startDateText = findViewById(R.id.textViewStartDate);
-        TextView freqText = findViewById(R.id.textViewFreq);
-        TextView noEventsText = findViewById(R.id.no_events_textView);
-        TextView reason = findViewById(R.id.reason);
-        TextView startDate = findViewById(R.id.startDate);
-        TextView frequency = findViewById(R.id.frequency);
-        TextView streakText = findViewById(R.id.streakTextView);
-        TextView milestoneText = findViewById(R.id.milestoneTextView);
-        Button edit = findViewById(R.id.edit);
-        Button delete = findViewById(R.id.delete);
-
-        titleText.setTypeface(ralewayRegular);
-        reasonText.setTypeface(ralewayRegular);
-        startDateText.setTypeface(ralewayRegular);
-        freqText.setTypeface(ralewayRegular);
-        noEventsText.setTypeface(ralewayRegular);
-        reason.setTypeface(ralewayRegular);
-        startDate.setTypeface(ralewayRegular);
-        frequency.setTypeface(ralewayRegular);
-        streakText.setTypeface(ralewayRegular);
-        milestoneText.setTypeface(ralewayRegular);
-        edit.setTypeface(ralewayRegular);
-        delete.setTypeface(ralewayRegular);
-    }
-
     @Override
     public void onBackPressed() {
         setResult(RESULT_OK);
@@ -260,7 +230,8 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     /**
-     * Calculates and creates the Pie chart of events to be displayed
+     * Calculates and creates the Pie chart of events to be displayed.
+     * Compares events completed on time to those that are not completed on time.
      */
     private void createPieChart() {
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
@@ -306,6 +277,11 @@ public class ViewHabitActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Calculates and creates the Bar chart of events to be displayed.
+     * Compares total events to be completed, events not completed on time, and
+     * the events completed on time.
+     */
     private void createBarChart() {
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, habit.getStartDate(), new Date());
@@ -370,7 +346,8 @@ public class ViewHabitActivity extends AppCompatActivity {
     }
 
     /**
-     * Calculates and creates the line chart of events to be displayed
+     * Calculates and creates the line chart of events to be displayed.
+     * Displays Habits completed on time as compared to the date.
      */
     private void createLineChart() {
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
@@ -438,6 +415,9 @@ public class ViewHabitActivity extends AppCompatActivity {
         lineChart.getXAxis().setValueFormatter(formatter);
     }
 
+    /**
+     * Lists the habit events in the corner of the screen so that the user can select them.
+     */
     private void listHabitEvents() {
         ListView eventsList = findViewById(R.id.habit_events_scroller_ListView);
         final List<HabitEvent> habitEventList = habit.getEvents().getArrayList();
@@ -482,7 +462,9 @@ public class ViewHabitActivity extends AppCompatActivity {
         }
     }
 
-    // Copied from https://stackoverflow.com/questions/8166497/custom-adapter-for-list-view
+    /**
+     * Copied from https://stackoverflow.com/questions/8166497/custom-adapter-for-list-view
+     */
     public class ListAdapter extends ArrayAdapter<HabitEvent> {
         public ListAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
