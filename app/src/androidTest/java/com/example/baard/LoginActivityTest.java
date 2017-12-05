@@ -14,6 +14,8 @@ import com.robotium.solo.Solo;
 
 import org.junit.Test;
 
+import java.util.Date;
+
 /**
  * Implements testing for the Login Activity
  * @see android.test.ActivityInstrumentationTestCase2
@@ -91,18 +93,21 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
      * Test case for registering a new user
      */
     @Test
-    public void testRegister() {
+    public void testRegister() throws InterruptedException {
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
         solo.clickOnButton("Register");
-        assertTrue(solo.waitForText("This field is required", 1, 1000));
+        assertTrue(solo.waitForText("This field is required", 2, 1000));
 
-        solo.enterText((EditText) solo.getView(R.id.username), "test_username");
+        String username = new Date().toString().substring(11,19).replace(":",".");
+
+        solo.enterText((EditText) solo.getView(R.id.username), username);
         solo.clickOnButton("Register");
         assertTrue(solo.waitForText("This field is required", 1, 1000));
 
         solo.enterText((EditText) solo.getView(R.id.name), "Test Name");
         solo.clickOnButton("Register");
-        solo.assertCurrentActivity("wrong activity", LoginActivity.class);
+        solo.waitForActivity(MainActivity.class, 3000);
+        solo.assertCurrentActivity("wrong activity", MainActivity.class);
     }
 
     /**

@@ -11,6 +11,9 @@
 
 
     <TextView
+        android:background="@color/white"
+        android:padding="14dp"
+        android:elevation="4dp"
         android:id="@+id/helpText"
         android:layout_width="331dp"
         android:layout_height="470dp"

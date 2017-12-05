@@ -7,47 +7,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="12dp"
     tools:context="com.example.baard.HabitEvents.AllHabitEventsFragment">
 
     <LinearLayout
-        android:id="@+id/filterLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp">
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/habitFilterSpinner"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/commentFilterEditText"
-            android:layout_width="200dp"
+        <LinearLayout
+            android:id="@+id/filterLayout"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search comment"
-            android:inputType="text" />
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/habitFilterSpinner"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_marginEnd="2dp"
+                android:layout_height="match_parent"/>
+
+            <EditText
+                android:id="@+id/commentFilterEditText"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_marginStart="2dp"
+                android:layout_height="match_parent"
+                android:hint="Search comment"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:id="@+id/filterButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filter" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/colorSecondary" />
+
+        <ExpandableListView
+            android:id="@+id/habitEventListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/filterButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Filter" />
-
-    <ExpandableListView
-        android:id="@+id/habitEventListView"
-        android:layout_width="361dp"
-        android:layout_height="441dp"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="0dp" />
 
 
 </LinearLayout>

@@ -31,10 +31,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by randi on 23/11/17.
+ * This displays the user's current list of friends. Once they click on a friend, they will
+ * be brought to the friend's page where they can view their habits.
+ * @see FileController
+ * @author rderbysh
+ * @since 1.0
  */
-
-
 public class FriendsListFragment extends Fragment {
 
     private ListView friendListView;

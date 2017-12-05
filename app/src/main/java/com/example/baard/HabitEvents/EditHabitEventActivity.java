@@ -6,6 +6,7 @@ package com.example.baard.HabitEvents;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -58,9 +59,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Activity that is started when the user pressed the edit button when viewing a HabitEvent
- * @author amckerna
+ * @author amckerna, bangotti
  * @version 1.0
  */
 public class EditHabitEventActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -82,6 +85,10 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
 
+    /**
+     * Sets up the habit event to be edited
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +119,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         habitEvent.setHabit(habit);
         setContentView(R.layout.activity_edit_habit_event);
 
+        // if image is in Habit Event, set the text to remove mode
         ImageView image = findViewById(R.id.imageViewEditEvent);
             if (habitEvent.getBitmapString() != null) {
                 image.setImageBitmap(SerializableImage.getBitmapFromString(habitEvent.getBitmapString()));
@@ -171,10 +179,16 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         }
 
         setActionBarTitle("Edit Habit Event");
-        changeFont();
     }
 
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
+    /**
+     * Checks that location has not been repopulated from the add location activity
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -188,6 +202,9 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Changes and aligns all font on screen
+     */
     private void changeFont() {
         Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
@@ -222,6 +239,10 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         getSupportActionBar().setTitle(s);
     }
 
+    /**
+     * Sets Google Map callback. If location exists put marker on map.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -241,7 +262,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
 
 
     /**
-     * returns the username of the user stored in SharedPreferences
+     * Returns the username of the user stored in SharedPreferences
      * @return username
      */
     private String getUsername(){
@@ -359,6 +380,9 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
     /**
      * Method called when the select image button is pressed. Lets the user select an image to be added to the
      * habit event. Calls startActivityForResult to handle their selection.
+     *
+     * If a user has already added an image, this button removes that image, and then resets to allow the user to add
+     * an image again. The text of the button is updated accordingly.
      * @param view supplied when button is pressed
      */
     public void onSelectImageButtonPress(View view){
@@ -376,6 +400,9 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * Called when the user selects an image. Gets an image from the file system.
+     */
     private void getImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
@@ -438,6 +465,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
             }
             image = myBitmap;
             Button selButton = findViewById(R.id.selectImageButton);
+            // set text to say Remove for the next button press
             selButton.setText("Remove Image");
             ImageView imageView = findViewById(R.id.imageViewEditEvent);
             imageView.setImageURI(selectedImage);

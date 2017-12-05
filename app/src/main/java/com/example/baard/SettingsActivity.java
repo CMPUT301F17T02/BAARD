@@ -4,12 +4,15 @@
 
 package com.example.baard;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,9 +21,12 @@ import android.widget.Toast;
 
 import com.example.baard.Controllers.ElasticSearchController;
 import com.example.baard.Controllers.FileController;
+import com.example.baard.Controllers.TypefaceSpan;
 import com.example.baard.Entities.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Settings for the user's account activity
@@ -100,7 +106,26 @@ public class SettingsActivity extends AppCompatActivity {
         // Create the AlertDialog
         dialog = builder.create();
 
-        getSupportActionBar().setTitle(R.string.settings);
+        setActionBarTitle(getString(R.string.settings));
+    }
+
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
     }
 
     /**
@@ -124,7 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
         nameView.setVisibility(View.GONE);
         saveButton.setVisibility(View.VISIBLE);
         // hide edit Button
-        editButton.setVisibility(View.INVISIBLE);
+        editButton.setVisibility(View.GONE);
     }
 
     /**
@@ -138,7 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
         nameEdit.setVisibility(View.GONE);
         nameView.setText(nameEdit.getText().toString());
         nameView.setVisibility(View.VISIBLE);
-        saveButton.setVisibility(View.INVISIBLE);
+        saveButton.setVisibility(View.GONE);
         // show edit button
         editButton.setVisibility(View.VISIBLE);
 

@@ -30,13 +30,11 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AllHabitsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AllHabitsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * All habits displays all habits that a user has so that they can view, edit or delete the habit.
  * @see MainActivity
+ * @author anarten, bangotti
+ * @since 2.0
+ * @version 1.1
  */
 public class AllHabitsFragment extends Fragment {
     private ExpandableListView expandableListView;
@@ -83,6 +81,17 @@ public class AllHabitsFragment extends Fragment {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         expandableListView = view.findViewById(R.id.habitListView);
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            int previousGroup = -1;
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (groupPosition != previousGroup) {
+                    expandableListView.collapseGroup(previousGroup);
+                }
+                previousGroup = groupPosition;
+            }
+        });
 
         return view;
     }

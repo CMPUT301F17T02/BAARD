@@ -5,6 +5,7 @@
 package com.example.baard.Habits;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
@@ -41,13 +42,21 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+/**
+ * Edit a habit's details.
+ * @see FileController
+ * @author bangotti
+ * @since 2.0
+ * @version 1.1
+ */
 public class EditHabitActivity extends AppCompatActivity {
 
     private Habit habit;
     private EditText editTextTitle, editTextReason, editTextStartDate;
     private ArrayList<Day> frequency;
     private DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-    private FileController fc;
+    private FileController fileController;
     private User user;
     private Calendar calendar = Calendar.getInstance();
 
@@ -61,7 +70,7 @@ public class EditHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_habit);
 
-        fc = new FileController();
+        fileController = new FileController();
 
         // grab the index of the item in the list
         Bundle extras = getIntent().getExtras();
@@ -72,7 +81,7 @@ public class EditHabitActivity extends AppCompatActivity {
         String username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         // load required data
-        user = fc.loadUser(getApplicationContext(), username);
+        user = fileController.loadUser(getApplicationContext(), username);
         habit = user.getHabits().getHabit(position);
 
         // set all of the values for the habit to be edited
@@ -111,7 +120,6 @@ public class EditHabitActivity extends AppCompatActivity {
         setToggleButtons();
 
         setActionBarTitle("Edit Habit");
-        changeFont();
     }
 
     private void changeFont() {
@@ -172,6 +180,11 @@ public class EditHabitActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     /**
      * Sets the required toggle buttons for the days of the week.
      * This thereby controls the frequency array to which habits should repeat on.
@@ -218,7 +231,7 @@ public class EditHabitActivity extends AppCompatActivity {
      */
     private void commitEdits() {
         Collections.sort(user.getHabits().getArrayList());
-        fc.saveUser(getApplicationContext(), user);
+        fileController.saveUser(getApplicationContext(), user);
     }
 
     /**
