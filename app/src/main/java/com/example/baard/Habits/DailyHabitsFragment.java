@@ -36,13 +36,11 @@ import java.util.Locale;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DailyHabitsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DailyHabitsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Shows the habits whose frequency is on this current day. The user can then view, edit or
+ * delete this habit.
  * @see MainActivity
+ * @author anarten
+ * @note based on setup from all habits fragment
  */
 public class DailyHabitsFragment extends Fragment {
     private FileController fc;
