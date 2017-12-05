@@ -7,9 +7,14 @@ package com.example.baard;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.example.baard.Friends.ExploreFriends;
+import com.example.baard.Friends.FindFriendsFragment;
 import com.robotium.solo.Solo;
 
 import java.text.SimpleDateFormat;
@@ -34,23 +39,12 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
     /**
      * Setup function for InstrumentationTest Cases
      */
-    @Override
-    public void setUp() {
+
+    public void andrewLogin() {
         solo = new Solo(getInstrumentation(), getActivity());
         // log out if we are logged in for each test
         if (!(solo.searchButton("Register", true))) {
-            solo.clickOnImage(0);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-            solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+            logOut();
         }
         Log.d("SETUP", "setUp()");
 
@@ -58,7 +52,7 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
         solo.assertCurrentActivity("wrong activity", LoginActivity.class);
         EditText username = (EditText) solo.getView(R.id.username);
         solo.clearEditText(username);
-        solo.enterText(username, "newguy");
+        solo.enterText(username, "Andrew.M");
         solo.clickOnButton("Sign in");
 
         // go to main activity
@@ -67,7 +61,11 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
     }
 
+
+
     public void testExploreFriends() {
+
+        andrewLogin();
 
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -86,4 +84,70 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
         assertTrue(solo.searchText("Friend Requests"));
 
     }
+
+    public void testSendFriendRequest() {
+
+        andrewLogin();
+
+        testExploreFriends();
+
+        solo.clickOnText("Find Friends");
+        solo.waitForFragmentById(R.layout.fragment_find_friends, 2000);
+
+        View view = solo.getText("1cooldude");
+        ViewGroup viewGroupContaingTextAndButton = (ViewGroup) view.getParent();
+        Button button = (Button) viewGroupContaingTextAndButton.getChildAt(1);
+        solo.clickOnView(button);
+
+        solo.waitForFragmentById(R.layout.fragment_find_friends, 2000);
+
+        assertTrue(solo.searchText("Pending"));
+
+        logOut();
+
+    }
+
+
+    public void testDeclineFriendRequest() {
+        solo = new Solo(getInstrumentation(), getActivity());
+
+        if (!(solo.searchButton("Register", true))) {
+            logOut();
+        }
+
+        solo.waitForActivity(LoginActivity.class);
+        EditText username1 = (EditText) solo.getView(R.id.username);
+        solo.clearEditText(username1);
+        solo.enterText(username1, "1cooldude");
+
+        solo.clickOnButton("Sign in");
+
+        testExploreFriends();
+
+        solo.clickOnText("Friend Requests");
+        solo.waitForFragmentById(R.layout.fragment_friend_requests, 2000);
+
+        assertTrue(solo.searchText("friendTest", 1, true, true));
+
+        solo.clickOnText("friendTest");
+        solo.clickOnButton("Decline");
+
+        assertFalse(solo.searchText("friendTest", 1, true, true));
+    }
+
+    private void logOut() {
+        solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+    }
+
 }
