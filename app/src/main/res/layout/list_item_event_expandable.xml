@@ -5,24 +5,28 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="55dip"
+    android:layout_height="55dp"
     android:orientation="horizontal" >
 
     <Button
         android:id="@+id/viewButton"
+        android:background="@color/white"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="View"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"/>
+        android:text="View"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorSecondary" />
 
     <Button
         android:id="@+id/editButton"
+        android:background="@color/white"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="Edit"
-        android:layout_marginRight="1dp"/>
+        android:text="Edit"/>
 
 </LinearLayout>

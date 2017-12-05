@@ -230,7 +230,6 @@ public class FriendRequestsFragment extends Fragment {
 
             TextView lblListHeader = convertView
                     .findViewById(R.id.lblListHeader);
-            lblListHeader.setTypeface(null, Typeface.BOLD);
             lblListHeader.setText(headerTitle);
 
             return convertView;

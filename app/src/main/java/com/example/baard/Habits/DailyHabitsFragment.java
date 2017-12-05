@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 /**
  * Shows the habits whose frequency is on this current day. The user can then view, edit or
@@ -91,9 +93,21 @@ public class DailyHabitsFragment extends Fragment {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         expandableListView = view.findViewById(R.id.dailyHabitsListView);
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            int previousGroup = -1;
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (groupPosition != previousGroup) {
+                    expandableListView.collapseGroup(previousGroup);
+                }
+                previousGroup = groupPosition;
+            }
+        });
 
         return view;
     }
+
 
     /**
      * Called when DailyHabitsFragment fragment is opened up and called again.

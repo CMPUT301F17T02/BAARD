@@ -175,8 +175,6 @@ public class CreateNewHabitFragment extends Fragment {
             }
         });
 
-        changeFont(myView);
-
         // Inflate the layout for this fragment
         return myView;
     }

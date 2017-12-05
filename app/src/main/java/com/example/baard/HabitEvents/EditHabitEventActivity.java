@@ -6,6 +6,7 @@ package com.example.baard.HabitEvents;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -57,6 +58,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Activity that is started when the user pressed the edit button when viewing a HabitEvent
@@ -176,9 +179,12 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         }
 
         setActionBarTitle("Edit Habit Event");
-        changeFont();
     }
 
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     /**
      * Checks that location has not been repopulated from the add location activity

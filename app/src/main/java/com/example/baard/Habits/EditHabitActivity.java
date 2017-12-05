@@ -5,6 +5,7 @@
 package com.example.baard.Habits;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
@@ -41,6 +42,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Edit a habit's details.
  * @see FileController
@@ -118,7 +120,6 @@ public class EditHabitActivity extends AppCompatActivity {
         setToggleButtons();
 
         setActionBarTitle("Edit Habit");
-        changeFont();
     }
 
     private void changeFont() {
@@ -177,6 +178,11 @@ public class EditHabitActivity extends AppCompatActivity {
             finish();
         }
         return true;
+    }
+
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     /**

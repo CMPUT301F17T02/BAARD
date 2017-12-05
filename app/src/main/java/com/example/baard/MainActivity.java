@@ -4,6 +4,7 @@
 
 package com.example.baard;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -32,6 +33,8 @@ import com.example.baard.Habits.CreateNewHabitFragment;
 import com.example.baard.Habits.DailyHabitsFragment;
 
 import java.util.Stack;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Implements the MainActivity for the app that is reached after logging in
@@ -89,6 +92,11 @@ public class MainActivity extends AppCompatActivity
                 .commit();
         navigationView.setCheckedItem(R.id.nav_dailyHabits);
         setActionBarTitle(getString(R.string.daily_habits));
+    }
+
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     /**
