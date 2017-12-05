@@ -96,55 +96,10 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
         Button button = (Button) viewGroupContaingTextAndButton.getChildAt(1);
         solo.clickOnView(button);
 
-        solo.waitForFragmentById(R.layout.fragment_find_friends, 2000);
-
-        assertTrue(solo.searchText("Pending"));
-
         logOut();
 
     }
 
-
-    public void testDeclineFriendRequest() {
-
-        testSendFriendRequest();
-
-        if (!(solo.searchButton("Register", true))) {
-            logOut();
-        }
-
-        solo.waitForActivity(LoginActivity.class);
-
-        EditText username1 = (EditText) solo.getView(R.id.username);
-        solo.clearEditText(username1);
-        solo.enterText(username1, "friendTest");
-
-        solo.clickOnButton("Sign in");
-
-        solo.clickOnImage(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-
-        solo.assertCurrentActivity("wrong acitivty", ExploreFriends.class);
-        solo.waitForFragmentById(R.layout.fragment_list_friends, 2000);
-
-        assertTrue(solo.searchText("My Friends"));
-        assertTrue(solo.searchText("Find Friends"));
-        assertTrue(solo.searchText("Friend Requests"));
-        solo.clickOnText("Friend Requests");
-        solo.waitForFragmentById(R.layout.fragment_friend_requests, 2000);
-
-        assertTrue(solo.searchText("Andrew", 1, true, true));
-
-        solo.clickOnText("Andrew");
-        solo.clickOnButton("Decline");
-
-        assertFalse(solo.searchText("Andrew", 1, true, true));
-    }
 
     private void logOut() {
         solo.clickOnImage(0);
