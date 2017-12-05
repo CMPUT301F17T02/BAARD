@@ -11,3 +11,6 @@ CMPUT 301 Project Repo
 **R**andi Derbyshire (rderbysh)
 
 **D**aniel Choi (minsoung)
+
+
+Habit Tracker to track your habits! Please see the Wiki for more information!
