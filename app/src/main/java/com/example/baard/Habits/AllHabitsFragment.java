@@ -83,6 +83,17 @@ public class AllHabitsFragment extends Fragment {
         username = gson.fromJson(json, new TypeToken<String>() {}.getType());
 
         expandableListView = view.findViewById(R.id.habitListView);
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            int previousGroup = -1;
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (groupPosition != previousGroup) {
+                    expandableListView.collapseGroup(previousGroup);
+                }
+                previousGroup = groupPosition;
+            }
+        });
 
         return view;
     }

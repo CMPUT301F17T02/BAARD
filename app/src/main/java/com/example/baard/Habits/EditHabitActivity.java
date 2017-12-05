@@ -5,6 +5,7 @@
 package com.example.baard.Habits;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
@@ -40,6 +41,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.DataFormatException;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditHabitActivity extends AppCompatActivity {
 
@@ -169,6 +172,11 @@ public class EditHabitActivity extends AppCompatActivity {
             finish();
         }
         return true;
+    }
+
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     /**

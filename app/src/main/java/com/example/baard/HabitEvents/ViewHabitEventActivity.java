@@ -4,6 +4,7 @@
 
 package com.example.baard.HabitEvents;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -37,6 +38,8 @@ import com.google.gson.reflect.TypeToken;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 /**
@@ -72,6 +75,11 @@ public class ViewHabitEventActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.activity_view_habit_event);
 
         setActionBarTitle("View Habit Event");
+    }
+
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

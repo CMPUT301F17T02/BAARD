@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -261,6 +263,7 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the Pie chart of events to be displayed
      */
     private void createPieChart() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, habit.getStartDate(), new Date());
 
         // Create Pie Chart
@@ -297,12 +300,14 @@ public class ViewHabitActivity extends AppCompatActivity {
         if (habitCompletionData.total == 0) {
             pieChart.setVisibility(View.GONE);
         } else {
-          pieChart.setData(data);
+            constraintLayout.setPadding(constraintLayout.getPaddingLeft(), constraintLayout.getPaddingTop(), constraintLayout.getPaddingRight(), 12);
+            pieChart.setData(data);
         }
 
     }
 
     private void createBarChart() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         HabitStatistics.HabitCompletionData habitCompletionData = new HabitStatistics().calcHabitCompletion(habit, habit.getStartDate(), new Date());
 
         // Crate Bar Chart
@@ -322,8 +327,8 @@ public class ViewHabitActivity extends AppCompatActivity {
         entries2.add(new BarEntry(1f, habitCompletionData.late));
         entries3.add(new BarEntry(2f, habitCompletionData.completed));
 
-        BarDataSet dataSet1 = new BarDataSet(entries1, "Total to be completed");
-        BarDataSet dataSet2 = new BarDataSet(entries2, "Late");
+        BarDataSet dataSet1 = new BarDataSet(entries1, "Total to be completed on time");
+        BarDataSet dataSet2 = new BarDataSet(entries2, "Not completed on time");
         BarDataSet dataSet3 = new BarDataSet(entries3, "Completed on time");
         IValueFormatter formatter1 = new IValueFormatter() {
             @Override
@@ -346,11 +351,13 @@ public class ViewHabitActivity extends AppCompatActivity {
         if (habitCompletionData.total == 0) {
             barChart.setVisibility(View.GONE);
         } else {
+            constraintLayout.setPadding(constraintLayout.getPaddingLeft(), constraintLayout.getPaddingTop(), constraintLayout.getPaddingRight(), 12);
             barChart.setData(data);
         }
         barChart.setFitBars(true);
         barChart.getXAxis().setLabelCount(3);
         barChart.getLegend().setEnabled(true);
+        barChart.getLegend().setWordWrapEnabled(true);
 
         IAxisValueFormatter formatter2 = new IAxisValueFormatter() {
             @Override
@@ -366,6 +373,8 @@ public class ViewHabitActivity extends AppCompatActivity {
      * Calculates and creates the line chart of events to be displayed
      */
     private void createLineChart() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
+
         final ArrayList<HabitStatistics.HabitCompletionVsTimeData> habitCompletionVsTimesData = new HabitStatistics().getHabitCompletionVsTimeData(habit, new Date(Long.MIN_VALUE), new Date());
 
         // Create Line Chart
@@ -401,6 +410,7 @@ public class ViewHabitActivity extends AppCompatActivity {
 
         if (habitCompletionVsTimesData.size() > 0) {
             lineChart.setData(data);
+            constraintLayout.setPadding(constraintLayout.getPaddingLeft(), constraintLayout.getPaddingTop(), constraintLayout.getPaddingRight(), 12);
         } else {
             lineChart.setVisibility(View.GONE);
         }

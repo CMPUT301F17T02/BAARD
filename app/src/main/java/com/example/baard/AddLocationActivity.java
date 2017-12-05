@@ -4,6 +4,7 @@
 
 package com.example.baard;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -14,10 +15,13 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.baard.Controllers.TypefaceSpan;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
@@ -32,6 +36,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Enables users to add a location to their habit event when they are in creating or editing mode.
@@ -81,10 +87,31 @@ public class AddLocationActivity extends AppCompatActivity
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPrefsEditor = sharedPrefs.edit();
 
+        setActionBarTitle("Add Location");
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    /**
+     *  Copied from https://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
+     */
+    private void setActionBarTitle(String str) {
+        String fontPath = "Raleway-Regular.ttf";
+
+        SpannableString s = new SpannableString(str);
+        s.setSpan(new TypefaceSpan(this, fontPath), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Update the action bar title with the TypefaceSpan instance
+        getSupportActionBar().setTitle(s);
     }
 
     /**
