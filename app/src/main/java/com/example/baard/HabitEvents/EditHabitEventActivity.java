@@ -60,7 +60,7 @@ import java.util.zip.DataFormatException;
 
 /**
  * Activity that is started when the user pressed the edit button when viewing a HabitEvent
- * @author amckerna
+ * @author amckerna, bangotti
  * @version 1.0
  */
 public class EditHabitEventActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -82,6 +82,10 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
 
+    /**
+     * Sets up the habit event to be edited
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,6 +180,9 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
     }
 
 
+    /**
+     * Checks that location has not been repopulated from the add location activity
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -189,6 +196,9 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Changes and aligns all font on screen
+     */
     private void changeFont() {
         Typeface ralewayRegular = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
 
@@ -246,7 +256,7 @@ public class EditHabitEventActivity extends AppCompatActivity implements OnMapRe
 
 
     /**
-     * returns the username of the user stored in SharedPreferences
+     * Returns the username of the user stored in SharedPreferences
      * @return username
      */
     private String getUsername(){

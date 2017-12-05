@@ -18,6 +18,11 @@ import android.view.MenuItem;
 
 import com.example.baard.R;
 
+/**
+ * Activity that holds the three fragments for my friends, find friends, and request friends.
+ * @author rderbysh
+ * @since 1.0
+ */
 public class ExploreFriends extends AppCompatActivity {
 
     /**
@@ -35,6 +40,10 @@ public class ExploreFriends extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    /**
+     * Sets up the explore friends activity and fragments
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +65,25 @@ public class ExploreFriends extends AppCompatActivity {
     }
 
 
+    /**
+     * Ensures the back button is on
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_explore_friends, menu);
         return true;
     }
 
+    /**
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-
 
 
     /**

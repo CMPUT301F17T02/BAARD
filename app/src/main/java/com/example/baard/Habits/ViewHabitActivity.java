@@ -136,6 +136,13 @@ public class ViewHabitActivity extends AppCompatActivity {
             createBarChart();
             createLineChart();
             listHabitEvents();
+        } else {
+            PieChart pieChart = (PieChart) findViewById(R.id.habit_pieChart);
+            HorizontalBarChart barChart = (HorizontalBarChart) findViewById(R.id.habit_barChart);
+            ListView eventsList = findViewById(R.id.habit_events_scroller_ListView);
+            pieChart.setVisibility(View.GONE);
+            barChart.setVisibility(View.GONE);
+            eventsList.setVisibility(View.GONE);
         }
 
         TextView milestoneTextView = findViewById(R.id.milestoneTextView);

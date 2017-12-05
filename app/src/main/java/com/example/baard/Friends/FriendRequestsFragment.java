@@ -29,21 +29,22 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by randi on 23/11/17.
+ * Users can see who requested to follow them, and then accept or delete that request.
+ * @see FileController
+ * @author rderbysh
+ * @since 1.0
  */
-
-
 public class FriendRequestsFragment extends Fragment {
 
     private ExpandableListView friendRequestsView;
-    MyFriendsRequestAdapter adapter;
+    private MyFriendsRequestAdapter adapter;
     private String username;
     private FileController fileController;
     private ArrayList<String> getFriendRequestsList = new ArrayList<>();
     private HashMap<String, Boolean> getFriendRequestsMap = new HashMap<String, Boolean>();
     private User user;
     private HashMap<String, String> userMap = new HashMap<String, String>();
-    ArrayList<String> fullFriendRequestsList = new ArrayList<String>();
+    private ArrayList<String> fullFriendRequestsList = new ArrayList<String>();
 
 
     private FriendRequestsFragment.OnFragmentInteractionListener mListener;
@@ -150,6 +151,9 @@ public class FriendRequestsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Adapter for the expandable list view so users can either accept or delete a request.
+     */
     private class MyFriendsRequestAdapter extends BaseExpandableListAdapter {
 
         // Referenced and copied from https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/

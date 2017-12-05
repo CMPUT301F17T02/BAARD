@@ -33,6 +33,14 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
+/**
+ * Enables users to add a location to their habit event when they are in creating or editing mode.
+ * @see com.example.baard.HabitEvents.EditHabitEventActivity
+ * @see com.example.baard.HabitEvents.CreateNewHabitEventFragment
+ * @author bangotti, minsoung
+ * @since 2.0
+ * @version 1.1
+ */
 public class AddLocationActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -54,6 +62,10 @@ public class AddLocationActivity extends AppCompatActivity
     private MarkerOptions markerOptions;
     private Marker mMarker;
 
+    /**
+     * Sets up the map view
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +140,10 @@ public class AddLocationActivity extends AppCompatActivity
         buildGoogleApiClient();
     }
 
+    /**
+     * Takes care of all permission checks with the user
+     * @param bundle
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         getLocationPermission();
@@ -158,6 +174,12 @@ public class AddLocationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Requests permission to see their location if location is not previously granted.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -176,6 +198,10 @@ public class AddLocationActivity extends AppCompatActivity
         getDeviceLocation();
     }
 
+    /**
+     * Updates the location ui in the map with whether or not permission is granted for viewing
+     * a user's location.
+     */
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -281,7 +307,6 @@ public class AddLocationActivity extends AppCompatActivity
     public void save(View view) {
         String json = gson.toJson(pinPosition);
         sharedPrefsEditor.putString("locationPosition", json).commit();
-//        sharedPrefsEditor.apply();
         finish();
     }
 }
