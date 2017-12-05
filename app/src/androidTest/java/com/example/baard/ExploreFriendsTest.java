@@ -100,7 +100,6 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
     }
 
-
     private void logOut() {
         solo.clickOnImage(0);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);

@@ -220,7 +220,6 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_viewFriends) {
             if (fileController.isNetworkAvailable(getApplicationContext())) {
-                Toast.makeText(this, R.string.title_activity_explore_friends, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ExploreFriends.class);
                 startActivity(intent);
             } else {
