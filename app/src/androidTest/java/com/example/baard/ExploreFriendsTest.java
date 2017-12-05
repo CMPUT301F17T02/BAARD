@@ -98,7 +98,6 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
         solo.waitForFragmentById(R.layout.fragment_find_friends, 2000);
 
-        solo.getText("1cooldude");
         assertTrue(solo.searchText("Pending"));
 
         logOut();
