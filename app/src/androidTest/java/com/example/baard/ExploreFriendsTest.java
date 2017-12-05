@@ -39,8 +39,8 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
     /**
      * Setup function for InstrumentationTest Cases
      */
-
-    public void andrewLogin() {
+    @Override
+    public void setUp() {
         solo = new Solo(getInstrumentation(), getActivity());
         // log out if we are logged in for each test
         if (!(solo.searchButton("Register", true))) {
@@ -65,9 +65,8 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
     public void testExploreFriends() {
 
-        andrewLogin();
-
         solo.clickOnImage(0);
+        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -87,8 +86,6 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
     public void testSendFriendRequest() {
 
-        andrewLogin();
-
         testExploreFriends();
 
         solo.clickOnText("Find Friends");
@@ -101,6 +98,7 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
         solo.waitForFragmentById(R.layout.fragment_find_friends, 2000);
 
+        solo.getText("1cooldude");
         assertTrue(solo.searchText("Pending"));
 
         logOut();
@@ -109,7 +107,8 @@ public class ExploreFriendsTest extends ActivityInstrumentationTestCase2<LoginAc
 
 
     public void testDeclineFriendRequest() {
-        solo = new Solo(getInstrumentation(), getActivity());
+
+        testSendFriendRequest();
 
         if (!(solo.searchButton("Register", true))) {
             logOut();
