@@ -41,7 +41,7 @@ import java.util.Locale;
 
 /**
  * Activity called when user selects a HabitEvent when viewing all HabitEvents
- * @author amckerna
+ * @author amckerna, bangotti, minsoung
  * @version 2.0
  * @see AppCompatActivity
  * @see HabitEvent

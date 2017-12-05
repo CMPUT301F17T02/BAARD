@@ -45,6 +45,7 @@ import java.util.Stack;
  * @see HelpFragment
  * @see ViewMapActivity
  * @see ExploreFriends
+ * @see SettingsActivity
  * @author bangotti, anarten
  * @since 1.0
  * @version 2.2

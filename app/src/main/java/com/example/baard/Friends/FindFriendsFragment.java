@@ -38,7 +38,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-
+/**
+ * Finds all users in the database and displays them for the user to choose who to follow
+ * @see ElasticSearchController
+ * @see FileController
+ * @author rderbysh
+ * @since 1.0
+ */
 public class FindFriendsFragment extends Fragment {
 
     private ListView findFriendsView;
@@ -46,13 +52,20 @@ public class FindFriendsFragment extends Fragment {
     private String username;
     private User user;
     private FileController fileController;
-    ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
-    UserList allUsers = new UserList();
+    private ElasticSearchController.GetAllUsersTask getAllUsersTask = new ElasticSearchController.GetAllUsersTask();
+    private UserList allUsers = new UserList();
     private HashMap<String, Boolean> myFriends;
     private HashMap<String, String> userMap = new HashMap<String, String>();
 
-    ArrayList<String> acceptedFriendsList, pendingFriendsList;
+    private ArrayList<String> acceptedFriendsList, pendingFriendsList;
 
+    /**
+     * Sets up the find friends view
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,6 +118,10 @@ public class FindFriendsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * List adapter for displaying the changing buttons depending on the state on which a user
+     * is following another user. (Follow, Pending, Following)
+     */
     private class MyFriendsListAdapter extends ArrayAdapter<User> {
         private int layout;
         public MyFriendsListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull UserList objects) {

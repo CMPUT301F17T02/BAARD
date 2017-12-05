@@ -81,7 +81,7 @@ import static com.example.baard.R.id.view;
  * {@link CreateNewHabitEventFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  *
- * @author amckerna
+ * @author amckerna, bangotti, minsoung
  * @version 1.0
  * This fragment is used for when creating a new HabitEvent.
  */
@@ -261,6 +261,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         }
     }
 
+    /**
+     * Grabs the location position if it was passed from add location activity
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -269,6 +272,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         mapView.getMapAsync(this);
     }
 
+    /**
+     * Reset on start if the habit event already exists
+     */
     public void onStart() {
         super.onStart();
         EditText commentEditText = (EditText) getActivity().findViewById(R.id.commentEditText);
@@ -286,6 +292,9 @@ public class CreateNewHabitEventFragment extends Fragment implements OnMapReadyC
         }
     }
 
+    /**
+     * Changes and aligns all font on screen
+     */
     private void changeFont() {
         Typeface ralewayRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-Regular.ttf");
 

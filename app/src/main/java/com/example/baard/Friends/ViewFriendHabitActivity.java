@@ -34,6 +34,13 @@ import java.util.Locale;
 
 import static android.view.View.VISIBLE;
 
+/**
+ * When the user selects one of their friends and subsequently, one of their friend's habits,
+ * this view provides them a snapshot of the habit including the most recent habit event from
+ * that user.
+ * @author bangotti, rderbysh, amckerna
+ * @since 1.0
+ */
 public class ViewFriendHabitActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private final DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
@@ -46,7 +53,11 @@ public class ViewFriendHabitActivity extends AppCompatActivity implements OnMapR
 
     private static final float DEFAULT_ZOOM = 13.5f;
     private GoogleMap mMap;
-    
+
+    /**
+     * Grabs the position of the user in the list from the previous intent
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +74,9 @@ public class ViewFriendHabitActivity extends AppCompatActivity implements OnMapR
         changeFont();
     }
 
+    /**
+     * Sets up the entire view and display of the habit and its most recent habit event.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -178,7 +192,10 @@ public class ViewFriendHabitActivity extends AppCompatActivity implements OnMapR
     }
 
 
-
+    /**
+     * Sets the map view if the user has a location attached to the most recent habit event
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("ViewHabitEvent", "FLAG0");
