@@ -178,11 +178,17 @@ public class FindFriendsFragment extends Fragment {
                 }
             }
             if (!pendingFriendsList.isEmpty()) {
+                User friend = getItem(position);
                 for (int j = 0; j < pendingFriendsList.size(); j++) {
                     String name = userMap.get(pendingFriendsList.get(j));
+
                     if (name == mainViewHolder.title.getText()) {
                         mainViewHolder.button.setText("PENDING");
                         updateView(position);
+                    }
+                    if ((user.getFriends().get(friend.getUsername()) == Boolean.FALSE) && (friend.getReceivedRequests().get(username) == Boolean.FALSE)) {
+                        mainViewHolder.button.setText("FOLLOW");
+                        pendingFriendsList.remove(j);
                     }
                 }
             }
